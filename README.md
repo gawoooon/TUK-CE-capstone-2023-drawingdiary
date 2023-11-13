@@ -1,4 +1,1 @@
-"# drawingdiary" 
-"# drawingdiary" 
-
-졸작 ♥
+♥ 졸작 ♥
