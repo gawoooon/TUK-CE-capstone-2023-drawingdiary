@@ -1,0 +1,22 @@
+{
+    "name": "TUK-CE-capstone-2023-drawingdiary",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "client": "cd ./client && npm run start",
+      "server": "cd ./server && npm run server",
+      "dev": "concurrently \"npm run server\" \"npm run client\""
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "concurrently": "^6.2.0"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary.git"
+    },
+    "homepage": "https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary#readme"
+  }
