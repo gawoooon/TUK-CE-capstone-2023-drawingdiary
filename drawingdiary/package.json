@@ -1,5 +1,5 @@
 {
-    "name": "TUK-CE-capstone-2023-drawingdiary",
+    "name": "drawingdiary",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -17,6 +17,9 @@
     "repository": {
       "type": "git",
       "url": "git+https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary.git"
+    },
+    "bugs": {
+      "url": "https://github.com/kimdongjang/TUK-CE-capstone-2023-drawingdiary/issues"
     },
     "homepage": "https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary#readme"
   }
