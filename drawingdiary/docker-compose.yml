@@ -1,5 +1,10 @@
 version: '3.8'
 
+volumes:
+  db-config:
+  db-data:
+    name: db-data
+
 services:
   nginx_proxy:
     image: nginx:latest
@@ -26,3 +31,22 @@ services:
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true
     tty: true
+
+  db:
+    image: mysql
+    container_name: db
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    restart: always
+    volumes:
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=zoLZak@!1321
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_bin
+    networks:
+      - default
