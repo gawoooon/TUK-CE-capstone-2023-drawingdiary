@@ -2,15 +2,13 @@ const shortsidebarStyle = {
     height: '400px',
     width: '80px',
     position: 'fixed',
-    marginTop: '30px',
-    marginLeft: '60px',
     borderRadius: '10px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
     backgroundColor: '#F9F9F9',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-}
+};
 
 const linkStyle = {
     marginTop: '30px',
