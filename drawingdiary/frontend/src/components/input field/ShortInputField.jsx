@@ -1,4 +1,17 @@
 const ShortInputField = ({ id, type, value, onChange, placeHolder }) => {
+    const inputStyle = {
+        height: '40px',
+        width: '110px',
+        margin: '0px 15px 30px 15px',
+        paddingLeft: '10px',
+        border: '1px solid #909090', 
+        borderRadius: '10px',
+        display: 'flex',
+        minWidth: '0%',
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center'
+    };
     return(
         <div>
             <input
@@ -7,17 +20,7 @@ const ShortInputField = ({ id, type, value, onChange, placeHolder }) => {
                 value={value}
                 onChange={onChange}
                 placeholder={placeHolder}
-                style={{
-                    height: '30px',
-                    width: '110px',
-                    paddingLeft: '10px',
-                    marginBottom: '20px',
-                    border: '1px solid #909090', 
-                    borderRadius: '10px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
+                style={inputStyle}
             />
         </div>
     )
