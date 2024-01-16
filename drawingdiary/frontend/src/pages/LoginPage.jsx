@@ -1,4 +1,6 @@
+import React from "react";
 import styled from "styled-components";
+import { useNavigate, Link } from "react-router-dom";
 
 import Background from "../components/Background";
 import LoginBar from "../components/LoginBar";
@@ -19,6 +21,7 @@ const Body = styled.body`
 const Title = styled.p`
   font-size: 40px;
   font-weight: 800;
+  padding-bottom: 30px;
 `;
 
 const LoginBox = styled.form`
@@ -28,7 +31,7 @@ const LoginBox = styled.form`
   background-color: rgba(255, 255, 255, 0.2);
   box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 5px 2px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
+  border-radius: 30px;
   padding: 70px 80px 40px 80px;
   box-sizing: border-box;
 `;
@@ -41,12 +44,13 @@ const LeftBox = styled.div`
   height: 100%;
 `;
 
-const JoinBtn = styled.div`
+const JoinBtn = styled(Link)`
   padding-left: 30px;
   color: #989898;
   opacity: 0.5;
   font-weight: 800;
   font-size: 16px;
+  text-decoration: none;
 `;
 
 const RightBox = styled.div`
@@ -56,15 +60,24 @@ const RightBox = styled.div`
   box-sizing: border-box;
 `;
 
-const LoginLostBtn = styled.div`
+const LoginLostBtn = styled(Link)`
   width: 800px;
   font-size: 20px;
   font-weight: 800;
   color: #090071;
   text-align: right;
+  text-decoration: none;
+  padding-top: 10px;
 `;
 
 function LoginPage() {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
+    navigate("/calendar");
+  };
+
   return (
     <Background>
       <Body>
@@ -73,13 +86,15 @@ function LoginPage() {
           <LeftBox>
             <LoginBar icon={<IoMdPerson />} text="아이디"></LoginBar>
             <LoginBar icon={<FaLock />} text="비밀번호"></LoginBar>
-            <JoinBtn>회원가입</JoinBtn>
+            <JoinBtn to="/join">회원가입</JoinBtn>
           </LeftBox>
           <RightBox>
-            <LoginBtn text="로그인" />
+            <LoginBtn text="로그인" onClick={handleLogin} />
           </RightBox>
         </LoginBox>
-        <LoginLostBtn>아이디·비밀번호를 잃어버리셨나요? </LoginLostBtn>
+        <LoginLostBtn to="/loginlost">
+          아이디·비밀번호를 잃어버리셨나요?{" "}
+        </LoginLostBtn>
       </Body>
     </Background>
   );
