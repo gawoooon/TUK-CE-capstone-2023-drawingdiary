@@ -1,6 +1,12 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
-const BackgroundColor = styled.div`
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+  }
+  `;
+
+const BackgroundColor = styled.body`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,11 +26,12 @@ const BackgroundBox = styled.div`
 
 function Background({ children }) {
   return (
-    <div>
+    <>
+      <GlobalStyle />
       <BackgroundColor>
         <BackgroundBox>{children}</BackgroundBox>
       </BackgroundColor>
-    </div>
+    </>
   );
 }
 

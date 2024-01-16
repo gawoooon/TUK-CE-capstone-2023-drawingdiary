@@ -9,6 +9,8 @@ import DiaryPage from "./pages/DiaryPage.jsx";
 import AlbumPage from "./pages/AlbumPage.jsx";
 import StatsPage from "./pages/StatsPage.jsx";
 import MyPage from "./pages/MyPage.jsx";
+import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
+import FinishPage from "./pages/FinishPage";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path="/album" element={<AlbumPage />} />
         <Route path="/stats" element={<StatsPage />} />
         <Route path="/my" element={<MyPage />} />
+        <Route path="/choosePersonality" element={<ChoosePersonalityPage />} />
+        <Route path="/FinishPage" element={<FinishPage />} />
       </Routes>
     </Router>
   );
