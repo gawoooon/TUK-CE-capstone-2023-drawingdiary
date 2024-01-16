@@ -1,4 +1,15 @@
 const LongInputField = ({ id, type, value, onChange, placeHolder }) => {
+    const inputStyle = {
+        height: '40px',
+        width: '420px',
+        paddingLeft: '10px',
+        margin: '0px 15px 30px 15px',
+        border: '1px solid #909090', 
+        borderRadius: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignContent: 'center',
+    };
     return(
         <div>
             <input
@@ -7,17 +18,7 @@ const LongInputField = ({ id, type, value, onChange, placeHolder }) => {
                 value={value}
                 onChange={onChange}
                 placeholder={placeHolder}
-                style={{
-                    height: '30px',
-                    width: '400px',
-                    paddingLeft: '10px',
-                    marginBottom: '20px',
-                    border: '1px solid #909090', 
-                    borderRadius: '10px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignContent: 'center',
-                }}
+                style={inputStyle}
             />
         </div>
     )

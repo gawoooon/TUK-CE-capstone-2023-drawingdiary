@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import Button from "../components/Button";
+import Button from "../components/button/Button";
 import LongInputField from '../components/input field/LongInputField';
 import ShortInputField from '../components/input field/ShortInputField';
-
 
 const CreateAccount = () => {
     const [name, setName] = useState('');
@@ -11,8 +10,9 @@ const CreateAccount = () => {
     const [day, setDay] = useState('');
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
+    const [certification, setCheckCertification] = useState('');
     const [password, setPassword] = useState('');
-    const [checkPassword, setCheckPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
 
     const handleSubmit = (event) => {
@@ -21,7 +21,7 @@ const CreateAccount = () => {
     };
 
     const containerStyle = {
-        height: '800px',
+        height: '700px',
         width: '550px',
         position: 'fixed',
         left: '50%', 
@@ -34,9 +34,34 @@ const CreateAccount = () => {
         backgroundColor: '#fff',
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    };
+
+    const selectMonthStyle = {
+        height: '45px',
+        width: '125px',
+        margin: '0px 15px 30px 15px',
+        paddingLeft: '5px',
+        border: '1px solid #909090', 
+        borderRadius: '10px',
+        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
     };
+
+    const selectGenderStyle = {
+        height: '45px',
+        width: '435px',
+        margin: '0px 15px 30px 15px',
+        paddingLeft: '5px',
+        border: '1px solid #909090', 
+        borderRadius: '10px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    };
+
 
     return (
         <div className='create-account-containers' style={containerStyle}>
@@ -54,32 +79,62 @@ const CreateAccount = () => {
 
                 <div style={{
                     display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
                 }}>
-                    <ShortInputField
-                        id="year"
-                        type="number"
-                        value={year}
-                        onChange={(e) => setYear(e.target.value)}
-                        placeHolder="연"
-                    />
+                    <div>
+                        <ShortInputField
+                            id="year"
+                            type="text"
+                            value={year}
+                            onChange={(e) => setYear(e.target.value)}
+                            placeHolder="연"
+                        />
+                    </div>
 
-                    <ShortInputField
-                        id="month"
-                        type="number"
-                        value={month}
-                        onChange={(e) => setMonth(e.target.value)}
-                        placeHolder="월"
-                    />
+                    <div>
+                        <select 
+                            name='month'
+                            id='month'
+                            onChange={ (e) => setMonth(e.target.value)}
+                            style={selectMonthStyle}>
 
-                    <ShortInputField
-                        id="day"
-                        type="number"
-                        value={day}
-                        onChange={(e) => setDay(e.target.value)}
-                        placeHolder="일"
-                    />
+                            <option value="" disabled select style={{ color: 'grey'}}>월</option>
+                            <option value="1">1월</option>
+                            <option value="2">2월</option>
+                            <option value="3">3월</option>
+                            <option value="4">4월</option>
+                            <option value="5">5월</option>
+                            <option value="6">6월</option>
+                            <option value="7">7월</option>
+                            <option value="8">8월</option>
+                            <option value="9">9월</option>
+                            <option value="10">10월</option>
+                            <option value="11">11월</option>
+                            <option value="12">12월</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <ShortInputField
+                            id="day"
+                            type="text"
+                            value={day}
+                            onChange={(e) => setDay(e.target.value)}
+                            placeHolder="일"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <select
+                        name='gender'
+                        id='gender'
+                        onChange={ (e) => setGender(e.target.value)}
+                        style={selectGenderStyle}>
+                            <option value="" disabled select style={{ color: 'grey'}}>성별</option>
+                            <option value="female">여자</option>
+                            <option value="male">남자</option>
+                            <option value="secret">공개안함</option>
+                        </select>
                 </div>
 
                 <div>
@@ -89,6 +144,16 @@ const CreateAccount = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeHolder="이메일"
+                    />
+                </div>
+
+                <div>
+                    <LongInputField
+                        id="certification"
+                        type="email"
+                        value={certification}
+                        onChange={(e) => setCheckCertification(e.target.value)}
+                        placeHolder="인증번호 입력"
                     />
                 </div>
 
@@ -106,17 +171,15 @@ const CreateAccount = () => {
                     <LongInputField
                         id="checkPassword"
                         type="checkPassword"
-                        value={checkPassword}
-                        onChange={(e) => setCheckPassword(e.target.value)}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                         placeHolder="비밀번호 확인"
                     />
                 </div>
 
+                <Button text="다음" onClick={handleSubmit}/>
+
             </form>
-            
-            <div>
-                <Button text="다음"/>
-            </div>
         </div>
     )
 };
