@@ -18,11 +18,11 @@ const BackgroundBox = styled.div`
   border-radius: 20px;
 `;
 
-function Background() {
+function Background({ children }) {
   return (
     <div>
       <BackgroundColor>
-        <BackgroundBox></BackgroundBox>
+        <BackgroundBox>{children}</BackgroundBox>
       </BackgroundColor>
     </div>
   );
