@@ -1,25 +1,32 @@
-const buttonStyle = {
-    height: '50px',
-    width: '250px',
-    marginBottom: '30px',
-    backgroundColor: 'rgba(106, 156, 253, 0.3)',
-    borderRadius: '20px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    border: 'none',
-    cursor: 'pointer',
-    color: 'black',
-    fontSize: '20px',
-    fontWeight: 'bold',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-}
+import style, { styled } from "styled-components";
+
+const ButtonStyle = styled.button`
+    height: 50px;
+    width: 250px;
+    margin-bottom: 30px;
+    background-color: rgba(106, 156, 253, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+`;
+
+const ButtonContainer = styled.div `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 
 const Button = ({ text, onClick }) => {
     return (
-        <button style={buttonStyle} type="submit" onClick={onClick}>
-            {text}
-        </button>
+        <ButtonContainer>
+            <ButtonStyle type="submit" onClick={onClick}>
+                {text}
+            </ButtonStyle>
+        </ButtonContainer>
     )
 }
 

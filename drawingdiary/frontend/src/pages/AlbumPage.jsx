@@ -1,9 +1,12 @@
 import Background from "../components/Background";
+import SideBar from "../components/sidebar/SideBar";
 
 function AlbumPage() {
   return (
     <div>
-      <Background>AlbumPage</Background>
+      <Background>
+        <SideBar/>
+      </Background>
     </div>
   );
 }
