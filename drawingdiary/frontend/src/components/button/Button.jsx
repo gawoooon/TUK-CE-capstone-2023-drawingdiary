@@ -1,4 +1,4 @@
-import style, { styled } from "styled-components";
+import styled from "styled-components";
 
 const ButtonStyle = styled.button`
     height: 50px;
@@ -23,9 +23,11 @@ const ButtonContainer = styled.div `
 const Button = ({ text, onClick }) => {
     return (
         <ButtonContainer>
+
             <ButtonStyle type="submit" onClick={onClick}>
                 {text}
             </ButtonStyle>
+
         </ButtonContainer>
     )
 }

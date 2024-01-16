@@ -20,15 +20,33 @@ const LinkStyle = styled.a`
     font-size: 10px;
     color: #818181;
     display: block;
+
+    img {
+        width: 25px;
+        height: 25px;
+    };
 `;
 
+const ImageWithMargin = styled.div`
+    margin-top: 70px;
+`;
 const SideBar = () => {
     return (
         <SideBarStyle>
-            <LinkStyle href="/calendar">Home</LinkStyle>
-            <LinkStyle href="/album">Album</LinkStyle>
-            <LinkStyle href="/stats">Analyze</LinkStyle>
-            <LinkStyle href="/my">MyPage</LinkStyle>
+            <LinkStyle href="/calendar">
+                <ImageWithMargin>
+                    <img src="schedule.png" alt="Home"/>
+                </ImageWithMargin>
+            </LinkStyle>
+            <LinkStyle href="/album">
+                <img src="photo-album.png" alt="Album"/>
+            </LinkStyle>
+            <LinkStyle href="/stats">
+                <img src="graph.png" alt="Statics"/>
+            </LinkStyle>
+            <LinkStyle href="/my">
+                <img src="my-page.png" alt="MyPage"/>
+            </LinkStyle>
         </SideBarStyle>
     );
 };

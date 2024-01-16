@@ -18,17 +18,37 @@ const LinkStyle = styled.a`
     text-decoration: none;
     font-size: 10px;
     color: #818181;
-    display: block
+    display: block;
+
+    img {
+        width: 25px;
+        height: 25px;
+    };
+
 `;
 
 const ShortSidebar = () => {
     return (
         <ShortSideBarStyle>
-            <LinkStyle href="/calendar">Back</LinkStyle>
-            <LinkStyle href="/calendar">Home</LinkStyle>
-            <LinkStyle href="/album">Album</LinkStyle>
-            <LinkStyle href="/stats">Analyze</LinkStyle>
-            <LinkStyle href="/my">MyPage</LinkStyle>
+            <LinkStyle href="/calendar">
+                <img src="/left-arrow.png" alt="Back"/>
+            </LinkStyle>
+
+            <LinkStyle href="/calendar">
+                <img src="/schedule.png" alt="Home"/>
+            </LinkStyle>
+
+            <LinkStyle href="/album">
+                <img src="/photo-album.png" alt="Album"/>
+            </LinkStyle>
+
+            <LinkStyle href="/stats">
+                <img src="/graph.png" alt="Statics"/>
+            </LinkStyle>
+
+            <LinkStyle href="/my">
+                <img src="/my-page.png" alt="MyPage"/>
+            </LinkStyle>
         </ShortSideBarStyle>
     );
 };

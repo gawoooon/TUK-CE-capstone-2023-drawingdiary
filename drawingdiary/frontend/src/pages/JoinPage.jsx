@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Background from "../components/Background";
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 import Button from "../components/button/Button";
 import LongInputField from '../components/input field/LongInputField';
 import ShortInputField from '../components/input field/ShortInputField';
@@ -16,12 +17,16 @@ const ContainerStyle = styled.div`
   transform: translate(-50%, -50%);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid #000000;
+  border: 1px solid ;
   background-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  };
 `;
 
 const InputFieldStyle = styled.div`
@@ -66,6 +71,14 @@ const BirthDayContainer = styled.div`
   align-items: center;
 `;
 
+const ConfilmPasswordStyle = styled.input`
+  height: 40px;
+  width: 420px;
+  padding-left: 10px;
+  border: 1px solid #909090;
+  border-radius: 10px;
+`;
+
 const CreateAccount = () => {
     const [name, setName] = useState('');
     const [year, setYear] = useState('');
@@ -77,10 +90,27 @@ const CreateAccount = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const navigate = useNavigate();
+
+    const confirmPasswordRef = useRef();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(name, email, password);
+
+        if(!name || !year || !month || !day || !gender || !email || !certification || !password || !confirmPassword) {
+          alert("모든 입력란을 채워주세요.");
+          return;
+        }
+
+        // 비밀번호 일치 확인
+        if(password !== confirmPassword) {
+          alert("비밀번호가 일치하지 않습니다.");
+          confirmPasswordRef.current.focus();
+          return;
+        }
+        navigate('/choosePersonality');
+        console.log(`이름: ${name}, 이메일: ${email}, 비밀번호: ${password}, 연: ${year}, 월: ${month}, 일: ${day}, 성별: ${gender}`);
+
     };
 
     return (
@@ -118,19 +148,19 @@ const CreateAccount = () => {
                   name='month'
                   id='month'
                   onChange={ (e) => setMonth(e.target.value)}>
-                  <option value="" disabled style={{ color: 'grey'}}>월</option>
-                  <option value="1">1월</option>
-                  <option value="2">2월</option>
-                  <option value="3">3월</option>
-                  <option value="4">4월</option>
-                  <option value="5">5월</option>
-                  <option value="6">6월</option>
-                  <option value="7">7월</option>
-                  <option value="8">8월</option>
-                  <option value="9">9월</option>
-                  <option value="10">10월</option>
-                  <option value="11">11월</option>
-                  <option value="12">12월</option>
+                  <option value={""} disabled style={{ color: 'grey'}}>월</option>
+                  <option value={"1"}>1월</option>
+                  <option value={"2"}>2월</option>
+                  <option value={"3"}>3월</option>
+                  <option value={"4"}>4월</option>
+                  <option value={"5"}>5월</option>
+                  <option value={"6"}>6월</option>
+                  <option value={"7"}>7월</option>
+                  <option value={"8"}>8월</option>
+                  <option value={"9"}>9월</option>
+                  <option value={"10"}>10월</option>
+                  <option value={"11"}>11월</option>
+                  <option value={"12"}>12월</option>
 
                 </SelectMonthContainer>
 
@@ -192,18 +222,19 @@ const CreateAccount = () => {
               </InputFieldStyle>
 
               <InputFieldStyle>
-              
-                <LongInputField
+
+                <ConfilmPasswordStyle
                   id="checkPassword"
-                  type="checkPassword"
+                  type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeHolder="비밀번호 확인"
+                  ref={confirmPasswordRef}
                 />
               
               </InputFieldStyle>
 
-              <Button text="다음" onClick={handleSubmit}/>
+              <Button text="다음" onClick={handleSubmit} herf="/choosePersonality"/>
 
             </form>
 

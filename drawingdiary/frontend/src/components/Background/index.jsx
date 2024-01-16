@@ -16,6 +16,8 @@ const BackgroundBox = styled.div`
   background-color: rgba(255, 255, 255, 0.08);
   box-shadow: 3px 3px 20px 5px rgba(0, 0, 0, 0.03);
   border-radius: 20px;
+  display: flex;
+  justify-content: flex-start;
 `;
 
 function Background({ children }) {

@@ -1,9 +1,12 @@
 import Background from "../components/Background";
+import SideBar from "../components/sidebar/SideBar";
 
 function CalendarPage() {
   return (
     <div>
-      <Background>CalendarPage</Background>
+      <Background>
+        <SideBar/>
+      </Background>
     </div>
   );
 }
