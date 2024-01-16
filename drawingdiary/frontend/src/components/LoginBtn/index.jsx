@@ -11,10 +11,11 @@ const Btn = styled.button`
   font-size: 20px;
   font-weight: 800;
   color: #989898;
+  cursor: pointer;
 `;
 
-function LoginBar({ text }) {
-  return <Btn>{text}</Btn>;
+function LoginBtn({ text, onClick }) {
+  return <Btn onClick={onClick}>{text}</Btn>;
 }
 
-export default LoginBar;
+export default LoginBtn;

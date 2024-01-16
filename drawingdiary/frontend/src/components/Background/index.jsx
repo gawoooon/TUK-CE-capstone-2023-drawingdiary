@@ -1,9 +1,10 @@
 import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-  body {
+  body, p {
     margin: 0;
   }
+  
   `;
 
 const BackgroundColor = styled.body`
