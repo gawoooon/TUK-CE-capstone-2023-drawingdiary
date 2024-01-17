@@ -1,4 +1,4 @@
-package com.diary.drawing.user.domain;
+package com.diary.drawing.user;
 
 import java.sql.Date;
 
@@ -7,11 +7,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
-@Entity
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Table(name = "User")
+@Entity
 public class User {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long UserID;
@@ -23,10 +31,6 @@ public class User {
     private String PhoneNumber;
     private String Personality;
 
-
-    public User(){
-        super();
-    }
 
     public Long getUserID() {
         return this.UserID;

@@ -33,7 +33,7 @@ services:
     tty: true
 
   db:
-    image: mysql
+    image: mysql:latest
     container_name: db
     ports:
       - "3308:3306"
@@ -45,6 +45,7 @@ services:
       - db-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=zoLZak@!1321
+      - MYSQL_USER: root
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_bin
