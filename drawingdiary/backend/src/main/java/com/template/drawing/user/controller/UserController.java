@@ -1,4 +1,4 @@
-package com.diary.drawing.user.controller;
+package com.template.drawing.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.diary.drawing.user.domain.User;
-import com.diary.drawing.user.service.UserService;
+import com.template.drawing.user.domain.User;
+import com.template.drawing.user.service.UserService;
 
 @RestController
 @RequestMapping("/user")
