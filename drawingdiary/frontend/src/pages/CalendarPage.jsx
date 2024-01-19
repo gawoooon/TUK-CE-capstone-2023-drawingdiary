@@ -36,7 +36,7 @@ const RightBox = styled.div`
   height: 100%;
   background-color: white;
   border-radius: 0 30px 30px 0;
-  padding: 40px;
+  padding: 40px 60px;
   box-sizing: border-box;
 `;
 

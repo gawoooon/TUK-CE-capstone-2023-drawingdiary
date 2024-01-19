@@ -55,6 +55,28 @@ const HeaderEndBox = styled.div`
   font-weight: 1000;
 `;
 
+const DaysBox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 30px;
+  backgound-color: blue;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 2px;
+  box-sizing: border-box;
+`;
+
+const DayColumn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14%;
+  height: 100%;
+  color: #b7b7b7;
+  border: 1px solid #e0e0e0;
+  padding: 5px 0px;
+`;
+
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
     <HeaderBox>
@@ -69,6 +91,17 @@ const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
       </HeaderEndBox>
     </HeaderBox>
   );
+};
+
+const RenderDays = () => {
+  const days = [];
+  const date = ["Sun", "Mon", "Thu", "Wed", "Thrs", "Fri", "Sat"];
+
+  for (let i = 0; i < 7; i++) {
+    days.push(<DayColumn key={i}>{date[i]}</DayColumn>);
+  }
+
+  return <DaysBox>{days}</DaysBox>;
 };
 
 function Calendar2() {
@@ -89,6 +122,7 @@ function Calendar2() {
         prevMonth={prevMonth}
         nextMonth={nextMonth}
       />
+      <RenderDays />
     </CalendarBox>
   );
 }
