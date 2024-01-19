@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 import Background from "../components/Background";
 import Calendar2 from "../components/Calendar2";
+import Calendar from "../components/Calendar";
 import SideBar from "../components/sidebar/SideBar";
 
 import { IoMdPerson } from "react-icons/io";
