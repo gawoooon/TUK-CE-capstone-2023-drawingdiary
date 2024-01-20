@@ -2,11 +2,10 @@ package com.template.drawing.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+// import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-
-@EnableJpaRepositories("com.template.drawing.user.repository")
-@SpringBootApplication
+// @EnableJpaRepositories("com.diary.template")
+@SpringBootApplication()
 
 public class DrawingApplication {
     

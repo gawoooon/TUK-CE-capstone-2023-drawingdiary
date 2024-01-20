@@ -1,38 +1,21 @@
-package com.diary.drawing.user;
-
-import java.util.List;
+package com.template.drawing.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
-@RequestMapping("api/users")
-
+@RequestMapping("/user")
 public class UserController {
-
     @Autowired
     private UserService userService;
 
-    @GetMapping("/findAll")
-    public List<User> getAllUsers(){
-        return null;
-
-    };
-
-    @GetMapping("/insert")
-    public User insert(@RequestBody User user){
-        return userService.insertUser(user);
+    @PostMapping("/add")
+    public String add(@RequestBody User user){
+        userService.saveUser(user);
+        return "New user is added";
 
     }
 }
-    
-
-    
-
-
-
-

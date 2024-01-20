@@ -1,10 +1,6 @@
-package com.diary.drawing.user;
-
-import java.util.List;
+package com.template.drawing.user;
 
 public interface UserService {
-    public User insertUser(User user);
-
-    List<User> getUsers();
+    public User saveUser(User user);
 
 }

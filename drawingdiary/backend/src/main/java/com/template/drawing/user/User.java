@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:drawingdiary/backend/src/main/java/com/template/drawing/user/domain/User.java
-package com.template.drawing.user.domain;
-========
-package com.diary.drawing.user;
->>>>>>>> ebf0b6e16ec2d3a5096dd7e86026c8ecca279203:drawingdiary/backend/src/main/java/com/template/drawing/user/User.java
+package com.template.drawing.user;
 
 import java.sql.Date;
 
@@ -11,19 +7,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Table(name = "User")
 @Entity
+@Table(name = "User")
 public class User {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long UserID;
@@ -35,6 +23,10 @@ public class User {
     private String PhoneNumber;
     private String Personality;
 
+
+    public User(){
+        super();
+    }
 
     public Long getUserID() {
         return this.UserID;
