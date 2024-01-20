@@ -1,9 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import ShortSidebar from "./components/sidebar/ShortSidebar";
 import "./components/styles.css";
 import CreateAccount from "./pages/CreateAccount";
-import SideBar from "./components/sidebar/SideBar";
-import ShortSidebar from "./components/sidebar/ShortSidebar";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
