@@ -12,6 +12,8 @@ const CalendarBox = styled.div`
   width: 100%;
   height: 100%;
   transition: width 0.5s ease;
+  padding: 40px 60px;
+  box-sizing: border-box;
 `;
 
 const HeaderBox = styled.div`
@@ -137,10 +139,7 @@ const BodyDayOneBox = styled.div`
 
     &.clicked {
       ${CalendarBox} {
-        width: 70%;
-      }
-      .LeftBox {
-        width: ${({ leftBoxWidth }) => leftBoxWidth}; // 수정된 부분
+        width: 65%;
       }
     }
   }
@@ -178,6 +177,7 @@ const RenderCells = ({
   selectedDate,
   onDateClick: cellOnDateClick,
   leftBoxWidth,
+  rightBoxWidth,
 }) => {
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
@@ -211,6 +211,7 @@ const RenderCells = ({
           key={day}
           onClick={() => cellOnDateClick(cloneDay)}
           leftBoxWidth={leftBoxWidth}
+          rightBoxWidth={rightBoxWidth}
         >
           <BodyMonth
             className={
@@ -233,7 +234,11 @@ const RenderCells = ({
   return <BodyBox>{rows}</BodyBox>;
 };
 
-function Calendar2({ leftBoxWidth, onDateClick: parentOnDateClick }) {
+function Calendar2({
+  leftBoxWidth,
+  rightBoxWidth,
+  onDateClick: parentOnDateClick,
+}) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [calendarBoxWidth, setCalendarBoxWidth] = useState("100%"); // 추가
@@ -265,6 +270,7 @@ function Calendar2({ leftBoxWidth, onDateClick: parentOnDateClick }) {
         selectedDate={selectedDate}
         onDateClick={onDateClick}
         leftBoxWidth={leftBoxWidth}
+        rightBoxWidth={rightBoxWidth}
       />
     </CalendarBox>
   );

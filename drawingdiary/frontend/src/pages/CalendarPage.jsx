@@ -42,20 +42,24 @@ const MiddleBox = styled.div`
 `;
 
 const RightBox = styled.div`
-  display: flex;
-  width: 0%;
+  display: ${({ showRightBox }) => (showRightBox ? "flex" : "none")};
+  width: ${({ rightBoxWidth }) => rightBoxWidth};
   height: 100%;
-  background-color: pink;
+
   border-radius: 0 30px 30px 0;
-  box-sizing: border-box;
+  transition: width 0.5s ease;
 `;
 
 function CalendarPage() {
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
+  const [rightBoxWidth, setRightBoxWidth] = useState("0%");
+  const [showRightBox, setShowRightBox] = useState(false);
 
   const handleDateClick = () => {
     // BodyDayOneBox를 클릭했을 때 leftBoxWidth 변경
     setLeftBoxWidth("8%");
+    setRightBoxWidth("27%");
+    setShowRightBox(true);
   };
   return (
     <Background>
@@ -64,13 +68,15 @@ function CalendarPage() {
           <LeftBox leftBoxWidth={leftBoxWidth}>
             <SideBar />
           </LeftBox>
-          <MiddleBox>
-            <Calendar2
-              leftBoxWidth={leftBoxWidth}
-              onDateClick={handleDateClick}
-            />
-          </MiddleBox>
-          <RightBox></RightBox>
+
+          <Calendar2
+            leftBoxWidth={leftBoxWidth}
+            onDateClick={handleDateClick}
+          />
+
+          <RightBox showRightBox={showRightBox} rightBoxWidth={rightBoxWidth}>
+            dd
+          </RightBox>
         </CalendarBox>
       </Body>
     </Background>
