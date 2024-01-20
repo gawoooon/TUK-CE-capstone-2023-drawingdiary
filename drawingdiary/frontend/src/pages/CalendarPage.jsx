@@ -1,13 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
 
 import Background from "../components/Background";
 import Calendar2 from "../components/Calendar2";
 import Calendar from "../components/Calendar";
 import SideBar from "../components/sidebar/SideBar";
-
-import { IoMdPerson } from "react-icons/io";
 
 const Body = styled.body`
   display: flex;
@@ -22,16 +19,19 @@ const CalendarBox = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 30px;
+  background-color: white;
   box-shadow: 3px 10px 5px 0 rgba(0, 0, 0, 0.1);
 `;
 const LeftBox = styled.div`
   display: flex;
-  width: 25%;
+  width: ${({ leftBoxWidth }) => leftBoxWidth};
+  height: 100%;
   background-color: #f9f9f9;
   border-radius: 30px 0 0 30px;
+  transition: width 0.5s ease;
 `;
 
-const RightBox = styled.div`
+const MiddleBox = styled.div`
   display: flex;
   width: 75%;
   height: 100%;
@@ -41,17 +41,36 @@ const RightBox = styled.div`
   box-sizing: border-box;
 `;
 
+const RightBox = styled.div`
+  display: flex;
+  width: 0%;
+  height: 100%;
+  background-color: pink;
+  border-radius: 0 30px 30px 0;
+  box-sizing: border-box;
+`;
+
 function CalendarPage() {
+  const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
+
+  const handleDateClick = () => {
+    // BodyDayOneBox를 클릭했을 때 leftBoxWidth 변경
+    setLeftBoxWidth("8%");
+  };
   return (
     <Background>
       <Body>
         <CalendarBox>
-          <LeftBox>
+          <LeftBox leftBoxWidth={leftBoxWidth}>
             <SideBar />
           </LeftBox>
-          <RightBox>
-            <Calendar2 />
-          </RightBox>
+          <MiddleBox>
+            <Calendar2
+              leftBoxWidth={leftBoxWidth}
+              onDateClick={handleDateClick}
+            />
+          </MiddleBox>
+          <RightBox></RightBox>
         </CalendarBox>
       </Body>
     </Background>

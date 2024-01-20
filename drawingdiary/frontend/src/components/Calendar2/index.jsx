@@ -11,6 +11,7 @@ import { Icon } from "@iconify/react";
 const CalendarBox = styled.div`
   width: 100%;
   height: 100%;
+  transition: width 0.5s ease;
 `;
 
 const HeaderBox = styled.div`
@@ -71,7 +72,7 @@ const DayColumn = styled.div`
   width: 14%;
   height: 100%;
   color: #b7b7b7;
-  border: 1px solid #e0e0e0;
+  border: 1px solid rgba(224, 224, 224, 0.5);
   padding: 5px 0px;
   box-sizing: border-box;
 `;
@@ -89,15 +90,6 @@ const BodyDaysBox = styled.div`
   width: 100%;
   height: 20%;
   box-sizing: border-box;
-`;
-const BodyDayOneBox = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 14%;
-  height: 100%;
-  box-sizing: border-box;
-  border: 1px solid #e0e0e0;
-  pointer: cursor;
 `;
 
 const BodyMonth = styled.div`
@@ -124,23 +116,14 @@ const BodyMonth = styled.div`
   }
 `;
 
-const BodyDayOneBoxStyle = styled(BodyDayOneBox)`
- 
-  &.disabled {
-     color:#b7b7b7;
-  }
-
-  &.selected {
-     selected 클래스에 대한 스타일
-  }
-
-
-
-  &.valid {
-     valid 클래스에 대한 스타일
-  }
-
-
+const BodyDayOneBox = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 14%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(224, 224, 224, 0.5);
+  transition: width 0.5s ease;
 
   &:hover {
     cursor: pointer;
@@ -152,12 +135,15 @@ const BodyDayOneBoxStyle = styled(BodyDayOneBox)`
       cursor: pointer;
     }
 
-
+    &.clicked {
+      ${CalendarBox} {
+        width: 70%;
+      }
+      .LeftBox {
+        width: ${({ leftBoxWidth }) => leftBoxWidth}; // 수정된 부분
+      }
+    }
   }
-
-
-
-  
 `;
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
@@ -187,7 +173,12 @@ const RenderDays = () => {
   return <DaysBox>{days}</DaysBox>;
 };
 
-const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
+const RenderCells = ({
+  currentMonth,
+  selectedDate,
+  onDateClick: cellOnDateClick,
+  leftBoxWidth,
+}) => {
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -206,20 +197,20 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
       const cloneDay = day;
 
       const isToday = isSameDay(day, today);
+      const isClicked = isSameDay(day, selectedDate);
 
       days.push(
-        <BodyDayOneBoxStyle
+        <BodyDayOneBox
           className={`col cell ${
             !isSameMonth(day, monthStart)
               ? "disabled"
-              : isSameDay(day, selectedDate)
-              ? "selected"
               : format(currentMonth, "M") !== format(day, "M")
               ? "not-valid"
               : "valid"
-          }${isToday ? "today" : ""}`}
+          }${isToday ? "today" : ""}${isClicked ? " clicked" : ""}`}
           key={day}
-          onClick={() => onDateClick(parse(cloneDay))}
+          onClick={() => cellOnDateClick(cloneDay)}
+          leftBoxWidth={leftBoxWidth}
         >
           <BodyMonth
             className={
@@ -232,7 +223,7 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
           >
             {formattedDate}
           </BodyMonth>
-        </BodyDayOneBoxStyle>
+        </BodyDayOneBox>
       );
       day = addDays(day, 1);
     }
@@ -242,9 +233,10 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
   return <BodyBox>{rows}</BodyBox>;
 };
 
-function Calendar2() {
+function Calendar2({ leftBoxWidth, onDateClick: parentOnDateClick }) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [calendarBoxWidth, setCalendarBoxWidth] = useState("100%"); // 추가
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -255,10 +247,13 @@ function Calendar2() {
 
   const onDateClick = (day) => {
     setSelectedDate(day);
+    parentOnDateClick();
+
+    setCalendarBoxWidth("80%");
   };
 
   return (
-    <CalendarBox>
+    <CalendarBox style={{ width: calendarBoxWidth }}>
       <RenderHeader
         currentMonth={currentMonth}
         prevMonth={prevMonth}
@@ -269,6 +264,7 @@ function Calendar2() {
         currentMonth={currentMonth}
         selectedDate={selectedDate}
         onDateClick={onDateClick}
+        leftBoxWidth={leftBoxWidth}
       />
     </CalendarBox>
   );
