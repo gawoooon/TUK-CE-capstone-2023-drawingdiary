@@ -1,7 +1,10 @@
-package com.template.drawing.user;
+package com.diary.drawing.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.diary.drawing.user.domain.User;
+import com.diary.drawing.user.repository.UserRepository;
 
 import jakarta.annotation.Nonnull;
 

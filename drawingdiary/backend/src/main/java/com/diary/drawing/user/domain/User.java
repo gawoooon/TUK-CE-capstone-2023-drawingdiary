@@ -1,4 +1,4 @@
-package com.template.drawing.user;
+package com.diary.drawing.user.domain;
 
 import java.sql.Date;
 

@@ -1,4 +1,4 @@
-package com.template.drawing.user;
+package com.diary.drawing.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
