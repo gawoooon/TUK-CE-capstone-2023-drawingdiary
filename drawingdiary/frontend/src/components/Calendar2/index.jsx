@@ -10,8 +10,6 @@ import { isSameMonth, isSameDay, addDays } from "date-fns";
 const CalendarBox = styled.div`
   width: 100%;
   height: 100%;
-  transition: width 0.5s ease;
-  padding: 40px 60px;
   box-sizing: border-box;
   transition: width 0.5s linear;
 `;
@@ -237,7 +235,6 @@ const RenderCells = ({
 function Calendar2({ onDateClick: parentOnDateClick }) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [calendarBoxWidth, setCalendarBoxWidth] = useState("100%"); // 추가
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -251,16 +248,14 @@ function Calendar2({ onDateClick: parentOnDateClick }) {
       // 같은 날짜를 다시 클릭한 경우, 상태를 원상복구
       setSelectedDate(null);
       parentOnDateClick(day);
-      setCalendarBoxWidth("100%");
     } else {
       setSelectedDate(day);
       parentOnDateClick(day);
-      setCalendarBoxWidth("70%");
     }
   };
 
   return (
-    <CalendarBox style={{ width: calendarBoxWidth }}>
+    <CalendarBox style={{}}>
       <RenderHeader
         currentMonth={currentMonth}
         prevMonth={prevMonth}
