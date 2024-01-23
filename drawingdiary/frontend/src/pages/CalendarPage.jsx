@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { isSameDay } from "date-fns";
 
 import Background from "../components/Background";
 import Calendar2 from "../components/Calendar2";
@@ -10,7 +11,7 @@ const Body = styled.body`
   display: flex;
   width: 100%;
   height: 100%;
-  padding: 60px 200px;
+  padding: 60px 100px;
   box-sizing: border-box;
 `;
 
@@ -28,7 +29,7 @@ const LeftBox = styled.div`
   height: 100%;
   background-color: #f9f9f9;
   border-radius: 30px 0 0 30px;
-  transition: width 0.5s ease;
+  transition: width 0.5s linear;
 `;
 
 const MiddleBox = styled.div`
@@ -47,19 +48,31 @@ const RightBox = styled.div`
   height: 100%;
 
   border-radius: 0 30px 30px 0;
-  transition: width 0.5s ease;
+  transition: width 0.5s linear;
 `;
 
 function CalendarPage() {
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
   const [showRightBox, setShowRightBox] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
-  const handleDateClick = () => {
-    // BodyDayOneBox를 클릭했을 때 leftBoxWidth 변경
-    setLeftBoxWidth("8%");
-    setRightBoxWidth("27%");
-    setShowRightBox(true);
+  // CalendarPage 컴포넌트에서 handleDateClick 함수 수정
+  const handleDateClick = (day) => {
+    if (isSameDay(day, selectedDate)) {
+      // 이미 선택된 날짜를 클릭했을 때
+      setLeftBoxWidth("25%");
+      setRightBoxWidth("0%");
+      setShowRightBox(false);
+      setSelectedDate(null);
+      console.log("Hello, World!");
+    } else {
+      // 새로운 날짜를 선택했거나 이전에 선택한 날짜를 클릭했을 때
+      setLeftBoxWidth("8%");
+      setRightBoxWidth("27%");
+      setShowRightBox(true);
+      setSelectedDate(day);
+    }
   };
   return (
     <Background>

@@ -5,8 +5,7 @@ import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
 
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
-import { isSameMonth, isSameDay, addDays, parse } from "date-fns";
-import { Icon } from "@iconify/react";
+import { isSameMonth, isSameDay, addDays } from "date-fns";
 
 const CalendarBox = styled.div`
   width: 100%;
@@ -14,6 +13,7 @@ const CalendarBox = styled.div`
   transition: width 0.5s ease;
   padding: 40px 60px;
   box-sizing: border-box;
+  transition: width 0.5s linear;
 `;
 
 const HeaderBox = styled.div`
@@ -112,7 +112,7 @@ const BodyMonth = styled.div`
 
   &.today {
     color: white;
-    background-color: #88b0fd;
+    background-color: #4f8cff;
     width: 50%;
     border-radius: 50%;
   }
@@ -125,7 +125,7 @@ const BodyDayOneBox = styled.div`
   height: 100%;
   box-sizing: border-box;
   border: 1px solid rgba(224, 224, 224, 0.5);
-  transition: width 0.5s ease;
+  transition: width 0.5s linear;
 
   &:hover {
     cursor: pointer;
@@ -134,13 +134,15 @@ const BodyDayOneBox = styled.div`
       background-color: #88b0fd;
       width: 50%;
       border-radius: 50%;
-      cursor: pointer;
     }
+  }
 
-    &.clicked {
-      ${CalendarBox} {
-        width: 65%;
-      }
+  &.selected {
+    ${BodyMonth}:not(.today, .not-valid) {
+      color: white;
+      background-color: #88b0fd;
+      width: 50%;
+      border-radius: 50%;
     }
   }
 `;
@@ -176,8 +178,6 @@ const RenderCells = ({
   currentMonth,
   selectedDate,
   onDateClick: cellOnDateClick,
-  leftBoxWidth,
-  rightBoxWidth,
 }) => {
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
@@ -207,11 +207,11 @@ const RenderCells = ({
               : format(currentMonth, "M") !== format(day, "M")
               ? "not-valid"
               : "valid"
-          }${isToday ? "today" : ""}${isClicked ? " clicked" : ""}`}
+          }${isToday ? "today" : ""}${isClicked ? " clicked" : ""} ${
+            isClicked ? " selected" : ""
+          }`}
           key={day}
           onClick={() => cellOnDateClick(cloneDay)}
-          leftBoxWidth={leftBoxWidth}
-          rightBoxWidth={rightBoxWidth}
         >
           <BodyMonth
             className={
@@ -234,11 +234,7 @@ const RenderCells = ({
   return <BodyBox>{rows}</BodyBox>;
 };
 
-function Calendar2({
-  leftBoxWidth,
-  rightBoxWidth,
-  onDateClick: parentOnDateClick,
-}) {
+function Calendar2({ onDateClick: parentOnDateClick }) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [calendarBoxWidth, setCalendarBoxWidth] = useState("100%"); // 추가
@@ -251,10 +247,16 @@ function Calendar2({
   };
 
   const onDateClick = (day) => {
-    setSelectedDate(day);
-    parentOnDateClick();
-
-    setCalendarBoxWidth("80%");
+    if (isSameDay(day, selectedDate)) {
+      // 같은 날짜를 다시 클릭한 경우, 상태를 원상복구
+      setSelectedDate(null);
+      parentOnDateClick(day);
+      setCalendarBoxWidth("100%");
+    } else {
+      setSelectedDate(day);
+      parentOnDateClick(day);
+      setCalendarBoxWidth("70%");
+    }
   };
 
   return (
@@ -269,8 +271,6 @@ function Calendar2({
         currentMonth={currentMonth}
         selectedDate={selectedDate}
         onDateClick={onDateClick}
-        leftBoxWidth={leftBoxWidth}
-        rightBoxWidth={rightBoxWidth}
       />
     </CalendarBox>
   );
