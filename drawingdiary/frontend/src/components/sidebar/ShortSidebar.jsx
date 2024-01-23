@@ -1,29 +1,46 @@
 import styled from "styled-components";
 
 const ShortSideBarStyle = styled.div`
-    height: 400px;
+    height: 80px;
     width: 80px;
     position: fixed;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #F9F9F9;
+    background-color: rgba(249, 249, 249, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: height 200ms linear;
+    cursor: pointer;
+
+    &:hover{
+        height: 400px;
+    }
+
 `;
 
 const LinkStyle = styled.a`
     margin-top: 30px;
-    padding: 6px 8px;
+    padding: 0 8px;
     text-decoration: none;
     font-size: 10px;
     color: #818181;
     display: block;
+    opacity: 0; /*초기에는 숨김*/
+    transition: opacity 180ms linear;
 
     img {
         width: 25px;
         height: 25px;
     };
+
+    &:first-child {
+        opacity: 1; /*뒤로가기 메뉴는 항상 보이도록 설정*/
+    }
+
+    ${ShortSideBarStyle}:hover & {
+        opacity: 1;
+    }
 
 `;
 
