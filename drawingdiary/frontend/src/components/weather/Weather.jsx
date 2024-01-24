@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
 
 const WeatherContainer = styled.div`
   width: 287px;
-  height: 50px;
+  height: 60px;
   border: none;
   border-radius: 40px;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
@@ -21,9 +19,9 @@ const WeatherContent = styled.div`
 `;
 
 const WeatherImage = styled.img`
-  width: 30px;
-  height: 30px;
-  margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  margin-right: 5px;
 `;
 
 const DateText = styled.text`
@@ -31,46 +29,73 @@ const DateText = styled.text`
   font-weight: bold;
 `;
 
+const LoadingImage = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-right: 20px;
+`;
+
 const Weather = () => {
     
-    const [weatherData, setWeather] = useState({
-        icon: "",
+    const [weather, setWeather] = useState({
+        icon:"",
     });
-    
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition((position) => {
-            let lat = position.coords.latitude;
-            let lon = position.coords.longitude;
-            getWeatherData(lat, lon);
-        });
-    }, []);
-    
-    // 위치 기반 날씨 정보 조회
-    const getWeatherData = async (lat, lon) => {
-        const API_KEY = process.env.REACT_APP_WEATHER_KEY;
-        try {
-            const response = await axios.get(
-                `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}`
-            );
+    const [coords, saveCoords] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-            const weatherIcon = response.data.weather[0].icon;
+    function handleGeoSucc(position) {
+        const { latitude, longitude } = position.coords;
+        const coordsObj = {
+            latitude,
+            longitude
+        };
+        saveCoords(coordsObj);
+        getWeather(latitude, longitude);
+    };
+
+    function handleGeoErr(err) {
+        console.error("geo error!", err);
+    };
+
+    function requestCoords() {
+        navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr);
+    };
+
+    async function getWeather(lat, lon) {
+        const apiKey = process.env.REACT_APP_WEATHER_KEY;
+        try {
+            const response = await fetch (
+                `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
+            );
+            const data = await response.json();
+
+            const weatherIcon = data.weather[0].icon;
             const weatherIconAdrs = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
             setWeather({
-                icon: weatherIconAdrs,
+                icon:weatherIconAdrs,
             });
-
+            
         } catch (error) {
-            console.error("Error fetching weather data:", error);
+            console.error("Error fetching weather data: ", error);
+        } finally {
+            setLoading(false);
         }
-    };
+    }
+    
+    useEffect(() => {
+        requestCoords();
+    }, []);
+    
 
     return (
         <WeatherContainer>
             <WeatherContent>
-                <WeatherImage
-                src={`${weatherData.icon}.png`}
-                alt="Weather Icon"
-                />
+                {loading ? (
+                    <LoadingImage src="/icons8-loading.gif" alt="loading" />
+                ) : (
+                    <WeatherImage src={weather.icon} alt="Weather Icon"/>
+                )}
             </WeatherContent>
             <DateText>1월 1일 월요일</DateText>
         </WeatherContainer>
