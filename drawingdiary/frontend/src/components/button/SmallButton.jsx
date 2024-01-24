@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import React from "react";
 
 const ButtonStyle = styled.button `
     height: 40px;
@@ -14,9 +15,9 @@ const ButtonStyle = styled.button `
     text-align: center;
 `;
 
-const SmallButton = ({ text }) => {
+const SmallButton = ({ text, onClick }) => {
     return (
-        <ButtonStyle type="button">
+        <ButtonStyle type="button" onClick={onClick}>
             {text}
         </ButtonStyle>
     )

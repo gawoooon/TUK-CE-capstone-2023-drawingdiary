@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
-import AlbumCategory from "../components/album category/AlbumCategory";
+import AlbumCategory from "../components/album/AlbumCategory";
 import EditDiary from "../components/edit diary/EditDiary";
 import Weather from "../components/weather/Weather";
 import ImageOption from "../components/edit diary/ImageOption";
