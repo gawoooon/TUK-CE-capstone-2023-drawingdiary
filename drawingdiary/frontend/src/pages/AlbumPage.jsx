@@ -3,9 +3,9 @@ import Background from "../components/Background";
 import AlbumBox from "../components/album/AlbumBox";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import Button from "../components/button/Button";
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import AddCategory from "../components/album/AddCategory";
-import { CategoryProvider, useCategory } from "../components/album/CategoryList";
+import { CategoryProvider } from "../components/album/CategoryList";
 
 const Container = styled.div`
   width: 100vw;
@@ -35,15 +35,6 @@ const AddAlbumContainer = styled.div`
 
 const AlbumPage = () => {
   const [isAddCategoryVisible, setAddCategoryVisible] = useState(false);
-  const { categoryList } = useCategory();
-  const albumBoxRef = useRef(null);
-
-  useEffect(() => {
-      // 카테고리 리스트가 변경될 때 스크롤을 맨 아래로 이동
-      if (albumBoxRef.current) {
-          albumBoxRef.current.scrollTop = albumBoxRef.current.scrollHeight;
-      }
-  }, [categoryList]);
 
   const handleAddCategoryButtonClick = () => {
     setAddCategoryVisible(!isAddCategoryVisible);
@@ -54,11 +45,11 @@ const AlbumPage = () => {
       <Background>
         <Container>
           <ShortSidebar/>
-          <AddAlbumContainer ref={albumBoxRef}>
+          <AddAlbumContainer>
             <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
             {isAddCategoryVisible && <AddCategory />}
           </AddAlbumContainer>
-          <AlbumBox />
+          <AlbumBox  />
         </Container>
       </Background>
     </CategoryProvider>

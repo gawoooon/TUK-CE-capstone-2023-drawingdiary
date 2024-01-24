@@ -49,25 +49,16 @@ const CategoryName = styled.text`
 `;
 
 const AlbumBox = () => {
-
     const { categoryList } = useCategory();
-    // const albumBoxRef = useRef(null);
 
-    // useEffect(() => {
-    //     // 카테고리 리스트가 변경될 때 스크롤을 맨 아래로 이동
-    //     if (albumBoxRef.current) {
-    //         albumBoxRef.current.scrollTop = albumBoxRef.current.scrollHeight;
-    //     }
-    // }, [categoryList]);
-
-
+    
     // 임의의 앨범 아이템 배열 생성 (1월 1일부터 1월 10일까지)
     // const albumItems = Array.from({ length: 10 }, (_, index) => ({
     //     date: `1월 ${index + 1}일`,
     // }));
-
+    
     const albumItemEmpty = [];
-
+    
     return (
         <div>
             {categoryList.map((category) => (

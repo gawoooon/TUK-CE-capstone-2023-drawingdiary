@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { CategoryProvider } from "./components/album/CategoryList";
 
 import LoginPage from "./pages/LoginPage.jsx";
 import LoginLostPage from "./pages/LoginLostPage.jsx";
@@ -20,8 +21,23 @@ function App() {
         <Route path="/loginlost" element={<LoginLostPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/diary/:id" element={<DiaryPage />} />
-        <Route path="/album" element={<AlbumPage />} />
+        <Route 
+          path="/diary/:id" 
+          element={
+            <CategoryProvider>
+              <DiaryPage />
+            </CategoryProvider>
+            }
+          />
+
+        <Route
+          path="/album"
+          element={
+            <CategoryProvider>
+              <AlbumPage />
+            </CategoryProvider>
+          }
+        />
         <Route path="/stats" element={<StatsPage />} />
         <Route path="/my" element={<MyPage />} />
         <Route path="/choosePersonality" element={<ChoosePersonalityPage />} />
