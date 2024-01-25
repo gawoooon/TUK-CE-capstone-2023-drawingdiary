@@ -23,6 +23,11 @@ dependencies {
    developmentOnly 'org.springframework.boot:spring-boot-devtools'
    testImplementation 'org.springframework.boot:spring-boot-starter-test'
    testImplementation 'io.projectreactor:reactor-test'
+
+   //스프링 시큐리티
+   implementation 'org.springframework.boot:spring-boot-starter-security'
+   implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
+   
 }
 
 sourceSets {
