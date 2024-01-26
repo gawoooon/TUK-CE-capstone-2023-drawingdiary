@@ -51,14 +51,17 @@ const MiddleBox = styled.div`
 const RightBox = styled.div`
   display: ${({ showRightBox }) => (showRightBox ? "flex" : "none")};
   width: ${({ rightBoxWidth }) => rightBoxWidth};
+  flex-direction: column;
   height: 100%;
   padding: 40px 0;
   border-radius: 0 30px 30px 0;
   transition: width 0.5s linear;
+  box-sizing: border-box;
 `;
 
 const PrevBtn = styled.button`
-  height: 50px;
+  width: 5%;
+  height: 5%;
   font-size: 50px;
   color: #090071;
   border: none;
@@ -66,6 +69,11 @@ const PrevBtn = styled.button`
   cursor: pointer;
   background: transparent;
   transition: width 0.5s linear;
+`;
+
+const ResultBox = styled.div`
+  width: 100%;
+  height: 95%;
 `;
 
 function CalendarPage() {
@@ -77,11 +85,8 @@ function CalendarPage() {
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // CalendarPage 컴포넌트에서 handleDateClick 함수 수정
   const handleDateClick = async (day) => {
     if (isSameDay(day, selectedDate)) {
-      console.log("handleDateClick11 called. Selected Date:", day);
-      // 이미 선택된 날짜를 클릭했을 때
       setSelectedDate(null);
       setLeftBoxWidth("23%");
       setRightBoxWidth("2%");
@@ -89,66 +94,32 @@ function CalendarPage() {
       setShowRightBox(false);
       setSelectedDateHasData(false);
     } else {
-      console.log("handleDateClick22 called. Selected Date:", day);
-      // 새로운 날짜를 선택했거나 이전에 선택한 날짜를 클릭했을 때
       setShowRightBox(true);
       setLeftBoxWidth("10%");
       setMiddleBoxWidth("60%");
       setRightBoxWidth("30%");
-      setSelectedDate(day);
-      setSelectedDateHasData(true);
+      setSelectedDate(day); // selectedDate 상태 업데이트
+      setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
 
       setIsLoading(true); // 데이터 로딩 시작
-
-      try {
-        // 클릭한 날짜
-        const year = day.getFullYear();
-        const month = day.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
-        const date = day.getDate();
-
-        const formattedMonth = month < 10 ? `0${month}` : `${month}`;
-        const formattedDate = date < 10 ? `0${date}` : `${date}`;
-
-        const formattedNumber = `${year}-${formattedMonth}-${formattedDate}`;
-
-        console.log("Clicked date as number:", formattedNumber);
-
-        // fetchData 함수를 비동기적으로 호출하고 데이터 확인
-        const hasData = await fetchData(selectedDate);
-
-        // 데이터 확인 결과에 따라 상태 업데이트
-        setSelectedDateHasData(hasData);
-        console.log(hasData);
-        console.log(setSelectedDateHasData(hasData));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // 에러가 발생하면 데이터가 없는 것으로 간주
-        setSelectedDateHasData(false);
-      } finally {
-        setIsLoading(false);
-      }
     }
   };
 
-  // PrevBtn 클릭 시 handlePrevBtnClick 함수 호출
+  // PrevBtn 클릭 시
   const handlePrevBtnClick = () => {
     if (selectedDate) {
       console.log("PrevBtn clicked. Selected Date:", selectedDate);
       handleDateClick(selectedDate);
-      // 여기에 실제 데이터 확인 로직을 추가하세요
     }
   };
 
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
-      // 데이터를 가져오는 시뮬레이션 함수
+      // 데이터를 가져옴
       const simulateDataFetch = () => {
         return new Promise((resolve) => {
-          const dataArray = [
-            { date: "2024-01-23", data: "true" },
-            { date: "2024-01-24", data: "false" },
-          ];
+          const dataArray = [{ date: "2024-01-23" }, { date: "2024-01-24" }];
           resolve(dataArray);
         });
       };
@@ -156,12 +127,12 @@ function CalendarPage() {
       // 실제 데이터를 받아오는 부분
       const dataArray = await simulateDataFetch();
 
-      // Use findIndex instead of some to get the index of the matching date
+      // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
       const index = dataArray.findIndex((item) =>
         isSameDay(new Date(item.date), date)
       );
 
-      // Check if the index is valid and resolve accordingly
+      //일치하면 인덱스 값/ 아니면 -1 반환 => 존재하면 true, 존재하지 않으면 false
       const hasData = index !== -1;
       return hasData;
     } catch (error) {
@@ -170,7 +141,7 @@ function CalendarPage() {
     }
   };
 
-  // useEffect 내부에서 fetchData 함수 호출
+  // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
@@ -182,8 +153,7 @@ function CalendarPage() {
 
           // 데이터 확인 결과에 따라 상태 업데이트
           setSelectedDateHasData(hasData);
-          console.log(hasData);
-          console.log(setSelectedDateHasData(hasData));
+          console.log("data:", hasData);
         } catch (error) {
           console.error("Error fetching data:", error);
           // 에러가 발생하면 데이터가 없는 것으로 간주
@@ -215,8 +185,21 @@ function CalendarPage() {
             <PrevBtn onClick={handlePrevBtnClick}>
               <GrFormPreviousLink />
             </PrevBtn>
-            {selectedDate &&
-              (selectedDateHasData ? <TrueComponent /> : <FalseComponent />)}
+            <ResultBox>
+              {" "}
+              {selectedDate &&
+                (selectedDateHasData ? (
+                  <TrueComponent
+                    month={selectedDate.getMonth() + 1}
+                    day={selectedDate.getDate()}
+                  />
+                ) : (
+                  <FalseComponent
+                    month={selectedDate.getMonth() + 1}
+                    day={selectedDate.getDate()}
+                  />
+                ))}
+            </ResultBox>
           </RightBox>
         </CalendarBox>
       </Body>
