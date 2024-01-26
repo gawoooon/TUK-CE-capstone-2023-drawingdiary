@@ -54,6 +54,7 @@ const HeaderEndBox = styled.div`
   color: #b7b7b7;
   font-size: 40px;
   font-weight: 900;
+  cursor: pointer;
 `;
 
 const DaysBox = styled.div`

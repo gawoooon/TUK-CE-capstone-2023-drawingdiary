@@ -1,16 +1,15 @@
 import styled from "styled-components";
 
 const SideBarStyle = styled.div`
-  height: 780px;
-  width: 90px;
-  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  align-items: center;
+  padding-left: 20px;
+  box-sizing: border-box;
 `;
 
 const LinkStyle = styled.a`
@@ -27,16 +26,11 @@ const LinkStyle = styled.a`
   }
 `;
 
-const ImageWithMargin = styled.div`
-  margin-top: 70px;
-`;
 const SideBar = () => {
   return (
     <SideBarStyle>
       <LinkStyle href="/calendar">
-        <ImageWithMargin>
-          <img src="schedule.png" alt="Home" />
-        </ImageWithMargin>
+        <img src="schedule.png" alt="Home" />
       </LinkStyle>
       <LinkStyle href="/album">
         <img src="photo-album.png" alt="Album" />

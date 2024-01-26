@@ -8,6 +8,7 @@ import Calendar from "../components/Calendar";
 import SideBar from "../components/sidebar/SideBar";
 import TrueComponent from "../components/TrueComponent";
 import FalseComponent from "../components/FalseComponent";
+import CalendarProfile from "../components/CalendarProfile";
 
 import { GrFormPreviousLink } from "react-icons/gr";
 
@@ -29,12 +30,25 @@ const CalendarBox = styled.div`
 `;
 const LeftBox = styled.div`
   display: flex;
+  flex-direction: column;
   width: ${({ leftBoxWidth }) => leftBoxWidth};
   height: 100%;
   background-color: #f9f9f9;
   border-radius: 30px 0 0 30px;
   transition: width 0.5s linear;
   margin-right: 20px;
+`;
+
+const LeftTopBox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 25%;
+`;
+
+const ProfileBox = styled.div`
+  display: ${({ showProfileBox }) => (showProfileBox ? "flex" : "none")};
+  width: 100%;
+  height: 100%;
 `;
 
 const MiddleBox = styled.div`
@@ -81,6 +95,7 @@ function CalendarPage() {
   const [rightBoxWidth, setRightBoxWidth] = useState("2%");
   const [middleBoxWidth, setMiddleBoxWidth] = useState("75%");
   const [showRightBox, setShowRightBox] = useState(false);
+  const [showProfileBox, setShowProfileBox] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -92,9 +107,11 @@ function CalendarPage() {
       setRightBoxWidth("2%");
       setMiddleBoxWidth("75%");
       setShowRightBox(false);
+      setShowProfileBox(true);
       setSelectedDateHasData(false);
     } else {
       setShowRightBox(true);
+      setShowProfileBox(false);
       setLeftBoxWidth("10%");
       setMiddleBoxWidth("60%");
       setRightBoxWidth("30%");
@@ -172,6 +189,11 @@ function CalendarPage() {
       <Body>
         <CalendarBox>
           <LeftBox leftBoxWidth={leftBoxWidth}>
+            <LeftTopBox>
+              <ProfileBox showProfileBox={showProfileBox}>
+                <CalendarProfile />
+              </ProfileBox>
+            </LeftTopBox>
             <SideBar />
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
