@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@iconify/react": "^4.1.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "apexcharts": "^3.45.2",
     "axios": "^1.6.5",
+    "date-fns": "^3.2.0",
     "crypto-browserify": "^3.12.0",
     "dotenv": "^16.4.0",
     "js-confetti": "^0.12.0",
@@ -19,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
+    "sass": "^1.70.0",
     "styled-components": "^6.1.8",
     "vite": "^5.0.12",
     "web-vitals": "^2.1.4"
