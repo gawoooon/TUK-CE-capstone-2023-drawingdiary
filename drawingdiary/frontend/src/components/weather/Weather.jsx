@@ -64,9 +64,12 @@ const Weather = () => {
 
     async function getWeather(lat, lon) {
         const apiKey = process.env.REACT_APP_WEATHER_KEY;
+
+        const targetHour = 12;
+
         try {
             const response = await fetch (
-                `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
+                `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&hour=${targetHour}&appid=${apiKey}`
             );
             const data = await response.json();
 
@@ -85,7 +88,7 @@ const Weather = () => {
     
     useEffect(() => {
         requestCoords();
-    }, []);
+    });
     
 
     return (

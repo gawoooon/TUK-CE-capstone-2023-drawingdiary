@@ -35,7 +35,7 @@ const AddCategoryContainer = styled.div`
 
 const MessageContainer = styled.text`
   font-size: 10px;
-  color: #B9B9B9;
+  color: #8c8c8c;
   position: absolute;
 `;
 
