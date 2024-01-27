@@ -4,22 +4,25 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "client": "cd ./client && npm run start",
-      "server": "cd ./server && npm run server",
-      "dev": "concurrently \"npm run server\" \"npm run client\""
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "client": "cd ./client && npm run start",
+        "server": "cd ./server && npm run server",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
-      "concurrently": "^6.2.0"
+        "concurrently": "^6.2.0"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary.git"
+        "type": "git",
+        "url": "git+https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary.git"
     },
     "bugs": {
-      "url": "https://github.com/kimdongjang/TUK-CE-capstone-2023-drawingdiary/issues"
+        "url": "https://github.com/kimdongjang/TUK-CE-capstone-2023-drawingdiary/issues"
     },
-    "homepage": "https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary#readme"
-  }
+    "homepage": "https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary#readme",
+    "dependencies": {
+        "react-icons": "^5.0.1"
+    }
+}
