@@ -1,6 +1,13 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
-const BackgroundColor = styled.div`
+const GlobalStyle = createGlobalStyle`
+  body, p {
+    margin: 0;
+  }
+  
+  `;
+
+const BackgroundColor = styled.body`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +22,7 @@ const BackgroundBox = styled.div`
   width: 1400px;
   height: 900px;
   background-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 3px 3px 20px 5px rgba(0, 0, 0, 0.03);
+  box-shadow: 3px 3px 20px 5px rgba(0, 0, 0, 0.04);
   border-radius: 20px;
   display: flex;
   justify-content: flex-start;
@@ -23,11 +30,12 @@ const BackgroundBox = styled.div`
 
 function Background({ children }) {
   return (
-    <div>
+    <>
+      <GlobalStyle />
       <BackgroundColor>
         <BackgroundBox>{children}</BackgroundBox>
       </BackgroundColor>
-    </div>
+    </>
   );
 }
 
