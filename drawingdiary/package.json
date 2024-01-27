@@ -21,5 +21,8 @@
     "bugs": {
         "url": "https://github.com/kimdongjang/TUK-CE-capstone-2023-drawingdiary/issues"
     },
-    "homepage": "https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary#readme"
+    "homepage": "https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary#readme",
+    "dependencies": {
+        "react-icons": "^5.0.1"
+    }
 }

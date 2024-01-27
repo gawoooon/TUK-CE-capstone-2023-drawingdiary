@@ -4,7 +4,6 @@ import { isSameDay } from "date-fns";
 
 import Background from "../components/Background";
 import Calendar2 from "../components/Calendar2";
-import Calendar from "../components/Calendar";
 import SideBar from "../components/sidebar/SideBar";
 import TrueComponent from "../components/TrueComponent";
 import FalseComponent from "../components/FalseComponent";
