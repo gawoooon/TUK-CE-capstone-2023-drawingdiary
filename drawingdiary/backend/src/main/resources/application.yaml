@@ -1,0 +1,4 @@
+security:
+    jwt:
+        secret-key: veryverysecretkeyohmygodwhysecretcanttellanybody
+        #나중에 제대로 된걸로 수정할거임
