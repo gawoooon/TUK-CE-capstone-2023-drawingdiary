@@ -1,14 +1,14 @@
-package com.diary.drawing.user.domain;
+package com.diary.drawing.user.config;
 
 
 
 
-
-import static org.springframework.security.config.Customizer.*;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.diary.drawing.user.service.CustomUserDetailService;
 import com.diary.drawing.user.service.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
@@ -28,12 +29,13 @@ public class SecurityConfig{
 
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomUserDetailService customUserDetailService;
 
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
         //내가 만든 토큰 필터 먼저
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         http
                 //csrf disable csrf 공격 막아주기
                 .csrf(AbstractHttpConfigurer::disable)
@@ -41,8 +43,8 @@ public class SecurityConfig{
                 .cors(Customizer.withDefaults())
 				//Form 로그인 방식 disable
                 .formLogin((auth) -> auth.disable())
-                //oath2 로그인 방식은 OK~
-                .oauth2Login(withDefaults())
+                //oath2 로그인 방식은 잠깐 disable
+                .oauth2Login((auth) -> auth.disable())
 				//http basic 인증 방식 disable
                 .httpBasic((auth) -> auth.disable())
 				//경로별 인가 작업
@@ -65,6 +67,14 @@ public class SecurityConfig{
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        var builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder
+                .userDetailsService(customUserDetailService)
+                .passwordEncoder(bCryptPasswordEncoder());
+        return builder.build();
+    }
     // react 서버와 연동하는 cors (나중에 추가)
 
 }

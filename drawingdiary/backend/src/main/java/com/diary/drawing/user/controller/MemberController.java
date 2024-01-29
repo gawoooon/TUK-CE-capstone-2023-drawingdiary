@@ -42,11 +42,12 @@ public class MemberController {
 
 
     
+    //로그인 되어 있는지 확인하는 api
     @GetMapping("/secured")
     public String secured(@AuthenticationPrincipal PrincipalDetails principalDetails){
         if (principalDetails != null) {
             return "IF you see this. then youre logged in " + principalDetails.getEmail()
-                        + "User ID: " + principalDetails.getUserId();
+                        + "User ID: " + principalDetails.getMemberId();
         } else {
             // handle the case where principalDetails is null
             return "User is not logged in.";

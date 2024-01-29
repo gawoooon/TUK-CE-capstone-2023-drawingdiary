@@ -16,7 +16,7 @@ import lombok.Getter;
 @Builder
 public class PrincipalDetails implements UserDetails{
     
-    private final Long userId;
+    private final Long memberId;
     private final String email;
 
     @JsonIgnore
@@ -46,7 +46,7 @@ public class PrincipalDetails implements UserDetails{
 
     @Override
     public String getPassword() {   // User 비밀번호 리턴
-        return null;
+        return password;
     }
 
     @Override

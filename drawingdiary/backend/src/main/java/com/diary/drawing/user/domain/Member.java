@@ -67,15 +67,15 @@ public class Member {
     public Member (){}
 
     @Builder // 나중에 보안성 높이고 일단 구현(access = AccessLevel=private)
-    public Member(String Name, String Email, Date Birth, char Gender, String Password, String PhoneNumber, String Personality, MemberRole role, String provider, String providerID){
-        this.name = Name;
-        this.email = Email;
-        this.birth = Birth;
-        this.gender = Gender;
-        this.password = Password;
-        this.phoneNumber = PhoneNumber;
-        this.personality = Personality;
-        this.role = role;
+    public Member(String name, String email, Date birth, char gender, String password, String phoneNumber, String personality, String provider, String providerID){
+        this.name = name;
+        this.email = email;
+        this.birth = birth;
+        this.gender = gender;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.personality = personality;
+        this.role = MemberRole.ROLE_USER;   //기본값 설정
         this.provider = provider;
         this.providerID = providerID;
     }
