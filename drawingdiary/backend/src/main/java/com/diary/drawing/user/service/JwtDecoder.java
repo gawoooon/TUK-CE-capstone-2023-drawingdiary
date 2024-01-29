@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class JwtDecorder {
+public class JwtDecoder {
 
     private final JwtProperties properties;
 

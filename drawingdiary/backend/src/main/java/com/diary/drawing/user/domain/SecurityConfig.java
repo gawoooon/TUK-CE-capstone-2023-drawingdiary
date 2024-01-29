@@ -1,4 +1,4 @@
-package com.diary.drawing.user.config;
+package com.diary.drawing.user.domain;
 
 
 
@@ -15,13 +15,25 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.diary.drawing.user.service.JwtAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity //스프링 시큐리티 필터가 스프링 필터 체인에 등록
+@RequiredArgsConstructor
 public class SecurityConfig{
+
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-				
+    public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
+        //내가 만든 토큰 필터 먼저
+		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        
         http
                 //csrf disable csrf 공격 막아주기
                 .csrf(AbstractHttpConfigurer::disable)
@@ -37,7 +49,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests((auth) -> auth
                         // 일단 죄다 허가 해놨음
                         .requestMatchers("/login", "/**", "/join", "/api/**",
-                                            "/error", "/auth/**").permitAll()
+                                            "/error", "/auth/**", "/auth/login").permitAll()
 												//.requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 //세션을 생성하지 않고, 요청마다 새로운 인증을 수행하도록 구성하는 옵션으로 REST API와 같은 환경에서 사용

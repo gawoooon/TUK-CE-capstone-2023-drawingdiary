@@ -18,12 +18,12 @@ public class JwtIssuer{
 
     private final JwtProperties properties;
 
-    public String issue(Long userID, String email, List<String> role){
+    public String issue(Long userID, String email, List<String> roles){
         return JWT.create()
                 .withSubject(String.valueOf(userID))
                 .withExpiresAt(Instant.now().plus(Duration.of(1, ChronoUnit.DAYS))) // 1일로 토큰 refresh
                 .withClaim("e", email)
-                .withClaim("a", role)
+                .withClaim("a", roles)
                 .sign(Algorithm.HMAC256(properties.getSecretKey())); // 테스트 버전이라 시크릿키 대충
     }
 }

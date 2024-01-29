@@ -6,11 +6,13 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import com.diary.drawing.user.domain.PrincipalDetails;
 
 public class PrincipalDetailsAuthenticationToken extends AbstractAuthenticationToken{
+
     private final PrincipalDetails principalDetails;
 
     public PrincipalDetailsAuthenticationToken(PrincipalDetails principalDetails) {
         super(principalDetails.getAuthorities());
         this.principalDetails = principalDetails;
+        setAuthenticated(true);
     }
 
 
@@ -21,8 +23,8 @@ public class PrincipalDetailsAuthenticationToken extends AbstractAuthenticationT
     }
 
     @Override
-    public Object getPrincipal() {
-        return null;
+    public PrincipalDetails getPrincipal() {
+        return principalDetails;
     }
     
 }

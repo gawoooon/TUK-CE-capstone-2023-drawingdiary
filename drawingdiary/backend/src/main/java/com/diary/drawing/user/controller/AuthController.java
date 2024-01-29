@@ -24,7 +24,7 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public LoginResponse login(@RequestBody @Validated LoginRequest request){
-        var token = jwtIssuer.issue(1L, request.getEmail(), List.of("TEST"));
+        var token = jwtIssuer.issue(1L, request.getEmail(), List.of("USER"));
         return LoginResponse.builder()
             .accessToken(token)
             .build();

@@ -19,11 +19,11 @@ import lombok.Data;
 @Entity
 @Data     //보안 문제 있을 것 같음 나중에 수정
 @Table(name = "User")
-public class User {
+public class Member {
         
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userID;
+    private Long memberID;
 
     @Column(length = 50)
     private String name;
@@ -47,7 +47,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name="role")
-    private UserRole role; //ROLE_USER, ROLE_ADMIN
+    private MemberRole role; //ROLE_USER, ROLE_ADMIN
 
     private String provider;
     private String providerID;
@@ -59,15 +59,15 @@ public class User {
 
     @Override
     public String toString(){
-        return "UserID: " + this.userID + "Name: " +  this.name + "Email: " + this.email + "Password: " + this.password
+        return "UserID: " + this.memberID + "Name: " +  this.name + "Email: " + this.email + "Password: " + this.password
                 + "Birth: " + this.birth + "Gender: " + this.gender + "PhoneNumber: " + this.phoneNumber
                 + "Personality: " + this.personality;
     }
 
-    public User (){}
+    public Member (){}
 
     @Builder // 나중에 보안성 높이고 일단 구현(access = AccessLevel=private)
-    public User(String Name, String Email, Date Birth, char Gender, String Password, String PhoneNumber, String Personality, UserRole role, String provider, String providerID){
+    public Member(String Name, String Email, Date Birth, char Gender, String Password, String PhoneNumber, String Personality, MemberRole role, String provider, String providerID){
         this.name = Name;
         this.email = Email;
         this.birth = Birth;
