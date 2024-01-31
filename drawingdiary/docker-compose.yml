@@ -32,14 +32,11 @@ services:
     stdin_open: true
     tty: true
 
-
-#마찬가지로 docker 문제로 3308:3306으로 되어있음
-#실행할때 3306:3306등으로 고칠것
   db:
     image: mysql
     container_name: db
     ports:
-      - "3308:3306"
+      - "5500:3306"
     expose:
       - 3306
     restart: always

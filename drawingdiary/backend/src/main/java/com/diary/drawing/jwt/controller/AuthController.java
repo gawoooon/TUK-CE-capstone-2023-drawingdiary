@@ -1,4 +1,4 @@
-package com.diary.drawing.user.controller;
+package com.diary.drawing.jwt.controller;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.diary.drawing.user.domain.LoginRequest;
-import com.diary.drawing.user.domain.LoginResponse;
-import com.diary.drawing.user.domain.PrincipalDetails;
-import com.diary.drawing.user.service.JwtIssuer;
+import com.diary.drawing.jwt.dto.LoginRequest;
+import com.diary.drawing.jwt.dto.LoginResponse;
+import com.diary.drawing.jwt.model.PrincipalDetails;
+import com.diary.drawing.jwt.security.JwtIssuer;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

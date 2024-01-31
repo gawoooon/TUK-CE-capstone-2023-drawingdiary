@@ -17,8 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.diary.drawing.user.service.CustomUserDetailService;
-import com.diary.drawing.user.service.JwtAuthenticationFilter;
+import com.diary.drawing.jwt.security.JwtAuthenticationFilter;
+import com.diary.drawing.jwt.service.CustomUserDetailService;
 
 import lombok.RequiredArgsConstructor;
 

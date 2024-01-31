@@ -1,4 +1,4 @@
-package com.diary.drawing.user.service;
+package com.diary.drawing.jwt.security;
 
 import java.time.Duration;
 import java.time.Instant;

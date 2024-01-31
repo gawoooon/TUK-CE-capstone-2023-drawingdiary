@@ -1,4 +1,4 @@
-package com.diary.drawing.user.service;
+package com.diary.drawing.jwt.security;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.diary.drawing.user.domain.PrincipalDetails;
+import com.diary.drawing.jwt.model.PrincipalDetails;
 
 
 @Component

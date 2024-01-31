@@ -1,4 +1,4 @@
-package com.diary.drawing.user.domain;
+package com.diary.drawing.jwt.dto;
 
 import lombok.Builder;
 import lombok.Getter;

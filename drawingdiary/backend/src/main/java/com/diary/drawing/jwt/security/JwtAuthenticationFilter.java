@@ -1,4 +1,4 @@
-package com.diary.drawing.user.service;
+package com.diary.drawing.jwt.security;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.diary.drawing.jwt.service.PrincipalDetailsAuthenticationToken;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

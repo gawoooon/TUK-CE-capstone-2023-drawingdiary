@@ -1,9 +1,9 @@
-package com.diary.drawing.user.service;
+package com.diary.drawing.jwt.service;
 
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
-import com.diary.drawing.user.domain.PrincipalDetails;
+import com.diary.drawing.jwt.model.PrincipalDetails;
 
 public class PrincipalDetailsAuthenticationToken extends AbstractAuthenticationToken{
 

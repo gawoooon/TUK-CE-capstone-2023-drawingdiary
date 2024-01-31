@@ -1,4 +1,4 @@
-package com.diary.drawing.user.service;
+package com.diary.drawing.jwt.service;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.diary.drawing.jwt.model.PrincipalDetails;
 import com.diary.drawing.user.domain.Member;
-import com.diary.drawing.user.domain.PrincipalDetails;
 import com.diary.drawing.user.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
