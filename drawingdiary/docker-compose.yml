@@ -36,7 +36,7 @@ services:
     image: mysql
     container_name: db
     ports:
-      - "3306:3306"
+      - "5500:3306"
     expose:
       - 3306
     restart: always
