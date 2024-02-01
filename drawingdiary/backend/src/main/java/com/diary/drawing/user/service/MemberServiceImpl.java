@@ -1,5 +1,6 @@
 package com.diary.drawing.user.service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.diary.drawing.user.domain.Member;
-import com.diary.drawing.user.domain.MemberRole;
+import com.diary.drawing.user.dto.MemberDTO;
 import com.diary.drawing.user.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,21 @@ public class MemberServiceImpl implements MemberService{
 
     // 회원 가입 (예외처리 나중에)
     @Override
-    public Member joinMember(Member member) throws Exception {
+    public Member joinMember(MemberDTO memberDTO) throws IOException {
 
-        // 암호화 나중에 클래스로 따로 분리하기
-        String rawPassword = member.getPassword();
+        // 암호화
+        String rawPassword = memberDTO.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-        member.setPassword(encPassword);
-        member.setRole(MemberRole.ROLE_USER);
+
+        // 생성
+        Member member = Member.builder()
+                .name(memberDTO.getName())
+                .email(memberDTO.getEmail())
+                .password(encPassword)
+                .birth(memberDTO.getBirth())
+                .gender(memberDTO.getGender())
+                .build();
+        
         return memberRepository.save(member);
     }
 

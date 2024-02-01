@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.jwt.model.PrincipalDetails;
-import com.diary.drawing.user.domain.Member;
+import com.diary.drawing.user.dto.MemberDTO;
 import com.diary.drawing.user.service.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,18 +57,12 @@ public class MemberController {
     
     @Operation(summary = "회원가입", description = "말그대로 그냥 회원가입")
     @PostMapping("/join")
-    public String add(@RequestBody Member member) throws Exception{
-        memberService.joinMember(member);
+    public String add(@RequestBody MemberDTO memberDTO) throws Exception{
+        // 만약 이메일 인증번호가 옳지 않다면~~~ 못넘어감
+        memberService.joinMember(memberDTO);
         return "회원가입 완료";
 
     }
-
-    // @Operation(summary = "로그인", description = "입력방식으로 로그인")
-    // @GetMapping("/login")
-    // public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-    //     System.out.println("principalDetails : " + principalDetails.getMember());
-    //     return "user";
-    // }
     
     
 

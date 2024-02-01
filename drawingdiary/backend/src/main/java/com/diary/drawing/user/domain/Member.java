@@ -13,12 +13,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 
 @Entity
-@Data     //보안 문제 있을 것 같음 나중에 수정
-@Table(name = "User")
+@Getter
+@Table(name = "Member")
 public class Member {
         
     @Id
@@ -39,9 +39,6 @@ public class Member {
 
     private char gender;
 
-    @Column(length = 20)
-    private String phoneNumber;
-
     @Column(length = 50)
     private String personality;
 
@@ -49,8 +46,7 @@ public class Member {
     @Column(name="role")
     private MemberRole role; //ROLE_USER, ROLE_ADMIN
 
-    private String provider;
-    private String providerID;
+    private String profileImage;
 
     public String getRole() {
         return this.role.name();
@@ -60,24 +56,20 @@ public class Member {
     @Override
     public String toString(){
         return "UserID: " + this.memberID + "Name: " +  this.name + "Email: " + this.email + "Password: " + this.password
-                + "Birth: " + this.birth + "Gender: " + this.gender + "PhoneNumber: " + this.phoneNumber
+                + "Birth: " + this.birth + "Gender: " + this.gender + "ProfileImage: " + this.profileImage
                 + "Personality: " + this.personality;
     }
 
     public Member (){}
 
-    @Builder // 나중에 보안성 높이고 일단 구현(access = AccessLevel=private)
-    public Member(String name, String email, Date birth, char gender, String password, String phoneNumber, String personality, String provider, String providerID){
+    @Builder // 나중에 보안성 높이고 일단 구현(access = AccessLevel=private), personality, image는 별개
+    public Member(String name, String email, Date birth, char gender, String password){
         this.name = name;
         this.email = email;
         this.birth = birth;
         this.gender = gender;
         this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.personality = personality;
         this.role = MemberRole.ROLE_USER;   //기본값 설정
-        this.provider = provider;
-        this.providerID = providerID;
     }
 
 
