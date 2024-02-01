@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
   `;
 
 const BackgroundColor = styled.body`
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
