@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const OptionContainer = styled.div`
   width: 450px;
-  height: 410px;
+  height: 415px;
   margin: 10px 30px 10px 0;
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 30px;

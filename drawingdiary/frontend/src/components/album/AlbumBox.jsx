@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
+import DeleteButton from "../button/DeleteButton";
+import Modal from "./Modal";
 
 const AlbumContainer = styled.div`
     width: 1190px;
@@ -48,9 +50,25 @@ const CategoryName = styled.text`
     margin-left: 130px;
 `;
 
-const AlbumBox = () => {
-    const { categoryList } = useCategory();
 
+const AlbumBox = () => {
+    const { categoryList, removeCategory } = useCategory();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentCategory, setCurrentCategory] = useState(null);
+
+    const handleDeleteClick = (category) => {
+        setIsModalOpen(true);
+        setCurrentCategory(category);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleConfirmDelete = () => {
+        setIsModalOpen(false);
+        removeCategory(currentCategory);
+    };
     
     // 임의의 앨범 아이템 배열 생성 (1월 1일부터 1월 10일까지)
     // const albumItems = Array.from({ length: 10 }, (_, index) => ({
@@ -63,7 +81,24 @@ const AlbumBox = () => {
         <div>
             {categoryList.map((category) => (
                 <div key={category}>
-                    <CategoryName>{category}</CategoryName>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'baseline',
+                            marginRight: '80px',
+                        }}>
+                        <CategoryName>{category}</CategoryName>
+                        <DeleteButton onClick={() => handleDeleteClick(category)}/>
+
+                    </div>
+
+                    <Modal
+                        isOpen={isModalOpen}
+                        onClose={handleCloseModal}
+                        onConfirm={handleConfirmDelete}
+                    />
+
                     <AlbumContainer>
                         {albumItemEmpty.length > 0 ? (
                             <ScrollSection>

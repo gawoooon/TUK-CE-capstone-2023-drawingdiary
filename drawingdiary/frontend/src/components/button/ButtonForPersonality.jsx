@@ -14,7 +14,7 @@ const PersonalButton = styled.button`
     color: ${({ isSelected }) => isSelected ? 'white' : 'black'};
 `;
 
-const ButtonForPersonality = ( {keyword, onSelect, onDeselect, children} ) => {
+const ButtonForPersonality = ( {keyword, onSelect, selected, children} ) => {
 
     const [isSelected, setIsSelected] = useState(false);
 
@@ -23,8 +23,8 @@ const ButtonForPersonality = ( {keyword, onSelect, onDeselect, children} ) => {
     }, [isSelected]); // isSelected 값이 변할 때마다 useEffect 실행
 
     const handleClick = () => {
-        if(isSelected) {
-            onDeselect(keyword);
+        if(selected === keyword) {
+            onSelect(null)
         } else {
             onSelect(keyword);
         }
@@ -33,7 +33,7 @@ const ButtonForPersonality = ( {keyword, onSelect, onDeselect, children} ) => {
     };
 
     return(
-        <PersonalButton isSelected={isSelected} onClick={handleClick}>
+        <PersonalButton isSelected={selected === keyword} onClick={handleClick}>
             {children}
         </PersonalButton>
     );

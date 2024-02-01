@@ -15,7 +15,12 @@ const useCategoryList = () => {
         }
     };
 
-    return { categoryList, addCategory };
+    //카테고리 삭제 함수
+    const removeCategory = (categoryToRemove) => {
+        setCategoryList((prevList) => prevList.filter(category => category !== categoryToRemove));
+    };
+
+    return { categoryList, addCategory,  removeCategory };
 };
 
 const CategoryProvider = ({ children }) => {

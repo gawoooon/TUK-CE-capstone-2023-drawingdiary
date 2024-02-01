@@ -9,6 +9,7 @@ import GeneratedImage from "../components/edit diary/GeneratedImage";
 import Button from "../components/button/Button";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
+import DeleteStyle from "../components/button/DeleteButton";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -87,7 +88,8 @@ function DiaryPage() {
             <ImageOption/>
           </EditDiaryArea>
 
-          <div style={{ marginRight: '20px', display: 'flex', justifyContent: 'flex-end'}}>
+          <div style={{marginLeft: '20px', marginRight: '20px', display: 'flex', justifyContent: 'space-between'}}>
+            <DeleteStyle text="삭제"/>
             <Button text="저장"/>
           </div>
           

@@ -12,7 +12,7 @@ const BackgroundColor = styled.body`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(45deg, #f8e5eb, #dadff4);
+  background: linear-gradient(45deg, rgba(255, 184, 208, 0.58), rgba(106, 156, 253, 0.4));
   width: 100%;
   height: 100vh;
   margin: auto;
