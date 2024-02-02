@@ -1,3 +1,5 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
@@ -9,7 +11,7 @@ import GeneratedImage from "../components/edit diary/GeneratedImage";
 import Button from "../components/button/Button";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
-import DeleteStyle from "../components/button/DeleteButton";
+import { RemoveButton } from "../components/button/DeleteButton";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -72,6 +74,13 @@ const RightComponentsContainer = styled.div`
 `;
 
 function DiaryPage() {
+
+  const location = useLocation();
+  const { date } = location.state || {}; // 날짜 정보 수신
+
+  const handleDelete = () => {
+    
+  };
   return (
     <div>
       <Background>
@@ -79,7 +88,8 @@ function DiaryPage() {
         <ShortSidebar/>
         <RightContainer>
           <TopContent>
-            <Weather/>
+            {/* 날짜 정보 전달 */}
+            <Weather date={date}/>
             <AlbumCategory/>
           </TopContent>
 
@@ -89,7 +99,7 @@ function DiaryPage() {
           </EditDiaryArea>
 
           <div style={{marginLeft: '20px', marginRight: '20px', display: 'flex', justifyContent: 'space-between'}}>
-            <DeleteStyle text="삭제"/>
+            <RemoveButton text="삭제"/>
             <Button text="저장"/>
           </div>
           

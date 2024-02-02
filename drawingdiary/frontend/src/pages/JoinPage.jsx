@@ -109,8 +109,33 @@ const CreateAccount = () => {
           return;
         }
         navigate('/choosePersonality');
-        console.log(`이름: ${name}, 이메일: ${email}, 비밀번호: ${password}, 연: ${year}, 월: ${month}, 일: ${day}, 성별: ${gender}`);
-
+        
+        // // 백엔드 api로 데이터 전송
+        // fetch('/api/auth/join', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type' : 'application/json',
+        //   },
+        //   body: JSON.stringify({
+        //     name,
+        //     year,
+        //     month,
+        //     day,
+        //     gender,
+        //     email,
+        //     certification,
+        //     password,
+        //     confirmPassword,
+        //   }),
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //   console.log('Success: ', data);
+        //   navigate('/choosePersonality');
+        // })
+        // .catch((error) => {
+        //   console.error('Error: ', error);
+        // });
     };
 
     return (
