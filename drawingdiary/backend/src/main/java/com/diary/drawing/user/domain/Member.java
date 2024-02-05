@@ -48,19 +48,14 @@ public class Member {
 
     private String profileImage;
 
-    public String getRole() {
-        return this.role.name();
-    }
-    
+    private int theme; // 화면 테마
 
     @Override
     public String toString(){
         return "UserID: " + this.memberID + "Name: " +  this.name + "Email: " + this.email + "Password: " + this.password
                 + "Birth: " + this.birth + "Gender: " + this.gender + "ProfileImage: " + this.profileImage
-                + "Personality: " + this.personality;
+                + "Personality: " + this.personality + "theme: " + this.theme;
     }
-
-    public Member (){}
 
     @Builder // 나중에 보안성 높이고 일단 구현(access = AccessLevel=private), personality, image는 별개
     public Member(String name, String email, Date birth, char gender, String password){
@@ -70,7 +65,19 @@ public class Member {
         this.gender = gender;
         this.password = password;
         this.role = MemberRole.ROLE_USER;   //기본값 설정
+        this.theme = 1; // 기본값 설정
     }
+
+    // 문자열로 role 주기
+    public String getRole() {
+        return this.role.name();
+    }
+
+    // persnality 설정
+    public void setPersonality(String personality) {
+        this.personality = personality;
+    }
+    
 
 
 

@@ -47,6 +47,13 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.save(member);
     }
 
+    // 회원가입시 성격 저장하는 메소드
+    @Override
+    public void joinMemberPersonality(Member member, String personality){
+        member.setPersonality(personality);
+    }
+
+    // 이메일로 멤버 찾기
     @Override
     public Optional<Member> findByEmail(String email) {
         return memberRepository.findByEmail(email);

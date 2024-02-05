@@ -6,7 +6,9 @@ import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.dto.MemberDTO;
 
 public interface MemberService {
-    //회원가입
-    public Member joinMember(MemberDTO memberDTO) throws Exception;
-    public Optional<Member> findByEmail(String email);
+    
+    public Member joinMember(MemberDTO memberDTO) throws Exception; //회원가입
+    public void joinMemberPersonality(Member member, String personality); //회원가입시 성격 선택
+
+    public Optional<Member> findByEmail(String email); //이메일로 멤버 찾기
 }
