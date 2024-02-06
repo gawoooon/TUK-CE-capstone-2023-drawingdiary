@@ -11,10 +11,41 @@ import lombok.RequiredArgsConstructor;
 public class EmailAccountController {
 
     private final EmailService emailService;
+    private final EmailVerificationService verificationService;
 
-    @PostMapping("/api/email")
-    public String mailConfirm(@RequestBody String email) throws Exception{
+
+    // 인증번호 전송, 잘 보내지면 알아서 상태코드 200
+    @PostMapping("/api/email/codesending")
+    public void mailConfirm(@RequestBody String email) throws Exception{
+        String code = emailService.sendSimpleMessage(email);
+        verificationService.saveVerificationCode(email, code);
+    }
+
+    // 인증번호 확인
+    // TODO: 에러코드 표현 따로 만들고 노션에 업로드, request VerificationRequest request로 수정
+    @PostMapping("/api/email/verify")
+    public String verify(@RequestBody EmailVerificationDTO requesDto){
+        if(verificationService.verifyEmail(requesDto.getEmail(), requesDto.getVerificationCode())){
+            return "SUCCESS";
+        } else{
+            //throw new RequestException 추가
+            return "FALSE";
+        }
+
+
+
+    }
+    
+
+
+
+    // 테스트용 - 코드를 반환해줌
+    @PostMapping("/api/email/test")
+    public String mailConfirmTest(@RequestBody String email) throws Exception{
         String code = emailService.sendSimpleMessage(email);
         return code;
     }
+
+
+    
 }
