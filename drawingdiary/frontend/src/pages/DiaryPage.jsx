@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import styled from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
@@ -55,7 +56,7 @@ const EditDiaryArea = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  `;
+`;
 
 const ManageAIArea = styled.div`
   width: 100%;
@@ -72,39 +73,77 @@ const RightComponentsContainer = styled.div`
 `;
 
 function DiaryPage() {
+  const [diaryText, setDiaryText] = useState("");
+
+  const handleDiaryTextChange = (text) => {
+    setDiaryText(text);
+  };
+
+  const handleSaveDiary = async () => {
+    try {
+      if (diaryText === "") {
+        console.log("일기 내용이 없어 저장되지 않았습니다.");
+        return;
+      }
+
+      console.log("일기 내용 저장:", diaryText);
+
+      // Flask 서버에 일기 내용을 전달
+      const response = await fetch("http://localhost:5000/api/save-diary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ diaryText }),
+      });
+
+      if (!response.ok) {
+        console.error("Error saving diary:", response.statusText);
+      } else {
+        const result = await response.json();
+        console.log("예아", result);
+      }
+    } catch (error) {
+      console.error("Error saving diary:", error);
+    }
+  };
+
   return (
     <div>
       <Background>
         <FlexContainer>
-        <ShortSidebar/>
-        <RightContainer>
-          <TopContent>
-            <Weather/>
-            <AlbumCategory/>
-          </TopContent>
+          <ShortSidebar />
+          <RightContainer>
+            <TopContent>
+              <Weather />
+              <AlbumCategory />
+            </TopContent>
 
-          <EditDiaryArea>
-            <EditDiary/>
-            <ImageOption/>
-          </EditDiaryArea>
+            <EditDiaryArea>
+              <EditDiary onDiaryTextChange={handleDiaryTextChange} />
+              <ImageOption />
+            </EditDiaryArea>
 
-          <div style={{marginLeft: '20px', marginRight: '20px', display: 'flex', justifyContent: 'space-between'}}>
-            <DeleteStyle text="삭제"/>
-            <Button text="저장"/>
-          </div>
-          
-          <ManageAIArea>
-            <GeneratedImage/>
-            <RightComponentsContainer>
-              <AIComment/>
-              <Sentiment/>
-            </RightComponentsContainer>
+            <div
+              style={{
+                marginLeft: "20px",
+                marginRight: "20px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <DeleteStyle text="삭제" />
+              <Button text="저장" onClick={handleSaveDiary} />
+            </div>
 
-          </ManageAIArea>
-
-
-        </RightContainer>
-
+            <ManageAIArea>
+              <GeneratedImage />
+              <RightComponentsContainer>
+                <AIComment />
+                <Sentiment />
+              </RightComponentsContainer>
+            </ManageAIArea>
+          </RightContainer>
         </FlexContainer>
       </Background>
     </div>

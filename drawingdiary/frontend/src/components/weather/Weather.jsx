@@ -37,72 +37,74 @@ const LoadingImage = styled.img`
 `;
 
 const Weather = () => {
-    
-    const [weather, setWeather] = useState({
-        icon:"",
-    });
-    const [coords, saveCoords] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [weather, setWeather] = useState({
+    icon: "",
+  });
+  const [coords, saveCoords] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    function handleGeoSucc(position) {
-        const { latitude, longitude } = position.coords;
-        const coordsObj = {
-            latitude,
-            longitude
-        };
-        saveCoords(coordsObj);
-        getWeather(latitude, longitude);
+  function handleGeoSucc(position) {
+    const { latitude, longitude } = position.coords;
+    const coordsObj = {
+      latitude,
+      longitude,
     };
+    saveCoords(coordsObj);
+    getWeather(latitude, longitude);
+  }
 
-    function handleGeoErr(err) {
-        console.error("geo error!", err);
-    };
+  function handleGeoErr(err) {
+    console.error("geo error!", err);
+  }
 
-    function requestCoords() {
-        navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr);
-    };
+  function requestCoords() {
+    navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr);
+  }
 
-    async function getWeather(lat, lon) {
-        const apiKey = process.env.REACT_APP_WEATHER_KEY;
+  async function getWeather(lat, lon) {
+    const apiKey = process.env.REACT_APP_WEATHER_KEY;
 
-        const targetHour = 12;
+    const targetHour = 12;
 
-        try {
-            const response = await fetch (
-                `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&hour=${targetHour}&appid=${apiKey}`
-            );
-            const data = await response.json();
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&hour=${targetHour}&appid=${apiKey}`
+      );
+      const data = await response.json();
 
-            const weatherIcon = data.weather[0].icon;
-            const weatherIconAdrs = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
-            setWeather({
-                icon:weatherIconAdrs,
-            });
-            
-        } catch (error) {
-            console.error("Error fetching weather data: ", error);
-        } finally {
-            setLoading(false);
-        }
+      const weatherIcon = data.weather[0].icon;
+      const weatherIconAdrs = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+      setWeather({
+        icon: weatherIconAdrs,
+      });
+    } catch (error) {
+      console.error("Error fetching weather data: ", error);
+    } finally {
+      setLoading(false);
     }
-    
-    useEffect(() => {
-        requestCoords();
-    });
-    
+  }
 
-    return (
-        <WeatherContainer>
-            <WeatherContent>
-                {loading ? (
-                    <LoadingImage src="/icons8-loading.gif" alt="loading" />
-                ) : (
-                    <WeatherImage src={weather.icon} alt="Weather Icon"/>
-                )}
-            </WeatherContent>
-            <DateText>1월 1일 월요일</DateText>
-        </WeatherContainer>
-    );
+  // 콘솔 오류 반복 때문에 내가 멋대로 수정한 거임
+  useEffect(() => {
+    if (!coords) {
+      requestCoords();
+    } else {
+      getWeather(coords.latitude, coords.longitude);
+    }
+  }, [coords]);
+
+  return (
+    <WeatherContainer>
+      <WeatherContent>
+        {loading ? (
+          <LoadingImage src="/icons8-loading.gif" alt="loading" />
+        ) : (
+          <WeatherImage src={weather.icon} alt="Weather Icon" />
+        )}
+      </WeatherContent>
+      <DateText>1월 1일 월요일</DateText>
+    </WeatherContainer>
+  );
 };
 
 export default Weather;
