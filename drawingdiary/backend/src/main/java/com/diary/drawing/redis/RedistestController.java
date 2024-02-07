@@ -1,7 +1,8 @@
-package com.diary.drawing.temp;
+package com.diary.drawing.redis;
 
 import java.util.Map;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,8 @@ public class RedistestController {
 
     private final RedisTemplate<String, String> redisTemplate;
 
+    // post는 "key" : "키", "value" : "값"의 json body 형태로
+    // 이거 호출하면 redis에 저장
     @PostMapping("/data")
     public ResponseEntity<String> setRedisData(
         @RequestBody(required = true) Map<String,String> map) throws Exception{
@@ -27,6 +30,7 @@ public class RedistestController {
         return new ResponseEntity<>("정상 등록", HttpStatus.CREATED);
     }
 
+    // get string 값으로 받아옴
     @GetMapping("/data")
     public ResponseEntity<String> getRedisData(
         @RequestParam(required = true) String key){

@@ -2,9 +2,11 @@ package com.diary.drawing.user.dto;
 
 import java.sql.Date;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,20 +20,23 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class MemberDTO {
 
+    @Valid
+
+    @Size(min = 1, max = 50, message = "닉네임은 1에서 50자 사이로 입력해주세요.")
     @NotEmpty(message = "닉네임을 비울 수 없습니다.")
     private String name;
 
     @NotEmpty(message = "이메일을 비울 수 없습니다.")
-    @Email
+    @Email(message = "이메일 형식이 아닙니다")
     private String email;
 
+    @Size(min = 1, max = 50, message = "비밀번호는 1에서 50자 사이로 입력해주세요.")
     @NotEmpty(message = "패스워드를 비울 수 없습니다.")
     private String password;
 
-    @NotEmpty(message = "생일을 비울 수 없습니다.")
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "올바른 날짜 형식이 아닙니다 (YYYY-MM-DD)")
+    @NotNull(message = "생일을 비울 수 없습니다.")
     private Date birth;
 
-    @NotEmpty(message = "성별을 비울 수 없습니다.")
+    @NotNull(message = "성별을 비울 수 없습니다.")
     private char gender;
 }

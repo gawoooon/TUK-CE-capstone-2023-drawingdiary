@@ -57,25 +57,6 @@ public class EmailServiceImpl implements EmailService{
         return emailPassword;
     }
 
-    /* 메일 발송하는 과정
-     *  sendSimpleMessage에 들어온 to는 보낼 주소
-     *  Mimesaage 객체에 메세지 내용 담음
-     *  bean 등록한 javaMailSender 이용해서 이메일 보냄
-     */
-
-    // @Override
-    // public String sendSimpleMessage(String to) throws Exception {
-    //     MimeMessage message = createMessage(to);
-    //     try{
-    //         emailSender.send(message); // 전송
-    //     }catch(MailException es){
-    //         es.printStackTrace();
-    //         throw new IllegalArgumentException();
-    //     }
-        
-    //     return emailPassword; // 실패했던 성공했던 메일의 인증코드 서버로 리턴
-    // }
-
     // 인증번호 만드는 메소드
     public static String createKey(){
         StringBuffer key = new StringBuffer();

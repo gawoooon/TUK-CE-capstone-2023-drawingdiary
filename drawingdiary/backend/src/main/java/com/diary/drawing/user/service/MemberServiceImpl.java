@@ -34,6 +34,7 @@ public class MemberServiceImpl implements MemberService{
         // 암호화
         String rawPassword = memberDTO.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        
 
         // 생성
         Member member = Member.builder()
@@ -59,20 +60,7 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.findByEmail(email);
     }
 
-    // 체크용 예비 만들기.. 지워도 될듯
-    // private static final String EXISTING_EMAIL = "test@test.com";
-    // @Override
-    // public Optional<Member> findbyEmail(String email) {
-    //     if (! EXISTING_EMAIL.equalsIgnoreCase(email)) return Optional.empty();
-    //     return
 
-    // }
-
-
-    // public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    //     // 여기서 받은 유저 패스워드와 비교하여 로그인 인증한다
-        
-    // }
 
     
 
