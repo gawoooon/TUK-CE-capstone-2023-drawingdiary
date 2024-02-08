@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Background from "../components/Background";
 import React, { useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
-import Button from "../components/button/Button";
 import LongInputField from '../components/input field/LongInputField';
 import ShortInputField from '../components/input field/ShortInputField';
 import SmallButton from "../components/button/SmallButton";
@@ -77,6 +76,26 @@ const ConfilmPasswordStyle = styled.input`
   padding-left: 10px;
   border: 1px solid #909090;
   border-radius: 10px;
+`;
+
+const ButtonContainer = styled.div `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ButtonStyle = styled.button`
+    height: 50px;
+    width: 250px;
+    margin-bottom: 30px;
+    background-color: rgba(106, 156, 253, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
 `;
 
 const CreateAccount = () => {
@@ -224,13 +243,14 @@ const CreateAccount = () => {
 
               <InputFieldStyle>
 
-                <LongInputField
+                <EmailInputStyle
                   id="certification"
                   type="email"
                   value={certification}
                   onChange={(e) => setCheckCertification(e.target.value)}
-                  placeHolder="인증번호 입력"
-                />
+                  placeHolder="인증번호 입력"/>
+
+                  <SmallButton text="확인"/>
               
               </InputFieldStyle>
 
@@ -259,7 +279,11 @@ const CreateAccount = () => {
               
               </InputFieldStyle>
 
-              <Button text="다음" onClick={handleSubmit} herf="/choosePersonality"/>
+              <ButtonContainer>
+                <ButtonStyle type="submit" onClick={handleSubmit} herf="/choosePersonality">
+                  다음
+                </ButtonStyle>
+              </ButtonContainer>
 
             </form>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const OptionContainer = styled.div`
@@ -79,10 +79,11 @@ const DropdownItem = styled.a`
   }
 `;
 
-const ImageOption = () => {
+const ImageOption = ({ onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedButtonStyle, setSelectedButtonStyle] = useState(null);
   const [selectedDropdownOption, setSelectedDropdownOption] = useState(null);
+  const [isSelected, setIsSelected] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -91,16 +92,22 @@ const ImageOption = () => {
   const handleButtonStyleSelect = (option) => {
     setSelectedButtonStyle(option);
     setSelectedDropdownOption(null);
+    setIsSelected(true);
   };
 
   const handleDropdownOptionSelect = (option) => {
     setSelectedDropdownOption(option);
     setSelectedButtonStyle(null);
     setIsOpen(false);
+    setIsSelected(true);
   };
 
+  useEffect(() => {
+    // 옵션 선택 시 상위 컴포넌트로 상태 전달
+    onOptionSelect(isSelected);
+  }, [isSelected, onOptionSelect]);
+
   return (
-    <div>
       <OptionContainer>
         <h3>추천하는 이미지 스타일</h3>
         <SelectedStyle>
@@ -129,7 +136,6 @@ const ImageOption = () => {
           </DropdownContainer>
         </div>
       </OptionContainer>
-    </div>
   );
 };
 

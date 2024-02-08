@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const WriteContatiner = styled.div`
@@ -36,20 +36,41 @@ const WriteArea = styled.textarea`
     resize: none;
 `;
 
+const SaveSuccess = styled.text`
+    font-size: 15px;
+    color: #787878;
+    margin-top: 13px;
+    opacity: ${(props => (props.show ? 1 : 0))};
+    transform: opacity 0.5 ease-in-out;
+`;
 
-const EditDiary = () => {
+
+const EditDiary = ( { onTextChange }) => {
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        // 텍스트 변경 시 상위 컴포넌트로 상태 전달
+        onTextChange(text.length >= 30); // 30자 이상인지 boolean 값으로 전달
+    }, [text, onTextChange]);
+
+    
     return (
-        <div>
-
-            <WriteContatiner>
+        <WriteContatiner>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginRight: '30px'
+                }}>
                 <h3>일기 작성</h3>
-                <WriteArea>
-
-                </WriteArea>
-                    
-            </WriteContatiner>
-
-        </div>
+                
+            </div>
+            <WriteArea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+            ></WriteArea>
+                
+        </WriteContatiner>
     );
 };
 

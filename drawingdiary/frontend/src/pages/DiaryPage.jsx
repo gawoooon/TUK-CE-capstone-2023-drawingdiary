@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Background from "../components/Background";
@@ -78,6 +78,22 @@ function DiaryPage() {
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
 
+  const [isTextValid, setIsTextValid] = useState(false);
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
+
+  // EditDiary에서 텍스트 길이 조건 충족 여부 받기
+  const handleTextChange = (isValid) => {
+    setIsTextValid(isValid);
+  };
+
+  // ImageOption에서 옵션 선택 여부 받기
+  const handleOptionSelect = (isSelected) => {
+    setIsOptionSelected(isSelected);
+  };
+
+  // 저장 버튼 활성화 조건
+  const isSaveButtonEnabled = isTextValid && isOptionSelected;
+
   const handleDelete = () => {
     
   };
@@ -94,13 +110,13 @@ function DiaryPage() {
           </TopContent>
 
           <EditDiaryArea>
-            <EditDiary/>
-            <ImageOption/>
+            <EditDiary onTextChange={handleTextChange}/>
+            <ImageOption onOptionSelect={handleOptionSelect}/>
           </EditDiaryArea>
 
           <div style={{marginLeft: '20px', marginRight: '20px', display: 'flex', justifyContent: 'space-between'}}>
             <RemoveButton text="삭제"/>
-            <Button text="저장"/>
+            <Button text="저장" disabled={!isSaveButtonEnabled}/>
           </div>
           
           <ManageAIArea>
