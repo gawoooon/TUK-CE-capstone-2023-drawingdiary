@@ -11,7 +11,9 @@ app = Flask(__name__)
 CORS(app)
 
 # OpenAI API 키 설정
-openai.api_key = "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"
+openai.api_key = "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"
+
+
 
 @app.route('/api/save-diary', methods=['POST'])
 def save_diary():
@@ -19,6 +21,8 @@ def save_diary():
         # 클라이언트로부터 일기 내용을 받아옴
         data = request.json
         diary_text = data.get('diaryText')
+        print("일기내용:",diary_text)
+
 
         # OpenAI API에 전달하여 이미지 생성
         list_a = [diary_text]
@@ -30,13 +34,15 @@ def save_diary():
             response_format="url",
         )
 
+
+
         # 이미지 저장
         image_url = response['data'][0]['url']
         image_data = requests.get(image_url).content
         image = Image.open(BytesIO(image_data))
         
         # 저장할 디렉토리 경로 설정
-        save_directory = "../frontend/public" # 경로를 적절히 변경하세요.
+        save_directory =  os.path.join("frontend", "public") # 경로를 적절히 변경하세요.
 
         # 디렉토리가 존재하지 않으면 생성
         if not os.path.exists(save_directory):
