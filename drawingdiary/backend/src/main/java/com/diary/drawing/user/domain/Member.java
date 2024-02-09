@@ -23,6 +23,7 @@ public class Member {
         
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "memberID")
     private Long memberID;
 
     @Column(length = 50)
@@ -56,6 +57,8 @@ public class Member {
                 + "Birth: " + this.birth + "Gender: " + this.gender + "ProfileImage: " + this.profileImage
                 + "Personality: " + this.personality + "theme: " + this.theme;
     }
+
+    public Member(){}
 
     @Builder // 나중에 보안성 높이고 일단 구현(access = AccessLevel=private), personality, image는 별개
     public Member(String name, String email, Date birth, char gender, String password){

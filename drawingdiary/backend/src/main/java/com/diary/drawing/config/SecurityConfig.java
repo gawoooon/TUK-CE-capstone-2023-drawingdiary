@@ -1,4 +1,4 @@
-package com.diary.drawing.user.config;
+package com.diary.drawing.config;
 
 
 
