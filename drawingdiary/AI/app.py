@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS 
 import random
-import openai
+import openai 
 import requests
 from PIL import Image
 from io import BytesIO
@@ -11,12 +11,12 @@ app = Flask(__name__)
 CORS(app)
 
 # OpenAI API 키 설정
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 
-@app.route('/api/save-diary', methods=['POST'])
-def save_diary():
+@app.route('/api/diary/:id', methods=['POST'])
+def diary():
     try:
         # 클라이언트로부터 일기 내용을 받아옴
         data = request.json
@@ -25,9 +25,10 @@ def save_diary():
 
 
         # OpenAI API에 전달하여 이미지 생성
-        list_a = [diary_text]
-        prompt = random.choice(list_a)
+       
+        prompt = "수채화" + diary_text
         response = openai.Image.create(
+            model="dall-e-3",
             prompt=prompt,
             n=1,
             size="1024x1024",
@@ -35,9 +36,8 @@ def save_diary():
         )
 
 
-
         # 이미지 저장
-        image_url = response['data'][0]['url']
+        image_url = response.data[0].url
         image_data = requests.get(image_url).content
         image = Image.open(BytesIO(image_data))
         
@@ -56,7 +56,7 @@ def save_diary():
 
         return jsonify({"success": True, "message": "Diary saved successfullyyyy"})
     except Exception as e:
-        print("Error saving diary:", str(e))
+        print("Error saving diary:",  repr(e))
         return jsonify({"success": False, "message": "Error saving diary"})
 
 if __name__ == '__main__':

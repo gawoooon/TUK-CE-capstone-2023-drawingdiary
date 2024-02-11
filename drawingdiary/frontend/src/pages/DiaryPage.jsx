@@ -89,7 +89,7 @@ function DiaryPage() {
       console.log("일기 내용 저장:", diaryText);
 
       // Flask 서버에 일기 내용을 전달
-      const response = await fetch("http://localhost:5000/api/save-diary", {
+      const response = await fetch("http://localhost:5000/api/diary/:id", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
