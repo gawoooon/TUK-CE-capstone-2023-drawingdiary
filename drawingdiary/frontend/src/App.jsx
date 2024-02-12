@@ -22,7 +22,7 @@ function App() {
         <Route path="/join" element={<JoinPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route 
-          path="/diary/:id" 
+          path="/diary" 
           element={
             <CategoryProvider>
               <DiaryPage />

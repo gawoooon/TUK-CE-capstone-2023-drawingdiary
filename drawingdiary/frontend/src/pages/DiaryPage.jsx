@@ -11,6 +11,7 @@ import Button from "../components/button/Button";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
 import DeleteStyle from "../components/button/DeleteButton";
+import axios from "axios";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -88,21 +89,25 @@ function DiaryPage() {
 
       console.log("일기 내용 저장:", diaryText);
 
-      // Flask 서버에 일기 내용을 전달
-      const response = await fetch("http://localhost:5000/api/diary/:id", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ diaryText }),
-      });
+       // 로컬에서 실행 중인 Flask 서버 주소로 설정
+    const apiUrl = "http://localhost:5000/api/diary";
+    const response = await fetch(apiUrl, {
+      method: 'POST', // HTTP 메소드
+      headers: {
+        'Content-Type': 'application/json', // 보내는 데이터 타입
+      },
+      body: JSON.stringify({ diaryText }), // 전송할 데이터
+    });
 
-      if (!response.ok) {
-        console.error("Error saving diary:", response.statusText);
-      } else {
-        const result = await response.json();
-        console.log("예아", result);
-      }
+    if (response.ok) {
+      // 요청 성공 시 응답 처리
+      const responseData = await response.json();
+      console.log("일기 저장 성공:", responseData);
+    } else {
+      // 서버 응답 오류 처리
+      console.error("일기 저장 실패:", response.status);
+    }
+      
     } catch (error) {
       console.error("Error saving diary:", error);
     }

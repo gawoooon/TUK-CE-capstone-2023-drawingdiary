@@ -11,21 +11,20 @@ app = Flask(__name__)
 CORS(app)
 
 # OpenAI API 키 설정
-openai.api_key = "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"
+openai.api_key = "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"
+print("키")
 
 
-
-@app.route('/api/diary/:id', methods=['POST'])
-def diary():
+@app.route('/api/diary', methods=['POST'])
+def save_diary():
     try:
         # 클라이언트로부터 일기 내용을 받아옴
         data = request.json
-        diary_text = data.get('diaryText')
+        diary_text = data.get('diaryText','')
         print("일기내용:",diary_text)
 
 
         # OpenAI API에 전달하여 이미지 생성
-       
         prompt = "수채화" + diary_text
         response = openai.Image.create(
             model="dall-e-3",
