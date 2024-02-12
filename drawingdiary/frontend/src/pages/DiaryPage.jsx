@@ -89,7 +89,7 @@ function DiaryPage() {
       console.log("일기 내용 저장:", diaryText);
 
       // Flask 서버에 일기 내용을 전달
-      const response = await fetch("http://localhost:5000/api/diary/:id", {
+      const response = await fetch("/diary", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,13 +98,13 @@ function DiaryPage() {
       });
 
       if (!response.ok) {
-        console.error("Error saving diary:", response.statusText);
+        console.error("Error saving diary!!!!:", response.statusText);
       } else {
         const result = await response.json();
         console.log("예아", result);
       }
     } catch (error) {
-      console.error("Error saving diary:", error);
+      console.error("Error saving diaryy:", error);
     }
   };
 
