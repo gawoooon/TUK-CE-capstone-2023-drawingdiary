@@ -36,6 +36,17 @@ sourceSets {
     }
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+        resources {
+            srcDir 'src/resources'
+        }
+    }
+}
+
 tasks.named('test') {
    useJUnitPlatform()
 }
