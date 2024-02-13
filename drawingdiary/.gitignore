@@ -36,4 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
+<<<<<<< HEAD
+### application.properties(민감한 정보 올라갈거라 스킵함)
+=======
 
+>>>>>>> main

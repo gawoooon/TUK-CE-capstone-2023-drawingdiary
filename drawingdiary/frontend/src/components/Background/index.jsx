@@ -20,7 +20,11 @@ const BackgroundColor = styled.body`
 `;
 
 const BackgroundBox = styled.div`
+<<<<<<< HEAD
+  width: 1800px;
+=======
   width: 1400px;
+>>>>>>> main
   height: 900px;
   background-color: rgba(255, 255, 255, 0.08);
   box-shadow: 3px 3px 20px 5px rgba(0, 0, 0, 0.04);
