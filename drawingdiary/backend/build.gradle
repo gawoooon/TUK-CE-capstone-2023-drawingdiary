@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+<<<<<<< HEAD
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -54,6 +55,15 @@ dependencies {
 
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.2.2'
+=======
+   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+   implementation 'org.springframework.boot:spring-boot-starter-web'
+   implementation 'org.apache.tomcat:tomcat-jdbc:8.5.98'
+   runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+   developmentOnly 'org.springframework.boot:spring-boot-devtools'
+   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+   testImplementation 'io.projectreactor:reactor-test'
+>>>>>>> main
 }
 
 sourceSets {
