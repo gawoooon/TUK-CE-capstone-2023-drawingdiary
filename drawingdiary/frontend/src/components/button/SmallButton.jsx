@@ -1,23 +1,26 @@
-const buttonStyle = {
-    height: '50px',
-    width: '70px',
-    marginBottom: '30px',
-    backgroundColor: 'rgba(106, 156, 253, 0.3)',
-    borderRadius: '20px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    cursor: 'pointer',
-    color: 'black',
-    fontSize: '20px',
-    fontWeight: 'bold',
-    textAlign: 'center',
-}
+import styled from "styled-components"
+import React from "react";
 
-const Button = ({ text }) => {
+const ButtonStyle = styled.button `
+    height: 40px;
+    width: 60px;
+    margin-left: 10px;
+    background-color: rgba(106, 156, 253, 0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: black;
+    font-size: 13px;
+    text-align: center;
+`;
+
+const SmallButton = ({ text, onClick }) => {
     return (
-        <button style={buttonStyle} type="button">
+        <ButtonStyle type="button" onClick={onClick}>
             {text}
-        </button>
+        </ButtonStyle>
     )
 }
 
-export default Button
+export default SmallButton

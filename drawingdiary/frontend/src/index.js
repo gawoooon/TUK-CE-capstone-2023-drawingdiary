@@ -1,18 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./components/styles.css";
-import CreateAccount from "./pages/CreateAccount";
-import SideBar from "./components/sidebar/SideBar";
-import ShortSidebar from "./components/sidebar/ShortSidebar";
+import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <div className="BackgroundColor">
-      <div className="BackgroundBox">
-        <ShortSidebar/>
-        <CreateAccount/>
-      </div>
-    </div>
+    <App />
   </React.StrictMode>
 );
