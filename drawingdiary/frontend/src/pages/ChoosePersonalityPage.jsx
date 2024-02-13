@@ -66,6 +66,24 @@ const ChoosePersonality = () => {
     const handleSubmit = () => { 
         if(selected !== null) {
             navigate('/FinishPage');
+            // // 백엔드 api로 데이터 전송
+            // fetch('/api/auth/join', {
+            //     method: 'POST',
+            //     headers: {
+            //     'Content-Type' : 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         selected,
+            //     }),
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     console.log('Success: ', data);
+            //     navigate('/FinishPage');
+            // })
+            // .catch((error) => {
+            //     console.error('Error: ', error);
+            // });
         } else {
             alert('mbti를 선택해주세요!');
         }

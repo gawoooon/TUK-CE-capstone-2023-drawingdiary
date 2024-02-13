@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
@@ -9,7 +11,7 @@ import GeneratedImage from "../components/edit diary/GeneratedImage";
 import Button from "../components/button/Button";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
-import DeleteStyle from "../components/button/DeleteButton";
+import { RemoveButton } from "../components/button/DeleteButton";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -72,6 +74,29 @@ const RightComponentsContainer = styled.div`
 `;
 
 function DiaryPage() {
+
+  const location = useLocation();
+  const { date } = location.state || {}; // 날짜 정보 수신
+
+  const [isTextValid, setIsTextValid] = useState(false);
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
+
+  // EditDiary에서 텍스트 길이 조건 충족 여부 받기
+  const handleTextChange = (isValid) => {
+    setIsTextValid(isValid);
+  };
+
+  // ImageOption에서 옵션 선택 여부 받기
+  const handleOptionSelect = (isSelected) => {
+    setIsOptionSelected(isSelected);
+  };
+
+  // 저장 버튼 활성화 조건
+  const isSaveButtonEnabled = isTextValid && isOptionSelected;
+
+  const handleDelete = () => {
+    
+  };
   return (
     <div>
       <Background>
@@ -79,18 +104,19 @@ function DiaryPage() {
         <ShortSidebar/>
         <RightContainer>
           <TopContent>
-            <Weather/>
+            {/* 날짜 정보 전달 */}
+            <Weather date={date}/>
             <AlbumCategory/>
           </TopContent>
 
           <EditDiaryArea>
-            <EditDiary/>
-            <ImageOption/>
+            <EditDiary onTextChange={handleTextChange}/>
+            <ImageOption onOptionSelect={handleOptionSelect}/>
           </EditDiaryArea>
 
           <div style={{marginLeft: '20px', marginRight: '20px', display: 'flex', justifyContent: 'space-between'}}>
-            <DeleteStyle text="삭제"/>
-            <Button text="저장"/>
+            <RemoveButton text="삭제"/>
+            <Button text="저장" disabled={!isSaveButtonEnabled}/>
           </div>
           
           <ManageAIArea>
