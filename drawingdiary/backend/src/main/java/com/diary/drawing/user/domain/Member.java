@@ -14,10 +14,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @Getter
+@Setter
 @Table(name = "Member")
 public class Member {
         

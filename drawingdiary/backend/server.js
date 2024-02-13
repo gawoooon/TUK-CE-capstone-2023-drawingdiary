@@ -1,12 +1,12 @@
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
 
-app.use(json());
+// app.use(json());
 
-app.listen(8080, (err) => {
-    if (err) {
-        console.log('err ¹ß»ý');
-    }
+// app.listen(8080, (err) => {
+//     if (err) {
+//         console.log('err ï¿½ß»ï¿½');
+//     }
 
-    console.log('Á¤»ó±¸µ¿');
-});
+//     console.log('ï¿½ï¿½ï¿½ó±¸µï¿½');
+// });
