@@ -1,10 +1,13 @@
-package com.diary.drawing.album;
+package com.diary.drawing.album.service;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.diary.drawing.album.domain.Album;
+import com.diary.drawing.album.dto.AlbumDTO;
+import com.diary.drawing.album.repository.AlbumRepository;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.repository.MemberRepository;
 

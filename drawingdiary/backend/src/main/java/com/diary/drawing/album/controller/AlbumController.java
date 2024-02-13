@@ -1,10 +1,13 @@
-package com.diary.drawing.album;
+package com.diary.drawing.album.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.diary.drawing.album.dto.AlbumDTO;
+import com.diary.drawing.album.service.AlbumService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,4 +1,4 @@
-package com.diary.drawing.album;
+package com.diary.drawing.album.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

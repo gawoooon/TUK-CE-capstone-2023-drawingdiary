@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
-    private final JwtIssuer jwtIssuer;  // 죄종적인 값이므로 final 자동 생성자 RequiredArgsConstructor
+    private final JwtIssuer jwtIssuer;  // 최종적인 값이므로 final 자동 생성자 RequiredArgsConstructor
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/auth/login")

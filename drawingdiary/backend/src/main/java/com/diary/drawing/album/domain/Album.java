@@ -1,4 +1,4 @@
-package com.diary.drawing.album;
+package com.diary.drawing.album.domain;
 
 import com.diary.drawing.user.domain.Member;
 

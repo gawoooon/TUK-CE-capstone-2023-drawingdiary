@@ -49,7 +49,9 @@ public class MemberController {
     // 로그인은 jwt AuthController 에 구현되어있음
 
 
-    // 로그인 되어 있는지 확인하는 api
+    // 로그인 되어있는 경우 해당 사용자 정보 반환하는 api
+    // @AuthenticationPrincipal principal 정보 가져옴
+    // TODO: 정보 가져오게
     @GetMapping("/secured")
     public String secured(@AuthenticationPrincipal PrincipalDetails principalDetails){
         if (principalDetails != null) {
