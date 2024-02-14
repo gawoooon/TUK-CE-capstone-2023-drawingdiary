@@ -31,6 +31,8 @@ import jakarta.validation.Valid;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+    // [지원] 수정 부분
+    @Autowired
     private MemberRepository memberRepository;
 
     // 통신 체크

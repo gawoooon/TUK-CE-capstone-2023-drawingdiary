@@ -133,6 +133,10 @@ const CreateAccount = () => {
 
         // 생일 형식 설정 부분
         const birth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+        console.log('Sending data:', { name, email, password, birth, gender });
+
+
         
         // 백엔드 api로 데이터 전송
         axiosInstance.post('/api/join', {
