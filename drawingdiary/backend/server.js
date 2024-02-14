@@ -6,7 +6,7 @@ app.use(json());
 
 // 특정 출처의 요청만 허용
 app.use(cors({
-    origin: 'http://localhost:3001' // 클라이언트 애플리케이션 주소
+    origin: '*' // 클라이언트 애플리케이션 주소
 }));
 
 app.listen(8080, () => {
