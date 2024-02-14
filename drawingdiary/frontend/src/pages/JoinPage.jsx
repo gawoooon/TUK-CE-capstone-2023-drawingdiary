@@ -1,6 +1,7 @@
-import styled from "styled-components";
-import Background from "../components/Background";
 import React, { useState, useRef } from 'react';
+import styled from "styled-components";
+import axios from 'axios';
+import Background from "../components/Background";
 import { useNavigate } from "react-router-dom";
 import LongInputField from '../components/input field/LongInputField';
 import ShortInputField from '../components/input field/ShortInputField';
@@ -127,24 +128,38 @@ const CreateAccount = () => {
           confirmPasswordRef.current.focus();
           return;
         }
-        navigate('/choosePersonality');
+        // 데이터 전송이 성공하면 지워야 함
+        // navigate('/choosePersonality');
+
+        // 생일 형식 설정 부분
+        const birth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
         
-        // // 백엔드 api로 데이터 전송
-        // fetch('/api/auth/join', {
+        // 백엔드 api로 데이터 전송
+        axios.post('http://localhost:8080/api/join', {
+          name,
+          email,
+          password,
+          birth,
+          gender,
+        })
+        .then(response => {
+          console.log('Success: ', response);
+          navigate('/choosePersonality');
+        })
+        .catch(error => {
+          console.log('Error: ', error);
+        });
+        // fetch('http://localhost:8080/api/join', {
         //   method: 'POST',
         //   headers: {
         //     'Content-Type' : 'application/json',
         //   },
         //   body: JSON.stringify({
         //     name,
-        //     year,
-        //     month,
-        //     day,
-        //     gender,
         //     email,
-        //     certification,
         //     password,
-        //     confirmPassword,
+        //     birth,
+        //     gender,
         //   }),
         // })
         // .then(response => response.json())
