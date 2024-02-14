@@ -3,6 +3,7 @@ import express, { json } from 'express';
 const app = express();
 
 app.use(json());
+app.use(cors());
 
 // 특정 출처의 요청만 허용
 // app.use(cors({
