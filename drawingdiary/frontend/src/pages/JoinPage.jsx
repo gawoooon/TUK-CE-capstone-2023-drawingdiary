@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from "styled-components";
-import axios from 'axios';
+import axiosInstance from '../axios/axisoInstance';
 import Background from "../components/Background";
 import { useNavigate } from "react-router-dom";
 import LongInputField from '../components/input field/LongInputField';
@@ -135,7 +135,7 @@ const CreateAccount = () => {
         const birth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
         
         // 백엔드 api로 데이터 전송
-        axios.post('http://localhost:8080/api/join', {
+        axiosInstance.post('/api/join', {
           name,
           email,
           password,
@@ -149,27 +149,6 @@ const CreateAccount = () => {
         .catch(error => {
           console.log('Error: ', error);
         });
-        // fetch('http://localhost:8080/api/join', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type' : 'application/json',
-        //   },
-        //   body: JSON.stringify({
-        //     name,
-        //     email,
-        //     password,
-        //     birth,
-        //     gender,
-        //   }),
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //   console.log('Success: ', data);
-        //   navigate('/choosePersonality');
-        // })
-        // .catch((error) => {
-        //   console.error('Error: ', error);
-        // });
     };
 
     return (
