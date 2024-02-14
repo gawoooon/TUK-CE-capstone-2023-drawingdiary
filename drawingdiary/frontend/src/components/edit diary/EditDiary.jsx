@@ -45,8 +45,16 @@ const SaveSuccess = styled.text`
 `;
 
 
-const EditDiary = ( { onTextChange }) => {
+const EditDiary = ( { onTextChange, onDiaryTextChange }) => {
     const [text, setText] = useState('');
+    const [diaryText, setDiaryText] = useState('');
+
+    const handleDiaryTextChange = (e) => {
+        const newText = e.target.value;
+        setDiaryText(newText);
+
+        onDiaryTextChange(newText);
+    }
 
     useEffect(() => {
         // 텍스트 변경 시 상위 컴포넌트로 상태 전달
@@ -67,7 +75,10 @@ const EditDiary = ( { onTextChange }) => {
             </div>
             <WriteArea
                 value={text}
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e) => {
+                    setText(e.target.value);
+                    handleDiaryTextChange(e);
+                }}
             ></WriteArea>
                 
         </WriteContatiner>
