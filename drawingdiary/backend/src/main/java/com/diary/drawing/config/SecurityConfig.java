@@ -15,11 +15,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.diary.drawing.jwt.security.JwtAuthenticationFilter;
 import com.diary.drawing.jwt.service.CustomUserDetailService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -39,7 +39,18 @@ public class SecurityConfig {
                 // csrf disable csrf 공격 막아주기
                 .csrf(AbstractHttpConfigurer::disable)
                 // cors 설정(react랑) 나중에 Controller에 @CrossOrigin으로 싹 넣어야함
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource(){
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                        CorsConfiguration configuration = new CorsConfiguration();
+                        configuration.setAllowedOrigins(Arrays.asList("*"));    // react 허가
+                        configuration.setAllowedMethods(Arrays.asList("*"));    // "GET", "POST", "PUT", "DELETE"
+                        configuration.setAllowedHeaders(Arrays.asList("*"));
+                        configuration.setAllowCredentials(true);    // 일단 허용
+                        configuration.setMaxAge(3600L); // 1시간
+                        return configuration;
+                    }
+                }))
                 // Form 로그인 방식 disable
                 .formLogin((auth) -> auth.disable())
                 // oath2 로그인 방식은 잠깐 disable
@@ -77,18 +88,5 @@ public class SecurityConfig {
     }
 
     // react 서버와 연동하는 cors (나중에 추가)
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://locahost:3000"));    // react 허가
-        configuration.setAllowedMethods(Arrays.asList("*"));    // "GET", "POST", "PUT", "DELETE"
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);    // 일단 허용
-        configuration.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 
 }
