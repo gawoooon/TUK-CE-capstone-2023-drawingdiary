@@ -3,6 +3,7 @@ package com.diary.drawing.imagestyle.domain;
 import com.diary.drawing.user.domain.Member;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,11 +21,11 @@ public class StyleSelectHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long selectHistoryID;
 
-    @ManyToOne  // 여러 선택 이력과 한명의 멤버
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러 선택 이력과 한명의 멤버
     @JoinColumn(name = "memberID") // 외부키 references from memberID
     private Member member;
 
-    @ManyToOne  // 여러 선택 이력과 한개의 이미지 스타일
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러 선택 이력과 한개의 이미지 스타일
     @JoinColumn(name = "styleID") // 외부키 references from styleID
     private ImageStyle imageStyle;
 

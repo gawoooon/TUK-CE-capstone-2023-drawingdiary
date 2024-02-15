@@ -3,6 +3,7 @@ package com.diary.drawing.imagestyle.domain;
 import com.diary.drawing.user.domain.Member;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,11 +24,11 @@ public class MemberStylePreference {
 
     private int frequency;
 
-    @ManyToOne  // 여러개의 취향 테이블 한명의 유저
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 취향 테이블 한명의 유저
     @JoinColumn(name = "memberID") // 외부키 references from UserID
     private Member member;
 
-    @ManyToOne  // 여러개의 취향 테이블 한개의 스타일
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 취향 테이블 한개의 스타일
     @JoinColumn(name = "styleID") // 외부키 references from styleID
     private ImageStyle imageStyle;
 

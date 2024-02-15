@@ -1,15 +1,26 @@
 package com.diary.drawing.album.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.diary.drawing.album.domain.Album;
+import com.diary.drawing.user.domain.Member;
 
 
 //TODO: 이거 완성하기
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long>{
-    // 오류남
-    // @Query("SELECT a FROM Album a WHERE a.memberID in = :searchMember")
-    // public List<Album> findByMemberIDAlbums(@Param("searchMember") Long memberID);
+
+    // 같은 사용자의 같은이름 앨범 존재하는지 확인
+    boolean existsByAlbumName(Member member, String albumName);
+
+    // 어떤 사용자의 앨범 리스트 조회
+    List<Album> findByMemberID(Member member);
+
+    // albumID로 앨범 조회
+    Album findByAlbumID(Long albumID);
+
+    
 }

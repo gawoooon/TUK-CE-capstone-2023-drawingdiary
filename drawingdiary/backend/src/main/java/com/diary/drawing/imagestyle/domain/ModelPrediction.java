@@ -3,6 +3,7 @@ package com.diary.drawing.imagestyle.domain;
 import com.diary.drawing.user.domain.Member;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +21,7 @@ public class ModelPrediction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long predictionID;
 
-    @ManyToOne  // 예측 취향 테이블과 한명의 유저
+    @ManyToOne(fetch = FetchType.LAZY)  // 예측 취향 테이블과 한명의 유저
     @JoinColumn(name = "memberID") // 외부키 references from UserID
     private Member member;
 

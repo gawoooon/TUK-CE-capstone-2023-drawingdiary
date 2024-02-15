@@ -8,6 +8,7 @@ import com.diary.drawing.sentiment.Sentiment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,11 +33,11 @@ public class Prompt {
     @CreatedDate
     private Timestamp creationDate;
 
-    @ManyToOne  // 여러개의 프롬프트 하나의 다이어리
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 프롬프트 하나의 다이어리
     @JoinColumn(name = "diaryID") // 외부키 references from diaryID
     private Diary diary;
 
-    @ManyToOne  // 하나의 프롬프트 하나의 감정
+    @ManyToOne(fetch = FetchType.LAZY)  // 하나의 프롬프트 하나의 감정
     @JoinColumn(name = "sentimentID") // 외부키 references from sentimentID
     private Sentiment sentiment;
 

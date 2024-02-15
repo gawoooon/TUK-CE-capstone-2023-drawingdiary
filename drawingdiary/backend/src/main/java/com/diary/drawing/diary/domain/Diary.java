@@ -3,12 +3,14 @@ package com.diary.drawing.diary.domain;
 import java.sql.Timestamp;
 
 import com.diary.drawing.album.domain.Album;
+import com.diary.drawing.comment.Comment;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
 import com.diary.drawing.sentiment.Sentiment;
 import com.diary.drawing.user.domain.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,45 +40,40 @@ public class Diary{
     // 이후 enum으로 바뀔 수 있음
     private String weather;
 
-    @ManyToOne  // 여러개의 다이어리 한개의 날짜
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 다이어리 한개의 날짜
     @JoinColumn(name = "dateID") // 외부키 references from diaryid
     private Date date;
 
-    @ManyToOne  // 여러 다이어리와 하나의 앨범
-    @JoinColumn(name = "albumID") // 외부키 references from albumid
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러 다이어리와 하나의 앨범
+    @JoinColumn(name = "albumID", nullable = true) // 외부키 references from albumid
     private Album album;
 
-    @ManyToOne  // 여러개의 다이어리와 하나의 인물
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 다이어리와 하나의 인물
     @JoinColumn(name = "memberID") // 외부키 references from memberid
     private Member member;
 
-    @ManyToOne  // 여러개의 다이어리와 하나의 스타일
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 다이어리와 하나의 스타일
     @JoinColumn(name = "styleID") // 외부키 references from styleID
     private ImageStyle imageStyle;
 
     @OneToOne  // 다이어리 하나에 하나의 이미지
-    @JoinColumn(name = "imageID") // 외부키 references from imageid
+    @JoinColumn(name = "imageID", nullable = true) // 외부키 references from imageid
     private Image image;
 
     @OneToOne  // 다이어리 하나에 한개 감정
-    @JoinColumn(name = "sentimentID") // 외부키 references from sentimentid
+    @JoinColumn(name = "sentimentID", nullable = true) // 외부키 references from sentimentid
     private Sentiment sentiment;
 
+    @OneToOne  // 다이어리 하나에 한개 코멘트
+    @JoinColumn(name = "commentID", nullable = true) // 외부키 references from commentid
+    private Comment comment;
+
     @Builder
-    public Diary(String text, String weather, Date date, Album album, Member member,
-                    ImageStyle imageStyle, Image image, Sentiment sentiment){
+    public Diary(String text, String weather, Date date, Album album, Member member){
         this.text = text;
         this.weather=weather;
         this.date=date;
         this.album=album;
         this.member=member;
-        this.imageStyle = imageStyle;
-        this.image=image;
-        this.sentiment=sentiment;
     }
-
-    
-
-    
-
 }

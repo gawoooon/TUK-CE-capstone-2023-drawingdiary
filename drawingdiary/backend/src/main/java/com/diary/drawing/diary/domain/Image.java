@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +33,7 @@ public class Image {
     @JoinColumn(name = "diaryID") // 외부키 references from diaryID
     private Diary diary;
 
-    @ManyToOne  // 한개의 날짜는 여러개의 이미지
+    @ManyToOne(fetch = FetchType.LAZY)  // 한개의 날짜는 여러개의 이미지
     @JoinColumn(name = "dateID") // 외부키 references from dateID
     private Date date;
     
