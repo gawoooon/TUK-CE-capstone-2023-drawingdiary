@@ -1,7 +1,5 @@
 package com.diary.drawing.imagestyle.domain;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Scalar.String;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,11 +21,11 @@ public class ImageStyle {
     private String styleName;
 
     @Column(length = 150)
-    private String desperation;
+    private String description;
 
     @Builder
     public ImageStyle(String styleName, String desperation){
         this.styleName = styleName;
-        this.desperation = desperation;
+        this.description = desperation;
     }
 }
