@@ -23,6 +23,7 @@ public class JpaConfig {
 
         Map<String, Object> properties = new HashMap<>(); // 변경된 부분
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect"); // 사용하는 데이터베이스에 맞게 변경
+        properties.put("hibernate.hbm2ddl.auto", "update"); // 또는 "create"
         em.setJpaPropertyMap(properties);
         return em;
     }
