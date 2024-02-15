@@ -1,5 +1,7 @@
 package com.diary.drawing.user.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.jwt.model.PrincipalDetails;
 import com.diary.drawing.user.dto.MemberDTO;
+import com.diary.drawing.user.dto.PersonalityUpdateDTO;
 import com.diary.drawing.user.exception.MemberExceptionType;
 import com.diary.drawing.user.exception.MemberResponseException;
 import com.diary.drawing.user.repository.MemberRepository;
@@ -20,9 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-
-
-
+import com.diary.drawing.user.domain.Member;
 
 @Tag(name = "User", description = "User API")
 @RestController
@@ -78,8 +79,19 @@ public class MemberController {
         // 만약 이메일 인증번호가 옳지 않다면~~~ 못넘어감
         memberService.joinMember(memberDTO);
     }
-    
-    
 
+    // 성격 속성에 값을 추가하는 부분 따로 구현해놔서 이렇게 해야 한다고 함
+    @PostMapping("/updatePersonality")
+    public ResponseEntity<?> updatePersonality(@RequestBody PersonalityUpdateDTO updateDTO) {
+        Optional<Member> memberOptional = memberService.findByEmail(updateDTO.getEmail());
+        if(!memberOptional.isPresent()) {
+            return ResponseEntity.badRequest().body("해당 이메일의 사용자를 찾을 수 없습니다.");
+        }
+
+        Member member = memberOptional.get();
+        memberService.joinMemberPersonality(member, updateDTO.getPersonality());
+
+        return ResponseEntity.ok().body("성격 유형이 업데이트 되었습니다.");
+    }
 
 }

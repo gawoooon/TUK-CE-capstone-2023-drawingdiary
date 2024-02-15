@@ -2,8 +2,9 @@ import styled from "styled-components";
 import Background from "../components/Background";
 import ButtonForPersonality from "../components/button/ButtonForPersonality";
 import Button from "../components/button/Button";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import axiosInstance from "../axios/axisoInstance";
 
 const ContainerStyle = styled.div`
   height: 450px;
@@ -44,6 +45,12 @@ const MBTIContainer = styled.div`
 const ChoosePersonality = () => {
 
     const [selected, setSelected] = useState(null);
+    const [personality, setPersonality] = useState('');
+
+    const location = useLocation();
+    const userEmail = location.state?.email; // 이메일 값을 불러옴
+
+    console.log(userEmail);
 
     const mbtiKeywords = [
         "INTJ", "INTP", "ENTJ", "ENTP", 
@@ -60,30 +67,25 @@ const ChoosePersonality = () => {
             setSelected(null);
         } else {
             setSelected(keyword);
+            setPersonality(keyword);
         }
     };
 
     const handleSubmit = () => { 
         if(selected !== null) {
-            navigate('/FinishPage');
-            // // 백엔드 api로 데이터 전송
-            // fetch('/api/auth/join', {
-            //     method: 'POST',
-            //     headers: {
-            //     'Content-Type' : 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         selected,
-            //     }),
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log('Success: ', data);
-            //     navigate('/FinishPage');
-            // })
-            // .catch((error) => {
-            //     console.error('Error: ', error);
-            // });
+            // 백엔드 api로 데이터 전송
+            axiosInstance.post('/api/updatePersonality', {
+                email: userEmail,
+                personality,
+            })
+            .then(response => {
+                console.log('Success: ', response);
+                navigate('/FinishPage')
+            })
+            .catch(error => {
+                console.log('Error: ', error);
+            });
+
         } else {
             alert('mbti를 선택해주세요!');
         }
