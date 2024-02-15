@@ -86,31 +86,38 @@ function DiaryPage() {
         console.log("일기 내용이 없어 저장되지 않았습니다.");
         return;
       }
-
+  
       console.log("일기 내용 저장:", diaryText);
-
-      // 로컬에서 실행 중인 Flask 서버 주소로 설정
+  
       const apiUrl = "http://localhost:5000/api/diary/1";
       const response = await fetch(apiUrl, {
-        method: "POST", // HTTP 메소드
+        method: "POST",
         headers: {
-          "Content-Type": "application/json", // 보내는 데이터 타입
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ diaryText }), // 전송할 데이터
+        body: JSON.stringify({ diaryText }),
       });
-
+  
       if (response.ok) {
-        // 요청 성공 시 응답 처리
         const responseData = await response.json();
         console.log("일기 저장 성공:", responseData);
+  
+        // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
+        alert("일기가 성공적으로 저장되었습니다.");
       } else {
-        // 서버 응답 오류 처리
         console.error("일기 저장 실패:", response.status);
+  
+        // 실패 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
+        alert("일기 저장에 실패하였습니다.");
       }
     } catch (error) {
       console.error("Error saving diary:", error);
+  
+      // 에러 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
+      alert("일기 저장 중에 오류가 발생하였습니다.");
     }
   };
+  
 
   return (
     <div>

@@ -35,23 +35,23 @@ def save_diary():
         )
 
 
-        # 이미지 저장
-        image_url = response.data[0].url
-        image_data = requests.get(image_url).content
-        image = Image.open(BytesIO(image_data))
+        # # 이미지 저장
+        # image_url = response.data[0].url
+        # image_data = requests.get(image_url).content
+        # image = Image.open(BytesIO(image_data))
         
-        # 저장할 디렉토리 경로 설정
-        save_directory =  os.path.join("frontend", "public") # 경로를 적절히 변경하세요.
+        # # 저장할 디렉토리 경로 설정
+        # save_directory =  os.path.join("frontend", "public") # 경로를 적절히 변경하세요.
 
-        # 디렉토리가 존재하지 않으면 생성
-        if not os.path.exists(save_directory):
-            os.makedirs(save_directory)
+        # # 디렉토리가 존재하지 않으면 생성
+        # if not os.path.exists(save_directory):
+        #     os.makedirs(save_directory)
 
-        # 이미지 저장
-        saved_path = os.path.join(save_directory, "image01.jpg")
-        image.save(saved_path)
+        # # 이미지 저장
+        # saved_path = os.path.join(save_directory, "image01.jpg")
+        # image.save(saved_path)
 
-        print("이미지가 다음 경로에 저장되었습니다:", saved_path)
+        # print("이미지가 다음 경로에 저장되었습니다:", saved_path)
 
         return jsonify({"success": True, "message": "Diary saved successfullyyyy"})
     except Exception as e:
@@ -59,4 +59,4 @@ def save_diary():
         return jsonify({"success": False, "message": "Error saving diary"})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)
