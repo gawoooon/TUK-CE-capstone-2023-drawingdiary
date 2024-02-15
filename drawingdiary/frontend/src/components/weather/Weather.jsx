@@ -60,7 +60,6 @@ const Weather = ({ date }) => {
             // 가장 가까운 예보 찾기
             let closestForecast = data.list.reduce((acc, forecast) => {
                 const forecastDate = new Date(forecast.dt * 1000); // UTC 기준 예보 날짜와 시간
-                console.log(forecastDate);
                 // 현재까지 찾은 가장 가까운 예보와의 차이 비교
                 if (!acc || Math.abs(forecastDate - requestedDateUTC) < Math.abs(acc.date - requestedDateUTC)) {
                     return { date: forecastDate, forecast };

@@ -45,7 +45,7 @@ public class SecurityConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration configuration = new CorsConfiguration();
-                        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3001"));    // react 허가
+                        configuration.setAllowedOrigins(Arrays.asList("*"));    // react 허가 http://localhost:3001
                         configuration.setAllowedMethods(Arrays.asList("*"));    // "GET", "POST", "PUT", "DELETE"
                         configuration.setAllowedHeaders(Arrays.asList("*"));
                         configuration.setAllowCredentials(true);    // 일단 허용

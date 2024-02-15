@@ -2,49 +2,40 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DonutChart from './DonutChart';
 
-const Sentiment = () => {
+const Sentiment = ( { text } ) => {
 
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
 
+  // const text = "오늘은 하루종일 집에서 일을 했다. 힘들었지만 하던 일을 완수해서 기분이 좋았다."
+  console.log(text);
+
   useEffect(() => {
     const fetchSentimentData = async () => {
-      const apiUrl = 'https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze';
-      const data = JSON.stringify({
-        content: "오늘은 정말 기분이 좋은 날이야."
-      });
-  
       try {
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-NCP-APIGW-API-KEY-ID': 'ksnv4tfdvd', // 발급받은 Client ID
-            'X-NCP-APIGW-API-KEY': 'nJ0L2fO6t8jwOqpgcZsplPniprZo7eHiVBWdHt32', // 발급받은 Client Secret
-          },
-          body: data
-        });
-  
-        if (!response.ok) {
-          throw new Error('네트워크 응답이 올바르지 않습니다.');
-        }
-  
-        const result = await response.json();
-        setPositiveValue(result.document.confidence.positive * 100);
-        setNegativeValue(result.document.confidence.negative * 100);
-        setNeutralValue(result.document.confidence.neutral * 100);
+        // 서버 프록시 엔드포인트로 요청 전송
+        const response = await axios.post('/api/sentiment', { content: text });
+
+        // 응답에서 감정분석 결과 추출
+        const { positive, negative, neutral } = response.data.document.confidence;
+
+        // 소수점 두 자리까지 반올림하여 상태 업데이트
+        setPositiveValue(Math.round(positive * 100) / 100);
+        setNegativeValue(Math.round(negative * 100) / 100);
+        setNeutralValue(Math.round(neutral * 100) / 100);
+
       } catch (error) {
-        console.error('감정 분석 API 호출 중 오류 발생:', error);
+        console.error('감정 분석 API 호출 중 오류 발생: ', error);
       }
     };
-  
-    fetchSentimentData();
-  }, []);
+
+    if(text) fetchSentimentData();
+  }, [text]);
 
   return (
     <div>
-        <h3>감정분석 결과: {positiveValue}</h3>
+        <h3>감정분석</h3>
         <DonutChart
             positiveValue={positiveValue}
             negativeValue={negativeValue}

@@ -36,30 +36,20 @@ const WriteArea = styled.textarea`
     resize: none;
 `;
 
-const SaveSuccess = styled.text`
-    font-size: 15px;
-    color: #787878;
-    margin-top: 13px;
-    opacity: ${(props => (props.show ? 1 : 0))};
-    transform: opacity 0.5 ease-in-out;
-`;
-
-
-const EditDiary = ( { onTextChange, onDiaryTextChange }) => {
-    const [text, setText] = useState('');
+const EditDiary = ( { onDiaryTextChange }) => {
+    // const [text, setText] = useState('');
     const [diaryText, setDiaryText] = useState('');
 
     const handleDiaryTextChange = (e) => {
         const newText = e.target.value;
         setDiaryText(newText);
-
         onDiaryTextChange(newText);
     }
 
-    useEffect(() => {
-        // 텍스트 변경 시 상위 컴포넌트로 상태 전달
-        onTextChange(text.length >= 30); // 30자 이상인지 boolean 값으로 전달
-    }, [text, onTextChange]);
+    // useEffect(() => {
+    //     // 텍스트 변경 시 상위 컴포넌트로 상태 전달
+    //     onDiaryTextChange(text.length >= 30); // 30자 이상인지 boolean 값으로 전달
+    // }, [text, onDiaryTextChange]);
 
     
     return (
@@ -74,9 +64,9 @@ const EditDiary = ( { onTextChange, onDiaryTextChange }) => {
                 
             </div>
             <WriteArea
-                value={text}
+                value={diaryText}
                 onChange={(e) => {
-                    setText(e.target.value);
+                    setDiaryText(e.target.value);
                     handleDiaryTextChange(e);
                 }}
             ></WriteArea>
