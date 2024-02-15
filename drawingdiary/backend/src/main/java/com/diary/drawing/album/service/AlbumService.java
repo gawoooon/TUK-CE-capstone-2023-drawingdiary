@@ -1,5 +1,6 @@
 package com.diary.drawing.album.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class AlbumService {
     @Autowired
     private MemberRepository memberRepository;
 
-    // 앨범 추가
+    /* 앨범 추가 */
+    @SuppressWarnings("null") // 일단 null값 경고 지웠음
     public Album addAlbum(AlbumDTO albumDTO) throws IOException {
 
         // id로 멤버찾기
@@ -44,7 +46,10 @@ public class AlbumService {
 
     }
 
-    // 앨범 추가
+    /* 멤버별 앨범 리스트 return, 아무것도 없다면 빈 리스트 반환 */
+    public List<Album> getAlbumsByMemberId(Long memberId) {
+        return albumRepository.findByMemberId(memberId);
+    }
 
     // 앨범 삭제
 }
