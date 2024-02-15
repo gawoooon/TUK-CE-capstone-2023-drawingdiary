@@ -11,11 +11,11 @@ app = Flask(__name__)
 CORS(app)
 
 # OpenAI API 키 설정
-openai.api_key = "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"
+openai.api_key = ""
 print("키")
 
 
-@app.route('/api/diary', methods=['POST'])
+@app.route('/api/diary/1', methods=['POST'])
 def save_diary():
     try:
         # 클라이언트로부터 일기 내용을 받아옴
