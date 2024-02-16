@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS 
+from flask_cors import CORS
+from dotenv import load_dotenv 
 import random
 import openai 
 import requests
@@ -11,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 # OpenAI API 키 설정
-openai.api_key = ""
+openai.api_key = os.getenv("OPENAI_API_KEY")
 print("키")
 
 
