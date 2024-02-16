@@ -24,10 +24,13 @@ public class DiaryRequestDTO {
     private String weather;
 
     @NotNull(message = "날짜 ID가 전송되지 않았습니다.")
-    private Long dateID;
+    private int dateID;
 
     private Long albumID;   // null 가능
 
     @NotNull(message = "고객 ID가 전송되지 않았습니다.")
     private Long memberID;
+
+    @NotNull(message = "이미지 스타일이 전송되지 않았습니다.")
+    private Long imageStyleID;
 }

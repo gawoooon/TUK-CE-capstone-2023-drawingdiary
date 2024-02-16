@@ -69,11 +69,12 @@ public class Diary{
     private Comment comment;
 
     @Builder
-    public Diary(String text, String weather, Date date, Album album, Member member){
+    public Diary(String text, String weather, Date date, Album album, Member member, ImageStyle imageStyle){
         this.text = text;
         this.weather=weather;
         this.date=date;
         this.album=album;
         this.member=member;
+        this.imageStyle=imageStyle;
     }
 }
