@@ -13,6 +13,7 @@ import lombok.Getter;
 @Getter
 @Table(name = "ImageStyle")
 public class ImageStyle {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long styleID;
@@ -22,6 +23,8 @@ public class ImageStyle {
 
     @Column(length = 150)
     private String description;
+
+    public ImageStyle(){}
 
     @Builder
     public ImageStyle(String styleName, String desperation){

@@ -70,6 +70,7 @@ public class Diary{
 
     @Builder
     public Diary(String text, String weather, Date date, Album album, Member member, ImageStyle imageStyle){
+        this.record = new Timestamp(System.currentTimeMillis());
         this.text = text;
         this.weather=weather;
         this.date=date;

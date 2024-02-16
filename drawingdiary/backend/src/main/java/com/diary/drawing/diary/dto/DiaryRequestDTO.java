@@ -32,5 +32,5 @@ public class DiaryRequestDTO {
     private Long memberID;
 
     @NotNull(message = "이미지 스타일이 전송되지 않았습니다.")
-    private Long imageStyleID;
+    private Long StyleID;
 }

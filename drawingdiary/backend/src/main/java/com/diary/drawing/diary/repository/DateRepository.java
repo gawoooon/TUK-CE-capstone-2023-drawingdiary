@@ -9,5 +9,5 @@ import com.diary.drawing.diary.domain.Date;
 
 @Repository
 public interface DateRepository extends JpaRepository<Date, Integer>{
-    public Date findByDateID(int dateID); // Optional: findBy로 조회했을 때 객체가 존재하지 않는 경우 처리
+    Date findByDateID(int dateID); // Optional: findBy로 조회했을 때 객체가 존재하지 않는 경우 처리
 }

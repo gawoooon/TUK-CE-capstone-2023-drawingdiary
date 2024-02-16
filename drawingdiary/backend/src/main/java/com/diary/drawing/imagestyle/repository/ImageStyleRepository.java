@@ -7,5 +7,5 @@ import com.diary.drawing.imagestyle.domain.ImageStyle;
 
 @Repository
 public interface ImageStyleRepository extends JpaRepository<ImageStyle, Long>{
-    ImageStyle findByImageStyleID(Long imageStyleID);
+    ImageStyle findByStyleID(Long StyleID);
 }

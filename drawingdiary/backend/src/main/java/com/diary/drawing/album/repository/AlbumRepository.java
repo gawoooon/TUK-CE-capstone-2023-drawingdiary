@@ -14,10 +14,10 @@ import com.diary.drawing.user.domain.Member;
 public interface AlbumRepository extends JpaRepository<Album, Long>{
 
     // 같은 사용자의 같은이름 앨범 존재하는지 확인
-    boolean existsByAlbumName(Member member, String albumName);
+    boolean existsByMemberAndAlbumName(Member member, String albumName);
 
     // 어떤 사용자의 앨범 리스트 조회
-    List<Album> findByMemberID(Member member);
+    List<Album> findByMember(Member member);
 
     // albumID로 앨범 조회
     Album findByAlbumID(Long albumID);

@@ -47,8 +47,8 @@ public class AlbumService {
     }
 
     /* 멤버별 앨범 리스트 return, 아무것도 없다면 빈 리스트 반환 */
-    public List<Album> getAlbumsByMemberID(Member member) {
-        return albumRepository.findByMemberID(member);
+    public List<Album> getAlbumsByMember(Member member) {
+        return albumRepository.findByMember(member);
     }
 
     // 앨범 삭제

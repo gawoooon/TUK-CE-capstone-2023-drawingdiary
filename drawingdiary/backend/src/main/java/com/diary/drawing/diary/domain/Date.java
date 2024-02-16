@@ -11,13 +11,15 @@ import lombok.Getter;
 @Table(name = "Date")
 public class Date {
     @Id
-    private int dateID;
+    public int dateID;
 
     private String year;
 
     private String month;
     
     private String day;
+
+    public Date(){}
 
     @Builder
     public Date(String year, String month, String day){

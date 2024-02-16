@@ -30,6 +30,8 @@ public class Album {
     @JoinColumn(name = "memberID") // 외부키 references from UserID
     private Member member;
 
+    public Album(){}
+
 
     // 빌더
     @Builder

@@ -48,8 +48,4 @@ public class Prompt {
         this.sentiment=sentiment;
     }
 
-
-
-
-
 }
