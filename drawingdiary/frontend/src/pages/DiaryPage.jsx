@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 import styled, { keyframes, css } from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
@@ -127,8 +128,6 @@ const MessageText = styled.div`
     font-weight: bold;
 `;
 
-
-
 function DiaryPage() {
 
   const location = useLocation();
@@ -141,9 +140,15 @@ function DiaryPage() {
 
   // message 부분
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const [showInitialMessage, setShowInitialMessage] = useState(true);
 
-  const [animateSaveButton, setAnimateSaveButton] = useState(false);
+  const [animateSaveBtn, setAnimateSaveBtn] = useState(false);
+  const [animateDeleteBtn, setAnimateDeleteBtn] = useState(false);
+  
+  const [positiveValue, setPositiveValue] = useState(0);
+  const [negativeValue, setNegativeValue] = useState(0);
+  const [neutralValue, setNeutralValue] = useState(0);
 
   useEffect(() => {
     // 페이지 로딩 시 초기 메시지를 5초간 표시
@@ -154,6 +159,25 @@ function DiaryPage() {
     }, 5000);
     return () => clearTimeout(timer);
   }, [isTextValid]);
+
+  // 감정 분석 함수
+  const analyzeSentiment  = async () => {
+    try {
+      // 서버 프록시 엔드포인트로 요청 전송
+      const response = await axios.post('/api/sentiment', { content: diaryText });
+
+      // 응답에서 감정분석 결과 추출
+      const { positive, negative, neutral } = response.data.document.confidence;
+
+      // 소수점 두 자리까지 반올림하여 상태 업데이트
+      setPositiveValue(Math.round(positive * 100) / 100);
+      setNegativeValue(Math.round(negative * 100) / 100);
+      setNeutralValue(Math.round(neutral * 100) / 100);
+
+    } catch (error) {
+      console.error('감정 분석 API 호출 중 오류 발생: ', error);
+    }
+  };
 
   // EditDiary에서 텍스트 길이 조건 충족 여부 받기
   // const handleTextChange = (isValid) => {
@@ -182,21 +206,42 @@ function DiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = () => {
-    if(isSaveButtonEnabled) {
-      setAnimateSaveButton(true);
+
+    if(diaryText.length < 30) {
+      setShowInitialMessage(true);
       setTimeout(() => {
-        setAnimateSaveButton(false);
-      }, 500);
+        setShowInitialMessage(false);
+      }, 5000);
+      return;
+    }
+
+    if(isSaveButtonEnabled) {
+      setAnimateSaveBtn(true);
+      setTimeout(() => {
+        setAnimateSaveBtn(false);
+      }, 5000);
 
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
       }, 5000);
     }
+
+    // 감정 분석 실행
+    analyzeSentiment ();
   };
   
   const handleDelete = () => {
-    
+    // 삭제 요청 들어가야함 -- 일기와 합치고 나서 추가적으로 해야 함
+    setAnimateDeleteBtn(true);
+    setTimeout(() => {
+      setAnimateDeleteBtn(false);
+    }, 500);
+
+    setShowDelete(true);
+    setTimeout(() => {
+      setShowDelete(false);
+    }, 5000);
   };
 
   return (
@@ -217,11 +262,15 @@ function DiaryPage() {
 
           <MessageContainer>
             {showInitialMessage && (
-              <MessageText color="#ff0000" show={!isTextValid}>30자 이상 작성하세요!</MessageText>
+              <MessageText color="#707070" show={!isTextValid}>30자 이상 작성하세요!</MessageText>
             )}
 
             {showSuccess && (
               <MessageText color="#008000" show={isTextValid}>일기가 성공적으로 생성되었습니다!</MessageText>
+            )}
+
+            {showDelete && (
+              <MessageText color="#ff0000">일기가 삭제되었습니다.</MessageText>
             )}
           </MessageContainer>
 
@@ -233,13 +282,13 @@ function DiaryPage() {
           <div style={{marginLeft: '20px', marginRight: '20px', display: 'flex', justifyContent: 'space-between'}}>
 
             <ButtonContainer>
-                <RemoveButtonStyle onClick={handleDelete}>
+                <RemoveButtonStyle onClick={handleDelete} animate={animateDeleteBtn}>
                     삭제
                 </RemoveButtonStyle>
             </ButtonContainer>
             
             <ButtonContainer>
-                <SaveButtonStyle onClick={handleSave} disabled={!isSaveButtonEnabled} animate={animateSaveButton}>
+                <SaveButtonStyle onClick={handleSave} animate={animateSaveBtn}>
                     저장
                 </SaveButtonStyle>
             </ButtonContainer>
@@ -249,11 +298,14 @@ function DiaryPage() {
             <GeneratedImage/>
             <RightComponentsContainer>
               <AIComment/>
-              <Sentiment text={diaryText}/>
+              <Sentiment 
+                positiveValue={positiveValue}
+                negativeValue={negativeValue}
+                neutralValue={neutralValue}/>
+
             </RightComponentsContainer>
 
           </ManageAIArea>
-
 
         </RightContainer>
 

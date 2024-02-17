@@ -35,9 +35,14 @@ const AddAlbumContainer = styled.div`
 
 const AlbumPage = () => {
   const [isAddCategoryVisible, setAddCategoryVisible] = useState(false);
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
 
   const handleAddCategoryButtonClick = () => {
-    setAddCategoryVisible(!isAddCategoryVisible);
+    setIsAddCategoryOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsAddCategoryOpen(false);
   };
 
   return (
@@ -47,7 +52,11 @@ const AlbumPage = () => {
           <ShortSidebar/>
           <AddAlbumContainer>
             <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
-            {isAddCategoryVisible && <AddCategory />}
+            {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
+            <AddCategory
+              isOpen={isAddCategoryOpen}
+              onclose={handleClose}
+            />
           </AddAlbumContainer>
           <AlbumBox  />
         </Container>

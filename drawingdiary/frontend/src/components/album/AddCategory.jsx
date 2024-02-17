@@ -3,16 +3,37 @@ import styled from "styled-components";
 import SmallButton from "../button/SmallButton";
 import { useCategory } from "./CategoryList";
 
-const AddContainer = styled.div`
-    width: 250px;
-    height: 140px;
+const ContainerBackground = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1); // 투명한 회색 배경
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; // ModalStyle보다 1 낮게 설정하여 모달이 위에 오도록 함
+`;
+
+const ContainerStyle = styled.div`
+    width: 350px;
+    height: 180px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding-top: 30px;
+    z-index: 1000;
     border-radius: 10px;
-    position: absolute;
-    background-color: #FFF;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
 `;
 
 const AddItem = styled.input`
@@ -34,18 +55,39 @@ const AddCategoryContainer = styled.div`
 `;
 
 const MessageContainer = styled.text`
-  font-size: 10px;
+  font-size: 12px;
   color: #8c8c8c;
   position: absolute;
 `;
 
+const ExitBtn = styled.button`
+    font-size: 13px;
+    color: gray;
+    border: none;
+    background-color: white;
+`;
 
-const AddCategory = ({ categoryList }) => {
+
+const AddCategory = ({ categoryList, isOpen, onclose }) => {
+
+    
     const [newCategory, setNewCategory] = useState("");
     const { addCategory } = useCategory();
     const [showMessage, setShowMessage] = useState(false);
+    const [showBlankMessage, setShowBlankMessage] = useState(false);
 
+    if(!isOpen) return null;
+    
     const handleAddButtonClick = () => {
+
+        if (newCategory.trim() === "") {
+            setShowBlankMessage(true);
+            setTimeout(() => {
+                setShowBlankMessage(false);
+            }, 2000);
+            return;
+        }
+
         addCategory(newCategory);
         setNewCategory("");
         // 메시지 표시
@@ -53,6 +95,7 @@ const AddCategory = ({ categoryList }) => {
         // 2초 후에 메시지 감추기
         setTimeout(() => {
         setShowMessage(false);
+        onclose();
         }, 2000);
     };
 
@@ -60,27 +103,40 @@ const AddCategory = ({ categoryList }) => {
         <div>
             <AddCategoryContainer>
 
-                <AddContainer>
-                    <AddItem
-                        placeholder="앨범 이름을 입력하세요."
-                        value={newCategory}
-                        onChange={(e) => setNewCategory(e.target.value)} 
-                    />
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                        {showMessage && (
-                        <MessageContainer>
-                        새로운 카테고리가 추가되었습니다.
-                        </MessageContainer>
-                        )}
-                    </div>
-                    <div style={{display: 'flex', justifyContent: 'center', marginLeft: '-10px', marginBottom: '5px', marginTop: '10px'}}>
-                        <SmallButton text="추가" onClick={handleAddButtonClick} />
-                    </div>
-                </AddContainer>
+                <ContainerBackground>
+
+                    <ContainerStyle>
+
+                        <ExitBtn onClick={onclose} style={{ position: 'absolute', top: '10px', right: '10px' }}>
+                            닫기
+                        </ExitBtn>
+                        
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            {showBlankMessage && (
+                                <MessageContainer>
+                                    카테고리를 입력해주세요.
+                                </MessageContainer>
+                            )}
+                            {showMessage && (
+                            <MessageContainer>
+                            새로운 카테고리가 추가되었습니다.
+                            </MessageContainer>
+                            )}
+                        </div>
+                        <AddItem
+                            placeholder="앨범 이름을 입력하세요."
+                            value={newCategory}
+                            onChange={(e) => setNewCategory(e.target.value)} 
+                        />
+                        <div style={{display: 'flex', justifyContent: 'center', marginLeft: '-10px', marginBottom: '5px', marginTop: '10px'}}>
+                            <SmallButton text="추가" onClick={handleAddButtonClick} />
+                        </div>
+                    </ContainerStyle>
+                </ContainerBackground>
             </AddCategoryContainer>
         </div>
     );

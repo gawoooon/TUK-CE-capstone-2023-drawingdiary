@@ -65,6 +65,7 @@ const EditDiary = ( { onDiaryTextChange }) => {
             </div>
             <WriteArea
                 value={diaryText}
+                placeholder="여기에 일기를 작성해주세요."
                 onChange={(e) => {
                     setDiaryText(e.target.value);
                     handleDiaryTextChange(e);
