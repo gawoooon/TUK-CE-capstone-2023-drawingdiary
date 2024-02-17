@@ -2,7 +2,7 @@ package com.diary.drawing.diary.domain;
 
 import java.sql.Timestamp;
 
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.diary.drawing.sentiment.Sentiment;
 
@@ -27,10 +27,10 @@ public class Prompt {
     private Long promptID;
 
 
-    @Column(length = 300)
+    @Column(length = 1000)
     private String promptText;
 
-    @CreatedDate
+    @CreationTimestamp
     private Timestamp creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 프롬프트 하나의 다이어리

@@ -48,5 +48,12 @@ public class Image {
         this.date = date;
         this.prompt = prompt;
     }
+
+    public void update(String imageFile, Diary diary, Date date, Prompt prompt){
+        this.imageFile = imageFile;
+        this.diary = diary;
+        this.date = date;
+        this.prompt = prompt;
+    }
     
 }

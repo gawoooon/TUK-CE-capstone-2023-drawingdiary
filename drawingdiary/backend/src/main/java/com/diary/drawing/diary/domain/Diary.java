@@ -2,6 +2,8 @@ package com.diary.drawing.diary.domain;
 
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.comment.Comment;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
@@ -31,7 +33,8 @@ public class Diary{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diaryID;
 
-    @Column(columnDefinition = "TIMESTAMP", nullable = false)
+    @CreationTimestamp
+    @Column(nullable = false)
     private Timestamp record;
 
     @Column(length = 5000)
@@ -70,7 +73,6 @@ public class Diary{
 
     @Builder
     public Diary(String text, String weather, Date date, Album album, Member member, ImageStyle imageStyle){
-        this.record = new Timestamp(System.currentTimeMillis());
         this.text = text;
         this.weather=weather;
         this.date=date;

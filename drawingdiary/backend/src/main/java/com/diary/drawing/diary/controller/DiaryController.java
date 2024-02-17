@@ -24,7 +24,7 @@ public class DiaryController {
     @Operation(summary = "초기 일기 잘 들어가는지 확인")
     @PostMapping("/test/add")
     public Diary testAddDiary(@RequestBody DiaryRequestDTO diaryRequestDTO) throws Exception{
-        return diaryService.addDiary(diaryRequestDTO);
+        return diaryService.createDiary(diaryRequestDTO);
     }
 
 
