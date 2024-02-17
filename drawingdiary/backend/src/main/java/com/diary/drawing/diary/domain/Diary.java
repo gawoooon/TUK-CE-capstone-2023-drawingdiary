@@ -77,5 +77,8 @@ public class Diary{
         this.album=album;
         this.member=member;
         this.imageStyle=imageStyle;
+        this.image = null;
+        this.sentiment = null;
+        this.comment = null;
     }
 }
