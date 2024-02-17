@@ -54,7 +54,7 @@ public class ImageService {
 
 
         /* 다이어리에 연결된 이미지 찾기, 없으면 404 에러 */
-        Image image = imageRepository.findByDiaryID(diary);
+        Image image = imageRepository.findByDiary(diary);
         if(image == null){
             throw new DiaryResponseException(DiaryExceptionType.NOT_FOUND_IMAGE);
         }

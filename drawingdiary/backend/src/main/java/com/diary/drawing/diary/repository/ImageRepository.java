@@ -10,6 +10,6 @@ import com.diary.drawing.diary.domain.Image;
 public interface ImageRepository extends JpaRepository<Image, Long>{
 
     Image findByImageID(Long imageID);
-    Image findByDiaryID(Diary diary);
+    Image findByDiary(Diary diary);
 }
     

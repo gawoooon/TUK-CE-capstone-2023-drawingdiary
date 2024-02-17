@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GenerateDiaryService {
-    /* 다이어리 완성을 위한 서비스, + 감정, 이미지, 코멘트 */
+    /* 다이어리 완성을 위한 서비스, (+ 감정, 이미지, 코멘트) */
 
     /* 완전 처음 생성할때 */
     /* 메소드명: public GenerateRequestDTO generateDiary(DiaryRequestDTO diaryRequestDTO) */
