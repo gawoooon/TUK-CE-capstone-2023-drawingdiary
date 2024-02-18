@@ -3,6 +3,7 @@ package com.diary.drawing.diary.domain;
 import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.comment.Comment;
 import com.diary.drawing.common.BaseTime;
+import com.diary.drawing.diary.dto.DiaryRequestDTO;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
 import com.diary.drawing.sentiment.Sentiment;
 import com.diary.drawing.user.domain.Member;
@@ -17,13 +18,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-
-
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "Diary")
 public class Diary extends BaseTime{
     @Id
@@ -49,7 +51,7 @@ public class Diary extends BaseTime{
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 다이어리와 하나의 스타일
-    @JoinColumn(name = "styleID") // 외부키 references from styleID
+    @JoinColumn(name = "styleID", nullable = true) // 외부키 references from styleID
     private ImageStyle imageStyle;
 
     @OneToOne  // 다이어리 하나에 하나의 이미지
@@ -64,7 +66,6 @@ public class Diary extends BaseTime{
     @JoinColumn(name = "commentID", nullable = true) // 외부키 references from commentid
     private Comment comment;
 
-    public Diary() {}
     
 
     @Builder
@@ -78,5 +79,13 @@ public class Diary extends BaseTime{
         this.image = null;
         this.sentiment = null;
         this.comment = null;
+    }
+
+    public Diary update(DiaryRequestDTO dto, Album album, ImageStyle imageStyle){
+        this.text=dto.getText();
+        this.weather=dto.getWeather();
+        this.album=album;
+        this.imageStyle=imageStyle;
+        return this;
     }
 }

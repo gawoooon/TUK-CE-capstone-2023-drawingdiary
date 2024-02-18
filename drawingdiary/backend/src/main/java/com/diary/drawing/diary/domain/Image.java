@@ -11,11 +11,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "Image")
 public class Image extends BaseTime{
     @Id
@@ -36,8 +39,6 @@ public class Image extends BaseTime{
     @JoinColumn(name = "promptID") // 외부키 references from promptID
     private Prompt prompt;
 
-    public Image() {
-    }
     
 
     @Builder

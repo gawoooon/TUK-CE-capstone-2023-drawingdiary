@@ -12,11 +12,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "Prompt")
 public class Prompt extends BaseTime{
     @Id
@@ -33,8 +36,6 @@ public class Prompt extends BaseTime{
     @ManyToOne(fetch = FetchType.LAZY)  // 하나의 프롬프트 하나의 감정
     @JoinColumn(name = "sentimentID") // 외부키 references from sentimentID
     private Sentiment sentiment;
-
-    public Prompt(){}
 
     @Builder
     public Prompt(String promptText, Diary diary, Sentiment sentiment){
