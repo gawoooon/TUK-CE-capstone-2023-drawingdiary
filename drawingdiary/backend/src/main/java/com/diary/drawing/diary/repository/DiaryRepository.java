@@ -11,5 +11,5 @@ import com.diary.drawing.diary.domain.Diary;
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long>{
     Optional<Diary> findByDate(Date date); // Optional: findBy로 조회했을 때 객체가 존재하지 않는 경우 처리
-    Optional<Diary> findBydiaryID(Long diaryID);
+    Diary findByDiaryID(Long diaryID);
 }

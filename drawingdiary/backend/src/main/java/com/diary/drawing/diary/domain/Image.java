@@ -1,8 +1,6 @@
 package com.diary.drawing.diary.domain;
 
-import java.sql.Timestamp;
-
-import org.springframework.data.annotation.LastModifiedDate;
+import com.diary.drawing.common.BaseTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,15 +17,12 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(name = "Image")
-public class Image {
+public class Image extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageID;
 
     private String imageFile;
-
-    @LastModifiedDate
-    private Timestamp creationDate;
 
     @OneToOne  // 한개의 다이어리는 하나만
     @JoinColumn(name = "diaryID") // 외부키 references from diaryID
@@ -41,6 +36,10 @@ public class Image {
     @JoinColumn(name = "promptID") // 외부키 references from promptID
     private Prompt prompt;
 
+    public Image() {
+    }
+    
+
     @Builder
     public Image(String imageFile, Diary diary, Date date, Prompt prompt){
         this.imageFile = imageFile;
@@ -49,10 +48,8 @@ public class Image {
         this.prompt = prompt;
     }
 
-    public void update(String imageFile, Diary diary, Date date, Prompt prompt){
+    public void update(String imageFile, Prompt prompt){
         this.imageFile = imageFile;
-        this.diary = diary;
-        this.date = date;
         this.prompt = prompt;
     }
     

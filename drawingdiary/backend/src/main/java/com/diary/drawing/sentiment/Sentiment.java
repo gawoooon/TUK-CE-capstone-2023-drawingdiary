@@ -27,6 +27,8 @@ public class Sentiment {
     // positive, netural, negative 순으로 퍼센티지 숫자로 저장됨
     private String sentiment;
 
+    public Sentiment(){}
+
     @Builder
     public Sentiment(Diary diary, String sentiment){
         this.diary = diary;

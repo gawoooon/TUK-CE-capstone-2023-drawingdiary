@@ -60,9 +60,8 @@ public class ImageService {
         }
 
         /* 이미지 수정하기 */
-        image.update(imageFile, diary, diary.getDate(), prompt);
+        image.update(imageFile, prompt);
         return imageRepository.save(image);
 
     }
-
 }

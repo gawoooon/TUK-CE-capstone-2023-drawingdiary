@@ -1,11 +1,8 @@
 package com.diary.drawing.diary.domain;
 
-import java.sql.Timestamp;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.comment.Comment;
+import com.diary.drawing.common.BaseTime;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
 import com.diary.drawing.sentiment.Sentiment;
 import com.diary.drawing.user.domain.Member;
@@ -28,14 +25,10 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(name = "Diary")
-public class Diary{
+public class Diary extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diaryID;
-
-    @CreationTimestamp
-    @Column(nullable = false)
-    private Timestamp record;
 
     @Column(length = 5000)
     private String text;
@@ -70,6 +63,9 @@ public class Diary{
     @OneToOne  // 다이어리 하나에 한개 코멘트
     @JoinColumn(name = "commentID", nullable = true) // 외부키 references from commentid
     private Comment comment;
+
+    public Diary() {}
+    
 
     @Builder
     public Diary(String text, String weather, Date date, Album album, Member member, ImageStyle imageStyle){

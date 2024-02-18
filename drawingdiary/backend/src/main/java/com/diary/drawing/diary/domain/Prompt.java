@@ -1,9 +1,6 @@
 package com.diary.drawing.diary.domain;
 
-import java.sql.Timestamp;
-
-import org.hibernate.annotations.CreationTimestamp;
-
+import com.diary.drawing.common.BaseTime;
 import com.diary.drawing.sentiment.Sentiment;
 
 import jakarta.persistence.Column;
@@ -21,17 +18,13 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(name = "Prompt")
-public class Prompt {
+public class Prompt extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long promptID;
 
-
     @Column(length = 1000)
     private String promptText;
-
-    @CreationTimestamp
-    private Timestamp creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 프롬프트 하나의 다이어리
     @JoinColumn(name = "diaryID") // 외부키 references from diaryID
@@ -40,6 +33,8 @@ public class Prompt {
     @ManyToOne(fetch = FetchType.LAZY)  // 하나의 프롬프트 하나의 감정
     @JoinColumn(name = "sentimentID") // 외부키 references from sentimentID
     private Sentiment sentiment;
+
+    public Prompt(){}
 
     @Builder
     public Prompt(String promptText, Diary diary, Sentiment sentiment){

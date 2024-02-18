@@ -38,10 +38,12 @@ public class DiaryService {
     public Diary createDiary(DiaryRequestDTO diaryRequestDTO){
 
         // date album member 찾기
+        //TODO: 존재확인 validation 함수 추가로 예외처리
         Date d = dateRepository.findByDateID(diaryRequestDTO.getDateID());
         Album a = albumRepository.findByAlbumID(diaryRequestDTO.getAlbumID());
         Optional<Member> m = memberRepository.findByMemberID(diaryRequestDTO.getMemberID());
         ImageStyle s = imageStyleRepository.findByStyleID(diaryRequestDTO.getStyleID());
+
 
         Diary diary = Diary.builder()
             .text(diaryRequestDTO.getText())
