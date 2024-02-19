@@ -43,7 +43,7 @@ public class Diary extends BaseTime{
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)  // 여러 다이어리와 하나의 앨범
-    @JoinColumn(name = "albumID", nullable = true) // 외부키 references from albumid
+    @JoinColumn(name = "albumID") // 외부키 references from albumid
     private Album album;
 
     @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 다이어리와 하나의 인물

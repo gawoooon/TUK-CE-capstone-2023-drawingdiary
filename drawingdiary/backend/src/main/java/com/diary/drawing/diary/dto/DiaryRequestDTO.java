@@ -24,7 +24,7 @@ public class DiaryRequestDTO {
     private String weather;
 
     @NotNull(message = "날짜 ID가 전송되지 않았습니다.")
-    private int dateID;
+    private Long dateID;
 
     private Long albumID;   // null 가능
 

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "Date")
 public class Date {
     @Id
-    public int dateID;
+    public Long dateID;
 
     private String year;
 
@@ -24,7 +24,7 @@ public class Date {
 
     @Builder
     public Date(String year, String month, String day){
-        this.dateID =  Integer.parseInt(year + month + day);
+        this.dateID =  Long.parseLong(year + month + day);
         this.year = year;
         this.month = month;
         this.day = day;

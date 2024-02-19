@@ -8,7 +8,7 @@ public class GenerateDiaryService {
 
     /* 완전 처음 생성할때 */
     /* 메소드명: public GenerateRequestDTO generateDiary(DiaryRequestDTO diaryRequestDTO) */
-    // 1. Diary 생성, Diary 객체 받아옴                            --> [완료] Diary diary = diaryService.createDiary(diaryRequestDTO)
+    // 1. Diary 수정, Diary 객체 받아옴                            --> [완료] Diary diary = diaryService.createDiary(diaryRequestDTO)
     // 2. Diary 객체 getText로 Comment 객체 받아옴
     // 3. Diary 객체로 Sentiment 객체 받아옴                       --> [완료/연결해야함] 지원언니가 추가!
     // 4. sentiment까지 있는 prompt 생성, Prompt객체 받아옴         --> [완료/연결해야함] Prompt prompt = promptService.create(diary, sentiment)

@@ -22,5 +22,8 @@ public interface AlbumRepository extends JpaRepository<Album, Long>{
     // albumID로 앨범 조회
     Album findByAlbumID(Long albumID);
 
+    // 기본 앨범 조회
+    Album findByAlbumNameAndMember(String albumName, Member member);
+
     
 }

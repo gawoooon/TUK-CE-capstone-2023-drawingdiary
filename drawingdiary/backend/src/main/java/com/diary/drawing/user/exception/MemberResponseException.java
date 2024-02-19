@@ -18,5 +18,3 @@ public class MemberResponseException extends BaseException{
     }
 
 }
-
-// TODO:
