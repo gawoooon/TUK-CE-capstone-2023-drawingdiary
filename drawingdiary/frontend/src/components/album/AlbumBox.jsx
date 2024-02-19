@@ -81,7 +81,7 @@ const AlbumBox = () => {
         <div>
             {categoryList.length > 0 ? (
                 categoryList.map((category) => (
-                    <div key={category}>
+                    <div key={category.memberID}>
                         <div
                             style={{
                                 display: 'flex',
@@ -89,7 +89,7 @@ const AlbumBox = () => {
                                 alignItems: 'baseline',
                                 marginRight: '80px',
                             }}>
-                            <CategoryName>{category}</CategoryName>
+                            <CategoryName>{category.albumName}</CategoryName>
                             <TrashButton onClick={() => handleDeleteClick(category)}/>
 
                         </div>

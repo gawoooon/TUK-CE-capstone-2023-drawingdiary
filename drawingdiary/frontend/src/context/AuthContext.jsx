@@ -4,12 +4,12 @@ import axiosInstance, { setAuthToken } from '../axios/axisoInstance';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [auth, setAuth] = useState({ token: null, memberID: null });
 
-    const login = (accessToken) => {
-        setAuthToken(accessToken);
-        setUser({ accessToken });
-        console.log("token: ", accessToken);
+    const login = (token, memberID) => {
+        setAuthToken(token);
+        setAuth({ token, memberID });
+        console.log("memberID: ", memberID);
     };
 
     const logout = () => {
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login }}>
+        <AuthContext.Provider value={{ ...auth, login }}>
         {children}
         </AuthContext.Provider>
     );
