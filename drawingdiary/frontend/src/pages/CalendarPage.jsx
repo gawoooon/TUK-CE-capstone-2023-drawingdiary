@@ -63,7 +63,7 @@ const MiddleBox = styled.div`
 `;
 
 const RightBox = styled.div`
-  display: flex
+  display: flex;
   visibility: ${({ showRightBox }) => (showRightBox ? "visible" : "hidden")};
   width: ${({ rightBoxWidth }) => rightBoxWidth};
   flex-direction: column;
