@@ -40,6 +40,7 @@ public class AuthController {
         var token = jwtIssuer.issue(principalDetails.getMemberID(), principalDetails.getEmail(), roles);
         return LoginResponseDTO.builder()
             .accessToken(token)
+            .memberID(principalDetails.getMemberID())
             .build();
     }
 
