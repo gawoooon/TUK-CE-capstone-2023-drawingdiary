@@ -21,13 +21,22 @@ const useCategoryList = () => {
         fetchCategoryList();
     }, []);
 
-    const addCategory = (newCategory) => {
+    const addCategory = async (newCategory, memberId) => {
         if (newCategory && !categoryList.includes(newCategory)) {
-            setCategoryList((prevList) => {
-                const updateList = [...prevList, newCategory];
-                return updateList;
-            });
-        }
+            try {
+                const response = await axiosInstance.post('api/album/add', {
+                    memberId,
+                    albumName: newCategory,
+                });
+                // 성공적으로 카테고리가 추가되면 리스트 업데이트
+                setCategoryList((prevList) => {
+                    const updateList = [...prevList, response.data];
+                    return updateList;
+                });
+            } catch (error) {
+                console.log("카테고리 추가 중 에러 발생: ", error);
+            }
+        };
     };
 
     //카테고리 삭제 함수
