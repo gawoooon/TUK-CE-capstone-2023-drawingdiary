@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
-import CategoryContext from './CategoryContext';
+import React, { useContext, useEffect, useState } from 'react';
 import axiosInstance from '../../axios/axisoInstance';
+
+export const CategoryContext = React.createContext();
 
 const useCategoryList = () => {
     const [categoryList, setCategoryList] = useState([]);
@@ -9,7 +10,7 @@ const useCategoryList = () => {
         // 카테고리 리스트를 불러오기
         const fetchCategoryList = async () => {
             try {
-                const response = axiosInstance.get('/api/album/list');
+                const response = await axiosInstance.get('/api/album/list');
                 const fetchedCategoryList = response.data;
                 setCategoryList(fetchedCategoryList);
             } catch (error) {

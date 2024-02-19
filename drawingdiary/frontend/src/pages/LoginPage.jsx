@@ -8,7 +8,6 @@ import LoginBtn from "../components/LoginBtn";
 
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
-import axios from "axios";
 import axiosInstance from "../axios/axisoInstance";
 import { useAuth } from "../context/AuthContext";
 
