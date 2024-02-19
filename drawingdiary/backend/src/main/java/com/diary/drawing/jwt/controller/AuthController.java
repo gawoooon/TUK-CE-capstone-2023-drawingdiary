@@ -37,9 +37,10 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        var token = jwtIssuer.issue(principalDetails.getMemberId(), principalDetails.getEmail(), roles);
+        var token = jwtIssuer.issue(principalDetails.getMemberID(), principalDetails.getEmail(), roles);
         return LoginResponseDTO.builder()
             .accessToken(token)
+            .memberID(principalDetails.getMemberID())
             .build();
     }
 

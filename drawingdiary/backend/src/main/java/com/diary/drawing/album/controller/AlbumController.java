@@ -5,13 +5,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.album.dto.AlbumDTO;
+import com.diary.drawing.album.dto.AlbumListDTO;
 import com.diary.drawing.album.exception.AlbumExceptionType;
 import com.diary.drawing.album.exception.AlbumResponseException;
 import com.diary.drawing.album.repository.AlbumRepository;
@@ -56,8 +57,8 @@ public class AlbumController {
 
     // 앨범 리스트 넘겨주는 api
     @Operation(summary = "멤버별 앨범 리스트")
-    @GetMapping("/list")
-    public List<Album> getAlbumList(@RequestBody Long memberID){
+    @GetMapping("/list/{memberID}")
+    public List<AlbumListDTO> getAlbumList(@PathVariable Long memberID){
         // member 존재한다면
         Optional<Member> m = memberRepository.findByMemberID(memberID);
 

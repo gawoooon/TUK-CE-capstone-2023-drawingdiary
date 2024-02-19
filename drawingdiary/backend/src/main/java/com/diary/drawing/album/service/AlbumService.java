@@ -2,12 +2,14 @@ package com.diary.drawing.album.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.album.dto.AlbumDTO;
+import com.diary.drawing.album.dto.AlbumListDTO;
 import com.diary.drawing.album.repository.AlbumRepository;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.repository.MemberRepository;
@@ -47,8 +49,11 @@ public class AlbumService {
     }
 
     /* 멤버별 앨범 리스트 return, 아무것도 없다면 빈 리스트 반환 */
-    public List<Album> getAlbumsByMember(Member member) {
-        return albumRepository.findByMember(member);
+    public List<AlbumListDTO> getAlbumsByMember(Member member) {
+        List<Album> albums = albumRepository.findByMember(member);
+            return albums.stream()
+                        .map(album -> new AlbumListDTO(album.getAlbumID(), album.getAlbumName()))
+                        .collect(Collectors.toList());
     }
 
     // 앨범 삭제

@@ -7,4 +7,5 @@ import lombok.Getter;
 @Builder
 public class LoginResponseDTO{
     private final String accessToken;
+    private final Long memberID;
 }

@@ -70,3 +70,4 @@ const CategoryProvider = ({ children }) => {
 const useCategory = () => useContext(CategoryContext);
 
 export { CategoryProvider, useCategory };
+
