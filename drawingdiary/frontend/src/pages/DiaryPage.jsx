@@ -282,7 +282,7 @@ function DiaryPage() {
           <ShortSidebar />
           <RightContainer>
             <TopContent>
-              <Weather />
+              <Weather date={date}/>
               <AlbumCategory />
             </TopContent>
 
