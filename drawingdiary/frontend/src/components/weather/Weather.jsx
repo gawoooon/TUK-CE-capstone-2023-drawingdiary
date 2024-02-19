@@ -36,26 +36,33 @@ const LoadingImage = styled.img`
     margin-right: 20px;
 `;
 
-const Weather = ({ date }) => {
-    const [weather, setWeather] = useState({ icon: "" });
-    const [loading, setLoading] = useState(true);
+const Weather = () => {
+  const [weather, setWeather] = useState({
+    icon: "",
+  });
+  const [coords, saveCoords] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const formatDate = (date) => {
-        const newDate = new Date(date.year, date.month - 1, date.day);
-        const days = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
-        const months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
-        const dayOfWeek = days[newDate.getDay()];
-        return `${months[newDate.getMonth()]} ${newDate.getDate()}일 ${dayOfWeek}`;
+  function handleGeoSucc(position) {
+    const { latitude, longitude } = position.coords;
+    const coordsObj = {
+      latitude,
+      longitude,
     };
+    saveCoords(coordsObj);
+    getWeather(latitude, longitude);
+  }
 
-    async function getWeather(lat, lon, date) {
-        const apiKey = process.env.REACT_APP_WEATHER_KEY;
+  function handleGeoErr(err) {
+    console.error("geo error!", err);
+  }
 
-        try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`);
-            const data = await response.json();
+  function requestCoords() {
+    navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr);
+  }
 
-            const requestedDateUTC = date;
+  async function getWeather(lat, lon) {
+    const apiKey = process.env.REACT_APP_WEATHER_KEY;
 
             // 가장 가까운 예보 찾기
             let closestForecast = data.list.reduce((acc, forecast) => {
@@ -67,48 +74,45 @@ const Weather = ({ date }) => {
                 return acc;
             }, null);
 
-            if (closestForecast && closestForecast.forecast) {
-                const weatherIcon = closestForecast.forecast.weather[0].icon;
-                const weatherIconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
-                setWeather({ icon: weatherIconUrl });
-            } else {
-                console.log("No forecast data found for the specified date and time");
-            }
-        } catch (error) {
-        console.error("Error fetching weather forecast: ", error);
-        } finally {
-        setLoading(false);
-        }
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&hour=${targetHour}&appid=${apiKey}`
+      );
+      const data = await response.json();
+
+      const weatherIcon = data.weather[0].icon;
+      const weatherIconAdrs = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+      setWeather({
+        icon: weatherIconAdrs,
+      });
+    } catch (error) {
+      console.error("Error fetching weather data: ", error);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
-        (position) => {
-            if (date) {
-                const formattedDate = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}T15:00:00Z`;
-                const requestedDate = new Date(formattedDate);
-                getWeather(position.coords.latitude, position.coords.longitude, requestedDate);
-            }
-        },
-        (err) => {
-            console.error("Geolocation error: ", err);
-            setLoading(false);
-        }
-        );
-    }, [date]);
+  // 콘솔 오류 반복 때문에 내가 멋대로 수정한 거임
+  useEffect(() => {
+    if (!coords) {
+      requestCoords();
+    } else {
+      getWeather(coords.latitude, coords.longitude);
+    }
+  }, [coords]);
 
-    return (
-        <WeatherContainer>
-        <WeatherContent>
-            {loading ? (
-            <LoadingImage src="/icons8-loading.gif" alt="loading" />
-            ) : (
-            <WeatherImage src={weather.icon} alt="Weather Icon" />
-            )}
-        </WeatherContent>
-        <DateText>{date ? formatDate(date) : "날짜 정보 없음"}</DateText>
-        </WeatherContainer>
-    );
+  return (
+    <WeatherContainer>
+      <WeatherContent>
+        {loading ? (
+          <LoadingImage src="/icons8-loading.gif" alt="loading" />
+        ) : (
+          <WeatherImage src={weather.icon} alt="Weather Icon" />
+        )}
+      </WeatherContent>
+      <DateText>1월 1일 월요일</DateText>
+    </WeatherContainer>
+  );
 };
 
 export default Weather;
