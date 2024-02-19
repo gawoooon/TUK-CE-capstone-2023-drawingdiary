@@ -10,6 +10,7 @@ import FalseComponent from "../components/FalseComponent";
 import CalendarProfile from "../components/CalendarProfile";
 
 import { GrFormPreviousLink } from "react-icons/gr";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Body = styled.body`
   display: flex;
@@ -92,6 +93,11 @@ const ResultBox = styled.div`
 `;
 
 function CalendarPage() {
+
+  // 여기서 추가해서 살펴보자
+  const { memberID } = useAuth();
+  console.log("member id: ", memberID);
+
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
   const [middleBoxWidth, setMiddleBoxWidth] = useState("75%");

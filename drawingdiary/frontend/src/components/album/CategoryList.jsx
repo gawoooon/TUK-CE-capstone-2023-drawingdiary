@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import axiosInstance from '../../axios/axisoInstance';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../auth/context/AuthContext';
 
 export const CategoryContext = React.createContext();
 
@@ -9,8 +9,8 @@ const useCategoryList = () => {
     const { memberID } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
 
     console.log("member id : ", memberID);
-
-    const fetchCategoryList = async () => {
+    
+    const fetchCategoryList = useCallback(async () => {
         if(memberID) {// 로그인 상태 확인
             try {
                 const response = await axiosInstance.get(`/api/album/list/${memberID}`);
@@ -20,7 +20,7 @@ const useCategoryList = () => {
                 console.error("카테고리 리스트를 불러오는 중 에러 발생: ", error);
             }
         }
-    };
+    }, [memberID]);
     
     useEffect(() => {
         // 카테고리 리스트를 불러오기

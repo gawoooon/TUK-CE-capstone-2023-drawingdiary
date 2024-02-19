@@ -21,8 +21,8 @@ const AlbumCategory = () => {
             <text style={{fontSize: '18px'}}>앨범에 추가</text>
             <CategoryStyle>
                 {categoryList.map( (keyword) => (
-                    <option key={keyword} value={keyword}>
-                        {keyword}
+                    <option key={keyword.memberID} value={keyword.albumName}>
+                        {keyword.albumName}
                     </option>
                 ))}
             </CategoryStyle>

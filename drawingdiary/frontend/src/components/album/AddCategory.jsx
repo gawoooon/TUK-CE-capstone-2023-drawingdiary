@@ -73,7 +73,6 @@ const AddCategory = ({ categoryList, isOpen, onclose }) => {
     
     const [newCategory, setNewCategory] = useState("");
     const { addCategory } = useCategory();
-    const [showMessage, setShowMessage] = useState(false);
     const [showBlankMessage, setShowBlankMessage] = useState(false);
 
     if(!isOpen) return null;
@@ -90,13 +89,6 @@ const AddCategory = ({ categoryList, isOpen, onclose }) => {
 
         addCategory(newCategory);
         setNewCategory("");
-        // 메시지 표시
-        setShowMessage(true);
-        // 2초 후에 메시지 감추기
-        setTimeout(() => {
-        setShowMessage(false);
-        onclose();
-        }, 2000);
     };
 
     return(
@@ -120,11 +112,6 @@ const AddCategory = ({ categoryList, isOpen, onclose }) => {
                                 <MessageContainer>
                                     카테고리를 입력해주세요.
                                 </MessageContainer>
-                            )}
-                            {showMessage && (
-                            <MessageContainer>
-                            새로운 카테고리가 추가되었습니다.
-                            </MessageContainer>
                             )}
                         </div>
                         <AddItem

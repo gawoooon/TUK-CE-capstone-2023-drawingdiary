@@ -9,7 +9,7 @@ import LoginBtn from "../components/LoginBtn";
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 import axiosInstance from "../axios/axisoInstance";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Body = styled.body`
   display: flex;

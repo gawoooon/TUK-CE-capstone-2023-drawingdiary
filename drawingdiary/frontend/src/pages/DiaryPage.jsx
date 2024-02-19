@@ -11,6 +11,7 @@ import ImageOption from "../components/edit diary/ImageOption";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
+import axiosInstance from "../axios/axisoInstance";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -163,7 +164,7 @@ function DiaryPage() {
   const analyzeSentiment  = async () => {
     try {
       // 서버 프록시 엔드포인트로 요청 전송
-      const response = await axios.post('/api/sentiment', { content: diaryText });
+      const response = await axiosInstance.post('/api/sentiment', { content: diaryText });
 
       // 응답에서 감정분석 결과 추출
       const { positive, negative, neutral } = response.data.document.confidence;
@@ -232,7 +233,7 @@ function DiaryPage() {
     try {  
       console.log("일기 내용 저장:", diaryText);
   
-      const apiUrl = "http://localhost:5000/api/diary/test/add";
+      const apiUrl = "http://localhost:8080/api/diary/test/add";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
