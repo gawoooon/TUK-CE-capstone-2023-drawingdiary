@@ -2,38 +2,38 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const WeatherContainer = styled.div`
-  width: 287px;
-  height: 60px;
-  border: none;
-  border-radius: 40px;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 287px;
+    height: 60px;
+    border: none;
+    border-radius: 40px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const WeatherContent = styled.div`
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 `;
 
 const WeatherImage = styled.img`
-  width: 50px;
-  height: 50px;
-  margin-right: 5px;
+    width: 50px;
+    height: 50px;
+    margin-right: 5px;
 `;
 
 const DateText = styled.text`
-  font-size: 23px;
-  font-weight: bold;
+    font-size: 23px;
+    font-weight: bold;
 `;
 
 const LoadingImage = styled.img`
-  width: 30px;
-  height: 30px;
-  margin-left: 5px;
-  margin-right: 20px;
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-right: 20px;
 `;
 
 const Weather = () => {

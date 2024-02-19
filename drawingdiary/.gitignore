@@ -37,3 +37,6 @@ out/
 .vscode/
 
 .env
+
+### application.properties(민감한 정보 올라갈거라 스킵함)
+

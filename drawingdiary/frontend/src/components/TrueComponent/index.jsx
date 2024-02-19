@@ -55,12 +55,13 @@ const BottomBox = styled.div`
   border-radius: 30px;
 `;
 
-function TrueComponent({ month, day }) {
+function TrueComponent({year, month, day }) {
   const navigate = useNavigate();
 
   const handleEdit = () => {
     // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    navigate("/diary/1");
+    navigate("/diary/1", { state: { date: { year, month, day } } });
+
   };
 
   return (

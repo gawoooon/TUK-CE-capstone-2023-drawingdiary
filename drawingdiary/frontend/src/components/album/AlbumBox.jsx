@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
-import DeleteButton from "../button/DeleteButton";
+import { TrashButton } from "../button/DeleteButton";
 import Modal from "./Modal";
 
 const AlbumContainer = styled.div`
@@ -89,7 +89,7 @@ const AlbumBox = () => {
                             marginRight: '80px',
                         }}>
                         <CategoryName>{category}</CategoryName>
-                        <DeleteButton onClick={() => handleDeleteClick(category)}/>
+                        <TrashButton onClick={() => handleDeleteClick(category)}/>
 
                     </div>
 

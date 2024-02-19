@@ -216,11 +216,13 @@ function CalendarPage() {
               {selectedDate &&
                 (selectedDateHasData ? (
                   <TrueComponent
+                    year={selectedDate.getFullYear()}
                     month={selectedDate.getMonth() + 1}
                     day={selectedDate.getDate()}
                   />
                 ) : (
                   <FalseComponent
+                    year={selectedDate.getFullYear()}
                     month={selectedDate.getMonth() + 1}
                     day={selectedDate.getDate()}
                   />

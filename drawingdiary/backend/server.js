@@ -1,12 +1,14 @@
-const express = require('express');
+import cors from 'cors';
+import express, { json } from 'express';
 const app = express();
 
 app.use(json());
 
-app.listen(8080, (err) => {
-    if (err) {
-        console.log('err �߻�');
-    }
+// 특정 출처의 요청만 허용
+app.use(cors({
+    origin: 'http://localhost:3001' // 클라이언트 애플리케이션 주소
+}));
 
-    console.log('���󱸵�');
+app.listen(8080, () => {
+    console.log('Server is running on port 8080');
 });
