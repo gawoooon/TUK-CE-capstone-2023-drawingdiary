@@ -32,16 +32,16 @@ axiosInstance.interceptors.response.use(
   response => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401 && !originalRequest._retry && refreshToken) {
       originalRequest._retry = true; // 요청에 표시하여 무한 루프를 방지
 
       // 여기에서 리프레시 토큰 엔드포인트 호출
       try {
         const { data } = await axios.post('http://localhost:8080/auth/refresh', {
-          // 리프레시 토큰 전송
+          refreshToken: refreshToken, // 리프레시 토큰 전송
         });
         const newAccessToken = data.accessToken;
-        setAuthToken(newAccessToken); // 액세스 토큰 업데이트
+        setAuthToken(newAccessToken, refreshToken); // 액세스 토큰 업데이트
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
         return axiosInstance(originalRequest); // 새 액세스 토큰으로 원래 요청 재시도

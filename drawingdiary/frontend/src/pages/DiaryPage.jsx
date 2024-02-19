@@ -12,6 +12,7 @@ import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
 import axiosInstance from "../axios/axisoInstance";
+import { useAuth } from "../auth/context/AuthContext";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -130,6 +131,9 @@ const MessageText = styled.div`
 `;
 
 function DiaryPage() {
+  // memberID를 가져오는 코드
+  const { memberID } = useAuth();
+
   const [diaryText, setDiaryText] = useState("");
 
   const location = useLocation();
@@ -164,7 +168,7 @@ function DiaryPage() {
   const analyzeSentiment  = async () => {
     try {
       // 서버 프록시 엔드포인트로 요청 전송
-      const response = await axiosInstance.post('/api/sentiment', { content: diaryText });
+      const response = await axios.post('/api/sentiment', { content: diaryText });
 
       // 응답에서 감정분석 결과 추출
       const { positive, negative, neutral } = response.data.document.confidence;
@@ -239,7 +243,15 @@ function DiaryPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ diaryText }),
+        body: JSON.stringify({ 
+          // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
+          text: diaryText,
+          weather: "날씨 맑음",
+          dateID: "1",
+          albumID: 1,
+          memberID: memberID,
+          styleID: 0,
+         }),
       });
   
       if (response.ok) {
