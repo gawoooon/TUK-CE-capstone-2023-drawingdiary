@@ -137,8 +137,6 @@ function DiaryPage() {
   const [isTextValid, setIsTextValid] = useState(false);
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
-  const [diaryText, setDiaryText] = useState('');
-
   // message 부분
   const [showSuccess, setShowSuccess] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
