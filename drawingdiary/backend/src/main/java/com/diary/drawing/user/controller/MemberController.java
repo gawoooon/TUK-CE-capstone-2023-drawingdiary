@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.diary.drawing.album.dto.AlbumDTO;
+import com.diary.drawing.album.service.AlbumService;
 import com.diary.drawing.jwt.model.PrincipalDetails;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.dto.MemberDTO;
@@ -31,6 +33,8 @@ import jakarta.validation.Valid;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private AlbumService albumService;
     // [지원] 수정 부분
     @Autowired
     private MemberRepository memberRepository;
@@ -76,7 +80,11 @@ public class MemberController {
         }
         
         // 만약 이메일 인증번호가 옳지 않다면~~~ 못넘어감
-        memberService.joinMember(memberDTO);
+        Long ID = memberService.joinMember(memberDTO).getMemberID();
+
+        // 회원가입과 동시에 [기본] 앨범 생성함
+        albumService.addAlbum(new AlbumDTO("기본", ID));
+        
     }
 
     // 성격 속성에 값을 추가하는 부분 따로 구현해놔서 이렇게 해야 한다고 함

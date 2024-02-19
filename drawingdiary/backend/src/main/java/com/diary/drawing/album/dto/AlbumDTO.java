@@ -22,4 +22,10 @@ public class AlbumDTO {
     @NotNull(message = "고객 ID가 전송되지 않았습니다.")
     private Long memberID;
 
+
+    public AlbumDTO(String albumName, Long memberID){
+        this.albumName = albumName;
+        this.memberID=memberID;
+    }
+
 }

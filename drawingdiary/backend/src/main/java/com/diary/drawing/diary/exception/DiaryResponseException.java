@@ -18,5 +18,3 @@ public class DiaryResponseException extends BaseException{
     }
 
 }
-
-// TODO:
