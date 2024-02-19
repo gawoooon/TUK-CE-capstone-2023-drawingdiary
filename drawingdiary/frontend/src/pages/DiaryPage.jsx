@@ -129,6 +129,7 @@ const MessageText = styled.div`
 `;
 
 function DiaryPage() {
+  const [diaryText, setDiaryText] = useState("");
 
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
