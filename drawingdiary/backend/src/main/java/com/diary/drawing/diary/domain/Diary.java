@@ -5,7 +5,7 @@ import com.diary.drawing.comment.Comment;
 import com.diary.drawing.common.BaseTime;
 import com.diary.drawing.diary.dto.DiaryRequestDTO;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
-import com.diary.drawing.sentiment.Sentiment;
+import com.diary.drawing.sentiment.domain.Sentiment;
 import com.diary.drawing.user.domain.Member;
 
 import jakarta.persistence.Column;

@@ -1,7 +1,7 @@
 package com.diary.drawing.diary.domain;
 
 import com.diary.drawing.common.BaseTime;
-import com.diary.drawing.sentiment.Sentiment;
+import com.diary.drawing.sentiment.domain.Sentiment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

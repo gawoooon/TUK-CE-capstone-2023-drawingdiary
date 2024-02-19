@@ -1,29 +1,38 @@
 package com.diary.drawing.sentiment.domain;
 
-import jakarta.persistence.Column;
+import com.diary.drawing.diary.domain.Diary;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "Sentiment")
 public class Sentiment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sentimentID;
 
-    @Column(length = 50)
+    @OneToOne  // 한개의 다이어리는 하나만
+    @JoinColumn(name = "diaryID") // 외부키 references from diaryID
+    private Diary diary;
+
+    // positive, netural, negative 순으로 퍼센티지 숫자로 저장됨
     private String sentiment;
-    
+
+    public Sentiment(){}
+
     @Builder
-    public Sentiment(String sentiment) {
+    public Sentiment(Diary diary, String sentiment){
+        this.diary = diary;
         this.sentiment = sentiment;
     }
+
 }

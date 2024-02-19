@@ -29,12 +29,6 @@ public class DiaryController {
         return diaryService.testcreateDiary(diaryRequestDTO);
     }
 
-    @Operation(summary = "작성 일기 형식 잘 들어가는지 확인")
-    @PostMapping("/test/add")
-    public Diary testAddDiary(@RequestBody DiaryRequestDTO diaryRequestDTO) throws Exception{
-        return diaryService.testcreateDiary(diaryRequestDTO);
-    }
-
     //@PutMapping("/test/update/{id}")
     //public Diary testupdateDiary(@RequestBody DiaryRequestDTO diaryRequestDTO, @PathVariable long id)
     @Operation(summary = "작성 일기 형식 수정 확인")

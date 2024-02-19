@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.diary.drawing.diary.domain.Diary;
 import com.diary.drawing.diary.domain.Prompt;
 import com.diary.drawing.diary.repository.PromptRepository;
-import com.diary.drawing.sentiment.Sentiment;
+import com.diary.drawing.sentiment.domain.Sentiment;
 
 import lombok.RequiredArgsConstructor;
 
