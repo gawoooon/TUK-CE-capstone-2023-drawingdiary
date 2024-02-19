@@ -21,14 +21,14 @@ function App() {
         <Route path="/loginlost" element={<LoginLostPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
-        <Route 
-          path="/diary/:id" 
+        <Route
+          path="/diary/1"
           element={
             <CategoryProvider>
               <DiaryPage />
             </CategoryProvider>
-            }
-          />
+          }
+        />
 
         <Route
           path="/album"

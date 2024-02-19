@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
@@ -11,7 +10,8 @@ import GeneratedImage from "../components/edit diary/GeneratedImage";
 import Button from "../components/button/Button";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
-import { RemoveButton } from "../components/button/DeleteButton";
+import DeleteStyle from "../components/button/DeleteButton";
+import axios from "axios";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -57,7 +57,7 @@ const EditDiaryArea = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  `;
+`;
 
 const ManageAIArea = styled.div`
   width: 100%;
@@ -74,63 +74,87 @@ const RightComponentsContainer = styled.div`
 `;
 
 function DiaryPage() {
+  const [diaryText, setDiaryText] = useState("");
 
-  const location = useLocation();
-  const { date } = location.state || {}; // 날짜 정보 수신
-
-  const [isTextValid, setIsTextValid] = useState(false);
-  const [isOptionSelected, setIsOptionSelected] = useState(false);
-
-  // EditDiary에서 텍스트 길이 조건 충족 여부 받기
-  const handleTextChange = (isValid) => {
-    setIsTextValid(isValid);
+  const handleDiaryTextChange = (text) => {
+    setDiaryText(text);
   };
 
-  // ImageOption에서 옵션 선택 여부 받기
-  const handleOptionSelect = (isSelected) => {
-    setIsOptionSelected(isSelected);
+  const handleSaveDiary = async () => {
+    try {
+      if (diaryText === "") {
+        console.log("일기 내용이 없어 저장되지 않았습니다.");
+        return;
+      }
+  
+      console.log("일기 내용 저장:", diaryText);
+  
+      const apiUrl = "http://localhost:5000/api/diary/1";
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ diaryText }),
+      });
+  
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("일기 저장 성공:", responseData);
+  
+        // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
+        alert("일기가 성공적으로 저장되었습니다.");
+      } else {
+        console.error("일기 저장 실패:", response.status);
+  
+        // 실패 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
+        alert("일기 저장에 실패하였습니다.");
+      }
+    } catch (error) {
+      console.error("Error saving diary:", error);
+  
+      // 에러 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
+      alert("일기 저장 중에 오류가 발생하였습니다.");
+    }
   };
+  
 
-  // 저장 버튼 활성화 조건
-  const isSaveButtonEnabled = isTextValid && isOptionSelected;
-
-  const handleDelete = () => {
-    
-  };
   return (
     <div>
       <Background>
         <FlexContainer>
-        <ShortSidebar/>
-        <RightContainer>
-          <TopContent>
-            {/* 날짜 정보 전달 */}
-            <Weather date={date}/>
-            <AlbumCategory/>
-          </TopContent>
+          <ShortSidebar />
+          <RightContainer>
+            <TopContent>
+              <Weather />
+              <AlbumCategory />
+            </TopContent>
 
-          <EditDiaryArea>
-            <EditDiary onTextChange={handleTextChange}/>
-            <ImageOption onOptionSelect={handleOptionSelect}/>
-          </EditDiaryArea>
+            <EditDiaryArea>
+              <EditDiary onDiaryTextChange={handleDiaryTextChange} />
+              <ImageOption />
+            </EditDiaryArea>
 
-          <div style={{marginLeft: '20px', marginRight: '20px', display: 'flex', justifyContent: 'space-between'}}>
-            <RemoveButton text="삭제"/>
-            <Button text="저장" disabled={!isSaveButtonEnabled}/>
-          </div>
-          
-          <ManageAIArea>
-            <GeneratedImage/>
-            <RightComponentsContainer>
-              <AIComment/>
-              <Sentiment/>
-            </RightComponentsContainer>
+            <div
+              style={{
+                marginLeft: "20px",
+                marginRight: "20px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <DeleteStyle text="삭제" />
+              <Button text="저장" onClick={handleSaveDiary} />
+            </div>
 
-          </ManageAIArea>
-
-
-        </RightContainer>
-
+            <ManageAIArea>
+              <GeneratedImage />
+              <RightComponentsContainer>
+                <AIComment />
+                <Sentiment />
+              </RightComponentsContainer>
+            </ManageAIArea>
+          </RightContainer>
         </FlexContainer>
       </Background>
     </div>

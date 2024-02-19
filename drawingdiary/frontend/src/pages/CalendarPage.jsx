@@ -62,7 +62,8 @@ const MiddleBox = styled.div`
 `;
 
 const RightBox = styled.div`
-  display: ${({ showRightBox }) => (showRightBox ? "flex" : "none")};
+  display: flex
+  visibility: ${({ showRightBox }) => (showRightBox ? "visible" : "hidden")};
   width: ${({ rightBoxWidth }) => rightBoxWidth};
   flex-direction: column;
   height: 100%;
@@ -73,6 +74,7 @@ const RightBox = styled.div`
 `;
 
 const PrevBtn = styled.button`
+  display: ${({ prevBtnBox }) => (prevBtnBox ? "display" : "none")};
   width: 5%;
   height: 5%;
   font-size: 50px;
@@ -90,24 +92,26 @@ const ResultBox = styled.div`
 `;
 
 function CalendarPage() {
-  const [leftBoxWidth, setLeftBoxWidth] = useState("23%");
-  const [rightBoxWidth, setRightBoxWidth] = useState("2%");
+  const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
+  const [rightBoxWidth, setRightBoxWidth] = useState("0%");
   const [middleBoxWidth, setMiddleBoxWidth] = useState("75%");
   const [showRightBox, setShowRightBox] = useState(false);
   const [showProfileBox, setShowProfileBox] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
+  const [prevBtnBox, setPrevBtnBox] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDateClick = async (day) => {
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
-      setLeftBoxWidth("23%");
-      setRightBoxWidth("2%");
+      setLeftBoxWidth("25%");
+      setRightBoxWidth("0%");
       setMiddleBoxWidth("75%");
       setShowRightBox(false);
       setShowProfileBox(true);
       setSelectedDateHasData(false);
+      setPrevBtnBox(false);
     } else {
       setShowRightBox(true);
       setShowProfileBox(false);
@@ -116,6 +120,7 @@ function CalendarPage() {
       setRightBoxWidth("30%");
       setSelectedDate(day); // selectedDate 상태 업데이트
       setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
+      setPrevBtnBox(true);
 
       setIsLoading(true); // 데이터 로딩 시작
     }
@@ -203,7 +208,7 @@ function CalendarPage() {
           </MiddleBox>
 
           <RightBox showRightBox={showRightBox} rightBoxWidth={rightBoxWidth}>
-            <PrevBtn onClick={handlePrevBtnClick}>
+            <PrevBtn prevBtnBox={prevBtnBox} onClick={handlePrevBtnClick}>
               <GrFormPreviousLink />
             </PrevBtn>
             <ResultBox>
