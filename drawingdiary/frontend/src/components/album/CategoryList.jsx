@@ -1,18 +1,53 @@
-import { useContext, useState } from 'react';
-import CategoryContext from './CategoryContext';
+import React, { useContext, useEffect, useState } from 'react';
+import axiosInstance from '../../axios/axisoInstance';
+import { useAuth } from '../../context/AuthContext';
 
-const initialCategoryList = ["약속", "과제", "생일"];
+export const CategoryContext = React.createContext();
 
 const useCategoryList = () => {
-    const [categoryList, setCategoryList] = useState(initialCategoryList);
+    const [categoryList, setCategoryList] = useState([]);
+    const { memberID } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
 
-    const addCategory = (newCategory) => {
-        if (newCategory && !categoryList.includes(newCategory)) {
-            setCategoryList((prevList) => {
-                const updateList = [...prevList, newCategory];
-                return updateList;
-            });
+    console.log("member id : ", memberID);
+
+    const fetchCategoryList = async () => {
+        if(memberID) {// 로그인 상태 확인
+            try {
+                const response = await axiosInstance.get(`/api/album/list/${memberID}`);
+                const fetchedCategoryList = response.data;
+                setCategoryList(fetchedCategoryList);
+            } catch (error) {
+                console.error("카테고리 리스트를 불러오는 중 에러 발생: ", error);
+            }
         }
+    };
+    
+    useEffect(() => {
+        // 카테고리 리스트를 불러오기
+        fetchCategoryList();
+    }, [memberID, fetchCategoryList]);
+
+    const addCategory = async (newCategory) => {
+        // !categoryList.includes(newCategory) &&
+        if (newCategory && !categoryList.some(category => category.albumName === newCategory)) {
+            try {
+                await axiosInstance.post('api/album/add', {
+                    memberID,
+                    albumName: newCategory,
+                });
+                // 성공적으로 카테고리가 추가되면 리스트 업데이트
+                // setCategoryList((prevList) => {
+                //     const updateList = [...prevList, response.data.albumName];
+                //     return updateList;
+                // });
+
+                // 성공적으로 카테고리가 추가되면 리스트를 다시 불러옴
+                fetchCategoryList();
+
+            } catch (error) {
+                console.log("카테고리 추가 중 에러 발생: ", error);
+            }
+        };
     };
 
     //카테고리 삭제 함수
@@ -32,13 +67,7 @@ const CategoryProvider = ({ children }) => {
     );
 };
 
-const useCategory = () => {
-    const context = useContext(CategoryContext);
-    if(!context) {
-        throw new Error('useCategory must be used within a CategoryProvider');
-    }
-    return context;
-};
+const useCategory = () => useContext(CategoryContext);
 
 export { CategoryProvider, useCategory };
 
