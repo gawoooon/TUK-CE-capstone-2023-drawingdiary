@@ -6,6 +6,7 @@ import Button from "../components/button/Button";
 import { useState } from "react";
 import AddCategory from "../components/album/AddCategory";
 import { CategoryProvider } from "../components/album/CategoryList";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.div`
   width: 100vw;
@@ -36,6 +37,9 @@ const AddAlbumContainer = styled.div`
 const AlbumPage = () => {
   const [isAddCategoryVisible, setAddCategoryVisible] = useState(false);
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
+
+  const { memberID } = useAuth();
+  console.log("member id: ", memberID);
 
   const handleAddCategoryButtonClick = () => {
     setIsAddCategoryOpen(true);

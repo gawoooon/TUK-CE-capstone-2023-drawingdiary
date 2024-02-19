@@ -8,9 +8,8 @@ import LoginBtn from "../components/LoginBtn";
 
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
-import axios from "axios";
 import axiosInstance from "../axios/axisoInstance";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Body = styled.body`
   display: flex;
@@ -81,25 +80,16 @@ function LoginPage() {
   const { login } = useAuth();
 
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("email: ", email);
-    console.log("password: ", password);
-
-    axiosInstance.post('/auth/login', {
-      email,
-      password,
-    })
-    .then(response => {
-      const { accessToken } = response.data;
-      login(accessToken);
-      console.log('Success: ', response);
+    try {
+      const { data } = await axiosInstance.post('/auth/login', { email, password });
+      login(data.accessToken, data.memberID);
       navigate("/calendar");
-    })
-    .catch(error => {
+    } catch (error) {
       console.log("로그인 실패: ", error);
-    })
+    }
   };
 
   return (
