@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,10 +41,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // cors 설정(react랑) 나중에 Controller에 @CrossOrigin으로 싹 넣어야함
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource(){
+                    @SuppressWarnings("null")
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration configuration = new CorsConfiguration();
-                        configuration.setAllowedOrigins(Arrays.asList("*"));    // react 허가
+                        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3001", "https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze"));    // react 허가 
                         configuration.setAllowedMethods(Arrays.asList("*"));    // "GET", "POST", "PUT", "DELETE"
                         configuration.setAllowedHeaders(Arrays.asList("*"));
                         configuration.setAllowCredentials(true);    // 일단 허용
@@ -62,6 +64,9 @@ public class SecurityConfig {
                         // 일단 죄다 허가 해놨음
                         .requestMatchers("/login", "/**", "/join", "/api/**",
                                 "/error", "/auth/**", "/auth/login")
+                        .permitAll()
+                        // [지원] 추가한 부분
+                        .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll()
                         // .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())
@@ -90,3 +95,4 @@ public class SecurityConfig {
     // react 서버와 연동하는 cors (나중에 추가)
 
 }
+

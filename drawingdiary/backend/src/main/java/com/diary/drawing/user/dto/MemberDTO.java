@@ -39,4 +39,5 @@ public class MemberDTO {
 
     @NotNull(message = "성별을 비울 수 없습니다.")
     private char gender;
+
 }

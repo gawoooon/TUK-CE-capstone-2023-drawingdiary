@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// import axios from 'axios';
 import { CategoryProvider } from "./components/album/CategoryList";
 
 import LoginPage from "./pages/LoginPage.jsx";
@@ -13,6 +14,10 @@ import MyPage from "./pages/MyPage.jsx";
 import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
 
+// // axios 설정 부분
+// axios.defaults.baseURL = 'http://localhost:8080';
+// axios.defaults.withCredentials = true;
+
 function App() {
   return (
     <Router>
@@ -21,14 +26,14 @@ function App() {
         <Route path="/loginlost" element={<LoginLostPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
-        <Route 
-          path="/diary/:id" 
+        <Route
+          path="/diary/1"
           element={
             <CategoryProvider>
               <DiaryPage />
             </CategoryProvider>
-            }
-          />
+          }
+        />
 
         <Route
           path="/album"

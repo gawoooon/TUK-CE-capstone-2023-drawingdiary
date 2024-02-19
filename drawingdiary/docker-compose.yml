@@ -37,8 +37,6 @@ services:
     container_name: db
     ports:
       - "5500:3306"
-    expose:
-      - 3306
     restart: always
     volumes:
       - db-config:/etc/mysql

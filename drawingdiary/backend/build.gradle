@@ -2,6 +2,12 @@ plugins {
    id 'java'
    id 'org.springframework.boot' version '3.2.1'
    id 'io.spring.dependency-management' version '1.1.4'
+   id 'application'
+}
+
+application {
+    // 메인클래스 명시
+    mainClassName = 'com.diary.drawing.DrawingApplication'
 }
 
 group = 'com.template'
@@ -20,7 +26,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.apache.tomcat:tomcat-jdbc:8.5.98'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.hibernate:hibernate-core:6.4.4.Final'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.30'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'

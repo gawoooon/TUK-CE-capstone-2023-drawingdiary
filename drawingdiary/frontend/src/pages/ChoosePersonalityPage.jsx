@@ -2,8 +2,9 @@ import styled from "styled-components";
 import Background from "../components/Background";
 import ButtonForPersonality from "../components/button/ButtonForPersonality";
 import Button from "../components/button/Button";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import axiosInstance from "../axios/axisoInstance";
 
 const ContainerStyle = styled.div`
   height: 450px;
@@ -41,9 +42,35 @@ const MBTIContainer = styled.div`
     justify-content: center;
 `;
 
+const ButtonContainer = styled.div `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ButtonStyle = styled.button`
+    height: 50px;
+    width: 250px;
+    margin-bottom: 30px;
+    background-color: rgba(106, 156, 253, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+`;
+
 const ChoosePersonality = () => {
 
     const [selected, setSelected] = useState(null);
+    const [personality, setPersonality] = useState('');
+
+    const location = useLocation();
+    const userEmail = location.state?.email; // 이메일 값을 불러옴
+
+    console.log(userEmail);
 
     const mbtiKeywords = [
         "INTJ", "INTP", "ENTJ", "ENTP", 
@@ -60,30 +87,25 @@ const ChoosePersonality = () => {
             setSelected(null);
         } else {
             setSelected(keyword);
+            setPersonality(keyword);
         }
     };
 
     const handleSubmit = () => { 
         if(selected !== null) {
-            navigate('/FinishPage');
-            // // 백엔드 api로 데이터 전송
-            // fetch('/api/auth/join', {
-            //     method: 'POST',
-            //     headers: {
-            //     'Content-Type' : 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         selected,
-            //     }),
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log('Success: ', data);
-            //     navigate('/FinishPage');
-            // })
-            // .catch((error) => {
-            //     console.error('Error: ', error);
-            // });
+            // 백엔드 api로 데이터 전송
+            axiosInstance.post('/api/updatePersonality', {
+                email: userEmail,
+                personality,
+            })
+            .then(response => {
+                console.log('Success: ', response);
+                navigate('/FinishPage')
+            })
+            .catch(error => {
+                console.log('Error: ', error);
+            });
+
         } else {
             alert('mbti를 선택해주세요!');
         }
@@ -111,7 +133,12 @@ const ChoosePersonality = () => {
 
                 </MBTIContainer>
                 
-                <Button text="완료" onClick={handleSubmit}/>
+                {/* <Button text="완료" onClick={handleSubmit}/> */}
+                <ButtonContainer>
+                    <ButtonStyle onClick={handleSubmit}>
+                        다음
+                    </ButtonStyle>
+                </ButtonContainer>
 
             </ContainerStyle>
 

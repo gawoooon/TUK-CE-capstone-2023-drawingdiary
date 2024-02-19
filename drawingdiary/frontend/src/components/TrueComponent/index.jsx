@@ -60,7 +60,8 @@ function TrueComponent({year, month, day }) {
 
   const handleEdit = () => {
     // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    navigate("/diary/:id", { state: { date: { year, month, day } } });
+    navigate("/diary/1", { state: { date: { year, month, day } } });
+
   };
 
   return (

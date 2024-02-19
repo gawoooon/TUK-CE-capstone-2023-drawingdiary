@@ -23,6 +23,7 @@
     },
     "homepage": "https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary#readme",
     "dependencies": {
+        "cors": "^2.8.5",
         "react-icons": "^5.0.1"
     }
 }

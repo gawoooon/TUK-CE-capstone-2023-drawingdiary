@@ -6,14 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.dto.MemberDTO;
 import com.diary.drawing.user.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
-
-
 
 @RequiredArgsConstructor
 @Service
@@ -49,9 +48,11 @@ public class MemberServiceImpl implements MemberService{
     }
 
     // 회원가입시 성격 저장하는 메소드
+    @Transactional
     @Override
     public void joinMemberPersonality(Member member, String personality){
         member.setPersonality(personality);
+        memberRepository.save(member); // [지원 수정 부분]
     }
 
     // 이메일로 멤버 찾기

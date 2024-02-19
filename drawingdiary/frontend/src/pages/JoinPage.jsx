@@ -1,6 +1,7 @@
-import styled from "styled-components";
-import Background from "../components/Background";
 import React, { useState, useRef } from 'react';
+import styled from "styled-components";
+import axiosInstance from '../axios/axisoInstance';
+import Background from "../components/Background";
 import { useNavigate } from "react-router-dom";
 import LongInputField from '../components/input field/LongInputField';
 import ShortInputField from '../components/input field/ShortInputField';
@@ -23,7 +24,7 @@ const ContainerStyle = styled.div`
   justify-content: space-between;
   align-items: center;
   h3 {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 10px;
   };
 `;
@@ -55,7 +56,7 @@ const SelectMonthContainer = styled.select`
 const SelectGenderContainer = styled.select`
   height: 45px;
   width: 435px;
-  margin: 0px 15px 30px 15px;
+  margin: 0px 15px 15px 15px;
   padding-left: 5px;
   border: 1px solid #909090;
   border-radius: 10px;
@@ -98,6 +99,26 @@ const ButtonStyle = styled.button`
     font-weight: bold;
 `;
 
+const ErrorMessageContainer = styled.div`
+  margin: 0 0 3px 20px;
+  min-height: 20px;
+`;
+
+const ErrorMessage = styled.text`
+  font-size: 12px;
+  font-weight: bold;
+  color: red;
+`;
+
+const Divider = styled.hr`
+  width: 80%; 
+  border: none;
+  height: 1px; 
+  background-color: lightgray; 
+  margin-top: 5px; 
+  margin-bottom: 20px; 
+`;
+
 const CreateAccount = () => {
     const [name, setName] = useState('');
     const [year, setYear] = useState('');
@@ -108,6 +129,7 @@ const CreateAccount = () => {
     const [certification, setCheckCertification] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const navigate = useNavigate();
 
@@ -127,34 +149,45 @@ const CreateAccount = () => {
           confirmPasswordRef.current.focus();
           return;
         }
-        navigate('/choosePersonality');
+        // 데이터 전송이 성공하면 지워야 함
+        // navigate('/choosePersonality');
+
+        // 생일 형식 설정 부분
+        const birth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+        console.log("gender: ", gender);
+
+        // 성별 형식 변경
+        let genderForm;
+        if(gender === "female") {
+          genderForm = "F";
+        } else if(gender === "male") {
+          genderForm = "M";
+        } else {
+          genderForm = "S";
+        }
+
+        console.log('Sending data:', { name, email, password, birth, gender: genderForm });
         
-        // // 백엔드 api로 데이터 전송
-        // fetch('/api/auth/join', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type' : 'application/json',
-        //   },
-        //   body: JSON.stringify({
-        //     name,
-        //     year,
-        //     month,
-        //     day,
-        //     gender,
-        //     email,
-        //     certification,
-        //     password,
-        //     confirmPassword,
-        //   }),
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //   console.log('Success: ', data);
-        //   navigate('/choosePersonality');
-        // })
-        // .catch((error) => {
-        //   console.error('Error: ', error);
-        // });
+        // 백엔드 api로 데이터 전송
+        axiosInstance.post('/api/join', {
+          name,
+          email,
+          password,
+          birth,
+          gender: genderForm,
+        })
+        .then(response => {
+          console.log('Success: ', response);
+          navigate('/choosePersonality', { state: { email }});
+        })
+        .catch(error => {
+          if(error.response && error.response.status === 409) {
+            setErrorMessage(error.response.data.message); // 에러 메시지 상태 업데이트
+          } else {
+            console.log('Error: ', error);
+          }
+        });
     };
 
     return (
@@ -163,6 +196,8 @@ const CreateAccount = () => {
           <ContainerStyle className='create-account-containers'>
 
             <h3>계정 만들기</h3>
+
+            <Divider/>
 
             <form onSubmit={handleSubmit}>
 
@@ -191,20 +226,22 @@ const CreateAccount = () => {
                 <SelectMonthContainer 
                   name='month'
                   id='month'
-                  onChange={ (e) => setMonth(e.target.value)}>
-                  <option value={""} disabled style={{ color: 'grey'}}>월</option>
-                  <option value={"1"}>1월</option>
-                  <option value={"2"}>2월</option>
-                  <option value={"3"}>3월</option>
-                  <option value={"4"}>4월</option>
-                  <option value={"5"}>5월</option>
-                  <option value={"6"}>6월</option>
-                  <option value={"7"}>7월</option>
-                  <option value={"8"}>8월</option>
-                  <option value={"9"}>9월</option>
-                  <option value={"10"}>10월</option>
-                  <option value={"11"}>11월</option>
-                  <option value={"12"}>12월</option>
+                  value={month}
+                  onChange={ (e) => setMonth(e.target.value)}
+                  style={{ color: month === "" ? '#808080' : 'initial' }}>
+                  <option value="" disabled style={{ color: 'grey'}}>월</option>
+                  <option value="1">1월</option>
+                  <option value="2">2월</option>
+                  <option value="3">3월</option>
+                  <option value="4">4월</option>
+                  <option value="5">5월</option>
+                  <option value="6">6월</option>
+                  <option value="7">7월</option>
+                  <option value="8">8월</option>
+                  <option value="9">9월</option>
+                  <option value="10">10월</option>
+                  <option value="11">11월</option>
+                  <option value="12">12월</option>
 
                 </SelectMonthContainer>
 
@@ -221,13 +258,19 @@ const CreateAccount = () => {
               <SelectGenderContainer
                 name='gender'
                 id='gender'
-                onChange={ (e) => setGender(e.target.value)}>
+                value={gender}
+                onChange={ (e) => setGender(e.target.value)}
+                style={{ color: month === "" ? '#808080' : 'initial' }}>
                 <option value="" disabled style={{ color: 'grey'}}>성별</option>
                 <option value="female">여자</option>
                 <option value="male">남자</option>
                 <option value="secret">공개안함</option>
               </SelectGenderContainer>
 
+              <ErrorMessageContainer>
+                {errorMessage && ( <ErrorMessage> {errorMessage} </ErrorMessage> )}
+              </ErrorMessageContainer>
+              
               <InputFieldStyle>
 
                 <EmailInputStyle
@@ -238,7 +281,6 @@ const CreateAccount = () => {
                   placeholder="이메일"/>
                 
                 <SmallButton text="인증"/>
-              
               </InputFieldStyle>
 
               <InputFieldStyle>
