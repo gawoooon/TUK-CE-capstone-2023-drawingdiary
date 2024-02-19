@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Sentiment", description = "Sentiment API")
 @RestController
-@RequestMapping("api/sentiment")
 public class SentimentController {
 
     @Autowired
