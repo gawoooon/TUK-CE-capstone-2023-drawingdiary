@@ -14,7 +14,7 @@ public class JwtToPrincipalConverter {
 
     public PrincipalDetails convert(DecodedJWT jwt){
         return PrincipalDetails.builder()
-            .memberId(Long.valueOf(jwt.getSubject()))
+            .memberID(Long.valueOf(jwt.getSubject()))
             .email(jwt.getClaim("e").asString())
             .authorities(extractAuthoritiesFromClaim(jwt))
             .build();

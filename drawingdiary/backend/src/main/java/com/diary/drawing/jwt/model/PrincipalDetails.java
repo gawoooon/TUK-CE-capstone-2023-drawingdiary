@@ -16,7 +16,7 @@ import lombok.Getter;
 @Builder
 public class PrincipalDetails implements UserDetails{
     
-    private final Long memberId;
+    private final Long memberID;
     private final String email;
 
     @JsonIgnore

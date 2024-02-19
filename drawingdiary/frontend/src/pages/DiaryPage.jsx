@@ -11,6 +11,8 @@ import ImageOption from "../components/edit diary/ImageOption";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
+import axiosInstance from "../axios/axisoInstance";
+import { useAuth } from "../auth/context/AuthContext";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -129,6 +131,9 @@ const MessageText = styled.div`
 `;
 
 function DiaryPage() {
+  // memberID를 가져오는 코드
+  const { memberID } = useAuth();
+
   const [diaryText, setDiaryText] = useState("");
 
   const location = useLocation();
@@ -232,13 +237,21 @@ function DiaryPage() {
     try {  
       console.log("일기 내용 저장:", diaryText);
   
-      const apiUrl = "http://localhost:5000/api/diary/test/add";
+      const apiUrl = "http://localhost:8080/api/diary/test/add";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ diaryText }),
+        body: JSON.stringify({ 
+          // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
+          text: diaryText,
+          weather: "날씨 맑음",
+          dateID: "1",
+          albumID: 1,
+          memberID: memberID,
+          styleID: 0,
+         }),
       });
   
       if (response.ok) {
