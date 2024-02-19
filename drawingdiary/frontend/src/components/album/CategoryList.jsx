@@ -1,24 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import CategoryContext from './CategoryContext';
-import axiosInstance from '../../axios/axisoInstance';
+
+const initialCategoryList = ["약속", "과제", "생일"];
 
 const useCategoryList = () => {
-    const [categoryList, setCategoryList] = useState([]);
-    
-    useEffect(() => {
-        // 카테고리 리스트를 불러오기
-        const fetchCategoryList = async () => {
-            try {
-                const response = axiosInstance.get('/api/album/list');
-                const fetchedCategoryList = response.data;
-                setCategoryList(fetchedCategoryList);
-            } catch (error) {
-                console.error("카테고리 리스트를 불러오는 중 에러 발생: ", error);
-            }
-        }
-
-        fetchCategoryList();
-    }, []);
+    const [categoryList, setCategoryList] = useState(initialCategoryList);
 
     const addCategory = (newCategory) => {
         if (newCategory && !categoryList.includes(newCategory)) {
@@ -55,3 +41,4 @@ const useCategory = () => {
 };
 
 export { CategoryProvider, useCategory };
+

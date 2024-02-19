@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.jwt.model.PrincipalDetails;
+import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.dto.MemberDTO;
 import com.diary.drawing.user.dto.PersonalityUpdateDTO;
 import com.diary.drawing.user.exception.MemberExceptionType;
@@ -22,8 +23,6 @@ import com.diary.drawing.user.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
-import com.diary.drawing.user.domain.Member;
 
 @Tag(name = "User", description = "User API")
 @RestController
@@ -59,7 +58,7 @@ public class MemberController {
     public String secured(@AuthenticationPrincipal PrincipalDetails principalDetails){
         if (principalDetails != null) {
             return "IF you see this. then youre logged in " + principalDetails.getEmail()
-                        + "User ID: " + principalDetails.getMemberId();
+                        + "User ID: " + principalDetails.getMemberID();
         } else {
             // handle the case where principalDetails is null
             return "User is not logged in.";

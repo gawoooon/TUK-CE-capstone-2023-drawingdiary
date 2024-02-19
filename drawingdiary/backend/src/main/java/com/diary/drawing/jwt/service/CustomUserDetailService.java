@@ -28,7 +28,7 @@ public class CustomUserDetailService implements UserDetailsService{
         Member member = memberRepository.findByEmail(username).orElseThrow();
 
         return PrincipalDetails.builder()
-            .memberId(member.getMemberID())
+            .memberID(member.getMemberID())
             .email(member.getEmail())
             .authorities(List.of(new SimpleGrantedAuthority(member.getRole())))
             .password(member.getPassword())
