@@ -1,11 +1,5 @@
 package com.diary.drawing.sentiment.dto;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
