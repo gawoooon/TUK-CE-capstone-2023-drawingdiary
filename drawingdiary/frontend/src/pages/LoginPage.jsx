@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -8,6 +8,9 @@ import LoginBtn from "../components/LoginBtn";
 
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
+import axios from "axios";
+import axiosInstance from "../axios/axisoInstance";
+import { useAuth } from "../context/AuthContext";
 
 const Body = styled.body`
   display: flex;
@@ -71,11 +74,32 @@ const LoginLostBtn = styled(Link)`
 `;
 
 function LoginPage() {
-  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    navigate("/calendar");
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    console.log("email: ", email);
+    console.log("password: ", password);
+
+    axiosInstance.post('/auth/login', {
+      email,
+      password,
+    })
+    .then(response => {
+      const { accessToken } = response.data;
+      login(accessToken);
+      console.log('Success: ', response);
+      navigate("/calendar");
+    })
+    .catch(error => {
+      console.log("로그인 실패: ", error);
+    })
   };
 
   return (
@@ -84,8 +108,8 @@ function LoginPage() {
         <Title>감성 일기</Title>
         <LoginBox>
           <LeftBox>
-            <LoginBar icon={<IoMdPerson />} text="아이디"></LoginBar>
-            <LoginBar icon={<FaLock />} text="비밀번호"></LoginBar>
+            <LoginBar icon={<IoMdPerson />} text="아이디" onChange={(e) => setEmail(e.target.value)}></LoginBar>
+            <LoginBar icon={<FaLock />} text="비밀번호" type="password" onChange={(e) => setPassword(e.target.value)}></LoginBar>
             <JoinBtn to="/join">회원가입</JoinBtn>
           </LeftBox>
           <RightBox>

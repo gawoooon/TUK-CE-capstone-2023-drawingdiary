@@ -45,12 +45,6 @@ const EditDiary = ( { onDiaryTextChange }) => {
         setDiaryText(newText);
         onDiaryTextChange(newText);
     }
-
-    // useEffect(() => {
-    //     // 텍스트 변경 시 상위 컴포넌트로 상태 전달
-    //     onDiaryTextChange(text.length >= 30); // 30자 이상인지 boolean 값으로 전달
-    // }, [text, onDiaryTextChange]);
-
     
     return (
         <WriteContatiner>
