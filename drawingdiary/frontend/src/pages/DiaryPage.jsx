@@ -240,13 +240,13 @@ function DiaryPage() {
       }, 5000);
     }
 
-    // 감정 분석 실행
-    analyzeSentiment();
+    // // // 감정 분석 실행
+    // analyzeSentiment();
 
     try {
       console.log("일기 내용 저장:", diaryText);
 
-      const apiUrl = "http://localhost:5000/api/diary/test/add";
+      const apiUrl = "http://localhost:8080/api/diary/test/add";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -262,10 +262,21 @@ function DiaryPage() {
           styleID: 0,
         }),
       });
-
+      console.log("..");
       if (response.ok) {
         const responseData = await response.json();
         console.log("일기:", responseData);
+
+        // 이미지 URL을 백엔드로 전송
+        const imageUrl = responseData.imageUrl;
+        console.log("이미지 url", imageUrl);
+        if (imageUrl) {
+          await axios.post("http://localhost:8080/api/image/test/create", {
+            imageFile: imageUrl,
+            // 추가적인 필요한 데이터가 있다면 여기에 추가
+          });
+          console.log("이미지 URL이 백엔드로 전송되었습니다.");
+        }
 
         // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
         alert("일기가 성공적으로 저장되었습니다.");
