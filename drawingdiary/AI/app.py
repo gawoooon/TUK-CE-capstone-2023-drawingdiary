@@ -11,6 +11,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+load_dotenv()
 # OpenAI API 키 설정
 openai.api_key =os.getenv("OPENAI_API_KEY")
 print("키")
