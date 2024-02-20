@@ -262,13 +262,15 @@ function DiaryPage() {
           styleID: 0,
         }),
       });
-      console.log("..");
+
       if (response.ok) {
         const responseData = await response.json();
+        console.log("하 십발발");
         console.log("일기:", responseData);
+        console.log("responseData type", typeof responseData);
 
         // 이미지 URL을 백엔드로 전송
-        const imageUrl = responseData.imageUrl;
+        const imageUrl = responseData.image.imageUrl;
         console.log("이미지 url", imageUrl);
         if (imageUrl) {
           await axios.post("http://localhost:8080/api/image/test/create", {

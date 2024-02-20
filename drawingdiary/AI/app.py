@@ -58,8 +58,17 @@ def save_diary():
         # 이미지 url을 클라이언트에게 전송
         image_url = response.data[0].url
         print("image_url:",image_url)
+
+        response = {
+        "message": "Diary saved successfullyyyy",
+        "diaryContent": diary_text,
+        "image": {
+            "imageUrl": image_url
+        }
+    }
+
         
-        return jsonify({"success": True, "message": "Diary saved successfullyyyy"})
+        return jsonify(response)
     except Exception as e:
         print("Error saving diary:",  repr(e))
         return jsonify({"success": False, "message": "Error saving diary"})
