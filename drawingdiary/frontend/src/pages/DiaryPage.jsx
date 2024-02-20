@@ -74,10 +74,10 @@ const RightComponentsContainer = styled.div`
   align-items: flex-end;
 `;
 
-const ButtonContainer = styled.div `
-    display: flex;
-    align-items: center;
-    justify-content: center;
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const jumpAnimation = keyframes`
@@ -87,20 +87,24 @@ const jumpAnimation = keyframes`
 `;
 
 const RemoveButtonStyle = styled.button`
-    height: 50px;
-    width: 250px;
-    margin-bottom: 30px;
-    background-color: rgba(255, 184, 208, 0.5);
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border: none;
-    cursor: pointer;
-    color: black;
-    font-size: 20px;
-    font-weight: bold;
-    animation: ${(props) => props.animate ? css`${jumpAnimation} 0.5s ease` : 'none'};
+  height: 50px;
+  width: 250px;
+  margin-bottom: 30px;
+  background-color: rgba(255, 184, 208, 0.5);
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  animation: ${(props) =>
+    props.animate
+      ? css`
+          ${jumpAnimation} 0.5s ease
+        `
+      : "none"};
 `;
-
 
 const SaveButtonStyle = styled.button`
   height: 50px;
@@ -114,7 +118,12 @@ const SaveButtonStyle = styled.button`
   color: black;
   font-size: 20px;
   font-weight: bold;
-  animation: ${(props) => props.animate ? css`${jumpAnimation} 0.5s ease` : 'none'};
+  animation: ${(props) =>
+    props.animate
+      ? css`
+          ${jumpAnimation} 0.5s ease
+        `
+      : "none"};
 `;
 
 const MessageContainer = styled.div`
@@ -123,11 +132,11 @@ const MessageContainer = styled.div`
 `;
 
 const MessageText = styled.div`
-    font-size: 15px;
-    color: ${(props) => props.color || '#000'};
-    transition: opacity 0.5s ease-in-out;
-    opacity: ${(props) => (props.show ? 1 : 0)};
-    font-weight: bold;
+  font-size: 15px;
+  color: ${(props) => props.color || "#000"};
+  transition: opacity 0.5s ease-in-out;
+  opacity: ${(props) => (props.show ? 1 : 0)};
+  font-weight: bold;
 `;
 
 function DiaryPage() {
@@ -149,7 +158,7 @@ function DiaryPage() {
 
   const [animateSaveBtn, setAnimateSaveBtn] = useState(false);
   const [animateDeleteBtn, setAnimateDeleteBtn] = useState(false);
-  
+
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
@@ -157,7 +166,7 @@ function DiaryPage() {
   useEffect(() => {
     // 페이지 로딩 시 초기 메시지를 5초간 표시
     const timer = setTimeout(() => {
-      if(!isTextValid) {
+      if (!isTextValid) {
         setShowInitialMessage(false);
       }
     }, 5000);
@@ -165,10 +174,12 @@ function DiaryPage() {
   }, [isTextValid]);
 
   // 감정 분석 함수
-  const analyzeSentiment  = async () => {
+  const analyzeSentiment = async () => {
     try {
       // 서버 프록시 엔드포인트로 요청 전송
-      const response = await axios.post('/api/sentiment', { content: diaryText });
+      const response = await axios.post("/api/sentiment", {
+        content: diaryText,
+      });
 
       // 응답에서 감정분석 결과 추출
       const { positive, negative, neutral } = response.data.document.confidence;
@@ -177,9 +188,8 @@ function DiaryPage() {
       setPositiveValue(Math.round(positive * 100) / 100);
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);
-
     } catch (error) {
-      console.error('감정 분석 API 호출 중 오류 발생: ', error);
+      console.error("감정 분석 API 호출 중 오류 발생: ", error);
     }
   };
 
@@ -187,12 +197,12 @@ function DiaryPage() {
   // const handleTextChange = (isValid) => {
   //   setIsTextValid(isValid);
   // };
-  
+
   // ImageOption에서 옵션 선택 여부 받기
   const handleOptionSelect = (isSelected) => {
     setIsOptionSelected(isSelected);
   };
-  
+
   // Sentiment에 텍스트 전달
   const handleDiaryTextChange = (newText) => {
     setIsTextValid(newText.length >= 30);
@@ -202,7 +212,6 @@ function DiaryPage() {
     }
   };
 
-  
   // 저장 버튼 활성화 조건
   // const isSaveButtonEnabled = isTextValid && isOptionSelected;
   // 일단 임시로 이걸로 하자
@@ -210,16 +219,16 @@ function DiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-
-    if(diaryText.length < 30) {
+    if (diaryText.length < 30) {
       setShowInitialMessage(true);
       setTimeout(() => {
         setShowInitialMessage(false);
+        alert("30자 이상 적어주세요.");
       }, 5000);
       return;
     }
 
-    if(isSaveButtonEnabled) {
+    if (isSaveButtonEnabled) {
       setAnimateSaveBtn(true);
       setTimeout(() => {
         setAnimateSaveBtn(false);
@@ -230,20 +239,20 @@ function DiaryPage() {
         setShowSuccess(false);
       }, 5000);
     }
-    
-    // 감정 분석 실행
-    analyzeSentiment ();
 
-    try {  
+    // 감정 분석 실행
+    analyzeSentiment();
+
+    try {
       console.log("일기 내용 저장:", diaryText);
-  
-      const apiUrl = "http://localhost:8080/api/diary/test/add";
+
+      const apiUrl = "http://localhost:5000/api/diary/test/add";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
           text: diaryText,
           weather: "날씨 맑음",
@@ -251,30 +260,29 @@ function DiaryPage() {
           albumID: 1,
           memberID: memberID,
           styleID: 0,
-         }),
+        }),
       });
-  
+
       if (response.ok) {
         const responseData = await response.json();
-        console.log("일기 저장 성공:", responseData);
-  
+        console.log("일기:", responseData);
+
         // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
         alert("일기가 성공적으로 저장되었습니다.");
       } else {
         console.error("일기 저장 실패:", response.status);
-  
+
         // 실패 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
         alert("일기 저장에 실패하였습니다.");
       }
     } catch (error) {
       console.error("Error saving diary:", error);
-  
+
       // 에러 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
       alert("일기 저장 중에 오류가 발생하였습니다.");
     }
-
   };
-  
+
   const handleDelete = () => {
     // 삭제 요청 들어가야함 -- 일기와 합치고 나서 추가적으로 해야 함
     setAnimateDeleteBtn(true);
@@ -295,63 +303,79 @@ function DiaryPage() {
           <ShortSidebar />
           <RightContainer>
             <TopContent>
-              <Weather date={date}/>
+              <Weather date={date} />
               <AlbumCategory />
             </TopContent>
 
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            ></div>
 
+            <MessageContainer>
+              {showInitialMessage && (
+                <MessageText color="#707070" show={!isTextValid}>
+                  30자 이상 작성하세요!
+                </MessageText>
+              )}
 
-          <MessageContainer>
-            {showInitialMessage && (
-              <MessageText color="#707070" show={!isTextValid}>30자 이상 작성하세요!</MessageText>
-            )}
+              {showSuccess && (
+                <MessageText color="#008000" show={isTextValid}>
+                  일기가 성공적으로 생성되었습니다!
+                </MessageText>
+              )}
 
-            {showSuccess && (
-              <MessageText color="#008000" show={isTextValid}>일기가 성공적으로 생성되었습니다!</MessageText>
-            )}
+              {showDelete && (
+                <MessageText color="#ff0000">
+                  일기가 삭제되었습니다.
+                </MessageText>
+              )}
+            </MessageContainer>
 
-            {showDelete && (
-              <MessageText color="#ff0000">일기가 삭제되었습니다.</MessageText>
-            )}
-          </MessageContainer>
+            <EditDiaryArea>
+              <EditDiary onDiaryTextChange={handleDiaryTextChange} />
+              <ImageOption onOptionSelect={handleOptionSelect} />
+            </EditDiaryArea>
 
-          <EditDiaryArea>
-            <EditDiary onDiaryTextChange={handleDiaryTextChange}/>
-            <ImageOption onOptionSelect={handleOptionSelect}/>
-          </EditDiaryArea>
-
-          <div style={{marginLeft: '20px', marginRight: '20px', display: 'flex', justifyContent: 'space-between'}}>
-
-            <ButtonContainer>
-                <RemoveButtonStyle onClick={handleDelete} animate={animateDeleteBtn}>
-                    삭제
+            <div
+              style={{
+                marginLeft: "20px",
+                marginRight: "20px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <ButtonContainer>
+                <RemoveButtonStyle
+                  onClick={handleDelete}
+                  animate={animateDeleteBtn}
+                >
+                  삭제
                 </RemoveButtonStyle>
-            </ButtonContainer>
-            
-            <ButtonContainer>
+              </ButtonContainer>
+
+              <ButtonContainer>
                 <SaveButtonStyle onClick={handleSave} animate={animateSaveBtn}>
-                    저장
+                  저장
                 </SaveButtonStyle>
-            </ButtonContainer>
-          </div>
-          
-          <ManageAIArea>
-            <GeneratedImage/>
-            <RightComponentsContainer>
-              <AIComment/>
-              <Sentiment 
-                positiveValue={positiveValue}
-                negativeValue={negativeValue}
-                neutralValue={neutralValue}/>
+              </ButtonContainer>
+            </div>
 
-            </RightComponentsContainer>
-
-          </ManageAIArea>
-
-        </RightContainer>
-
+            <ManageAIArea>
+              <GeneratedImage />
+              <RightComponentsContainer>
+                <AIComment />
+                <Sentiment
+                  positiveValue={positiveValue}
+                  negativeValue={negativeValue}
+                  neutralValue={neutralValue}
+                />
+              </RightComponentsContainer>
+            </ManageAIArea>
+          </RightContainer>
         </FlexContainer>
       </Background>
     </div>
