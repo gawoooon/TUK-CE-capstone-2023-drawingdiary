@@ -270,14 +270,23 @@ function DiaryPage() {
         console.log("responseData type", typeof responseData);
 
         // 이미지 URL을 백엔드로 전송
-        const imageUrl = responseData.image.imageUrl;
+        const imageUrl = responseData.image?.imageUrl;
         console.log("이미지 url", imageUrl);
         if (imageUrl) {
-          await axios.post("http://localhost:8080/api/image/test/create", {
-            imageFile: imageUrl,
-            // 추가적인 필요한 데이터가 있다면 여기에 추가
-          });
-          console.log("이미지 URL이 백엔드로 전송되었습니다.");
+          console.log("이미지가 있으먀ㅕㄴ ");
+          axiosInstance
+            .post("/api/image/test/create", {
+              imageFile: imageUrl,
+              diaryID: 1,
+              dateID: "1",
+              promptID: 1,
+            })
+            .then((response) => {
+              console.log("이미지 URL이 백엔드로 전송되었습니다.");
+            })
+            .catch((error) => {
+              console.log("Error: ", error);
+            });
         }
 
         // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.

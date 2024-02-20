@@ -9,7 +9,7 @@ from io import BytesIO
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,resources={r"/api/image/*": {"origins": "http://localhost:3000"}})
 
 load_dotenv()
 # OpenAI API 키 설정
