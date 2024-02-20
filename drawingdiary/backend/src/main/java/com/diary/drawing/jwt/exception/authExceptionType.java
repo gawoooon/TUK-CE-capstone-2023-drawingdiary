@@ -9,7 +9,10 @@ import com.diary.drawing.exception.BaseExceptionType;
 public enum authExceptionType implements BaseExceptionType {
     //== 로그인 시 ==//
     WRONG_PASSWORD(601,HttpStatus.CONFLICT, "비밀번호가 잘못되었습니다."),
-    NOT_FOUND_MEMBER(602, HttpStatus.CONFLICT, "회원 정보가 없습니다.");
+    NOT_FOUND_MEMBER(602, HttpStatus.CONFLICT, "회원 정보가 없습니다."),
+
+    //== 토큰 ==//
+    WRONG_REFRESHTOKEN(602, HttpStatus.BAD_REQUEST, "받은 리프래쉬이 없습니다.");
 
 
     private int errorCode;

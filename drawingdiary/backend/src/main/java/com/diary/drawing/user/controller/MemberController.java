@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.album.dto.AlbumDTO;
 import com.diary.drawing.album.service.AlbumService;
-import com.diary.drawing.jwt.model.PrincipalDetails;
+import com.diary.drawing.jwt.domain.PrincipalDetails;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.dto.MemberDTO;
 import com.diary.drawing.user.dto.PersonalityUpdateDTO;

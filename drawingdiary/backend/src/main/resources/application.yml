@@ -1,5 +1,6 @@
 security:
     jwt:
-        secret-key: veryverysecretkeyohmygodwhysecretcanttellanybody
+        secret-key: veryverysecretkeyohmygodheywhysecretcanttellanybody
+
         #나중에 제대로 된걸로 수정할거임
 
