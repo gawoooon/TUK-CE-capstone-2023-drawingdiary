@@ -39,6 +39,8 @@ out/
 .env
 
 ### application.properties ###
+/backend/src/resources/application.properties
+/backend/src/resources/application.yml
 
 ### redis ###
 /redis/data/dump.rdb
