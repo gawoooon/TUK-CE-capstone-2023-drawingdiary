@@ -63,6 +63,21 @@ public class MemberController {
         if (principalDetails != null) {
             return "IF you see this. then youre logged in " + principalDetails.getEmail()
                         + "User ID: " + principalDetails.getMemberID();
+            
+        } else {
+            // handle the case where principalDetails is null
+            return "User is not logged in.";
+        }
+    }
+
+    
+    // AccessToken으로 정보를 가져오는 메소드, ResponseEntity<Member>로 수정
+    @GetMapping("/getMember")
+    public String getMember(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        if (principalDetails != null) {
+            return "IF you see this. then youre logged in " + principalDetails.getEmail()
+                        + "User ID: " + principalDetails.getMemberID();
+            
         } else {
             // handle the case where principalDetails is null
             return "User is not logged in.";
@@ -86,6 +101,8 @@ public class MemberController {
         albumService.addAlbum(new AlbumDTO("기본", ID));
         
     }
+
+    
 
     // 성격 속성에 값을 추가하는 부분 따로 구현해놔서 이렇게 해야 한다고 함
     @PostMapping("/updatePersonality")
