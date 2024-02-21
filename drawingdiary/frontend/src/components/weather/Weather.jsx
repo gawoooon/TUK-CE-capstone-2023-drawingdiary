@@ -40,6 +40,9 @@ const Weather = ({ date }) => {
     const [weather, setWeather] = useState({ icon: "" });
     const [loading, setLoading] = useState(true);
 
+    // 임시로 날씨 description을 리스트로 저장할 것 - 나중에 db에서 불러올것
+    const descriptionLists = ["clear sky", "few clouds", "scattered clouds", "broken clouds", "shower rain", "rain", "thunderstorm", "snow", "mist"];
+
     const formatDate = (date) => {
         const newDate = new Date(date.year, date.month - 1, date.day);
         const days = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
@@ -69,9 +72,26 @@ const Weather = ({ date }) => {
 
             if (closestForecast && closestForecast.forecast) {
                 const weatherIcon = closestForecast.forecast.weather[0].icon;
-                console.log(weatherIcon);
+
+                // 자세한 날씨 : weather - description ex) 맑음 이런식으로 출력됨
+                const weatherDescription = closestForecast.forecast.weather[0].description;
+                let weatherIconSrc = "";
+
+                if (weatherDescription === descriptionLists[0]) { weatherIconSrc = "clear_sky.png" }
+                else if (weatherDescription === descriptionLists[1]) { weatherIconSrc = "few_clouds.png" }
+                else if (weatherDescription === descriptionLists[2]) { weatherIconSrc = "scattered_clouds.png" }
+                else if (weatherDescription === descriptionLists[3]) { weatherIconSrc = "broken_clouds.png" }
+                else if (weatherDescription === descriptionLists[4]) { weatherIconSrc = "shower_rain.png" }
+                else if (weatherDescription === descriptionLists[5]) { weatherIconSrc = "rain.png" }
+                else if (weatherDescription === descriptionLists[6]) { weatherIconSrc = "thunderstorm.png" }
+                else if (weatherDescription === descriptionLists[7]) { weatherIconSrc = "snow.png" }
+                else if (weatherDescription === descriptionLists[8]) { weatherIconSrc = "mist.png" }
+
+
+                // 일단 url로 불러오지 않고 이미지를 가져옴
                 const weatherIconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
-                setWeather({ icon: weatherIconUrl });
+
+                setWeather({ icon: weatherIconSrc });
             } else {
                 console.log("No forecast data found for the specified date and time");
             }
