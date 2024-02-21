@@ -1,5 +1,6 @@
 package com.diary.drawing.jwt.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,9 +8,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.diary.drawing.common.DefaultResponse;
 import com.diary.drawing.jwt.domain.PrincipalDetails;
 import com.diary.drawing.jwt.dto.LoginRequestDTO;
 import com.diary.drawing.jwt.dto.LoginResponseDTO;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @Tag(name = "Auth", description = "Auth API")
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -37,7 +39,7 @@ public class AuthController {
 
 
     /* 로그인 */
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO request){
         // 1. 사용자 인증 (로그인 요청할때 security를 통함)
         // token 객체를 인자로 받음
@@ -69,16 +71,10 @@ public class AuthController {
 
     /* refreshToken으로 accessToken 재발급 */
     // 원래 만료된 accesstoken으로 사용자 확인 해야해서 같이 보내줘야함
-
     @GetMapping("/refresh")
-    public DefaultResponse<?> refresh(HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        // Optional<String> getRefreshToken = jwtAuthenticationFilter.extractTokenFromRequest(request);
-
+    public ResponseEntity<LoginResponseDTO> refresh(HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
+  
         var refreshToken = request.getHeader("Authorization").substring(7);
-        
-
-        // if(getRefreshToken.isPresent()){ throw new authResponseException(authExceptionType.WRONG_REFRESHTOKEN);}
-        // String refreshToken = getRefreshToken.get();
         
         if (principalDetails != null){
                 String accessToken = authService.reissueAccessToken(refreshToken, principalDetails.getMemberID());
@@ -88,22 +84,12 @@ public class AuthController {
                     .refreshToken(refreshToken)
                     .memberID(principalDetails.getMemberID())
                     .build();
-                return DefaultResponse.successResponse(response);
+                return ResponseEntity.ok(response);
         }
         
         // 유효하지 않은 refreshToken에 대한 처리
         throw new authResponseException(authExceptionType.WRONG_REFRESHTOKEN);
     }
-
-
-    @PostMapping("/testtest")
-    public String postMethodName(@RequestBody String id) {
-        Long number = Long.parseLong(id);
-        return authService.validateRefreshToken(number);
-        
-    }
-    
-
 
     
     

@@ -13,14 +13,20 @@ import lombok.NoArgsConstructor;
 public class RefreshToken {
 
     @Id
-    private String memberID;
-
+    private Long id;
+    
     private String refreshToken;
 
-
-    // 생성자 추가
-    public RefreshToken(String memberID, String refreshToken) {
-        this.memberID = memberID;
+    public RefreshToken(final String refreshToken, final Long id) {
         this.refreshToken = refreshToken;
+        this.id = id;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

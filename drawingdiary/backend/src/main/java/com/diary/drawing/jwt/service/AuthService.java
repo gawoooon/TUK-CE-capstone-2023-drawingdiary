@@ -2,6 +2,7 @@ package com.diary.drawing.jwt.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,29 +29,27 @@ public class AuthService {
     // 저장
     @Transactional
     public void saveToken(Long memberID, String refreshToken) {
-        refreshTokenRepository.save(new RefreshToken(String.valueOf(memberID), refreshToken));
+        refreshTokenRepository.save(new RefreshToken(refreshToken, memberID));
     }
 
     // 삭제
     @Transactional
-    public void removeRefreshToken(Long userID) {
-        refreshTokenRepository.findByMemberID(String.valueOf(userID));
-                //.ifPresent(refreshToken -> refreshTokenRepository.delete(refreshToken));
+    public void removeRefreshToken(Long memberID) {
+        refreshTokenRepository.findById(memberID)
+            .ifPresent(refreshToken -> refreshTokenRepository.delete(refreshToken));
     }
 
     // 찾기
     public String validateRefreshToken(Long memberID){
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberID(String.valueOf(memberID));
-        String token = (refreshToken).getRefreshToken();
-        return token;
-        // if (refreshToken.isPresent()) {
-        //     String token = (refreshToken.get()).getRefreshToken();
+        Optional<RefreshToken>refreshToken = refreshTokenRepository.findById(memberID);
+        if (refreshToken.isPresent()) {
+            String token = (refreshToken.get()).getRefreshToken();
             
-        //     return token;
-        //     // token을 사용하는 코드
-        // }else{
-        //     throw new authResponseException(authExceptionType.WRONG_VALIDATION);
-        // }
+            return token;
+            // token을 사용하는 코드
+        }else{
+            throw new authResponseException(authExceptionType.WRONG_VALIDATION);
+        }
     }
 
     // 유효성 검사 > 일단 만들었으나 redis에서 삭제하므로 필요 없을 듯?
