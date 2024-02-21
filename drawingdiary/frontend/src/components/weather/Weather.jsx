@@ -69,6 +69,7 @@ const Weather = ({ date }) => {
 
             if (closestForecast && closestForecast.forecast) {
                 const weatherIcon = closestForecast.forecast.weather[0].icon;
+                console.log(weatherIcon);
                 const weatherIconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
                 setWeather({ icon: weatherIconUrl });
             } else {
