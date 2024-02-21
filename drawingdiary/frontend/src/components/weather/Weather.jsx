@@ -54,6 +54,14 @@ const Weather = ({ date }) => {
     async function getWeather(lat, lon, date) {
         const apiKey = process.env.REACT_APP_WEATHER_KEY;
 
+        // 추가할 것 :
+        /*
+            1. 만약 diary 데이터베이스에 새로 추가되는 데이터 값들이라면
+            날씨를 새로 생성하고 나서 날씨 description이나, weatherID를 저장하도록 해야함
+            2. 만약 이미 존재하는 diary를 조회할 때에는 날씨를 새로 생성하지 않도록 추가적인 작업이 필요함. 
+            3. 예보를 찾는 과정에서 이러한 로직이 추가될 필요가 있음.
+            => getWeather함수와 useEffect 부분 수정 필요함.
+        */
         try {
             const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`);
             const data = await response.json();
@@ -71,8 +79,7 @@ const Weather = ({ date }) => {
             }, null);
 
             if (closestForecast && closestForecast.forecast) {
-                const weatherIcon = closestForecast.forecast.weather[0].icon;
-
+                
                 // 자세한 날씨 : weather - description ex) 맑음 이런식으로 출력됨
                 const weatherDescription = closestForecast.forecast.weather[0].description;
                 let weatherIconSrc = "";
@@ -86,10 +93,11 @@ const Weather = ({ date }) => {
                 else if (weatherDescription === descriptionLists[6]) { weatherIconSrc = "thunderstorm.png" }
                 else if (weatherDescription === descriptionLists[7]) { weatherIconSrc = "snow.png" }
                 else if (weatherDescription === descriptionLists[8]) { weatherIconSrc = "mist.png" }
-
-
-                // 일단 url로 불러오지 않고 이미지를 가져옴
-                const weatherIconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+                
+                
+                // 일단 url로 불러오지 않고 db에서 리스트를 불러온 다음 이미지를 가져옴
+                // const weatherIcon = closestForecast.forecast.weather[0].icon;
+                // const weatherIconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
 
                 setWeather({ icon: weatherIconSrc });
             } else {
