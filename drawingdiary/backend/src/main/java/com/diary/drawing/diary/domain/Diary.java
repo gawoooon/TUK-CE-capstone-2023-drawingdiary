@@ -41,7 +41,7 @@ public class Diary extends BaseTime{
     @Enumerated(EnumType.STRING)
     private Weather weather;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 다이어리 한개의 날짜
+    @ManyToOne(fetch = FetchType.EAGER)  // 여러개의 다이어리 한개의 날짜, 한번 직렬화 깨봄
     @JoinColumn(name = "dateID") // 외부키 references from diaryid
     private Date date;
 

@@ -8,8 +8,9 @@ import com.diary.drawing.exception.BaseExceptionType;
 // 여기서 다루는거: valid로 못하는 것들
 public enum AlbumExceptionType implements BaseExceptionType {
     //== 앨범 추가 ==//
-    ALREADY_EXIST_ALBUMNAME(600, HttpStatus.OK, "이미 존재하는 앨범명입니다."),
-    NOT_FOUND_MEMBER(602, HttpStatus.OK, "회원 정보가 없습니다.");
+    ALREADY_EXIST_ALBUMNAME(600, HttpStatus.BAD_REQUEST, "이미 존재하는 앨범명입니다."),
+    NOT_FOUND_MEMBER(602, HttpStatus.NOT_FOUND, "회원 정보가 없습니다."),
+    NOT_FOUND_ALBUM(404, HttpStatus.NOT_FOUND, "이미 삭제되었거나 존재하지 않는 앨범입니다");
 
 
     private int errorCode;

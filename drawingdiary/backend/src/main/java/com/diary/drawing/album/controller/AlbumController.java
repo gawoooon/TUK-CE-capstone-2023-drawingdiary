@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.diary.drawing.album.dto.AlbumDTO;
 import com.diary.drawing.album.dto.AlbumListDTO;
+import com.diary.drawing.album.dto.AlbumRequestDTO;
 import com.diary.drawing.album.exception.AlbumExceptionType;
 import com.diary.drawing.album.exception.AlbumResponseException;
 import com.diary.drawing.album.repository.AlbumRepository;
 import com.diary.drawing.album.service.AlbumService;
+import com.diary.drawing.jwt.domain.PrincipalDetails;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.repository.MemberRepository;
 
@@ -40,7 +43,7 @@ public class AlbumController {
     // 앨범 추가 api
     @Operation(summary = "앨범 추가")
     @PostMapping("/add")
-    public void add (@Valid @RequestBody AlbumDTO albumDTO) throws Exception{
+    public void add (@Valid @RequestBody AlbumRequestDTO albumDTO) throws Exception{
         // 존재하는 멤버인가?
         Optional<Member> m = memberRepository.findByMemberID(albumDTO.getMemberID());
         if(!(m.isPresent())){
@@ -67,6 +70,13 @@ public class AlbumController {
         } else {
             throw new AlbumResponseException(AlbumExceptionType.NOT_FOUND_MEMBER);
         }
+    }
+
+    /* 토큰으로 앨범 페이지 앨범 + 이미지 넘겨주는 api */
+    @Operation(summary = "멤버별 앨범 리스트")
+    @GetMapping("/")
+    public ResponseEntity<?> getAlbumAll(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        return albumService.getAllOfAlbum(principalDetails.getMemberID());
     }
     
 }

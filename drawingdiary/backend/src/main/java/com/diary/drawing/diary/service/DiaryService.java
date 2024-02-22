@@ -12,6 +12,8 @@ import com.diary.drawing.diary.domain.Diary;
 import com.diary.drawing.diary.dto.CreateDiaryRequestDTO;
 import com.diary.drawing.diary.dto.DiaryRequestDTO;
 import com.diary.drawing.diary.dto.DiaryResponseDTO;
+import com.diary.drawing.diary.exception.DiaryExceptionType;
+import com.diary.drawing.diary.exception.DiaryResponseException;
 import com.diary.drawing.diary.repository.DateRepository;
 import com.diary.drawing.diary.repository.DiaryRepository;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
@@ -35,6 +37,14 @@ public class DiaryService {
     private final MemberRepository memberRepository;
     private final ImageStyleRepository imageStyleRepository;
 
+    /* date 존재여부 확인 */
+    public Date validateDate(Long dateID){
+        Date date = dateRepository.findByDateID(dateID);
+        if (date == null){
+            throw new DiaryResponseException(DiaryExceptionType.NOT_FOUND_DATE);
+        }
+        return date;
+    }
 
     /* 첫 생성시 임시 다이어리 객체 추가 */
 
@@ -42,7 +52,7 @@ public class DiaryService {
     public Long createTemporaryDiary(CreateDiaryRequestDTO requestDTO) throws Exception{
         // 임시 다이어리 객체 생성
         // TODO: token에서 memberid, 프런트에서 date
-        Date date = dateRepository.findByDateID(requestDTO.getDateID());
+        Date date = validateDate(requestDTO.getDateID());
         Optional<Member> m = memberRepository.findByMemberID(requestDTO.getMemberID());
 
         // 기본 앨범 찾기
