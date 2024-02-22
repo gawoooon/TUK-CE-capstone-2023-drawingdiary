@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
 
       // 여기에서 리프레시 토큰 엔드포인트 호출
       try {
-        const { data } = await axios.post('http://localhost:8080/auth/refresh', {
+        const { data } = await axiosInstance.post('/api/refresh', {
           refreshToken: refreshToken, // 리프레시 토큰 전송
         });
         const newAccessToken = data.accessToken;

@@ -84,7 +84,7 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const { data } = await axiosInstance.post('/auth/login', { email, password });
+      const { data } = await axiosInstance.post('/api/login', { email, password });
       login(data.accessToken, data.memberID);
       navigate("/calendar");
     } catch (error) {
