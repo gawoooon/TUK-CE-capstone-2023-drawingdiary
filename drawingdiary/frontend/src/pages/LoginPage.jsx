@@ -9,6 +9,7 @@ import LoginBtn from "../components/LoginBtn";
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 import axiosInstance from "../axios/axisoInstance";
+import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
 
 const Body = styled.body`
@@ -83,13 +84,34 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    try {
-      const { data } = await axiosInstance.post('/api/login', { email, password });
-      login(data.accessToken, data.memberID);
+    axiosInstance.post('/api/login', {
+      email,
+      password,
+    })
+    .then(response => {
+      console.log('Success: ', response);
+      login(response.data.accessToken, response.data.memberID);
       navigate("/calendar");
+    })
+    .catch(error => {
+      console.log("에러 status: ",error.code);
+      if(error.response && error.response.status === 500) {
+        console.log('로그인 실패: 잘못된 자격증명입니다.');
+      } else {
+        console.log('Error: ', error);
+      }
+    })
+
+    /** 
+     try {
+       const { data } = await axiosInstance.post('/api/login', { email, password });
+       console.log("data: ");
+       login(data.accessToken, data.refreshToken, data.memberID);
+       navigate("/calendar");
     } catch (error) {
       console.log("로그인 실패: ", error);
     }
+    **/
   };
 
   return (

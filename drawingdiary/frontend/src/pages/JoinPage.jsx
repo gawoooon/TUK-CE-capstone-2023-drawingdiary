@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from "styled-components";
 import axiosInstance from '../axios/axisoInstance';
+import axios from 'axios';
 import Background from "../components/Background";
 import { useNavigate } from "react-router-dom";
 import LongInputField from '../components/input field/LongInputField';
@@ -170,7 +171,7 @@ const CreateAccount = () => {
         console.log('Sending data:', { name, email, password, birth, gender: genderForm });
         
         // 백엔드 api로 데이터 전송
-        axiosInstance.post('/api/join', {
+        axios.post('http://localhost:8080/api/join', {
           name,
           email,
           password,

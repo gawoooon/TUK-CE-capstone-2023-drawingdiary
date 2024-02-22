@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import axiosInstance from '../../axios/axisoInstance';
 import { useAuth } from '../../auth/context/AuthContext';
+import axios from 'axios';
 
 export const CategoryContext = React.createContext();
 
 const useCategoryList = () => {
     const [categoryList, setCategoryList] = useState([]);
     const { memberID } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
-
-    console.log("member id : ", memberID);
     
     const fetchCategoryList = useCallback(async () => {
         if(memberID) {// 로그인 상태 확인

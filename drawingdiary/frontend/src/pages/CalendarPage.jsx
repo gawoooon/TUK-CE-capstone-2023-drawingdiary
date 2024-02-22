@@ -94,10 +94,6 @@ const ResultBox = styled.div`
 
 function CalendarPage() {
 
-  // 여기서 추가해서 살펴보자
-  const { memberID } = useAuth();
-  console.log("member id: ", memberID);
-
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
   const [middleBoxWidth, setMiddleBoxWidth] = useState("75%");
@@ -180,7 +176,7 @@ function CalendarPage() {
 
           // 데이터 확인 결과에 따라 상태 업데이트
           setSelectedDateHasData(hasData);
-          console.log("data:", hasData);
+          // console.log("data:", hasData);
         } catch (error) {
           console.error("Error fetching data:", error);
           // 에러가 발생하면 데이터가 없는 것으로 간주

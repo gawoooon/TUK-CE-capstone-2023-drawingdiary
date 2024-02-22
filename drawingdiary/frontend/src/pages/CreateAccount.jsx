@@ -17,7 +17,7 @@ const CreateAccount = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(name, email, password);
+        // console.log(name, email, password);
     };
 
     const containerStyle = {
