@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.dto.MemberDTO;
+import com.diary.drawing.user.exception.MemberExceptionType;
+import com.diary.drawing.user.exception.MemberResponseException;
 import com.diary.drawing.user.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -61,6 +63,18 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.findByEmail(email);
     }
 
+    // 아이디로 이메일 찾기
+    @Override
+    public String getEmailByMemberID(Long memberID) {
+        return memberRepository.findEmailByMemberID(memberID);
+    }
+
+    @Override
+    public Member validateMember(Long memberID){
+        Optional<Member> member = memberRepository.findByMemberID(memberID);
+        if(member.isPresent()) return member.get();
+        else{ throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);}
+    }
 
 
     

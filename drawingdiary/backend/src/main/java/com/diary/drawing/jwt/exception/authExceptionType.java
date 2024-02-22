@@ -12,7 +12,9 @@ public enum authExceptionType implements BaseExceptionType {
     NOT_FOUND_MEMBER(602, HttpStatus.CONFLICT, "회원 정보가 없습니다."),
 
     //== 토큰 ==//
-    WRONG_REFRESHTOKEN(602, HttpStatus.BAD_REQUEST, "받은 리프래쉬이 없습니다.");
+    WRONG_REFRESHTOKEN(400, HttpStatus.BAD_REQUEST, "다시 로그인해주세요."),
+    WRONG_VALIDATION(600, HttpStatus.BAD_REQUEST, "서비스 문제입니다."),
+    EXPIRED_TOKEN(401, HttpStatus.UNAUTHORIZED, "만료된 토큰입니다.");
 
 
     private int errorCode;

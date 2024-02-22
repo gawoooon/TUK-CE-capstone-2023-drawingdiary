@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
         log.error("MemberResponseException 발생, 유형: {}, 메시지: {}", exceptionType.getErrorCode(), exceptionType.getErrorMessage());
 
         ErrorResponse errorResponse = new ErrorResponse(
-            exceptionType.getErrorCode(), 
+            exceptionType.getErrorCode(),
             exceptionType.getErrorMessage()
         );
         

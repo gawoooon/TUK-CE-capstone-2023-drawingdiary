@@ -18,6 +18,7 @@ public class JwtIssuer{
 
     private final JwtProperties properties;
 
+    // access token
     public String createAccessToken(Long memberID, String email, List<String> roles){
         return JWT.create()
                 .withSubject(String.valueOf(memberID))
@@ -27,6 +28,7 @@ public class JwtIssuer{
                 .sign(Algorithm.HMAC256(properties.getSecretKey())); // 테스트 버전이라 시크릿키 대충
     }
 
+    // refresh token
     public String createRefreshToken(Long memberID, String email, List<String> roles){
         return JWT.create()
                 .withSubject(String.valueOf(memberID))
@@ -35,6 +37,9 @@ public class JwtIssuer{
                 .withClaim("a", roles)
                 .sign(Algorithm.HMAC256(properties.getSecretKey())); // 테스트 버전이라 시크릿키 대충
     }
+
+
+    
 
     
 }
