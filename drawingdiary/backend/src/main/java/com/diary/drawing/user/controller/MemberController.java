@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.diary.drawing.album.dto.AlbumDTO;
+import com.diary.drawing.album.dto.AlbumRequestDTO;
 import com.diary.drawing.album.service.AlbumService;
 import com.diary.drawing.jwt.domain.PrincipalDetails;
 import com.diary.drawing.user.domain.Member;
@@ -86,7 +86,7 @@ public class MemberController {
         Long ID = memberService.joinMember(memberDTO).getMemberID();
 
         // 회원가입과 동시에 [기본] 앨범 생성함
-        albumService.addAlbum(new AlbumDTO("기본", ID));
+        albumService.addAlbum(new AlbumRequestDTO("기본", ID));
         
     }
 

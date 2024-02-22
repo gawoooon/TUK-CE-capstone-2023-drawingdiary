@@ -27,7 +27,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long>{
     Album findByAlbumNameAndMember(String albumName, Member member);
 
     // id와 멤버로 존재유무 확인
-    Optional<Album> findByAlbumIDAndMember(Long memberID, Member member);
+    Optional<Album> findByAlbumIDAndMember(Long albumID, Member member);
 
     
 }

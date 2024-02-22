@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @RequiredArgsConstructor
 @ToString
-public class AlbumDTO {
+public class AlbumRequestDTO {
     
     @Valid
 
@@ -23,7 +23,7 @@ public class AlbumDTO {
     private Long memberID;
 
 
-    public AlbumDTO(String albumName, Long memberID){
+    public AlbumRequestDTO(String albumName, Long memberID){
         this.albumName = albumName;
         this.memberID=memberID;
     }
