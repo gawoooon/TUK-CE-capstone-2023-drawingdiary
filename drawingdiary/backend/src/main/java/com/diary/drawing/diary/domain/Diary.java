@@ -41,7 +41,7 @@ public class Diary extends BaseTime{
     @Enumerated(EnumType.STRING)
     private Weather weather;
 
-    @ManyToOne(fetch = FetchType.EAGER)  // 여러개의 다이어리 한개의 날짜, 한번 직렬화 깨봄
+    @ManyToOne()  // 여러개의 다이어리 한개의 날짜, 한번 직렬화 깨봄
     @JoinColumn(name = "dateID") // 외부키 references from diaryid
     private Date date;
 
@@ -74,7 +74,7 @@ public class Diary extends BaseTime{
     @Builder
     public Diary(String text, String weather, Date date, Album album, Member member, ImageStyle imageStyle){
         this.text = text;
-        this.weather=Weather.valueOf(weather);
+        this.weather=Weather.valueOfLabel(weather);
         this.date=date;
         this.album=album;
         this.member=member;
@@ -86,7 +86,7 @@ public class Diary extends BaseTime{
 
     public Diary update(DiaryRequestDTO dto, Album album, ImageStyle imageStyle){
         this.text=dto.getText();
-        this.weather= Weather.valueOf(dto.getWeather());
+        this.weather= Weather.valueOfLabel(dto.getWeather());
         this.album=album;
         this.imageStyle=imageStyle;
         return this;
@@ -95,6 +95,11 @@ public class Diary extends BaseTime{
     // 문자열로 weather 주기
     public String getWeather(){
         return this.weather.name();
+    }
+
+    // 프런트용 weather 주기
+    public String getWeatherLable(){
+        return this.weather.lable();
     }
 
 }

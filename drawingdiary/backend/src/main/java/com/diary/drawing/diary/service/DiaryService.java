@@ -37,6 +37,7 @@ public class DiaryService {
     private final MemberRepository memberRepository;
     private final ImageStyleRepository imageStyleRepository;
 
+
     /* date 존재여부 확인 */
     public Date validateDate(Long dateID){
         Date date = dateRepository.findByDateID(dateID);
@@ -61,8 +62,8 @@ public class DiaryService {
         Diary temporaryDiary = Diary.builder()
                 .date(date)
                 .album(album)
-                .member( m.get())
-                .weather("clearsky")
+                .member(m.get())
+                .weather("none")
                 .build();
 
         // 저장하여 ID 반환

@@ -75,6 +75,7 @@ public class AlbumService {
     // 앨범 삭제
     public void deleteAlbum(Long albumID){
         Album album = albumRepository.findByAlbumID(albumID);
+        
         if(album != null){
             albumRepository.delete(album);
             return;
