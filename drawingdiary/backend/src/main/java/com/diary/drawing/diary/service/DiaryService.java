@@ -52,6 +52,7 @@ public class DiaryService {
                 .date(date)
                 .album(album)
                 .member( m.get())
+                .weather("clearsky")
                 .build();
 
         // 저장하여 ID 반환

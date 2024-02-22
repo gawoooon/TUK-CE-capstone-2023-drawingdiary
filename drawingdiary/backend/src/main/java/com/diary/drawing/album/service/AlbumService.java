@@ -27,6 +27,12 @@ public class AlbumService {
     @Autowired
     private MemberRepository memberRepository;
 
+    /* 이름과 id 매칭되는지 확인 */
+    public Album validateAlbumByMember(Long albumID, Member member){
+        return albumRepository.findByAlbumIDAndMember(albumID, member)
+                    .orElseThrow(() -> new RuntimeException("사용자와 일치하는 앨범이 없습니다"));
+    }
+
     /* 앨범 추가 */
     @SuppressWarnings("null") // 일단 null값 경고 지웠음
     public Album addAlbum(AlbumDTO albumDTO) throws IOException {

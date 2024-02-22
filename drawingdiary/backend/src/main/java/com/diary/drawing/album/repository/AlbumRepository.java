@@ -1,6 +1,7 @@
 package com.diary.drawing.album.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,9 @@ public interface AlbumRepository extends JpaRepository<Album, Long>{
 
     // 기본 앨범 조회
     Album findByAlbumNameAndMember(String albumName, Member member);
+
+    // id와 멤버로 존재유무 확인
+    Optional<Album> findByAlbumIDAndMember(Long memberID, Member member);
 
     
 }
