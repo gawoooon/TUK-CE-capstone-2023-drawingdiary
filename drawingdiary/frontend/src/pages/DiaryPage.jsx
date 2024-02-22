@@ -261,6 +261,35 @@ function DiaryPage() {
         const responseDate = await response.json();
 
         console.log("일기:", responseDate);
+        console.log("responseData type", typeof responseData);
+
+        // 이미지 URL을 백엔드로 전송
+        const imageUrl = responseDate.image?.imageUrl;
+        console.log("이미지 url", imageUrl);
+
+        if (imageUrl) {
+          console.log("이미지가 있으먀ㅕㄴ ");
+          const apiUrl = "http://localhost:8080/api/image/test/create";
+          const responseImg = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            body: JSON.stringify({
+              // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
+              imageFile: imageUrl,
+              diaryID: 1,
+              dateID: 1,
+              promptID: 1,
+            }),
+          })
+            .then((responseImg) => {
+              console.log("이미지 URL이 백엔드로 전송되었습니다.");
+            })
+            .catch((error) => {
+              console.log("Error: ", error);
+            });
+        }
 
         // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
         alert("이미지가 성공적으로 저장되었습니다.");
