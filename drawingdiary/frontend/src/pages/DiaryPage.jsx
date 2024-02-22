@@ -246,56 +246,29 @@ function DiaryPage() {
     try {
       console.log("일기 내용 저장:", diaryText);
 
-      const apiUrl = "http://localhost:8080/api/diary/test/add";
-      const response = await fetch(apiUrl, {
+      const imageApiUrl = "http://localhost:5000/api/diary/image";
+      const response = await fetch(imageApiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
-          text: diaryText,
-          weather: "날씨 맑음",
-          dateID: "1",
-          albumID: 1,
-          memberID: memberID,
-          styleID: 0,
-        }),
+        body: JSON.stringify({ diaryText }),
       });
 
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("하 십발발");
-        console.log("일기:", responseData);
-        console.log("responseData type", typeof responseData);
+      console.log("bb");
 
-        // 이미지 URL을 백엔드로 전송
-        const imageUrl = responseData.image?.imageUrl;
-        console.log("이미지 url", imageUrl);
-        if (imageUrl) {
-          console.log("이미지가 있으먀ㅕㄴ ");
-          axiosInstance
-            .post("/api/image/test/create", {
-              imageFile: imageUrl,
-              diaryID: 1,
-              dateID: "1",
-              promptID: 1,
-            })
-            .then((response) => {
-              console.log("이미지 URL이 백엔드로 전송되었습니다.");
-            })
-            .catch((error) => {
-              console.log("Error: ", error);
-            });
-        }
+      if (response.ok) {
+        const responseDate = await response.json();
+
+        console.log("일기:", responseDate);
 
         // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
-        alert("일기가 성공적으로 저장되었습니다.");
+        alert("이미지가 성공적으로 저장되었습니다.");
       } else {
-        console.error("일기 저장 실패:", response.status);
+        console.error("이미지 저장 실패:", response.status);
 
         // 실패 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
-        alert("일기 저장에 실패하였습니다.");
+        alert("이미지 저장에 실패하였습니다.");
       }
     } catch (error) {
       console.error("Error saving diary:", error);
@@ -304,6 +277,58 @@ function DiaryPage() {
       alert("일기 저장 중에 오류가 발생하였습니다.");
     }
   };
+
+  // const apiUrl = "http://localhost:8080/api/diary/test/add";
+  // const response = await fetch(apiUrl, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
+  //     text: diaryText,
+  //     weather: "날씨 맑음",
+  //     dateID: "1",
+  //     albumID: 1,
+  //     memberID: memberID,
+  //     styleID: 0,
+  //   }),
+  // });
+
+  // if (response.ok) {
+  //   const responseData = await response.json();
+  //   console.log("하 십발발");
+  //   console.log("일기:", responseData);
+  //   console.log("responseData type", typeof responseData);
+
+  //   // 이미지 URL을 백엔드로 전송
+  //   const imageUrl = responseData.image?.imageUrl;
+  //   console.log("이미지 url", imageUrl);
+  //   if (imageUrl) {
+  //     console.log("이미지가 있으먀ㅕㄴ ");
+  //     axiosInstance
+  //       .post("/api/image/test/create", {
+  //         imageFile: imageUrl,
+  //         diaryID: 1,
+  //         dateID: "1",
+  //         promptID: 1,
+  //       })
+  //       .then((response) => {
+  //         console.log("이미지 URL이 백엔드로 전송되었습니다.");
+  //       })
+  //       .catch((error) => {
+  //         console.log("Error: ", error);
+  //       });
+  //   }
+
+  //   // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
+  //   alert("일기가 성공적으로 저장되었습니다.");
+  // } else {
+  //   console.error("일기 저장 실패:", response.status);
+
+  //   // 실패 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
+  //   alert("일기 저장에 실패하였습니다.");
+  // }
 
   const handleDelete = () => {
     // 삭제 요청 들어가야함 -- 일기와 합치고 나서 추가적으로 해야 함
