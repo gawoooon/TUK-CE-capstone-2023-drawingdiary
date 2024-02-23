@@ -15,7 +15,7 @@ import com.diary.drawing.jwt.exception.authResponseException;
 import com.diary.drawing.jwt.repository.RefreshTokenRepository;
 import com.diary.drawing.jwt.security.JwtIssuer;
 import com.diary.drawing.user.domain.Member;
-import com.diary.drawing.user.service.MemberService;
+import com.diary.drawing.user.service.ValidateMemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
-    private final MemberService memberService;
     private final JwtIssuer jwtIssuer;
+    private final ValidateMemberService validateMemberService;
 
     // 저장
     @Transactional
@@ -81,7 +81,7 @@ public class AuthService {
         // DB의 refreshToken과 요청의 refreshToken이 일치하는지 확인
         if(refreshToken.equals(storedRefreshToken)){
             // 사용자의 이메일과 권한을 가져옵니다.
-            Member member = memberService.validateMember(memberID);
+            Member member = validateMemberService.validateMember(memberID);
             String email = member.getEmail();
             List<String> authorities= List.of(member.getRole());
             // 새로운 accessToken 발급

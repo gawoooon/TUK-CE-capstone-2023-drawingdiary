@@ -1,6 +1,8 @@
 package com.diary.drawing.diary.dto;
 
-import com.diary.drawing.diary.domain.Date;
+import java.sql.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.ToString;
 public class ImageForAlbumDTO {
     private Long imageID;
     private String imageFile;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
     private Long diaryID;
 

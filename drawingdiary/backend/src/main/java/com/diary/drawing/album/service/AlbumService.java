@@ -1,10 +1,8 @@
 package com.diary.drawing.album.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,26 +19,26 @@ import com.diary.drawing.diary.dto.ImageForAlbumDTO;
 import com.diary.drawing.diary.repository.DiaryRepository;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.repository.MemberRepository;
+import com.diary.drawing.user.service.ValidateMemberService;
 
 import io.jsonwebtoken.io.IOException;
+import lombok.RequiredArgsConstructor;
 
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
 public class AlbumService {
     
     // 의존성 주입
-    @Autowired
-    private AlbumRepository albumRepository;
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private DiaryRepository diaryRepository;
+    private final AlbumRepository albumRepository;
+    private final MemberRepository memberRepository;
+    private final DiaryRepository diaryRepository;
+    private final ValidateMemberService validateMemberService;
 
     /* 기본 앨범 찾고, 없으면 새로 만들어서 return */
-    public Album getBasicAlbum(Long albumID, Member member){
+    @Transactional
+    public Album getBasicAlbum(Member member){
         // 기본 앨범 찾기
         Album album = albumRepository.findByAlbumNameAndMember("기본", member);
         // 기본 앨범 없으면 새로 만듬
@@ -57,23 +55,23 @@ public class AlbumService {
     }
 
     /* 앨범 추가 */
+    @Transactional
     @SuppressWarnings("null") // 일단 null값 경고 지웠음
     public Album addAlbum(AlbumRequestDTO albumDTO) throws IOException {
 
         // id로 멤버찾기
-        Optional<Member> m = memberRepository.findByMemberID(albumDTO.getMemberID());
-    
-        if(m.isPresent()){
-            // 앨범 생성
-            Album album = Album.builder()
-                .albumName(albumDTO.getAlbumName())
-                .member(m.get())
-                .build();
-            return albumRepository.save(album);
-        }
-        else {
-            throw new RuntimeException("Member with id " + albumDTO.getMemberID() + " not found");
-        }
+        Member member = validateMemberService.validateMember(albumDTO.getMemberID());
+        Album check = albumRepository.findByAlbumNameAndMember(albumDTO.getAlbumName(), member);
+        if(check != null) throw new AlbumResponseException(AlbumExceptionType.ALREADY_EXIST_ALBUMNAME);
+        
+
+        // 앨범 생성
+        Album album = Album.builder()
+            .albumName(albumDTO.getAlbumName())
+            .member(member)
+            .build();
+        return albumRepository.save(album);
+
 
     }
 
@@ -96,7 +94,7 @@ public class AlbumService {
         }
 
         // 기본 앨범이면 예외
-        Album basicAlbum = getBasicAlbum(albumID, album.getMember());
+        Album basicAlbum = getBasicAlbum(album.getMember());
         if(album.equals(basicAlbum)){
             throw new AlbumResponseException(AlbumExceptionType.TRY_DELETE_BASICALBUM);
         }
