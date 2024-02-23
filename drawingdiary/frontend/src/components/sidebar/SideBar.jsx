@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Link, useAsyncError } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../auth/context/AuthContext";
-import axiosInstance from "../../axios/axisoInstance";
 import axios from "axios";
 
 const SideBarStyle = styled.div`
@@ -14,17 +13,18 @@ const SideBarStyle = styled.div`
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background-color: #f9f9f9;
-  /* padding-left: 20px; */
   box-sizing: border-box;
 `;
 
 const SideBarHeader = styled.div`
-  padding: 0 20px; // 왼쪽 오른쪽 패딩 추가
+  padding: 40px 20px; // 왼쪽 오른쪽 패딩 추가
   margin-bottom: 40px; // 하단 여백 추가
+  min-height: 30px;
 `;
 
 const SideBarLogo = styled.img`
   height: 40px; // 로고 이미지 높이 설정
+  padding-right: 15px;
 `;
 
 const SideBarMenu = styled.nav`
@@ -49,17 +49,20 @@ const MenuItem = styled(Link)`
     transition: background 0.3s, box-shadow 0.3s;
   }
 
-  span {
-    display: ${({ isOpen }) => isOpen ? 'inline' : 'none'};
-    margin-left: 16px;
-    white-space: nowrap;
-  }
 
   &:hover {
     background: ${({ isOpen }) => isOpen ? '#ececec' : 'transparent'};
     width: ${({ isOpen }) => isOpen ? '245px' : 'auto'};
     border-left: ${({ isOpen }) => isOpen ? '5px solid rgba(255, 184, 208, 0.58)' : 'none'};
   }
+`;
+
+const MenuItemText = styled.span`
+  opacity: ${({ isOpen }) => isOpen ? 1 : 0};
+  visibility: ${({ isOpen }) => isOpen ? 'visible' : 'hidden'};
+  transition: opacity 00ms ease-out;
+  margin-left: 16px;
+  white-space: nowrap;
 `;
 
 const ProfileSection = styled.div`
@@ -70,7 +73,7 @@ const ProfileSection = styled.div`
 
 const ProfileImage = styled.img`
   width: 50px;
-  height: 50px;
+  min-height: 50px;
   border-radius: 50%; // 이미지를 원형으로 만듭니다.
   margin-bottom: 10px; // 프로필 이름과의 간격 설정
 `;
@@ -96,13 +99,14 @@ const SideBar = ({ isOpen }) => {
     if (memberID) {
       try {
         const accessToken = localStorage.getItem('accessToken');
-        console.log("accessToken: ", accessToken);
-        const response = await axios.get('http://localhost:8080/api/getMember', {
+        const response = await axios.get('http://localhost:8080/api/get-member', {
           headers: {
             'Authorization': `Bearer ${accessToken}`
           }
         });
-        console.log(response);
+
+        setUserName(response.data.name);
+        setUserEmail(response.data.email);
 
       } catch (error) {
         console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
@@ -118,30 +122,35 @@ const SideBar = ({ isOpen }) => {
   return (
     <SideBarStyle>
       <SideBarHeader>
-        {/* <SideBarLogo src="your-logo.png" alt="Your Logo" /> */}
+        <SideBarLogo src="your-logo.png" alt="Logo" />
+        <MenuItemText isOpen={isOpen}>감성 일기</MenuItemText>
       </SideBarHeader>
       <SideBarMenu>
         <MenuItem to="/calendar" isOpen={isOpen}>
           <img src="schedule.png" alt="Home" />
-          {isOpen && <span>Home</span>}
+          <MenuItemText isOpen={isOpen}>Home</MenuItemText>
         </MenuItem>
         <MenuItem to="/album" isOpen={isOpen}>
           <img src="photo-album.png" alt="Album" />
-          {isOpen && <span>Album</span>}
+          <MenuItemText isOpen={isOpen}>Album</MenuItemText>
         </MenuItem>
         <MenuItem to="/stats" isOpen={isOpen}>
           <img src="graph.png" alt="Statics" />
-          {isOpen && <span>Analytics</span>}
+          <MenuItemText isOpen={isOpen}>Analytics</MenuItemText>
         </MenuItem>
         <MenuItem to="/my" isOpen={isOpen}>
           <img src="my-page.png" alt="MyPage" />
-          {isOpen && <span>My Page</span>}
+          <MenuItemText isOpen={isOpen}>My Page</MenuItemText>
         </MenuItem>
       </SideBarMenu>
       <ProfileSection>
-        <ProfileImage src="user-profile.png" alt="User Profile" />
-        {isOpen && <ProfileName>홍길동</ProfileName>}
-        {isOpen && <ProfileEmail>홍길동</ProfileEmail>}
+        <ProfileImage src="usere.png" alt="User" />
+        <MenuItemText isOpen={isOpen}>
+          <ProfileName>{userName}</ProfileName>
+        </MenuItemText>
+        <MenuItemText isOpen={isOpen}>
+          <ProfileEmail>{userEmail}</ProfileEmail>
+          </MenuItemText>
       </ProfileSection>
     </SideBarStyle>
   );

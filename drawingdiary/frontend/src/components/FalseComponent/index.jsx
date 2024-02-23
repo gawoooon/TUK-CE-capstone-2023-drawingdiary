@@ -9,7 +9,7 @@ const ResultBox = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  transition: width 0.5s linear;
+  transition: opacity 800ms ease-out;
 `;
 
 const TopBox = styled.div`
@@ -54,7 +54,7 @@ function FalseComponent({ year, month, day }) {
       <TopBox>
         {month}월{day}일
       </TopBox>
-      <MiddleBox>아직 작성된 일기가 없어요</MiddleBox>
+      <MiddleBox>일기를 작성하세요.</MiddleBox>
 
       <AddBtn onClick={handleAdd}>추가하기</AddBtn>
     </ResultBox>

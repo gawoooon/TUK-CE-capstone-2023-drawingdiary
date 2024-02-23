@@ -34,7 +34,7 @@ const LeftBox = styled.div`
   height: 100%;
   background-color: #f9f9f9;
   border-radius: 30px 0 0 30px;
-  transition: width 0.5s linear;
+  transition: opacity 200ms ease-out, width 200ms ease-out;
   margin-right: 20px;
 `;
 
@@ -58,7 +58,7 @@ const MiddleBox = styled.div`
   border-radius: 0 30px 30px 0;
   padding: 40px 10px;
   box-sizing: border-box;
-  transition: width 0.5s linear;
+  transition: opacity 200ms ease-out, width 200ms ease-out;
 `;
 
 const RightBox = styled.div`
@@ -69,7 +69,7 @@ const RightBox = styled.div`
   height: 100%;
   padding: 40px 0;
   border-radius: 0 30px 30px 0;
-  transition: opacity 5ms linear, width 0.1ms linear;
+  transition: opacity 1s ease-out, width 200ms ease-out;
   box-sizing: border-box;
   overflow: hidden; // 내용이 max-height를 넘어가지 않도록 설정
   max-height: ${({ showRightBox }) => (showRightBox ? "1000px" : "0")}; // 점차적으로 높이가 늘어나게 설정
@@ -85,7 +85,7 @@ const PrevBtn = styled.button`
   outline: none;
   cursor: pointer;
   background: transparent;
-  transition: width 0.5s linear;
+  transition: width 200ms linear;
 `;
 
 const ResultBox = styled.div`
@@ -121,9 +121,9 @@ function CalendarPage() {
     } else {
       setShowRightBox(true);
       setShowProfileBox(false);
-      setLeftBoxWidth("10%");
-      setMiddleBoxWidth("60%");
-      setRightBoxWidth("30%");
+      setLeftBoxWidth("7%");
+      setMiddleBoxWidth("65%");
+      setRightBoxWidth("28%");
       setSelectedDate(day); // selectedDate 상태 업데이트
       setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
       setPrevBtnBox(true);
@@ -199,11 +199,11 @@ function CalendarPage() {
       <Body>
         <CalendarBox>
           <LeftBox leftBoxWidth={leftBoxWidth}>
-            <LeftTopBox>
+            {/* <LeftTopBox>
               <ProfileBox showProfileBox={showProfileBox}>
                 <CalendarProfile />
               </ProfileBox>
-            </LeftTopBox>
+            </LeftTopBox> */}
             <SideBar isOpen={isOpen} />
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
