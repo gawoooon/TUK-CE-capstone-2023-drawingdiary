@@ -76,8 +76,6 @@ public class DiaryService {
         return diaryResponseDTO;
     }
 
-
-
     /* 다이어리 수정 메소드 */
     @Transactional
     public Diary updateDiary(DiaryRequestDTO diaryRequestDTO, Long diaryID){
@@ -91,6 +89,12 @@ public class DiaryService {
         ImageStyle s = imageStyleRepository.findByStyleID(diaryRequestDTO.getStyleID());
 
         return diaryRepository.save(oldDiary.update(diaryRequestDTO, a, s));
+    }
+
+    public Diary calender(String year, String month, Long memberID){
+        Member member = validateMemberService.validateMember(memberID);
+        
+        return null;
     }
 
 
@@ -115,6 +119,7 @@ public class DiaryService {
             .build();
         return diaryRepository.save(diary);
     }
+    
 
     
 
