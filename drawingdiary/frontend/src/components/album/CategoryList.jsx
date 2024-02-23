@@ -8,11 +8,11 @@ export const CategoryContext = React.createContext();
 const useCategoryList = () => {
     const [categoryList, setCategoryList] = useState([]);
     const { memberID } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
+    const accessToken = localStorage.getItem('accessToken');
 
     const fetchCategoryList = useCallback(async () => {
         if(memberID) {// 로그인 상태 확인
             try {
-                const accessToken = localStorage.getItem('accessToken');
                 const response = await axios.get(`http://localhost:8080/api/album/list/${memberID}`, {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
@@ -35,9 +35,13 @@ const useCategoryList = () => {
  
         if (newCategory && !categoryList.some(category => category.albumName === newCategory)) {
             try {
-                await axiosInstance.post('api/album/add', {
-                    memberID,
+                await axiosInstance.post('/api/album/add', {
                     albumName: newCategory,
+                    memberID: memberID,
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
                 });
                 // 성공적으로 카테고리가 추가되면 리스트를 다시 불러옴
                 fetchCategoryList();

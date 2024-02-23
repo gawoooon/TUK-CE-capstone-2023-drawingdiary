@@ -2,6 +2,11 @@
     font-family: 감탄로그바탕체 Regular;
     src: url("./fonts/감탄로드바탕체 Regular.ttf");
 }
+
+@font-face {
+    font-family: 감탄로그바탕체 Thin;
+    src: url("./fonts/감탄로드바탕체 Thin.ttf");
+}
 body {
     font-family: 감탄로그바탕체 Regular;
 }
@@ -24,7 +29,5 @@ input {
     font-family: 감탄로그바탕체 Regular;
 }
 ::placeholder {
-    font-family: 감탄로그바탕체 Regular;
+    font-family: 감탄로그바탕체 Thin;
 }
-
-/* font-family: Giants-Regular; */

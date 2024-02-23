@@ -16,9 +16,21 @@ const ContainerBackground = styled.div`
     z-index: 999; // ModalStyle보다 1 낮게 설정하여 모달이 위에 오도록 함
 `;
 
+const TopContent = styled.div`
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+`;
+
+const AlbumImg = styled.img`
+    width: 30px;
+    height: 30px;
+`;
+
 const ContainerStyle = styled.div`
     width: 350px;
-    height: 180px;
+    height: 250px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -68,6 +80,7 @@ const ExitBtn = styled.button`
 `;
 
 
+
 const AddCategory = ({ categoryList, isOpen, onclose }) => {
 
     
@@ -98,10 +111,13 @@ const AddCategory = ({ categoryList, isOpen, onclose }) => {
                 <ContainerBackground>
 
                     <ContainerStyle>
+                    <TopContent>
+                        <AlbumImg src="photo-album.png" />
 
                         <ExitBtn onClick={onclose} style={{ position: 'absolute', top: '10px', right: '10px' }}>
                             닫기
                         </ExitBtn>
+                    </TopContent>
                         
                         <div style={{
                             display: 'flex',
