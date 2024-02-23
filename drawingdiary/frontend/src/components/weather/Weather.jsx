@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import WeatherTypes from "./WeatherTypes";
 
 const WeatherContainer = styled.div`
     width: 287px;
@@ -37,12 +38,14 @@ const LoadingImage = styled.img`
     margin-right: 20px;
     `;
 
+
+
 const Weather = ({ date }) => {
     const [weather, setWeather] = useState({ icon: "" });
     const [loading, setLoading] = useState(true);
     
     // 임시로 날씨 description을 리스트로 저장할 것 - 나중에 db에서 불러올것
-    const descriptionLists = useMemo(() => ["clearsky", "fewclouds", "scatteredclouds", "brokenclouds", "showerrain", "rain", "thunderstorm", "snow", "mist", "lightsnow"], []); 
+    // const descriptionLists = useMemo(() => ["clearsky", "fewclouds", "scatteredclouds", "brokenclouds", "showerrain", "rain", "thunderstorm", "snow", "mist", "lightsnow"], []); 
     
     const formatDate = (date) => {
         const newDate = new Date(date.year, date.month - 1, date.day);
@@ -51,6 +54,18 @@ const Weather = ({ date }) => {
         const dayOfWeek = days[newDate.getDay()];
         return `${months[newDate.getMonth()]} ${newDate.getDate()}일 ${dayOfWeek}`;
     };
+
+    // 날씨 상태 코드를 기반으로 날씨 상태 문자열을 반환하는 함수
+    const getWeatherState = (weatherId) => {
+        for(const [state, codes] of Object.entries(WeatherTypes)) {
+            if (codes.includes(weatherId)) {
+                console.log("state : ", state);
+                return state;
+            }
+        }
+        return "Unknown";
+    };
+
 
     const getWeather = useCallback(async (lat, lon) => {
         const apiKey = process.env.REACT_APP_WEATHER_KEY;
@@ -83,12 +98,24 @@ const Weather = ({ date }) => {
             if (closestForecast && closestForecast.forecast) {
                 
                 // 자세한 날씨 : weather - description ex) 맑음 이런식으로 출력됨
-                const weatherDescription = closestForecast.forecast.weather[0].description.replace(/\s+/g, '').toLowerCase();;
+                const weatherDescription = closestForecast.forecast.weather[0].description.replace(/\s+/g, '').toLowerCase();
+                const weatherID = closestForecast.forecast.weather[0].id; // weather id 불러오기
+                console.log("weather id: ", weatherID);
+
+                // weatherType 객체와 매핑
+                const weatherState = getWeatherState(weatherID);
+                weatherIconSrc = `/weather/${weatherState}.png`;
+
+                console.log(closestForecast.forecast);
+                console.log(weatherDescription);
+                console.log("weatherState: ", weatherState);
+                console.log("weatherIconSrc: ", weatherIconSrc);
+
                 
-                const index = descriptionLists.findIndex(description => description.trim().toLowerCase() === weatherDescription.trim().toLowerCase());
-                if (index !== -1) {
-                    weatherIconSrc = `/${descriptionLists[index].replace(/\s+/g, '_')}.png`;
-                }
+                // const index = descriptionLists.findIndex(description => description.trim().toLowerCase() === weatherDescription.trim().toLowerCase());
+                // if (index !== -1) {
+                //     weatherIconSrc = `/${descriptionLists[index].replace(/\s+/g, '_')}.png`;
+                // }
 
                 setWeather({ icon: weatherIconSrc });
             } else {
@@ -99,7 +126,7 @@ const Weather = ({ date }) => {
         } finally {
         setLoading(false);
         }
-    }, [date, descriptionLists]);
+    }, [date]);
     
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(

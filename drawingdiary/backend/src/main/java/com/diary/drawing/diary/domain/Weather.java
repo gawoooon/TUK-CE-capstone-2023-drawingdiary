@@ -8,13 +8,12 @@ public enum Weather {
     clearsky(" clear sky"),
     fewclouds(" few clouds"),
     scatteredclouds(" scattered clouds"),
-    brokenclouds(" broken clouds"),
     showerrain(" shower rain"),
     rain(" rain"),
     thunderstorm(" thunderstorm"),
     snow(" snow"),
     mist(" mist"),
-    lightsnow(" light snow")
+    drizzle(" drizzle"),
     ;
 
     private final String label;
