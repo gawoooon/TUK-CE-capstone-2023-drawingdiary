@@ -90,7 +90,7 @@ const AddCategory = ({ categoryList, isOpen, onclose }) => {
 
     if(!isOpen) return null;
     
-    const handleAddButtonClick = () => {
+    const handleAddButtonClick = async () => {
 
         if (newCategory.trim() === "") {
             setShowBlankMessage(true);
@@ -100,8 +100,14 @@ const AddCategory = ({ categoryList, isOpen, onclose }) => {
             return;
         }
 
-        addCategory(newCategory);
-        setNewCategory("");
+        try {
+            addCategory(newCategory);
+            setNewCategory("");
+            onclose();
+        } catch (error) {
+            console.error("카테고리 추가 중 에러 발생:", error);
+        }
+
     };
 
     return(

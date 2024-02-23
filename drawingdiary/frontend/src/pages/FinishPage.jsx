@@ -51,8 +51,9 @@ const FinishPage = () => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = () => {
-        navigate('/calendar');
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        navigate('/');
     };
 
     const confettiRef = useRef(new JSConfetti());
@@ -71,7 +72,7 @@ const FinishPage = () => {
 
                 <ButtonContainer>
                     <ButtonStyle onClick={handleSubmit}>
-                        메인화면으로
+                        로그인
                     </ButtonStyle>
                 </ButtonContainer>
 
