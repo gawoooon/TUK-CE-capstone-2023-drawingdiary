@@ -16,6 +16,7 @@ const TopBox = styled.div`
   font-size: 22px;
   font-weight: 800;
   color: #090071;
+  display: flex;
 `;
 
 const MiddleBox = styled.div`

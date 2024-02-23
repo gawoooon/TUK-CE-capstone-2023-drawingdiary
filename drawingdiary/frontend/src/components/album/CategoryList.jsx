@@ -32,19 +32,13 @@ const useCategoryList = () => {
     }, [memberID, fetchCategoryList]);
 
     const addCategory = async (newCategory) => {
-        // !categoryList.includes(newCategory) &&
+ 
         if (newCategory && !categoryList.some(category => category.albumName === newCategory)) {
             try {
                 await axiosInstance.post('api/album/add', {
                     memberID,
                     albumName: newCategory,
                 });
-                // 성공적으로 카테고리가 추가되면 리스트 업데이트
-                // setCategoryList((prevList) => {
-                //     const updateList = [...prevList, response.data.albumName];
-                //     return updateList;
-                // });
-
                 // 성공적으로 카테고리가 추가되면 리스트를 다시 불러옴
                 fetchCategoryList();
 

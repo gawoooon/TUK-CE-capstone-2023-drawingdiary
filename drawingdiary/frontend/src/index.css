@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 감탄로그바탕체 Regular;
+    src: url("./fonts/감탄로드바탕체 Regular.ttf");
+}
+body {
+    font-family: 감탄로그바탕체 Regular;
+}
+text {
+    font-family: 감탄로그바탕체 Regular;
+}
+button {
+    font-family: 감탄로그바탕체 Regular;
+}
+option {
+    font-family: 감탄로그바탕체 Regular;
+}
+select {
+    font-family: 감탄로그바탕체 Regular;
+}
+textarea {
+    font-family: 감탄로그바탕체 Regular;
+}
+input {
+    font-family: 감탄로그바탕체 Regular;
+}
+::placeholder {
+    font-family: 감탄로그바탕체 Regular;
+}
+
+/* font-family: Giants-Regular; */
