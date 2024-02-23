@@ -247,7 +247,7 @@ function DiaryPage() {
       console.log("일기 내용 저장:", diaryText);
 
       const imageApiUrl = "http://localhost:5000/api/diary/image";
-      const response = await fetch(imageApiUrl, {
+      const responseDiary = await fetch(imageApiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -257,52 +257,87 @@ function DiaryPage() {
 
       console.log("bb");
 
-      if (response.ok) {
-        const responseDate = await response.json();
+      if (responseDiary.ok) {
+        const responseDate = await responseDiary.json();
 
         console.log("일기:", responseDate);
         console.log("responseData type", typeof responseData);
 
-        // 이미지 URL을 백엔드로 전송
         const imageUrl = responseDate.image?.imageUrl;
         console.log("이미지 url", imageUrl);
 
+        alert("이미지가 성공적으로 저장되었습니다.");
         if (imageUrl) {
-          console.log("이미지가 있으먀ㅕㄴ ");
-          const apiUrl = "http://localhost:8080/api/image/test/create";
-          const responseImg = await fetch(apiUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            body: JSON.stringify({
-              // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
-              imageFile: imageUrl,
+          try {
+            console.log("이미지 url", imageUrl);
+
+            const apiUrl = "http://localhost:8080/api/image/test/create";
+
+            const data = {
+              imageFile:
+                " https://oaidalleapiprodscus.blob.core.windows.net/private/org-tmUJxJaFSEBNq6VZSAMmH6CO/user-szfO9vAIC0LuYBKFCML9LrSc/",
               diaryID: 1,
               dateID: 1,
               promptID: 1,
-            }),
-          })
-            .then((responseImg) => {
-              console.log("이미지 URL이 백엔드로 전송되었습니다.");
-            })
-            .catch((error) => {
-              console.log("Error: ", error);
+            };
+
+            const responseImg = await fetch(apiUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
             });
+
+            if (responseImg.ok) {
+              console.log("이미지 URL이 백엔드로 전송되었습니다.");
+            } else {
+              console.error("이미지 URL 전송 실패:", responseImg.status);
+            }
+          } catch (error) {
+            console.log("Error: ", error);
+          }
+          // try{
+          //   console.log("이미지가 있으먀ㅕㄴ ");
+          // const apiUrl = "http://localhost:8080/api/image/test/create";
+
+          // const data = {
+          //   imageFile:
+          //     " https://oaidalleapiprodscus.blob.core.windows.net/private/org-tmUJxJaFSEBNq6VZSAMmH6CO/user-szfO9vAIC0LuYBKFCML9LrSc/",
+          //   diaryID: 1,
+          //   dateID: 1,
+          //   promptID: 1,
+          // };
+
+          // const responseImage = await fetch(apiUrl, {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify(data),
+          // })
+          //   .then((responseImage) => {
+          //     if (responseImage.ok) {
+          //       console.log("이미지 URL이 백엔드로 전송되었습니다.");
+          //     } else {
+          //       console.error("이미지 URL 전송 실패:", responseImage.status);
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.log("Error: ", error);
+          //   });
+
+          // }catch(err){
+          //   console.log(err);
+          // }
         }
-
-        // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
-        alert("이미지가 성공적으로 저장되었습니다.");
       } else {
-        console.error("이미지 저장 실패:", response.status);
+        console.error("이미지 저장 실패:", responseDiary.status);
 
-        // 실패 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
         alert("이미지 저장에 실패하였습니다.");
       }
     } catch (error) {
       console.error("Error saving diary:", error);
-
-      // 에러 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
       alert("일기 저장 중에 오류가 발생하였습니다.");
     }
   };
@@ -434,7 +469,11 @@ function DiaryPage() {
               </ButtonContainer>
 
               <ButtonContainer>
-                <SaveButtonStyle onClick={handleSave} animate={animateSaveBtn}>
+                <SaveButtonStyle
+                  method="post"
+                  onClick={handleSave}
+                  animate={animateSaveBtn}
+                >
                   저장
                 </SaveButtonStyle>
               </ButtonContainer>

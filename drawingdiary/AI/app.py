@@ -38,6 +38,7 @@ def save_diary():
             response_format="url",
         )
 
+        #이미지 폴더, 이미지 저장장
         # image_data = requests.get(image_url).content
         # image = Image.open(BytesIO(image_data))
         

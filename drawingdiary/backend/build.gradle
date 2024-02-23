@@ -7,8 +7,8 @@ plugins {
 
 application {
     // 메인클래스 명시
-    mainClassName = 'com.diary.drawing.DrawingApplication'
-}
+    mainClass.set('com.diary.drawing.DrawingApplication')
+} 
 
 group = 'com.template'
 version = '0.0.1-SNAPSHOT'
