@@ -13,13 +13,13 @@ const ResultBox = styled.div`
 `;
 
 const TopBox = styled.div`
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 800;
   color: #090071;
 `;
 
 const MiddleBox = styled.div`
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 800;
   color: #090071;
   padding: 10px 0px;
@@ -27,7 +27,7 @@ const MiddleBox = styled.div`
 `;
 
 const AddBtn = styled.button`
-  width: 150px;
+  width: 120px;
   height: 50px;
   border: none;
   outline: none;
@@ -38,6 +38,7 @@ const AddBtn = styled.button`
   cursor: pointer;
   box-shadow: 0 5px 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 15px;
+  margin-top: 20px;
 `;
 
 function FalseComponent({ year, month, day }) {

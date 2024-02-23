@@ -37,7 +37,7 @@ public class DiaryController {
     // 나중에 token으로 인증 추가
     @Operation(summary = "일기 조회")
     @GetMapping("/get/{id}")
-    public ResponseEntity<?> addDiary(@PathVariable Long id) throws Exception{
+    public ResponseEntity<DiaryResponseDTO> addDiary(@PathVariable Long id) throws Exception{
         DiaryResponseDTO responseDTO = diaryService.getDiary(id);
         return ResponseEntity.ok().body(responseDTO);
     }

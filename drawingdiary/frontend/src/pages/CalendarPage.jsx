@@ -10,7 +10,6 @@ import FalseComponent from "../components/FalseComponent";
 import CalendarProfile from "../components/CalendarProfile";
 
 import { GrFormPreviousLink } from "react-icons/gr";
-import { useAuth } from "../auth/context/AuthContext";
 
 const Body = styled.body`
   display: flex;
@@ -64,20 +63,22 @@ const MiddleBox = styled.div`
 
 const RightBox = styled.div`
   display: flex;
-  visibility: ${({ showRightBox }) => (showRightBox ? "visible" : "hidden")};
+  opacity: ${({ showRightBox }) => (showRightBox ? 1 : 0)};
   width: ${({ rightBoxWidth }) => rightBoxWidth};
   flex-direction: column;
   height: 100%;
   padding: 40px 0;
   border-radius: 0 30px 30px 0;
-  transition: width 0.5s linear;
+  transition: opacity 5ms linear, width 0.1ms linear;
   box-sizing: border-box;
+  overflow: hidden; // 내용이 max-height를 넘어가지 않도록 설정
+  max-height: ${({ showRightBox }) => (showRightBox ? "1000px" : "0")}; // 점차적으로 높이가 늘어나게 설정
 `;
 
 const PrevBtn = styled.button`
   display: ${({ prevBtnBox }) => (prevBtnBox ? "display" : "none")};
-  width: 5%;
-  height: 5%;
+  width: 10px;
+  height: 10px;
   font-size: 50px;
   color: #090071;
   border: none;
@@ -103,8 +104,10 @@ function CalendarPage() {
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
   const [prevBtnBox, setPrevBtnBox] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleDateClick = async (day) => {
+
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
       setLeftBoxWidth("25%");
@@ -114,6 +117,7 @@ function CalendarPage() {
       setShowProfileBox(true);
       setSelectedDateHasData(false);
       setPrevBtnBox(false);
+      setIsOpen(true);
     } else {
       setShowRightBox(true);
       setShowProfileBox(false);
@@ -123,8 +127,8 @@ function CalendarPage() {
       setSelectedDate(day); // selectedDate 상태 업데이트
       setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
       setPrevBtnBox(true);
-
       setIsLoading(true); // 데이터 로딩 시작
+      setIsOpen(false);
     }
   };
 
@@ -200,7 +204,7 @@ function CalendarPage() {
                 <CalendarProfile />
               </ProfileBox>
             </LeftTopBox>
-            <SideBar />
+            <SideBar isOpen={isOpen} />
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
             <Calendar2

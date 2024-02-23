@@ -36,17 +36,12 @@ const LoadingImage = styled.img`
     height: 30px;
     margin-left: 5px;
     margin-right: 20px;
-    `;
-
-
+`;
 
 const Weather = ({ date }) => {
     const [weather, setWeather] = useState({ icon: "" });
     const [loading, setLoading] = useState(true);
-    
-    // 임시로 날씨 description을 리스트로 저장할 것 - 나중에 db에서 불러올것
-    // const descriptionLists = useMemo(() => ["clearsky", "fewclouds", "scatteredclouds", "brokenclouds", "showerrain", "rain", "thunderstorm", "snow", "mist", "lightsnow"], []); 
-    
+
     const formatDate = (date) => {
         const newDate = new Date(date.year, date.month - 1, date.day);
         const days = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
@@ -110,12 +105,6 @@ const Weather = ({ date }) => {
                 console.log(weatherDescription);
                 console.log("weatherState: ", weatherState);
                 console.log("weatherIconSrc: ", weatherIconSrc);
-
-                
-                // const index = descriptionLists.findIndex(description => description.trim().toLowerCase() === weatherDescription.trim().toLowerCase());
-                // if (index !== -1) {
-                //     weatherIconSrc = `/${descriptionLists[index].replace(/\s+/g, '_')}.png`;
-                // }
 
                 setWeather({ icon: weatherIconSrc });
             } else {
