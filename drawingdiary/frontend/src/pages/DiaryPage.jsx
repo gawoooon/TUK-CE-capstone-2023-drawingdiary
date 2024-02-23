@@ -210,11 +210,12 @@ function DiaryPage() {
         };
 
         const responseImg = await axios.post(apiUrl, {
-          method: "POST",
+          method: "post",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
+          timeout: 10000,
         });
 
         if (responseImg.ok) {
