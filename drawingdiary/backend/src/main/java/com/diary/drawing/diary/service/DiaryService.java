@@ -1,5 +1,6 @@
 package com.diary.drawing.diary.service;
 
+import java.sql.Date;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.diary.drawing.imagestyle.domain.ImageStyle;
 import com.diary.drawing.imagestyle.repository.ImageStyleRepository;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.repository.MemberRepository;
+import com.diary.drawing.user.service.ValidateMemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +33,8 @@ public class DiaryService {
     private final AlbumRepository albumRepository;
     private final MemberRepository memberRepository;
     private final ImageStyleRepository imageStyleRepository;
+    private final ValidateDiaryService validateDiaryService;
+    private final ValidateMemberService validateMemberService;
 
 
 
@@ -57,8 +61,16 @@ public class DiaryService {
         return diaryRepository.save(temporaryDiary).getDiaryID();
     }
 
-    /* 다이어리 내용 세부 조회 */
-    public DiaryResponseDTO getDiary(Long diaryID) throws Exception{
+    /* Date로 내용조회 */
+    public DiaryResponseDTO getDiary(Date date, Long memberID) throws Exception{
+        Member member = validateMemberService.validateMember(memberID);
+        Diary diary = validateDiaryService.findByDateAndMember(date, member);
+        DiaryResponseDTO diaryResponseDTO = DiaryResponseDTO.from(diary);
+        return diaryResponseDTO;
+    }
+
+    /* diaryID로 내용조회 */
+    public DiaryResponseDTO getDiaryID(Long diaryID) throws Exception{
         Diary diary = diaryRepository.findByDiaryID(diaryID);
         DiaryResponseDTO diaryResponseDTO = DiaryResponseDTO.from(diary);
         return diaryResponseDTO;
@@ -103,5 +115,7 @@ public class DiaryService {
             .build();
         return diaryRepository.save(diary);
     }
+
+    
 
 }
