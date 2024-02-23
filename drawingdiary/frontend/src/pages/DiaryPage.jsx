@@ -281,7 +281,7 @@ function DiaryPage() {
               promptID: 1,
             };
 
-            const responseImg = await fetch(apiUrl, {
+            const responseImg = await axios.post(apiUrl, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -471,6 +471,7 @@ function DiaryPage() {
               <ButtonContainer>
                 <SaveButtonStyle
                   method="post"
+                  type="button"
                   onClick={handleSave}
                   animate={animateSaveBtn}
                 >
