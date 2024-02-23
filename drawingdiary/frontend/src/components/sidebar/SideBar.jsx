@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useAsyncError } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../auth/context/AuthContext";
 import axiosInstance from "../../axios/axisoInstance";
@@ -55,15 +55,10 @@ const MenuItem = styled(Link)`
     white-space: nowrap;
   }
 
-  &:hover img {
-    padding-left: 5px;
-  }
-
   &:hover {
     background: ${({ isOpen }) => isOpen ? '#ececec' : 'transparent'};
     width: ${({ isOpen }) => isOpen ? '245px' : 'auto'};
-    border-left: ${({ isOpen }) => isOpen ? '5px solid #ddd' : 'none'};
-    border-radius: 10px;
+    border-left: ${({ isOpen }) => isOpen ? '5px solid rgba(255, 184, 208, 0.58)' : 'none'};
   }
 `;
 
@@ -85,11 +80,17 @@ const ProfileName = styled.div`
   font-size: 16px; // 프로필 이름의 폰트 크기 설정
 `;
 
+const ProfileEmail = styled.div`
+  color: #333;
+  font-size: 13px; // 프로필 이름의 폰트 크기 설정
+`;
+
 
 const SideBar = ({ isOpen }) => {
 
   const { memberID } = useAuth();
   const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const fetchUserName = useCallback(async () => {
     if (memberID) {
@@ -140,6 +141,7 @@ const SideBar = ({ isOpen }) => {
       <ProfileSection>
         <ProfileImage src="user-profile.png" alt="User Profile" />
         {isOpen && <ProfileName>홍길동</ProfileName>}
+        {isOpen && <ProfileEmail>홍길동</ProfileEmail>}
       </ProfileSection>
     </SideBarStyle>
   );
