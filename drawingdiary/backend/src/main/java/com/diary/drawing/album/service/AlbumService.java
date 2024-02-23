@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.album.dto.AlbumAllDTO;
@@ -24,6 +25,7 @@ import com.diary.drawing.user.repository.MemberRepository;
 import io.jsonwebtoken.io.IOException;
 
 //@RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class AlbumService {
     
@@ -36,6 +38,17 @@ public class AlbumService {
 
     @Autowired
     private DiaryRepository diaryRepository;
+
+    /* 기본 앨범 찾고, 없으면 새로 만들어서 return */
+    public Album getBasicAlbum(Long albumID, Member member){
+        // 기본 앨범 찾기
+        Album album = albumRepository.findByAlbumNameAndMember("기본", member);
+        // 기본 앨범 없으면 새로 만듬
+        if(album == null){
+            return addAlbum(new AlbumRequestDTO("기본", member.getMemberID()));
+        }
+        return album;
+    }
 
     /* 이름과 id 매칭되는지 확인 */
     public Album validateAlbumByMember(Long albumID, Member member){
@@ -72,13 +85,38 @@ public class AlbumService {
                         .collect(Collectors.toList());
     }
 
-    // 앨범 삭제
-    public void deleteAlbum(Long albumID){
+
+    /* 앨범 삭제 */
+    public ResponseEntity<String> deleteAlbum(Long albumID){
         Album album = albumRepository.findByAlbumID(albumID);
         
-        if(album != null){
-            albumRepository.delete(album);
-            return;
+        // 앨범 못찾으면 예외
+        if(album == null){
+            throw new AlbumResponseException(AlbumExceptionType.NOT_FOUND_ALBUM);
+        }
+
+        // 기본 앨범이면 예외
+        Album basicAlbum = getBasicAlbum(albumID, album.getMember());
+        if(album.equals(basicAlbum)){
+            throw new AlbumResponseException(AlbumExceptionType.TRY_DELETE_BASICALBUM);
+        }
+
+        insertAlbumToAlbum(album, basicAlbum);
+        albumRepository.delete(album);
+        return ResponseEntity.ok("앨범 삭제가 완료되었습니다.");
+
+    }
+
+    /* 특정 앨범의 내용을 모두 다른 앨범으로 바꿈 */
+    @Transactional
+    public ResponseEntity<?> insertAlbumToAlbum(Album from, Album to){
+        if (from != null && to != null) {
+            List<Diary> diariesToUpdate = diaryRepository.findByAlbum(from);
+            for (Diary diary : diariesToUpdate) {
+                diary.setAlbum(to);
+                diaryRepository.save(diary);
+            }
+            return ResponseEntity.ok("앨범 이전이 완료되었습니다.");
         }
 
         throw new AlbumResponseException(AlbumExceptionType.NOT_FOUND_ALBUM);
