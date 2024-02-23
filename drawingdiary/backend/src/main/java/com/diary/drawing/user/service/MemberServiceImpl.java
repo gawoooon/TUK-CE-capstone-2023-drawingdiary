@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.diary.drawing.user.domain.Member;
-import com.diary.drawing.user.dto.MemberDTO;
+import com.diary.drawing.user.dto.GetMemberDTO;
+import com.diary.drawing.user.dto.MemberJoinDTO;
 import com.diary.drawing.user.exception.MemberExceptionType;
 import com.diary.drawing.user.exception.MemberResponseException;
 import com.diary.drawing.user.repository.MemberRepository;
@@ -30,7 +31,7 @@ public class MemberServiceImpl implements MemberService{
 
     // 회원 가입 (예외처리 나중에)
     @Override
-    public Member joinMember(MemberDTO memberDTO) throws IOException {
+    public Member joinMember(MemberJoinDTO memberDTO) throws IOException {
 
         // 암호화
         String rawPassword = memberDTO.getPassword();
@@ -74,6 +75,22 @@ public class MemberServiceImpl implements MemberService{
         Optional<Member> member = memberRepository.findByMemberID(memberID);
         if(member.isPresent()) return member.get();
         else{ throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);}
+    }
+
+    @Override
+    public GetMemberDTO getMember(Long memberID){
+        Member targetMemeber = validateMember(memberID);
+        GetMemberDTO getMemberDTO = GetMemberDTO.builder()
+            .memberID(targetMemeber.getMemberID())
+            .name(targetMemeber.getName())
+            .email(targetMemeber.getEmail())
+            .birth(targetMemeber.getBirth())
+            .gender(targetMemeber.getGender())
+            .personality(targetMemeber.getPersonality())
+            .profileImage(targetMemeber.getProfileImage())  // 임시 url 넣기
+            .theme(targetMemeber.getTheme())
+            .build();
+        return getMemberDTO;
     }
 
 

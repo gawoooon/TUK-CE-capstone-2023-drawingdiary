@@ -102,4 +102,9 @@ public class Diary extends BaseTime{
         return this.weather.lable();
     }
 
+    // Album set
+    public void setAlbum(Album album){
+        this.album = album;
+    }
+
 }

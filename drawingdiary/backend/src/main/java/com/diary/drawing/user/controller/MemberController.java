@@ -15,7 +15,8 @@ import com.diary.drawing.album.dto.AlbumRequestDTO;
 import com.diary.drawing.album.service.AlbumService;
 import com.diary.drawing.jwt.domain.PrincipalDetails;
 import com.diary.drawing.user.domain.Member;
-import com.diary.drawing.user.dto.MemberDTO;
+import com.diary.drawing.user.dto.GetMemberDTO;
+import com.diary.drawing.user.dto.MemberJoinDTO;
 import com.diary.drawing.user.dto.PersonalityUpdateDTO;
 import com.diary.drawing.user.exception.MemberExceptionType;
 import com.diary.drawing.user.exception.MemberResponseException;
@@ -26,7 +27,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "User", description = "User API")
+@Tag(name = "Member", description = "Member API")
 @RestController
 @RequestMapping("/api")
 
@@ -35,7 +36,6 @@ public class MemberController {
     private MemberService memberService;
     @Autowired
     private AlbumService albumService;
-    // [지원] 수정 부분
     @Autowired
     private MemberRepository memberRepository;
 
@@ -60,16 +60,15 @@ public class MemberController {
 
     
     // AccessToken으로 정보를 가져오는 메소드, ResponseEntity<Member>로 수정
-    @GetMapping("/getMember")
-    public String getMember(@AuthenticationPrincipal PrincipalDetails principalDetails){
-        if (principalDetails != null) {
-            return "IF you see this. then youre logged in " + principalDetails.getEmail()
-                        + "User ID: " + principalDetails.getMemberID();
-            
-        } else {
-            // handle the case where principalDetails is null
-            return "User is not logged in.";
+    @GetMapping("/get-member")
+    public ResponseEntity<?> getMember(@AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        GetMemberDTO getMemberDTO = memberService.getMember(principalDetails.getMemberID());
+        if(getMemberDTO != null){
+            return ResponseEntity.ok(getMemberDTO);
         }
+
+        throw new MemberResponseException(MemberExceptionType.ERROR_GET_MEMBER);
     }
     
     // 회원가입 token 안쓰길래 여기에 구현
@@ -77,7 +76,7 @@ public class MemberController {
     //https://ttl-blog.tistory.com/290 참고
     @Operation(summary = "회원가입", description = "회원가입")
     @PostMapping("/join")
-    public void add(@Valid @RequestBody MemberDTO memberDTO) throws Exception{
+    public void add(@Valid @RequestBody MemberJoinDTO memberDTO) throws Exception{
         if (memberRepository.existsByEmail(memberDTO.getEmail())){
             throw new MemberResponseException(MemberExceptionType.ALREADY_EXIST_EMAIL);
         }

@@ -18,7 +18,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class MemberDTO {
+public class MemberJoinDTO {
 
     @Valid
 
