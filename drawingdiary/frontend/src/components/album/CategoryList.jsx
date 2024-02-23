@@ -8,11 +8,16 @@ export const CategoryContext = React.createContext();
 const useCategoryList = () => {
     const [categoryList, setCategoryList] = useState([]);
     const { memberID } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
-    
+
     const fetchCategoryList = useCallback(async () => {
         if(memberID) {// 로그인 상태 확인
             try {
-                const response = await axiosInstance.get(`/api/album/list/${memberID}`);
+                const accessToken = localStorage.getItem('accessToken');
+                const response = await axios.get(`http://localhost:8080/api/album/list/${memberID}`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
                 const fetchedCategoryList = response.data;
                 setCategoryList(fetchedCategoryList);
             } catch (error) {

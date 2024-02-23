@@ -101,11 +101,6 @@ const Weather = ({ date }) => {
                 const weatherState = getWeatherState(weatherID);
                 weatherIconSrc = `/weather/${weatherState}.png`;
 
-                console.log(closestForecast.forecast);
-                console.log(weatherDescription);
-                console.log("weatherState: ", weatherState);
-                console.log("weatherIconSrc: ", weatherIconSrc);
-
                 setWeather({ icon: weatherIconSrc });
             } else {
                 console.log("No forecast data found for the specified date and time");

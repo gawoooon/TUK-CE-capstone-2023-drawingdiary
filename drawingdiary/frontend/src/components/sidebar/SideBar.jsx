@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "../../auth/context/AuthContext";
+import axiosInstance from "../../axios/axisoInstance";
+import axios from "axios";
 
 const SideBarStyle = styled.div`
   display: flex;
@@ -59,7 +62,8 @@ const MenuItem = styled(Link)`
   &:hover {
     background: ${({ isOpen }) => isOpen ? '#ececec' : 'transparent'};
     width: ${({ isOpen }) => isOpen ? '245px' : 'auto'};
-    border-right: ${({ isOpen }) => isOpen ? '5px solid #ddd' : 'none'};
+    border-left: ${({ isOpen }) => isOpen ? '5px solid #ddd' : 'none'};
+    border-radius: 10px;
   }
 `;
 
@@ -83,6 +87,33 @@ const ProfileName = styled.div`
 
 
 const SideBar = ({ isOpen }) => {
+
+  const { memberID } = useAuth();
+  const [userName, setUserName] = useState("");
+
+  const fetchUserName = useCallback(async () => {
+    if (memberID) {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        console.log("accessToken: ", accessToken);
+        const response = await axios.get('http://localhost:8080/api/getMember', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        console.log(response);
+
+      } catch (error) {
+        console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
+      }
+    }
+  }, [memberID]);
+
+  useEffect(() => {
+    fetchUserName();
+  }, [memberID, fetchUserName]);
+
+
   return (
     <SideBarStyle>
       <SideBarHeader>
