@@ -25,7 +25,7 @@ public class DiaryResponseDTO {
     public static DiaryResponseDTO from(Diary diary) {
         return DiaryResponseDTO.builder()
                 .text(diary.getText())
-                .weather(diary.getWeather())
+                .weather(diary.getWeatherLable())
                 .month(diary.getDate().getMonth())
                 .day(diary.getDate().getDay())
                 .albumID(diary.getAlbum().getAlbumID())

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.diary.domain.Diary;
 import com.diary.drawing.diary.dto.CreateDiaryRequestDTO;
+import com.diary.drawing.diary.dto.CreateDiaryResponseDTO;
 import com.diary.drawing.diary.dto.DiaryRequestDTO;
 import com.diary.drawing.diary.dto.DiaryResponseDTO;
 import com.diary.drawing.diary.service.DiaryService;
@@ -28,9 +29,9 @@ public class DiaryController {
 
     @Operation(summary = "일기 작성하지 않은 날짜에 일기 생성 후 ID 리턴")
     @PostMapping("/add")
-    public ResponseEntity<Long> addDiary(@RequestBody CreateDiaryRequestDTO createDiaryRequestDTO) throws Exception{
+    public ResponseEntity<CreateDiaryResponseDTO> addDiary(@RequestBody CreateDiaryRequestDTO createDiaryRequestDTO) throws Exception{
         Long diaryID = diaryService.createTemporaryDiary(createDiaryRequestDTO);
-        return ResponseEntity.ok().body(diaryID);
+        return ResponseEntity.ok().body(new CreateDiaryResponseDTO(diaryID));
     }
 
     // 나중에 token으로 인증 추가

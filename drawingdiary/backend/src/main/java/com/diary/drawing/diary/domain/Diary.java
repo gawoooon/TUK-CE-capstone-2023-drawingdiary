@@ -10,6 +10,8 @@ import com.diary.drawing.user.domain.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,9 +38,10 @@ public class Diary extends BaseTime{
     private String text;
 
     // 이후 enum으로 바뀔 수 있음
-    private String weather;
+    @Enumerated(EnumType.STRING)
+    private Weather weather;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 다이어리 한개의 날짜
+    @ManyToOne()  // 여러개의 다이어리 한개의 날짜, 한번 직렬화 깨봄
     @JoinColumn(name = "dateID") // 외부키 references from diaryid
     private Date date;
 
@@ -71,7 +74,7 @@ public class Diary extends BaseTime{
     @Builder
     public Diary(String text, String weather, Date date, Album album, Member member, ImageStyle imageStyle){
         this.text = text;
-        this.weather=weather;
+        this.weather=Weather.valueOfLabel(weather);
         this.date=date;
         this.album=album;
         this.member=member;
@@ -83,9 +86,20 @@ public class Diary extends BaseTime{
 
     public Diary update(DiaryRequestDTO dto, Album album, ImageStyle imageStyle){
         this.text=dto.getText();
-        this.weather=dto.getWeather();
+        this.weather= Weather.valueOfLabel(dto.getWeather());
         this.album=album;
         this.imageStyle=imageStyle;
         return this;
     }
+
+    // 문자열로 weather 주기
+    public String getWeather(){
+        return this.weather.name();
+    }
+
+    // 프런트용 weather 주기
+    public String getWeatherLable(){
+        return this.weather.lable();
+    }
+
 }

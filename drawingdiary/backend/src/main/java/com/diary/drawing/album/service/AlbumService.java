@@ -5,12 +5,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.diary.drawing.album.domain.Album;
-import com.diary.drawing.album.dto.AlbumDTO;
+import com.diary.drawing.album.dto.AlbumAllDTO;
 import com.diary.drawing.album.dto.AlbumListDTO;
+import com.diary.drawing.album.dto.AlbumRequestDTO;
+import com.diary.drawing.album.exception.AlbumExceptionType;
+import com.diary.drawing.album.exception.AlbumResponseException;
 import com.diary.drawing.album.repository.AlbumRepository;
+import com.diary.drawing.diary.domain.Diary;
+import com.diary.drawing.diary.dto.ImageForAlbumDTO;
+import com.diary.drawing.diary.repository.DiaryRepository;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.repository.MemberRepository;
 
@@ -27,9 +34,18 @@ public class AlbumService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private DiaryRepository diaryRepository;
+
+    /* 이름과 id 매칭되는지 확인 */
+    public Album validateAlbumByMember(Long albumID, Member member){
+        return albumRepository.findByAlbumIDAndMember(albumID, member)
+                    .orElseThrow(() -> new RuntimeException("사용자와 일치하는 앨범이 없습니다"));
+    }
+
     /* 앨범 추가 */
     @SuppressWarnings("null") // 일단 null값 경고 지웠음
-    public Album addAlbum(AlbumDTO albumDTO) throws IOException {
+    public Album addAlbum(AlbumRequestDTO albumDTO) throws IOException {
 
         // id로 멤버찾기
         Optional<Member> m = memberRepository.findByMemberID(albumDTO.getMemberID());
@@ -57,4 +73,38 @@ public class AlbumService {
     }
 
     // 앨범 삭제
+    public void deleteAlbum(Long albumID){
+        Album album = albumRepository.findByAlbumID(albumID);
+        
+        if(album != null){
+            albumRepository.delete(album);
+            return;
+        }
+
+        throw new AlbumResponseException(AlbumExceptionType.NOT_FOUND_ALBUM);
+    }
+
+
+
+    // 앨범에 따른 다이어리 리스트 리턴
+    public ResponseEntity<?> getAllOfAlbum(Long memberID) {
+        Member member = memberRepository.findByMemberID(memberID)
+            .orElseThrow(() -> new AlbumResponseException(AlbumExceptionType.NOT_FOUND_MEMBER));
+
+        List<Album> albums = albumRepository.findByMember(member);
+        List<AlbumAllDTO> response =  albums.stream()
+            .map(album -> new AlbumAllDTO(album.getAlbumID(), album.getAlbumName(), getImagesOfAlbum(album)))
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
+    // 다이어리에서 이미지 추출
+    public List<ImageForAlbumDTO> getImagesOfAlbum(Album album){
+        List<Diary> diaries = diaryRepository.findByAlbum(album);
+        return diaries.stream()
+            .filter(diary -> diary != null && diary.getImage() != null)
+            .map(diary -> new ImageForAlbumDTO(diary.getImage().getImageID(), diary.getImage().getImageFile(), diary.getDate(), diary.getDiaryID()))
+            .collect(Collectors.toList());
+    }
+
 }
