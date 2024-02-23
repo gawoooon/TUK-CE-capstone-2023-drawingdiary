@@ -1,5 +1,9 @@
 package com.diary.drawing.diary.domain;
 
+import java.sql.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.comment.Comment;
 import com.diary.drawing.common.BaseTime;
@@ -37,12 +41,10 @@ public class Diary extends BaseTime{
     @Column(length = 5000)
     private String text;
 
-    // 이후 enum으로 바뀔 수 있음
     @Enumerated(EnumType.STRING)
     private Weather weather;
 
-    @ManyToOne()  // 여러개의 다이어리 한개의 날짜, 한번 직렬화 깨봄
-    @JoinColumn(name = "dateID") // 외부키 references from diaryid
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)  // 여러 다이어리와 하나의 앨범
@@ -74,7 +76,7 @@ public class Diary extends BaseTime{
     @Builder
     public Diary(String text, String weather, Date date, Album album, Member member, ImageStyle imageStyle){
         this.text = text;
-        this.weather=Weather.valueOfLabel(weather);
+        this.weather=Weather.valueOf(weather);
         this.date=date;
         this.album=album;
         this.member=member;
@@ -86,7 +88,7 @@ public class Diary extends BaseTime{
 
     public Diary update(DiaryRequestDTO dto, Album album, ImageStyle imageStyle){
         this.text=dto.getText();
-        this.weather= Weather.valueOfLabel(dto.getWeather());
+        this.weather= Weather.valueOf(dto.getWeather());
         this.album=album;
         this.imageStyle=imageStyle;
         return this;
@@ -96,12 +98,7 @@ public class Diary extends BaseTime{
     public String getWeather(){
         return this.weather.name();
     }
-
-    // 프런트용 weather 주기
-    public String getWeatherLable(){
-        return this.weather.lable();
-    }
-
+    
     // Album set
     public void setAlbum(Album album){
         this.album = album;

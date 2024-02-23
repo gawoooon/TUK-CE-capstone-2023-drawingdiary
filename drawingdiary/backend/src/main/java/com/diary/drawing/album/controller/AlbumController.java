@@ -44,17 +44,7 @@ public class AlbumController {
     @Operation(summary = "앨범 추가")
     @PostMapping("/add")
     public void add (@Valid @RequestBody AlbumRequestDTO albumDTO) throws Exception{
-        // 존재하는 멤버인가?
-        Optional<Member> m = memberRepository.findByMemberID(albumDTO.getMemberID());
-        if(!(m.isPresent())){
-            throw new AlbumResponseException(AlbumExceptionType.NOT_FOUND_MEMBER);
-        }
 
-        // 어떤 사용자가 이미 가진 앨범명
-        if(albumRepository.existsByMemberAndAlbumName(m.get(), albumDTO.getAlbumName())){
-            throw new AlbumResponseException(AlbumExceptionType.ALREADY_EXIST_ALBUMNAME);
-        }
-        
         albumService.addAlbum(albumDTO);
     }
 
@@ -74,7 +64,7 @@ public class AlbumController {
 
     /* 토큰으로 앨범 페이지 앨범 + 이미지 넘겨주는 api */
     @Operation(summary = "멤버별 앨범 리스트")
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<?> getAlbumAll(@AuthenticationPrincipal PrincipalDetails principalDetails){
         return albumService.getAllOfAlbum(principalDetails.getMemberID());
     }

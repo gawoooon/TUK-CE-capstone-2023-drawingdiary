@@ -3,7 +3,6 @@ package com.diary.drawing.user.service;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.dto.GetMemberDTO;
 import com.diary.drawing.user.dto.MemberJoinDTO;
-import com.diary.drawing.user.exception.MemberExceptionType;
-import com.diary.drawing.user.exception.MemberResponseException;
 import com.diary.drawing.user.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,11 +20,9 @@ public class MemberServiceImpl implements MemberService{
 
     // DB와 연결(의존성 주입)
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ValidateMemberService validateMemberService;
 
     // 회원 가입 (예외처리 나중에)
     @Override
@@ -70,16 +65,10 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.findEmailByMemberID(memberID);
     }
 
-    @Override
-    public Member validateMember(Long memberID){
-        Optional<Member> member = memberRepository.findByMemberID(memberID);
-        if(member.isPresent()) return member.get();
-        else{ throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);}
-    }
 
     @Override
     public GetMemberDTO getMember(Long memberID){
-        Member targetMemeber = validateMember(memberID);
+        Member targetMemeber = validateMemberService.validateMember(memberID);
         GetMemberDTO getMemberDTO = GetMemberDTO.builder()
             .memberID(targetMemeber.getMemberID())
             .name(targetMemeber.getName())
