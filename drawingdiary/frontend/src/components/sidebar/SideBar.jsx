@@ -19,7 +19,8 @@ const SideBarStyle = styled.div`
 const SideBarHeader = styled.div`
   padding: 40px 20px; // 왼쪽 오른쪽 패딩 추가
   margin-bottom: 40px; // 하단 여백 추가
-  min-height: 30px;
+  display: flex;
+  align-items: center;
 `;
 
 const SideBarLogo = styled.img`
@@ -60,15 +61,17 @@ const MenuItem = styled(Link)`
 const MenuItemText = styled.span`
   opacity: ${({ isOpen }) => isOpen ? 1 : 0};
   visibility: ${({ isOpen }) => isOpen ? 'visible' : 'hidden'};
-  transition: opacity 00ms ease-out;
+  transition: opacity 700ms ease-out;
   margin-left: 16px;
   white-space: nowrap;
+  min-height: 20px;
 `;
 
 const ProfileSection = styled.div`
   padding: 30px;
   margin-bottom: 20px;
   border-top: 1px solid #ddd; // 상단에 경계선 추가
+  min-height: 120px;
 `;
 
 const ProfileImage = styled.img`
@@ -122,7 +125,7 @@ const SideBar = ({ isOpen }) => {
   return (
     <SideBarStyle>
       <SideBarHeader>
-        <SideBarLogo src="your-logo.png" alt="Logo" />
+        <SideBarLogo src="logo.png" alt="Logo" />
         <MenuItemText isOpen={isOpen}>감성 일기</MenuItemText>
       </SideBarHeader>
       <SideBarMenu>
@@ -144,7 +147,7 @@ const SideBar = ({ isOpen }) => {
         </MenuItem>
       </SideBarMenu>
       <ProfileSection>
-        <ProfileImage src="usere.png" alt="User" />
+        <ProfileImage src="user.png" alt="User" />
         <MenuItemText isOpen={isOpen}>
           <ProfileName>{userName}</ProfileName>
         </MenuItemText>
