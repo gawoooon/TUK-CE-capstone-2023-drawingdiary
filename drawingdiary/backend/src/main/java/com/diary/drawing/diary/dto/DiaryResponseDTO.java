@@ -1,6 +1,6 @@
 package com.diary.drawing.diary.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,7 +17,7 @@ public class DiaryResponseDTO {
     private String text;
     private String weather;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
     private Long albumID;
     private String albumName;
     private Long styleID;

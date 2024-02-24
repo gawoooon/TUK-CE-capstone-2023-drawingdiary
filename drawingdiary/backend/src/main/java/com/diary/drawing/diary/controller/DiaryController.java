@@ -1,6 +1,5 @@
 package com.diary.drawing.diary.controller;
-
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +40,7 @@ public class DiaryController {
     // 나중에 token으로 인증 추가
     @Operation(summary = "일기 조회")
     @GetMapping("/diary/{date}")
-    public ResponseEntity<?> addDiary(@PathVariable Date date, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
+    public ResponseEntity<?> addDiary(@PathVariable LocalDate date, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
         DiaryResponseDTO responseDTO = diaryService.getDiary(date, principalDetails.getMemberID());
         return ResponseEntity.ok().body(responseDTO);
     }

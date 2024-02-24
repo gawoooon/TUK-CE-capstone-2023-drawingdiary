@@ -1,6 +1,6 @@
 package com.diary.drawing.diary.service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public class ValidateDiaryService {
          */
 
         /* Date로 다이어리 찾기 */
-        public Diary findByDateAndMember(Date date, Member member) {
+        public Diary findByDateAndMember(LocalDate date, Member member) {
                 return diaryRepository.findByDateAndMember(date, member)
                                 .orElseThrow(() -> new DiaryResponseException(DiaryExceptionType.NOT_FOUND_DIARY));
         }

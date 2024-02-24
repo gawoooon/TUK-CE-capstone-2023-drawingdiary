@@ -1,6 +1,6 @@
 package com.diary.drawing.diary.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,7 +18,7 @@ public class CalenderDTO {
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     @NotNull
     private String imageFile;
@@ -26,7 +26,7 @@ public class CalenderDTO {
     private String text;
 
 
-    public CalenderDTO(Date date, String imageFile, String text){
+    public CalenderDTO(LocalDate date, String imageFile, String text){
         this.date = date;
         this.imageFile = imageFile;
         this.text = text;

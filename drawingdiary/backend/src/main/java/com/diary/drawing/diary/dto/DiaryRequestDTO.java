@@ -1,6 +1,6 @@
 package com.diary.drawing.diary.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,7 +29,7 @@ public class DiaryRequestDTO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "날짜가 전송되지 않았습니다.")
-    private Date date;
+    private LocalDate date;
 
     private Long albumID;   // null 가능
 

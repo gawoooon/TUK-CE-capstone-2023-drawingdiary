@@ -1,6 +1,6 @@
 package com.diary.drawing.diary.service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -62,7 +62,7 @@ public class DiaryService {
     }
 
     /* Date로 내용조회 */
-    public DiaryResponseDTO getDiary(Date date, Long memberID) throws Exception{
+    public DiaryResponseDTO getDiary(LocalDate date, Long memberID) throws Exception{
         Member member = validateMemberService.validateMember(memberID);
         Diary diary = validateDiaryService.findByDateAndMember(date, member);
         DiaryResponseDTO diaryResponseDTO = DiaryResponseDTO.from(diary);

@@ -1,6 +1,6 @@
 package com.diary.drawing.user.domain;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,7 +38,7 @@ public class Member {
     private String password;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date birth;
+    private LocalDate birth;
 
     private char gender;
 
@@ -63,7 +63,7 @@ public class Member {
     public Member(){}
 
     @Builder // 나중에 보안성 높이고 일단 구현(access = AccessLevel=private), personality, image는 별개
-    public Member(String name, String email, Date birth, char gender, String password){
+    public Member(String name, String email, LocalDate birth, char gender, String password){
         this.name = name;
         this.email = email;
         this.birth = birth;
