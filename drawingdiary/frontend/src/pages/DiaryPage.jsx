@@ -162,7 +162,6 @@ function DiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
-  const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
     // 페이지 로딩 시 초기 메시지를 5초간 표시
@@ -194,46 +193,6 @@ function DiaryPage() {
     }
   };
 
-  // 이미지를 백엔드로 전송하는 함수
-  const sendImageToBackend = async (url) => {
-    if (url) {
-      try {
-        console.log("이미지 url", url);
-
-        const apiUrl = "http://localhost:8080/api/image/test/create";
-
-        const data = {
-          imageFile: url,
-          diaryID: 1,
-          dateID: 1,
-          promptID: 1,
-        };
-
-        const responseImg = await axios.post(apiUrl, {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-          timeout: 10000,
-        });
-
-        if (responseImg.ok) {
-          console.log("이미지 URL이 백엔드로 전송되었습니다.");
-        } else {
-          console.error("이미지 URL 전송 실패:", responseImg.status);
-        }
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    }
-  };
-
-  // 이미지 URL이 변경될 때마다 실행되는 useEffect
-  useEffect(() => {
-    sendImageToBackend(imageUrl);
-  }, [imageUrl]);
-
   // EditDiary에서 텍스트 길이 조건 충족 여부 받기
   // const handleTextChange = (isValid) => {
   //   setIsTextValid(isValid);
@@ -260,6 +219,9 @@ function DiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
+    const memberID = 1; // 멤버 아이디 불러오기
+    const accessToken = localStorage.getItem("accessToken");
+
     if (diaryText.length < 30) {
       setShowInitialMessage(true);
       setTimeout(() => {
@@ -300,19 +262,80 @@ function DiaryPage() {
         const responseDate = await responseDiary.json();
 
         console.log("일기:", responseDate);
-        console.log("responseData type", typeof responseDate);
+        console.log("responseData type", typeof responseData);
 
-        const receivedImageUrl = responseDate.image?.imageUrl;
-        console.log("이미지 url", receivedImageUrl);
+        const imageUrl = responseDate.image?.imageUrl;
+        console.log("이미지 url", imageUrl);
+        console.log("memberID", memberID);
 
         alert("이미지가 성공적으로 저장되었습니다.");
+        if (memberID) {
+          try {
+            console.log("이미지 url", imageUrl);
 
-        // 이미지 URL이 있다면 state를 업데이트
-        if (receivedImageUrl) {
-          setImageUrl(receivedImageUrl);
+            const data = {
+              imageFile:
+                " https://oaidalleapiprodscus.blob.core.windows.net/private/org-tmUJxJaFSEBNq6VZSAMmH6CO/user-szfO9vAIC0LuYBKFCML9LrSc/",
+              diaryID: 1,
+              dateID: 1,
+              promptID: 1,
+            };
+
+            const responseImg = await axios.post(
+              "http://localhost:8080/api/image/test/create",
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+                body: data,
+              }
+            );
+
+            if (responseImg.ok) {
+              console.log("이미지 URL이 백엔드로 전송되었습니다.");
+            } else {
+              console.error("이미지 URL 전송 실패:", responseImg.status);
+            }
+          } catch (error) {
+            console.log("Error: ", error);
+          }
+          // try{
+          //   console.log("이미지가 있으먀ㅕㄴ ");
+          // const apiUrl = "http://localhost:8080/api/image/test/create";
+
+          // const data = {
+          //   imageFile:
+          //     " https://oaidalleapiprodscus.blob.core.windows.net/private/org-tmUJxJaFSEBNq6VZSAMmH6CO/user-szfO9vAIC0LuYBKFCML9LrSc/",
+          //   diaryID: 1,
+          //   dateID: 1,
+          //   promptID: 1,
+          // };
+
+          // const responseImage = await fetch(apiUrl, {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify(data),
+          // })
+          //   .then((responseImage) => {
+          //     if (responseImage.ok) {
+          //       console.log("이미지 URL이 백엔드로 전송되었습니다.");
+          //     } else {
+          //       console.error("이미지 URL 전송 실패:", responseImage.status);
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.log("Error: ", error);
+          //   });
+
+          // }catch(err){
+          //   console.log(err);
+          // }
         }
       } else {
         console.error("이미지 저장 실패:", responseDiary.status);
+
         alert("이미지 저장에 실패하였습니다.");
       }
     } catch (error) {
