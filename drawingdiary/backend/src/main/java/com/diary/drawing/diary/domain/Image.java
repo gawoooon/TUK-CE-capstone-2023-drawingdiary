@@ -2,6 +2,7 @@ package com.diary.drawing.diary.domain;
 
 import com.diary.drawing.common.BaseTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class Image extends BaseTime{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imageID;
 
+    @Column(length = 600)
     private String imageFile;
 
     // @OneToOne  // 한개의 다이어리는 하나만

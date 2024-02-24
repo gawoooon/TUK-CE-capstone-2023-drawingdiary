@@ -219,7 +219,6 @@ function DiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-    const memberID = 1; // 멤버 아이디 불러오기
     const accessToken = localStorage.getItem("accessToken");
 
     if (diaryText.length < 30) {
@@ -269,29 +268,24 @@ function DiaryPage() {
         console.log("memberID", memberID);
 
         alert("이미지가 성공적으로 저장되었습니다.");
-        if (memberID) {
+        if (imageUrl) {
           try {
             console.log("이미지 url", imageUrl);
-
-            const data = {
-              imageFile:
-                " https://oaidalleapiprodscus.blob.core.windows.net/private/org-tmUJxJaFSEBNq6VZSAMmH6CO/user-szfO9vAIC0LuYBKFCML9LrSc/",
-              diaryID: 1,
-              dateID: 1,
-              promptID: 1,
-            };
 
             const responseImg = await axios.post(
               "http://localhost:8080/api/image/test/create",
               {
+                imageFile: imageUrl,
+                diaryID: 1,
+                promptID: 1,
                 headers: {
                   Authorization: `Bearer ${accessToken}`,
                 },
-                body: data,
               }
+              // 두 번째 인수로 데이터 객체를 직접 전달
             );
 
-            if (responseImg.ok) {
+            if (responseImg.status === 200) {
               console.log("이미지 URL이 백엔드로 전송되었습니다.");
             } else {
               console.error("이미지 URL 전송 실패:", responseImg.status);
