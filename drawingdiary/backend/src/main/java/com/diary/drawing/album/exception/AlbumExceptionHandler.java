@@ -1,4 +1,4 @@
-package com.diary.drawing.user.exception;
+package com.diary.drawing.album.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class AlbumExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(AlbumExceptionHandler.class);
 
     @SuppressWarnings("null")
-    @ExceptionHandler(MemberResponseException.class)
-    public ResponseEntity<ErrorResponse> handleMemberResponseException(MemberResponseException ex) {
-        MemberExceptionType exceptionType =(MemberExceptionType) ex.getExceptionType();
+    @ExceptionHandler(AlbumResponseException.class)
+    public ResponseEntity<ErrorResponse> handleMemberResponseException(AlbumResponseException ex) {
+        AlbumExceptionType exceptionType =(AlbumExceptionType) ex.getExceptionType();
         
         // 로깅 추가
         log.error("MemberResponseException 발생, 유형: {}, 메시지: {}", exceptionType.getErrorCode(), exceptionType.getErrorMessage());
@@ -57,3 +57,4 @@ public class GlobalExceptionHandler {
         }
     }
 }
+

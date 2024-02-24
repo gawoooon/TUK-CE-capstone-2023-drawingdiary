@@ -3,7 +3,7 @@ package com.diary.drawing.jwt.service;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
-import com.diary.drawing.jwt.model.PrincipalDetails;
+import com.diary.drawing.jwt.domain.PrincipalDetails;
 
 public class PrincipalDetailsAuthenticationToken extends AbstractAuthenticationToken{
 

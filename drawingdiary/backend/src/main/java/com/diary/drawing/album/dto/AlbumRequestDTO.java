@@ -2,7 +2,6 @@ package com.diary.drawing.album.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,7 @@ import lombok.ToString;
 @Getter
 @RequiredArgsConstructor
 @ToString
-public class AlbumDTO {
+public class AlbumRequestDTO {
     
     @Valid
 
@@ -19,13 +18,9 @@ public class AlbumDTO {
     @NotEmpty(message = "앨범 이름을 비울 수 없습니다.")
     private String albumName;
 
-    @NotNull(message = "고객 ID가 전송되지 않았습니다.")
-    private Long memberID;
 
-
-    public AlbumDTO(String albumName, Long memberID){
+    public AlbumRequestDTO(String albumName){
         this.albumName = albumName;
-        this.memberID=memberID;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.diary.drawing.user.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -18,7 +18,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class MemberDTO {
+public class MemberJoinDTO {
 
     @Valid
 
@@ -35,7 +35,7 @@ public class MemberDTO {
     private String password;
 
     @NotNull(message = "생일을 비울 수 없습니다.")
-    private Date birth;
+    private LocalDate birth;
 
     @NotNull(message = "성별을 비울 수 없습니다.")
     private char gender;

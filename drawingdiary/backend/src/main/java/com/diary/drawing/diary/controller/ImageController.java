@@ -39,7 +39,7 @@ public class ImageController {
             return "not exist Prompt Error";
         }
 
-        imageService.createImage(dto.getImageFile(), d, p);
+        imageService.createImage(dto.getImageFile(), p);
         return " 이미지 생성 성공! 테스트이므로 db 에서 확인하고 지울것 ";
     }
 

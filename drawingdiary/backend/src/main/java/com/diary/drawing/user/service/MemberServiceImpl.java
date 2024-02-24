@@ -3,13 +3,13 @@ package com.diary.drawing.user.service;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.diary.drawing.user.domain.Member;
-import com.diary.drawing.user.dto.MemberDTO;
+import com.diary.drawing.user.dto.GetMemberDTO;
+import com.diary.drawing.user.dto.MemberJoinDTO;
 import com.diary.drawing.user.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,15 +20,13 @@ public class MemberServiceImpl implements MemberService{
 
     // DB와 연결(의존성 주입)
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ValidateMemberService validateMemberService;
 
     // 회원 가입 (예외처리 나중에)
     @Override
-    public Member joinMember(MemberDTO memberDTO) throws IOException {
+    public Member joinMember(MemberJoinDTO memberDTO) throws IOException {
 
         // 암호화
         String rawPassword = memberDTO.getPassword();
@@ -61,6 +59,28 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.findByEmail(email);
     }
 
+    // 아이디로 이메일 찾기
+    @Override
+    public String getEmailByMemberID(Long memberID) {
+        return memberRepository.findEmailByMemberID(memberID);
+    }
+
+
+    @Override
+    public GetMemberDTO getMember(Long memberID){
+        Member targetMemeber = validateMemberService.validateMember(memberID);
+        GetMemberDTO getMemberDTO = GetMemberDTO.builder()
+            .memberID(targetMemeber.getMemberID())
+            .name(targetMemeber.getName())
+            .email(targetMemeber.getEmail())
+            .birth(targetMemeber.getBirth())
+            .gender(targetMemeber.getGender())
+            .personality(targetMemeber.getPersonality())
+            .profileImage(targetMemeber.getProfileImage())  // 임시 url 넣기
+            .theme(targetMemeber.getTheme())
+            .build();
+        return getMemberDTO;
+    }
 
 
     

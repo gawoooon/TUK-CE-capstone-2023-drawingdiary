@@ -10,6 +10,7 @@ application {
     mainClass.set('com.diary.drawing.DrawingApplication')
 } 
 
+
 group = 'com.template'
 version = '0.0.1-SNAPSHOT'
 

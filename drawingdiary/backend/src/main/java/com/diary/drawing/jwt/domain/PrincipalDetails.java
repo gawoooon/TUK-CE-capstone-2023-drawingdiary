@@ -1,4 +1,4 @@
-package com.diary.drawing.jwt.model;
+package com.diary.drawing.jwt.domain;
 
 import java.util.Collection;
 

@@ -32,12 +32,10 @@ public class ImageService {
     /* 이미지 생성한것 저장 */
     //TODO: 완전히 구현 완료한 이후에 ImageRequestDTO로 넣기, 예외처리
     @Transactional
-    public Image createImage(String imageFile, Diary diary, Prompt prompt){
+    public Image createImage(String imageFile, Prompt prompt){
         try {
             Image image = Image.builder()
                 .imageFile(imageFile)
-                .diary(diary)
-                .date(diary.getDate())
                 .prompt(prompt)
                 .build();
             return imageRepository.save(image);
@@ -54,7 +52,7 @@ public class ImageService {
 
 
         /* 다이어리에 연결된 이미지 찾기, 없으면 404 에러 */
-        Image image = imageRepository.findByDiary(diary);
+        Image image = diary.getImage();
         if(image == null){
             throw new DiaryResponseException(DiaryExceptionType.NOT_FOUND_IMAGE);
         }

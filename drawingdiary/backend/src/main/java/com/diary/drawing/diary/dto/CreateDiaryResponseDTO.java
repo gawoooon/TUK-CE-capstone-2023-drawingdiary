@@ -1,7 +1,5 @@
 package com.diary.drawing.diary.dto;
 
-import java.time.LocalDate;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -9,7 +7,11 @@ import lombok.ToString;
 @Getter
 @RequiredArgsConstructor
 @ToString
-public class CreateDiaryRequestDTO {
-    private LocalDate date;
-    private Long memberID;
+public class CreateDiaryResponseDTO {
+    private Long diaryID;
+
+
+    public CreateDiaryResponseDTO(Long diaryID){
+        this.diaryID = diaryID;
+    }
 }

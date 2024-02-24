@@ -1,7 +1,10 @@
 package com.diary.drawing.diary.dto;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.diary.drawing.album.domain.Album;
-import com.diary.drawing.diary.domain.Date;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
 import com.diary.drawing.user.domain.Member;
 
@@ -16,7 +19,8 @@ import lombok.ToString;
 public class UpdateDiaryRequestDTO {
     private String text;
     private String weather;
-    private Date date;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
     private Album album;
     private Member member;
     private ImageStyle imageStyle;

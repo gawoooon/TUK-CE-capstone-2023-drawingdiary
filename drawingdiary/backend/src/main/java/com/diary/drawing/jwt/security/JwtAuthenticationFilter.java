@@ -39,15 +39,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         filterChain.doFilter(request, response);
     }
 
-    // null이면 false 나옴
+    // null이면 false 나옴... 본래 private이나 바꿨음
     // 보통 Authorization: Bearear <7글자기 때문에 7개 제외
-    private Optional<String> extractTokenFromRequest(HttpServletRequest request){
+    public Optional<String> extractTokenFromRequest(HttpServletRequest request){
         var token = request.getHeader("Authorization");
         if(StringUtils.hasText(token) && token.startsWith("Bearer ")){
             return Optional.of(token.substring(7));
         }
-
-        
 
         return Optional.empty();
     }

@@ -18,12 +18,28 @@ public class JwtIssuer{
 
     private final JwtProperties properties;
 
-    public String issue(Long memberID, String email, List<String> roles){
+    // access token
+    public String createAccessToken(Long memberID, String email, List<String> roles){
         return JWT.create()
                 .withSubject(String.valueOf(memberID))
-                .withExpiresAt(Instant.now().plus(Duration.of(20, ChronoUnit.MINUTES))) // 토큰을 10분으로 제한
+                .withExpiresAt(Instant.now().plus(Duration.of(20, ChronoUnit.MINUTES))) // 토큰을 20분으로 제한
                 .withClaim("e", email)
                 .withClaim("a", roles)
                 .sign(Algorithm.HMAC256(properties.getSecretKey())); // 테스트 버전이라 시크릿키 대충
     }
+
+    // refresh token
+    public String createRefreshToken(Long memberID, String email, List<String> roles){
+        return JWT.create()
+                .withSubject(String.valueOf(memberID))
+                .withExpiresAt(Instant.now().plus(Duration.of(1, ChronoUnit.DAYS))) // 토큰을 1일로 제한
+                .withClaim("e", email)
+                .withClaim("a", roles)
+                .sign(Algorithm.HMAC256(properties.getSecretKey())); // 테스트 버전이라 시크릿키 대충
+    }
+
+
+    
+
+    
 }
