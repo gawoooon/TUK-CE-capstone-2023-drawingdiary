@@ -82,10 +82,10 @@ public class MemberController {
         }
         
         // 만약 이메일 인증번호가 옳지 않다면 못넘어감
-        Long ID = memberService.joinMember(memberDTO).getMemberID();
+        Long memberID = memberService.joinMember(memberDTO).getMemberID();
 
         // 회원가입과 동시에 [기본] 앨범 생성함
-        albumService.addAlbum(new AlbumRequestDTO("기본", ID));
+        albumService.addAlbum(new AlbumRequestDTO("기본"), memberID);
         
     }
 

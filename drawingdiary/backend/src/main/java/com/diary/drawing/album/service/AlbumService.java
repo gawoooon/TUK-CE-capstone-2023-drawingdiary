@@ -43,7 +43,7 @@ public class AlbumService {
         Album album = albumRepository.findByAlbumNameAndMember("기본", member);
         // 기본 앨범 없으면 새로 만듬
         if(album == null){
-            return addAlbum(new AlbumRequestDTO("기본", member.getMemberID()));
+            return addAlbum(new AlbumRequestDTO("기본"), member.getMemberID());
         }
         return album;
     }
@@ -57,10 +57,10 @@ public class AlbumService {
     /* 앨범 추가 */
     @Transactional
     @SuppressWarnings("null") // 일단 null값 경고 지웠음
-    public Album addAlbum(AlbumRequestDTO albumDTO) throws IOException {
+    public Album addAlbum(AlbumRequestDTO albumDTO, Long memberID) throws IOException {
 
         // id로 멤버찾기
-        Member member = validateMemberService.validateMember(albumDTO.getMemberID());
+        Member member = validateMemberService.validateMember(memberID);
         Album check = albumRepository.findByAlbumNameAndMember(albumDTO.getAlbumName(), member);
         if(check != null) throw new AlbumResponseException(AlbumExceptionType.ALREADY_EXIST_ALBUMNAME);
         
@@ -85,7 +85,8 @@ public class AlbumService {
 
 
     /* 앨범 삭제 */
-    public ResponseEntity<String> deleteAlbum(Long albumID){
+    @Transactional
+    public ResponseEntity<String> deleteAlbum(Long albumID, Long memberID){
         Album album = albumRepository.findByAlbumID(albumID);
         
         // 앨범 못찾으면 예외
@@ -97,6 +98,12 @@ public class AlbumService {
         Album basicAlbum = getBasicAlbum(album.getMember());
         if(album.equals(basicAlbum)){
             throw new AlbumResponseException(AlbumExceptionType.TRY_DELETE_BASICALBUM);
+        }
+
+        // 본인 앨범이 아니라면 예외
+        Member member = validateMemberService.validateMember(memberID);
+        if(!album.getMember().equals(member)){
+            throw new AlbumResponseException(AlbumExceptionType.UNAUTHORIZED_DELETION);
         }
 
         insertAlbumToAlbum(album, basicAlbum);
