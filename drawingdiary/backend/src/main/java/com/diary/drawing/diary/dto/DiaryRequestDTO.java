@@ -20,7 +20,7 @@ public class DiaryRequestDTO {
     @Valid
 
 
-    @Size(min=1, max=5000, message = "일기는 1자에서 5000자 사이로 입력해주세요")
+    @Size(min=1, max=300, message = "일기는 1자에서 300자 사이로 입력해주세요")
     private String text;
 
     // 이후 enum으로 바뀔 수 있음
