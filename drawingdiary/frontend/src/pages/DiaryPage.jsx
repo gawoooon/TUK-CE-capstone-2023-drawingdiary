@@ -143,6 +143,7 @@ function DiaryPage() {
   // image 부분
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
@@ -241,10 +242,11 @@ function DiaryPage() {
       }, 5000);
     }
 
+    setIsLoading(true);
     // 감정 분석 실행
     analyzeSentiment();
 
-    // 이미지 api ( dall- e )
+    // 이미지 api
     try {
       console.log("일기 내용 저장:", diaryText);
 
@@ -263,6 +265,7 @@ function DiaryPage() {
 
         // url 받아오기
         const imageUrl = responseDate.image?.imageUrl;
+        setIsLoading(false);
         setNewImageUrl(imageUrl);
 
         if (imageUrl) {
@@ -406,7 +409,7 @@ function DiaryPage() {
             </div>
 
             <ManageAIArea>
-              <GeneratedImage newImageUrl={newImageUrl} />
+              <GeneratedImage isLoading={isLoading} newImageUrl={newImageUrl} />
               <RightComponentsContainer>
                 <AIComment />
                 <Sentiment
