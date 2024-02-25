@@ -140,9 +140,8 @@ const MessageText = styled.div`
 `;
 
 function DiaryPage() {
-  // memberID를 가져오는 코드
-  const { memberID } = useAuth();
-
+  // image 부분
+  const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
 
   const location = useLocation();
@@ -163,8 +162,8 @@ function DiaryPage() {
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
 
+  // 페이지 로딩 시 초기 메시지를 5초간 표시
   useEffect(() => {
-    // 페이지 로딩 시 초기 메시지를 5초간 표시
     const timer = setTimeout(() => {
       if (!isTextValid) {
         setShowInitialMessage(false);
@@ -242,9 +241,10 @@ function DiaryPage() {
       }, 5000);
     }
 
-    // // // 감정 분석 실행
-    // analyzeSentiment();
+    // 감정 분석 실행
+    analyzeSentiment();
 
+    // 이미지 api ( dall- e )
     try {
       console.log("일기 내용 저장:", diaryText);
 
@@ -259,19 +259,17 @@ function DiaryPage() {
 
       if (responseDiary.ok) {
         const responseDate = await responseDiary.json();
-
         console.log("일기:", responseDate);
-        console.log("responseData type", typeof responseData);
 
+        // url 받아오기
         const imageUrl = responseDate.image?.imageUrl;
-        console.log("이미지 url", imageUrl);
-        console.log("memberID", memberID);
+        setNewImageUrl(imageUrl);
 
-        alert("이미지가 성공적으로 저장되었습니다.");
         if (imageUrl) {
           try {
             console.log("이미지 url", imageUrl);
 
+            // 이미지 url post
             const responseImg = await axios.post(
               "http://localhost:8080/api/image/test/create",
               {
@@ -282,7 +280,6 @@ function DiaryPage() {
                   Authorization: `Bearer ${accessToken}`,
                 },
               }
-              // 두 번째 인수로 데이터 객체를 직접 전달
             );
 
             if (responseImg.status === 200) {
@@ -293,39 +290,6 @@ function DiaryPage() {
           } catch (error) {
             console.log("Error: ", error);
           }
-          // try{
-          //   console.log("이미지가 있으먀ㅕㄴ ");
-          // const apiUrl = "http://localhost:8080/api/image/test/create";
-
-          // const data = {
-          //   imageFile:
-          //     " https://oaidalleapiprodscus.blob.core.windows.net/private/org-tmUJxJaFSEBNq6VZSAMmH6CO/user-szfO9vAIC0LuYBKFCML9LrSc/",
-          //   diaryID: 1,
-          //   dateID: 1,
-          //   promptID: 1,
-          // };
-
-          // const responseImage = await fetch(apiUrl, {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify(data),
-          // })
-          //   .then((responseImage) => {
-          //     if (responseImage.ok) {
-          //       console.log("이미지 URL이 백엔드로 전송되었습니다.");
-          //     } else {
-          //       console.error("이미지 URL 전송 실패:", responseImage.status);
-          //     }
-          //   })
-          //   .catch((error) => {
-          //     console.log("Error: ", error);
-          //   });
-
-          // }catch(err){
-          //   console.log(err);
-          // }
         }
       } else {
         console.error("이미지 저장 실패:", responseDiary.status);
@@ -354,41 +318,6 @@ function DiaryPage() {
   //     styleID: 0,
   //   }),
   // });
-
-  // if (response.ok) {
-  //   const responseData = await response.json();
-  //   console.log("하 십발발");
-  //   console.log("일기:", responseData);
-  //   console.log("responseData type", typeof responseData);
-
-  //   // 이미지 URL을 백엔드로 전송
-  //   const imageUrl = responseData.image?.imageUrl;
-  //   console.log("이미지 url", imageUrl);
-  //   if (imageUrl) {
-  //     console.log("이미지가 있으먀ㅕㄴ ");
-  //     axiosInstance
-  //       .post("/api/image/test/create", {
-  //         imageFile: imageUrl,
-  //         diaryID: 1,
-  //         dateID: "1",
-  //         promptID: 1,
-  //       })
-  //       .then((response) => {
-  //         console.log("이미지 URL이 백엔드로 전송되었습니다.");
-  //       })
-  //       .catch((error) => {
-  //         console.log("Error: ", error);
-  //       });
-  //   }
-
-  //   // 성공 시 사용자에게 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
-  //   alert("일기가 성공적으로 저장되었습니다.");
-  // } else {
-  //   console.error("일기 저장 실패:", response.status);
-
-  //   // 실패 시 사용자에게 에러 메시지를 표시하거나 다른 처리를 진행할 수 있습니다.
-  //   alert("일기 저장에 실패하였습니다.");
-  // }
 
   const handleDelete = () => {
     // 삭제 요청 들어가야함 -- 일기와 합치고 나서 추가적으로 해야 함
@@ -477,7 +406,7 @@ function DiaryPage() {
             </div>
 
             <ManageAIArea>
-              <GeneratedImage />
+              <GeneratedImage newImageUrl={newImageUrl} />
               <RightComponentsContainer>
                 <AIComment />
                 <Sentiment

@@ -19,13 +19,12 @@ const ImageContainer = styled.div`
   }
 `;
 
-const GeneratedImage = () => {
-  const imagePath = "/image01.jpg";
+const GeneratedImage = ({ newImageUrl }) => {
   return (
     <div>
       <h3>생성된 이미지</h3>
       <ImageContainer>
-        <img src={imagePath} alt="Generated" />
+        <img src={newImageUrl} alt="Generated" />
       </ImageContainer>
     </div>
   );
