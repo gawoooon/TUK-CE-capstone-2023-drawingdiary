@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Lottie from "react-lottie";
 import imageLoading from "../../animation/imageLodding.json"
+import ImageStyleLists from "./ImageStyleLists";
 
 const OptionContainer = styled.div`
   width: 450px;
@@ -54,7 +55,7 @@ const ButtonImage = styled.img`
 
 const DropdownContent = styled.div`
     max-height: 200px;
-    width: auto;
+    width: 150px;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: thin;
@@ -98,6 +99,7 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
   const [userGender, setUserGender] = useState("");
 
   const [imageList, setImageList] = useState([]);
+  const [nonDuplicateStyles, setNonDuplicateStyles] = useState([]);
 
   const accessToken = localStorage.getItem('accessToken');
 
@@ -164,8 +166,14 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
 
   useEffect(() => {
     fetchOptionStyle();
+  }, []);
+
+  useEffect(() => {
     onOptionSelect(isSelected);
-  }, [isSelected, onOptionSelect]);
+
+    const filterNonDuplicateStyles = ImageStyleLists.filter(style => !imageList.includes(style));
+    setNonDuplicateStyles(filterNonDuplicateStyles);
+  }, [isSelected, onOptionSelect, imageList]);
 
   return (
       <OptionContainer>
@@ -191,9 +199,9 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
           <DropdownContainer>
             <ButtonImage onClick={toggleDropdown} src="/three-dots.png" alt="plus button" />
             <DropdownContent isOpen={isOpen}>
-              {Array.from({ length: 20 }, (_, index) => (
-                <DropdownItem key={index} onClick={() => handleDropdownOptionSelect(index + 6)}>
-                  {index + 6}
+              {nonDuplicateStyles.map((style, index) => (
+                <DropdownItem key={index} onClick={() => handleDropdownOptionSelect(style)}>
+                  {style}
                 </DropdownItem>
               ))}
             </DropdownContent>
