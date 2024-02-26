@@ -38,5 +38,13 @@ out/
 
 .env
 
-### application.properties(민감한 정보 올라갈거라 스킵함)
+### application.properties ###
+/backend/src/resources/application.properties
+/backend/src/resources/application.yml
+
+### redis ###
+/redis/data/dump.rdb
+
+
+
 

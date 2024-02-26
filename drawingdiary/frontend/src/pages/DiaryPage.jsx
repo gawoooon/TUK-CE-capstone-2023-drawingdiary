@@ -237,7 +237,7 @@ function DiaryPage() {
     try {  
       console.log("일기 내용 저장:", diaryText);
   
-      const apiUrl = "http://localhost:8080/api/diary/test/add";
+      const apiUrl = "http://localhost:5500/api/diary/test/add";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {

@@ -1,5 +1,9 @@
 package com.diary.drawing.diary.dto;
 
+import java.sql.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.diary.drawing.diary.domain.Diary;
 
 import lombok.Builder;
@@ -12,8 +16,8 @@ import lombok.ToString;
 public class DiaryResponseDTO {
     private String text;
     private String weather;
-    private String month;
-    private String day;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date date;
     private Long albumID;
     private String albumName;
     private Long styleID;
@@ -26,8 +30,7 @@ public class DiaryResponseDTO {
         return DiaryResponseDTO.builder()
                 .text(diary.getText())
                 .weather(diary.getWeather())
-                .month(diary.getDate().getMonth())
-                .day(diary.getDate().getDay())
+                .date(diary.getDate())
                 .albumID(diary.getAlbum().getAlbumID())
                 .albumName(diary.getAlbum().getAlbumName())
                 .styleID(diary.getImageStyle().getStyleID())

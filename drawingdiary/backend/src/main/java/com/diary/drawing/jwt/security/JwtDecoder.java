@@ -16,7 +16,6 @@ public class JwtDecoder {
 
     public DecodedJWT decode(String token){
         return JWT.require(Algorithm.HMAC256(properties.getSecretKey()))
-
                 .build()
                 .verify(token);
     }

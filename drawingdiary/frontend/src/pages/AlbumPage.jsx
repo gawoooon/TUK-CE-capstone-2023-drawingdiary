@@ -38,9 +38,6 @@ const AlbumPage = () => {
   const [isAddCategoryVisible, setAddCategoryVisible] = useState(false);
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
 
-  const { memberID } = useAuth();
-  console.log("member id: ", memberID);
-
   const handleAddCategoryButtonClick = () => {
     setIsAddCategoryOpen(true);
   };

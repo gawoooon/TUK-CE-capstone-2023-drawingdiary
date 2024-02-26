@@ -5,6 +5,7 @@ import Button from "../components/button/Button";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import axiosInstance from "../axios/axisoInstance";
+import axios from "axios";
 
 const ContainerStyle = styled.div`
   height: 450px;
@@ -94,7 +95,7 @@ const ChoosePersonality = () => {
     const handleSubmit = () => { 
         if(selected !== null) {
             // 백엔드 api로 데이터 전송
-            axiosInstance.post('/api/updatePersonality', {
+            axios.post('http://localhost:8080/api/updatePersonality', {
                 email: userEmail,
                 personality,
             })

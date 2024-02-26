@@ -10,7 +10,6 @@ import FalseComponent from "../components/FalseComponent";
 import CalendarProfile from "../components/CalendarProfile";
 
 import { GrFormPreviousLink } from "react-icons/gr";
-import { useAuth } from "../auth/context/AuthContext";
 
 const Body = styled.body`
   display: flex;
@@ -35,7 +34,7 @@ const LeftBox = styled.div`
   height: 100%;
   background-color: #f9f9f9;
   border-radius: 30px 0 0 30px;
-  transition: width 0.5s linear;
+  transition: opacity 200ms ease-out, width 200ms ease-out;
   margin-right: 20px;
 `;
 
@@ -59,32 +58,34 @@ const MiddleBox = styled.div`
   border-radius: 0 30px 30px 0;
   padding: 40px 10px;
   box-sizing: border-box;
-  transition: width 0.5s linear;
+  transition: opacity 200ms ease-out, width 200ms ease-out;
 `;
 
 const RightBox = styled.div`
   display: flex;
-  visibility: ${({ showRightBox }) => (showRightBox ? "visible" : "hidden")};
+  opacity: ${({ showRightBox }) => (showRightBox ? 1 : 0)};
   width: ${({ rightBoxWidth }) => rightBoxWidth};
   flex-direction: column;
   height: 100%;
   padding: 40px 0;
   border-radius: 0 30px 30px 0;
-  transition: width 0.5s linear;
+  transition: opacity 1s ease-out, width 200ms ease-out;
   box-sizing: border-box;
+  overflow: hidden; // 내용이 max-height를 넘어가지 않도록 설정
+  max-height: ${({ showRightBox }) => (showRightBox ? "1000px" : "0")}; // 점차적으로 높이가 늘어나게 설정
 `;
 
 const PrevBtn = styled.button`
   display: ${({ prevBtnBox }) => (prevBtnBox ? "display" : "none")};
-  width: 5%;
-  height: 5%;
+  width: 10px;
+  height: 10px;
   font-size: 50px;
   color: #090071;
   border: none;
   outline: none;
   cursor: pointer;
   background: transparent;
-  transition: width 0.5s linear;
+  transition: width 200ms linear;
 `;
 
 const ResultBox = styled.div`
@@ -93,10 +94,6 @@ const ResultBox = styled.div`
 `;
 
 function CalendarPage() {
-
-  // 여기서 추가해서 살펴보자
-  const { memberID } = useAuth();
-  console.log("member id: ", memberID);
 
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
@@ -107,8 +104,10 @@ function CalendarPage() {
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
   const [prevBtnBox, setPrevBtnBox] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleDateClick = async (day) => {
+
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
       setLeftBoxWidth("25%");
@@ -118,17 +117,18 @@ function CalendarPage() {
       setShowProfileBox(true);
       setSelectedDateHasData(false);
       setPrevBtnBox(false);
+      setIsOpen(true);
     } else {
       setShowRightBox(true);
       setShowProfileBox(false);
-      setLeftBoxWidth("10%");
-      setMiddleBoxWidth("60%");
-      setRightBoxWidth("30%");
+      setLeftBoxWidth("7%");
+      setMiddleBoxWidth("65%");
+      setRightBoxWidth("28%");
       setSelectedDate(day); // selectedDate 상태 업데이트
       setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
       setPrevBtnBox(true);
-
       setIsLoading(true); // 데이터 로딩 시작
+      setIsOpen(false);
     }
   };
 
@@ -180,7 +180,7 @@ function CalendarPage() {
 
           // 데이터 확인 결과에 따라 상태 업데이트
           setSelectedDateHasData(hasData);
-          console.log("data:", hasData);
+          // console.log("data:", hasData);
         } catch (error) {
           console.error("Error fetching data:", error);
           // 에러가 발생하면 데이터가 없는 것으로 간주
@@ -199,12 +199,12 @@ function CalendarPage() {
       <Body>
         <CalendarBox>
           <LeftBox leftBoxWidth={leftBoxWidth}>
-            <LeftTopBox>
+            {/* <LeftTopBox>
               <ProfileBox showProfileBox={showProfileBox}>
                 <CalendarProfile />
               </ProfileBox>
-            </LeftTopBox>
-            <SideBar />
+            </LeftTopBox> */}
+            <SideBar isOpen={isOpen} />
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
             <Calendar2

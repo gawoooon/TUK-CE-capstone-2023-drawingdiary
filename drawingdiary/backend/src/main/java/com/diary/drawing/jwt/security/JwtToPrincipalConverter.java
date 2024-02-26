@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.diary.drawing.jwt.model.PrincipalDetails;
+import com.diary.drawing.jwt.domain.PrincipalDetails;
 
 
 @Component

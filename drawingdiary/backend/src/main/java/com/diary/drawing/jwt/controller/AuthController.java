@@ -1,54 +1,96 @@
 package com.diary.drawing.jwt.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.diary.drawing.jwt.domain.PrincipalDetails;
 import com.diary.drawing.jwt.dto.LoginRequestDTO;
 import com.diary.drawing.jwt.dto.LoginResponseDTO;
-import com.diary.drawing.jwt.model.PrincipalDetails;
+import com.diary.drawing.jwt.exception.authExceptionType;
+import com.diary.drawing.jwt.exception.authResponseException;
+import com.diary.drawing.jwt.security.JwtAuthenticationFilter;
+import com.diary.drawing.jwt.security.JwtDecoder;
 import com.diary.drawing.jwt.security.JwtIssuer;
+import com.diary.drawing.jwt.service.AuthService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 
 @Tag(name = "Auth", description = "Auth API")
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
     private final JwtIssuer jwtIssuer;  // 최종적인 값이므로 final 자동 생성자 RequiredArgsConstructor
+    private final JwtDecoder jwtDecoder;
     private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @PostMapping("/auth/login")
+
+    /* 로그인 */
+    @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO request){
-        // 1. 사용자 인증 (로그인 요청할때 secrity를 통함)
+        // 1. 사용자 인증 (로그인 요청할때 security를 통함)
         // token 객체를 인자로 받음
         var authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken((request.getEmail()), request.getPassword())
         );
+        // 2. 인증된 사용자의 세부 정보 가져오기
+        // Authentication 객체의 getPrincipal 메소드를 통해 인증된 사용자의 세부 정보 get
         var principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
+        // 3. 사용자 권한 가져오기
         var roles = principalDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        var token = jwtIssuer.issue(principalDetails.getMemberID(), principalDetails.getEmail(), roles);
+        // 4. jwt 토큰 발급
+        String accessToken = jwtIssuer.createAccessToken(principalDetails.getMemberID(), principalDetails.getEmail(), roles);
+        String refreshToken = jwtIssuer.createRefreshToken(principalDetails.getMemberID(), principalDetails.getEmail(), roles);
+
+        // 5. 발급받은 refreshToken은 redis에 저장
+        authService.saveToken(principalDetails.getMemberID(), refreshToken);
+
         return LoginResponseDTO.builder()
-            .accessToken(token)
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
             .memberID(principalDetails.getMemberID())
             .build();
     }
 
-    @PostMapping("/auth/checking")
-    public String check(@RequestBody @Validated LoginRequestDTO request){
+    /* refreshToken으로 accessToken 재발급 */
+    // 원래 만료된 accesstoken으로 사용자 확인 해야해서 같이 보내줘야함
+    @GetMapping("/refresh")
+    public ResponseEntity<LoginResponseDTO> refresh(HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
+  
+        var refreshToken = request.getHeader("Authorization").substring(7);
         
-        return request.getEmail() + request.getPassword();
+        if (principalDetails != null){
+                String accessToken = authService.reissueAccessToken(refreshToken, principalDetails.getMemberID());
+                // 응답 생성
+                LoginResponseDTO response = LoginResponseDTO.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .memberID(principalDetails.getMemberID())
+                    .build();
+                return ResponseEntity.ok(response);
+        }
+        
+        // 유효하지 않은 refreshToken에 대한 처리
+        throw new authResponseException(authExceptionType.WRONG_REFRESHTOKEN);
     }
+
     
     
 }

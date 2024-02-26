@@ -5,7 +5,7 @@ import { useCategory } from "./CategoryList";
 const CategoryStyle = styled.select`
     width: 220px;
     height: 50px;
-    margin: 0px 50px 0px 20px;
+    margin: 10px 50px 10px 20px;
     padding-left: 20px;
     font-size: 18px;
     border: none;

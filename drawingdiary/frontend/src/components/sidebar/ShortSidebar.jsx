@@ -15,6 +15,7 @@ const ShortSideBarStyle = styled.div`
 
     &:hover{
         height: 400px;
+        background-color: #ececec;
     }
 
 `;
@@ -41,6 +42,7 @@ const LinkStyle = styled.a`
     ${ShortSideBarStyle}:hover & {
         opacity: 1;
     }
+    
 
 `;
 

@@ -1,6 +1,7 @@
 package com.diary.drawing.common;
 
 public class DefaultResponse<T> {
+    
 
     private static final String SUCCESS_STATUS = "success";
 

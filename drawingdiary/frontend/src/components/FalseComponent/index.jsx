@@ -9,17 +9,18 @@ const ResultBox = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  transition: width 0.5s linear;
+  transition: opacity 800ms ease-out;
 `;
 
 const TopBox = styled.div`
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 800;
   color: #090071;
+  display: flex;
 `;
 
 const MiddleBox = styled.div`
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 800;
   color: #090071;
   padding: 10px 0px;
@@ -27,7 +28,7 @@ const MiddleBox = styled.div`
 `;
 
 const AddBtn = styled.button`
-  width: 150px;
+  width: 120px;
   height: 50px;
   border: none;
   outline: none;
@@ -38,6 +39,7 @@ const AddBtn = styled.button`
   cursor: pointer;
   box-shadow: 0 5px 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 15px;
+  margin-top: 20px;
 `;
 
 function FalseComponent({ year, month, day }) {
@@ -53,7 +55,7 @@ function FalseComponent({ year, month, day }) {
       <TopBox>
         {month}월{day}일
       </TopBox>
-      <MiddleBox>아직 작성된 일기가 없어요</MiddleBox>
+      <MiddleBox>일기를 작성하세요.</MiddleBox>
 
       <AddBtn onClick={handleAdd}>추가하기</AddBtn>
     </ResultBox>

@@ -1,5 +1,7 @@
 package com.diary.drawing.diary.dto;
 
+import java.sql.Date;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -8,6 +10,6 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 public class CreateDiaryRequestDTO {
-    private Long dateID;
+    private Date date;
     private Long memberID;
 }

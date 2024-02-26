@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import WeatherTypes from "./WeatherTypes";
 
 const WeatherContainer = styled.div`
     width: 287px;
@@ -19,9 +20,10 @@ const WeatherContent = styled.div`
 `;
 
 const WeatherImage = styled.img`
-    width: 50px;
-    height: 50px;
-    margin-right: 5px;
+    width: 24px;
+    height: 24px;
+    margin-right: 20px;
+    margin-top: 3px;
 `;
 
 const DateText = styled.text`
@@ -48,14 +50,35 @@ const Weather = ({ date }) => {
         return `${months[newDate.getMonth()]} ${newDate.getDate()}일 ${dayOfWeek}`;
     };
 
-    async function getWeather(lat, lon, date) {
-        const apiKey = process.env.REACT_APP_WEATHER_KEY;
+    // 날씨 상태 코드를 기반으로 날씨 상태 문자열을 반환하는 함수
+    const getWeatherState = (weatherId) => {
+        for(const [state, codes] of Object.entries(WeatherTypes)) {
+            if (codes.includes(weatherId)) {
+                console.log("state : ", state);
+                return state;
+            }
+        }
+        return "Unknown";
+    };
 
+
+    const getWeather = useCallback(async (lat, lon) => {
+        const apiKey = process.env.REACT_APP_WEATHER_KEY;
+        let weatherIconSrc = "";
+        
+        // 추가할 것 :
+        /*
+        1. 만약 diary 데이터베이스에 새로 추가되는 데이터 값들이라면
+            날씨를 새로 생성하고 나서 날씨 description이나, weatherID를 저장하도록 해야함
+            2. 만약 이미 존재하는 diary를 조회할 때에는 날씨를 새로 생성하지 않도록 추가적인 작업이 필요함. 
+            3. 예보를 찾는 과정에서 이러한 로직이 추가될 필요가 있음.
+            => getWeather함수와 useEffect 부분 수정 필요함.
+            */
         try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+           const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`);
             const data = await response.json();
 
-            const requestedDateUTC = date;
+            const requestedDateUTC = new Date(date.year, date.month - 1, date.day);
 
             // 가장 가까운 예보 찾기
             let closestForecast = data.list.reduce((acc, forecast) => {
@@ -66,28 +89,34 @@ const Weather = ({ date }) => {
                 }
                 return acc;
             }, null);
-
+            
             if (closestForecast && closestForecast.forecast) {
-                const weatherIcon = closestForecast.forecast.weather[0].icon;
-                const weatherIconUrl = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
-                setWeather({ icon: weatherIconUrl });
+                
+                // 자세한 날씨 : weather - description ex) 맑음 이런식으로 출력됨
+                const weatherDescription = closestForecast.forecast.weather[0].description.replace(/\s+/g, '').toLowerCase();
+                const weatherID = closestForecast.forecast.weather[0].id; // weather id 불러오기
+                console.log("weather id: ", weatherID);
+
+                // weatherType 객체와 매핑
+                const weatherState = getWeatherState(weatherID);
+                weatherIconSrc = `/weather/${weatherState}.png`;
+
+                setWeather({ icon: weatherIconSrc });
             } else {
                 console.log("No forecast data found for the specified date and time");
             }
         } catch (error) {
-        console.error("Error fetching weather forecast: ", error);
+            console.error("Error fetching weather forecast: ", error);
         } finally {
         setLoading(false);
         }
-    }
-
+    }, [date]);
+    
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
         (position) => {
             if (date) {
-                const formattedDate = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}T15:00:00Z`;
-                const requestedDate = new Date(formattedDate);
-                getWeather(position.coords.latitude, position.coords.longitude, requestedDate);
+                getWeather(position.coords.latitude, position.coords.longitude);
             }
         },
         (err) => {
@@ -95,7 +124,7 @@ const Weather = ({ date }) => {
             setLoading(false);
         }
         );
-    }, [date]);
+    }, [date, getWeather]);
 
     return (
         <WeatherContainer>

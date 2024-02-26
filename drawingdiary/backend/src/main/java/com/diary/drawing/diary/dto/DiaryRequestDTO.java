@@ -1,5 +1,9 @@
 package com.diary.drawing.diary.dto;
 
+import java.sql.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,8 +27,9 @@ public class DiaryRequestDTO {
     @NotNull(message = "날씨가 전송되지 않았습니다.")
     private String weather;
 
-    @NotNull(message = "날짜 ID가 전송되지 않았습니다.")
-    private Long dateID;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "날짜가 전송되지 않았습니다.")
+    private Date date;
 
     private Long albumID;   // null 가능
 
