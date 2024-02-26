@@ -91,16 +91,6 @@ const ProfileEmail = styled.div`
   font-size: 13px; // 프로필 이름의 폰트 크기 설정
 `;
 
-  const SignOut = styled.div`
-    width: 20px;
-    height: 20px;
-    padding-left: 20px;
-
-    img {
-      margin-right: 12px;
-    }
-  `;
-
 const SignOutButton = styled(MenuItem)`
   display: flex;
   align-items: center;

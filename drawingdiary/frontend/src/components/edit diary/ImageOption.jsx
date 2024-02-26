@@ -103,6 +103,7 @@ const ImageOption = ({ onOptionSelect }) => {
   };
 
   useEffect(() => {
+  
     // 옵션 선택 시 상위 컴포넌트로 상태 전달
     onOptionSelect(isSelected);
   }, [isSelected, onOptionSelect]);
