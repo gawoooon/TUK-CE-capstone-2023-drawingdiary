@@ -84,26 +84,6 @@ const jumpAnimation = keyframes`
     100% { transform: translateY(0); }
 `;
 
-const RemoveButtonStyle = styled.button`
-  height: 50px;
-  width: 250px;
-  margin-bottom: 30px;
-  background-color: rgba(255, 184, 208, 0.5);
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border: none;
-  cursor: pointer;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
-  animation: ${(props) =>
-    props.animate
-      ? css`
-          ${jumpAnimation} 0.5s ease
-        `
-      : "none"};
-`;
-
 const SaveButtonStyle = styled.button`
   height: 50px;
   width: 250px;
@@ -151,11 +131,9 @@ function DiaryPage() {
 
   // message 부분
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
   const [showInitialMessage, setShowInitialMessage] = useState(true);
 
   const [animateSaveBtn, setAnimateSaveBtn] = useState(false);
-  const [animateDeleteBtn, setAnimateDeleteBtn] = useState(false);
 
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
@@ -332,19 +310,6 @@ function DiaryPage() {
   //     styleID: 0,
   //   }),
   // });
-
-  const handleDelete = () => {
-    // 삭제 요청 들어가야함 -- 일기와 합치고 나서 추가적으로 해야 함
-    setAnimateDeleteBtn(true);
-    setTimeout(() => {
-      setAnimateDeleteBtn(false);
-    }, 500);
-
-    setShowDelete(true);
-    setTimeout(() => {
-      setShowDelete(false);
-    }, 5000);
-  };
 
   return (
     <div>
