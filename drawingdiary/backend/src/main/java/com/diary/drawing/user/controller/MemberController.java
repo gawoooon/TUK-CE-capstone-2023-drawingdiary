@@ -71,9 +71,10 @@ public class MemberController {
         throw new MemberResponseException(MemberExceptionType.ERROR_GET_MEMBER);
     }
     
-    // 회원가입 token 안쓰길래 여기에 구현
-    // 검증을 위한 valid 추가
-    //https://ttl-blog.tistory.com/290 참고
+
+    /*  회원가입 api
+     *  @param : MemberJoinDTO
+     */
     @Operation(summary = "회원가입", description = "회원가입")
     @PostMapping("/join")
     public void add(@Valid @RequestBody MemberJoinDTO memberDTO) throws Exception{
