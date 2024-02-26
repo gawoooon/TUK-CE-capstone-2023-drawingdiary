@@ -1,6 +1,6 @@
-import cors from 'cors';
-import express, { json } from 'express';
-import axios from 'axios'; // axios 추가
+import cors from "cors";
+import express, { json } from "express";
+import axios from "axios"; // axios 추가
 
 const app = express();
 
@@ -27,5 +27,5 @@ app.use(json());
 // });
 
 app.listen(8080, () => {
-    console.log('Server is running on port 8080');
+  console.log("Server is running on port 8080");
 });

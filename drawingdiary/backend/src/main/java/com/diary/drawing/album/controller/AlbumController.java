@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,12 +41,22 @@ public class AlbumController {
     @Autowired
     private MemberRepository memberRepository;
 
-    // 앨범 추가 api
+    /* 앨범 추가
+     * @api = "/api/album")
+     * @param albumname
+     */
     @Operation(summary = "앨범 추가")
-    @PostMapping("/add")
-    public void add (@Valid @RequestBody AlbumRequestDTO albumDTO) throws Exception{
+    @PostMapping
+    public void addAlbum(@Valid @RequestBody AlbumRequestDTO albumDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
 
-        albumService.addAlbum(albumDTO);
+        albumService.addAlbum(albumDTO, principalDetails.getMemberID());
+    }
+
+    /* 토큰으로 앨범 삭제 api */
+    @Operation(summary = "멤버별 앨범 리스트")
+    @DeleteMapping("/{albumID}")
+    public ResponseEntity<?> deleteAlbum(@PathVariable Long albumID, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        return albumService.deleteAlbum(albumID, principalDetails.getMemberID());
     }
 
     // 앨범 리스트 넘겨주는 api

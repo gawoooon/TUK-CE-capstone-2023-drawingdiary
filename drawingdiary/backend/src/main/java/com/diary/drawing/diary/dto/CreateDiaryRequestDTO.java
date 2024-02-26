@@ -1,6 +1,6 @@
 package com.diary.drawing.diary.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 public class CreateDiaryRequestDTO {
-    private Date date;
+    private LocalDate date;
     private Long memberID;
 }

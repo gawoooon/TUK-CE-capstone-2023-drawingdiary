@@ -1,7 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import Lottie from "react-lottie";
+import imageLodding from "../../animation/imageLodding.json";
+import { RiImageAddLine } from "react-icons/ri";
 
 const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 760px;
   height: 760px;
   background-color: #fff;
@@ -11,21 +18,40 @@ const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 30px;
-  }
+`;
+const ImageBox = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
 `;
 
-const GeneratedImage = () => {
-  const imagePath = "/image01.jpg";
+const GeneratedImage = ({ isLoading, newImageUrl }) => {
+  const LoddingOptions = {
+    loop: true, // 애니메이션 반복
+    autoplay: true, // 페이지 로딩 후 바로 재생
+    animationData: imageLodding,
+  };
+
   return (
     <div>
       <h3>생성된 이미지</h3>
       <ImageContainer>
-        <img src={imagePath} alt="Generated" />
+        {isLoading ? (
+          // 로딩 중일 때는 Lottie 애니메이션
+          <Lottie
+            isClickToPauseDisabled
+            options={LoddingOptions}
+            height={500}
+            width={500}
+          />
+        ) : newImageUrl ? (
+          // 로딩이 완료되고 이미지가 존재할 때 이미지 표시
+          <ImageBox src={newImageUrl} alt="Generated Image" />
+        ) : (
+          // 이미지가 존재하지 않을 때 다른 컴포넌트 표시
+          <RiImageAddLine size="100" color="#a5bdff" />
+        )}
       </ImageContainer>
     </div>
   );

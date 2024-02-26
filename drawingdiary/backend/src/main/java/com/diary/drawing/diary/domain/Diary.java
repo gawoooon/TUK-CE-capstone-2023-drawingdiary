@@ -1,6 +1,6 @@
 package com.diary.drawing.diary.domain;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -45,7 +45,7 @@ public class Diary extends BaseTime{
     private Weather weather;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)  // 여러 다이어리와 하나의 앨범
     @JoinColumn(name = "albumID") // 외부키 references from albumid
@@ -74,7 +74,7 @@ public class Diary extends BaseTime{
     
 
     @Builder
-    public Diary(String text, String weather, Date date, Album album, Member member, ImageStyle imageStyle){
+    public Diary(String text, String weather, LocalDate date, Album album, Member member, ImageStyle imageStyle){
         this.text = text;
         this.weather=Weather.valueOf(weather);
         this.date=date;

@@ -1,6 +1,6 @@
 package com.diary.drawing.user.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class GetMemberDTO {
 
     private String email;
 
-    private Date birth;
+    private LocalDate birth;
 
     private char gender;
 

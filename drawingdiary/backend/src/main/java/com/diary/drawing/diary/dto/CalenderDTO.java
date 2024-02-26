@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -11,18 +13,23 @@ import lombok.ToString;
 @Getter
 @RequiredArgsConstructor
 @ToString
-public class ImageForAlbumDTO {
-    private Long imageID;
-    private String imageFile;
+public class CalenderDTO {
+    @Valid
+
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    private Long diaryID;
 
-    public ImageForAlbumDTO(Long imageID, String imageFile, LocalDate date, Long diaryID){
-        this.imageID = imageID;
-        this.imageFile = imageFile;
+    @NotNull
+    private String imageFile;
+
+    private String text;
+
+
+    public CalenderDTO(LocalDate date, String imageFile, String text){
         this.date = date;
-        this.diaryID = diaryID;
+        this.imageFile = imageFile;
+        this.text = text;
     }
 
 }
