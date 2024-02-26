@@ -14,10 +14,6 @@ import MyPage from "./pages/MyPage.jsx";
 import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
 
-// // axios 설정 부분
-// axios.defaults.baseURL = 'http://localhost:8080';
-// axios.defaults.withCredentials = true;
-
 function App() {
   return (
     <Router>

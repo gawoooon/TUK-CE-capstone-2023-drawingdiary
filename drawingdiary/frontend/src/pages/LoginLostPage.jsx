@@ -103,7 +103,7 @@ function LoginLostPage() {
               <LoginBtn text="전송" onClick={handleLogin} />
             </RightBox>
           </PasswdBox>
-          <LoginBtn2 to="/calendar">로그인</LoginBtn2>
+          <LoginBtn2 to="/">로그인</LoginBtn2>
         </LoginBox>
       </Body>
     </Background>

@@ -11,6 +11,10 @@ import com.diary.drawing.sentiment.domain.Sentiment;
 import com.diary.drawing.sentiment.dto.SentimentDTO;
 import com.diary.drawing.sentiment.repository.SentimentRepository;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import lombok.RequiredArgsConstructor;
 
 @Transactional(readOnly = true)
@@ -18,6 +22,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class SentimentService {
     private final SentimentRepository sentimentRepository;
+
+    @Value("${naver.api.key.id}")
+    private String apiKeyId;
+
+    @Value("${naver.api.key}")
+    private String apiKey;
 
     public Sentiment validatSentiment(Long sentimentID) {
         return sentimentRepository.findBySentimentID(sentimentID)
@@ -32,8 +42,8 @@ public class SentimentService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("X-NCP-APIGW-API-KEY-ID", "ksnv4tfdvd");
-        headers.set("X-NCP-APIGW-API-KEY", "fcVwyGMNR7eJjAPDbMDZxdsOobEl1jHlvsS6RAC8");
+        headers.set("X-NCP-APIGW-API-KEY-ID", apiKeyId);
+        headers.set("X-NCP-APIGW-API-KEY", apiKey);
 
         String requestJson = "{\"content\": \"" + text + "\"}";
 

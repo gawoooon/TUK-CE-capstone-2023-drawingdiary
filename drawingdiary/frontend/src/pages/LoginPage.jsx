@@ -9,6 +9,7 @@ import LoginBtn from "../components/LoginBtn";
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 import axiosInstance from "../axios/axisoInstance";
+import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
 
 const Body = styled.body`
@@ -72,24 +73,50 @@ const LoginLostBtn = styled(Link)`
   padding-top: 10px;
 `;
 
+const ErrorMessageContainer = styled.div`
+  margin: 0 0 3px 20px;
+  min-height: 20px;
+`;
+
+const ErrorMessage = styled.text`
+  font-size: 12px;
+  font-weight: bold;
+  color: gray;
+  font-weight: bold;
+`;
+
 function LoginPage() {
 
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const { login } = useAuth();
 
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    try {
-      const { data } = await axiosInstance.post('/auth/login', { email, password });
-      login(data.accessToken, data.memberID);
+    axios.post('http://localhost:8080/api/login', {
+      email,
+      password,
+    })
+    .then(response => {
+      login(response.data.accessToken, response.data.memberID);
       navigate("/calendar");
-    } catch (error) {
-      console.log("로그인 실패: ", error);
-    }
+    })
+    .catch(error => {
+      console.log("에러 status: ",error.code);
+      if(error.response && error.response.status === 500) {
+        console.log('로그인 실패: 잘못된 자격증명입니다.');
+      } else if(error.response && error.response.status === 403) {
+        setErrorMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
+        console.log('Error: ', error.response.data.message);
+      } 
+      else {
+        console.log('Error: ', error);
+      }
+    })
   };
 
   return (
@@ -100,6 +127,9 @@ function LoginPage() {
           <LeftBox>
             <LoginBar icon={<IoMdPerson />} text="아이디" onChange={(e) => setEmail(e.target.value)}></LoginBar>
             <LoginBar icon={<FaLock />} text="비밀번호" type="password" onChange={(e) => setPassword(e.target.value)}></LoginBar>
+            <ErrorMessageContainer>
+                {errorMessage && ( <ErrorMessage> {errorMessage} </ErrorMessage> )}
+            </ErrorMessageContainer>
             <JoinBtn to="/join">회원가입</JoinBtn>
           </LeftBox>
           <RightBox>
