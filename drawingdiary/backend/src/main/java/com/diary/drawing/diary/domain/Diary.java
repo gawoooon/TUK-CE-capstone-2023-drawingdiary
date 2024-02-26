@@ -38,7 +38,7 @@ public class Diary extends BaseTime{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diaryID;
 
-    @Column(length = 5000)
+    @Column(length = 300)
     private String text;
 
     @Enumerated(EnumType.STRING)

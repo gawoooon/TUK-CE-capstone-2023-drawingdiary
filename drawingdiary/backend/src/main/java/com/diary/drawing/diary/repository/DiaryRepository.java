@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.diary.drawing.album.domain.Album;
@@ -17,5 +18,10 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>{
     Diary findByDiaryID(Long diaryID);
     List<Diary> findByAlbum(Album album);
     Optional<Diary> findByDateAndMember(LocalDate date, Member member);
-    List<Diary> findByDateBetween(LocalDate startdate, LocalDate enddate);
+
+    @Query("SELECT d FROM Diary d WHERE d.member = :member AND d.date BETWEEN :startDate AND :endDate")
+    List<Diary> findByMemberAndDateBetween(Member member, LocalDate startDate, LocalDate endDate);
+
 }
+
+
