@@ -35,9 +35,8 @@ const useCategoryList = () => {
  
         if (newCategory && !categoryList.some(category => category.albumName === newCategory)) {
             try {
-                await axiosInstance.post('/api/album/add', {
+                await axiosInstance.post('/api/album', {
                     albumName: newCategory,
-                    memberID: memberID,
                 }, {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
