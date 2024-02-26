@@ -163,6 +163,9 @@ function DiaryPage() {
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
 
+  // const [newDiaryText, setNewDiaryText] = useState('');
+  const newDiaryText = '';
+
   // 페이지 로딩 시 초기 메시지를 5초간 표시
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -183,8 +186,14 @@ function DiaryPage() {
 
       // 응답에서 감정분석 결과 추출
       const { positive, negative, neutral } = response.data.document.confidence;
+      console.log(response.data.document);
+      const sentimentResult = response.data.document.sentiment;
+      
+      newDiaryText = diaryText + sentimentResult;
 
-      // 소수점 두 자리까지 반올림하여 상태 업데이트
+      console.log(newDiaryText);
+
+      // 소수점 두 자리까지 반올림하여 상태 업데이트 -- 어떤 값이 가장 큰지 비교해야 함
       setPositiveValue(Math.round(positive * 100) / 100);
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);

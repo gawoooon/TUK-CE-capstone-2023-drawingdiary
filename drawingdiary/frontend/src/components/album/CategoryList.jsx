@@ -52,8 +52,22 @@ const useCategoryList = () => {
     };
 
     //카테고리 삭제 함수
-    const removeCategory = (categoryToRemove) => {
-        setCategoryList((prevList) => prevList.filter(category => category !== categoryToRemove));
+    const removeCategory = async (categoryToRemove) => {
+
+        if(categoryToRemove) {
+            try {
+                await axiosInstance.delete(`/api/album/${categoryToRemove.albumID}`, {
+                    headers : {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                // 성공적으로 카테고리 삭제 후 리스트를 다시 불러옴
+                fetchCategoryList();
+            } catch (error) {
+                console.log("카테고리 삭제 중 에러 발생: ", error);
+            }
+        }
+
     };
 
     return { categoryList, addCategory,  removeCategory };
