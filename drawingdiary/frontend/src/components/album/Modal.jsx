@@ -15,7 +15,7 @@ const ModalBackground = styled.div`
 `;
 const ModalStyle = styled.div`
     width: 350px;
-    height: 180px;
+    height: 230px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -31,6 +31,10 @@ const ModalStyle = styled.div`
     align-items: center;
     font-size: 20px;
     font-weight: bold;
+
+    img {
+        margin-bottom: 30px;
+    }
 `;
 
 const ButtonContainer = styled.div`
@@ -66,6 +70,7 @@ const Modal = ({ isOpen, onClose, onConfirm }) => {
     return (
         <ModalBackground>
             <ModalStyle>
+                <img src="trash.png" />
                 <p>앨범을 삭제하시겠습니까?</p>
                 <ButtonContainer>
                     <YesStyle onClick={onConfirm}>예</YesStyle>
