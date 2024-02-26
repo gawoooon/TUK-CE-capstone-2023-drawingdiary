@@ -23,7 +23,6 @@ const WeatherImage = styled.img`
     width: 24px;
     height: 24px;
     margin-right: 20px;
-    margin-top: 3px;
 `;
 
 const DateText = styled.text`
@@ -36,6 +35,7 @@ const LoadingImage = styled.img`
     height: 30px;
     margin-left: 5px;
     margin-right: 20px;
+    
 `;
 
 const Weather = ({ date }) => {

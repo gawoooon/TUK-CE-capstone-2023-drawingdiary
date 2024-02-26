@@ -377,12 +377,6 @@ function DiaryPage() {
                   일기가 성공적으로 생성되었습니다!
                 </MessageText>
               )}
-
-              {showDelete && (
-                <MessageText color="#ff0000">
-                  일기가 삭제되었습니다.
-                </MessageText>
-              )}
             </MessageContainer>
 
             <EditDiaryArea>
@@ -398,14 +392,6 @@ function DiaryPage() {
                 justifyContent: "space-between",
               }}
             >
-              <ButtonContainer>
-                <RemoveButtonStyle
-                  onClick={handleDelete}
-                  animate={animateDeleteBtn}
-                >
-                  삭제
-                </RemoveButtonStyle>
-              </ButtonContainer>
 
               <ButtonContainer>
                 <SaveButtonStyle

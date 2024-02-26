@@ -155,7 +155,6 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
       if (styleResponse.ok) {
         const styleData = await styleResponse.json();
         setImageList(styleData.predicted_styles);
-        console.log(styleData);
       } else {
         console.log("스타일을 불러오는 중 에러가 발생했습니다.");
       }
@@ -166,7 +165,7 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
 
   useEffect(() => {
     fetchOptionStyle();
-  }, []);
+  });
 
   useEffect(() => {
     onOptionSelect(isSelected);

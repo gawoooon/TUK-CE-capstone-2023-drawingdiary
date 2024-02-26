@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import styled from "styled-components";
-import axiosInstance from '../axios/axisoInstance';
 import axios from 'axios';
 import Background from "../components/Background";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +39,8 @@ const EmailInputStyle = styled.input`
   padding-left: 10px;
   border: 1px solid #909090;
   border-radius: 10px;
+  outline: none;
+  font-size: 13px;
 `;
 
 const SelectMonthContainer = styled.select`
@@ -78,6 +79,8 @@ const ConfilmPasswordStyle = styled.input`
   padding-left: 10px;
   border: 1px solid #909090;
   border-radius: 10px;
+  outline: none;
+  font-size: 13px;
 `;
 
 const ButtonContainer = styled.div `
