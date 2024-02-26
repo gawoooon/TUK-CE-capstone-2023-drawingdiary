@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Lottie from "react-lottie";
+import imageLoading from "../../animation/imageLodding.json"
 
 const OptionContainer = styled.div`
   width: 450px;
@@ -80,7 +82,12 @@ const DropdownItem = styled.a`
   }
 `;
 
-const ImageOption = ({ onOptionSelect }) => {
+const ImageOption = ({ onOptionSelect, isLoading }) => {
+  const LoadingOptions = {
+    loop:true,
+    autoplay: true,
+    animationData: imageLoading,
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [selectedButtonStyle, setSelectedButtonStyle] = useState(null);
   const [selectedDropdownOption, setSelectedDropdownOption] = useState(null);
@@ -145,6 +152,7 @@ const ImageOption = ({ onOptionSelect }) => {
       
       if (styleResponse.ok) {
         const styleData = await styleResponse.json();
+        setImageList(styleData.predicted_styles);
         console.log(styleData);
       } else {
         console.log("스타일을 불러오는 중 에러가 발생했습니다.");
@@ -165,11 +173,15 @@ const ImageOption = ({ onOptionSelect }) => {
         <SelectedStyle>
           선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : selectedDropdownOption !== null ? selectedDropdownOption : "없음"}
         </SelectedStyle>
-        {Array.from({ length: 5 }, (_, index) => (
-          <ButtonStyle key={index} isSelected={selectedButtonStyle === index + 1} onClick={() => handleButtonStyleSelect(index + 1)}>
-            {index + 1}
-          </ButtonStyle>
-        ))}
+        {isLoading ? (
+          <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={100} width={100} />
+        ) : (
+          imageList.map((style, index) => (
+            <ButtonStyle key={index} isSelected={selectedButtonStyle === style} onClick={() => handleButtonStyleSelect(style)}>
+              {style}
+            </ButtonStyle>
+          ))
+        )}
 
         <div>
           <TextStyle>

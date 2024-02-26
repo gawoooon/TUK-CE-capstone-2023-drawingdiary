@@ -387,7 +387,7 @@ function DiaryPage() {
 
             <EditDiaryArea>
               <EditDiary onDiaryTextChange={handleDiaryTextChange} />
-              <ImageOption onOptionSelect={handleOptionSelect} />
+              <ImageOption onOptionSelect={handleOptionSelect} isLoading={isLoading}/>
             </EditDiaryArea>
 
             <div
