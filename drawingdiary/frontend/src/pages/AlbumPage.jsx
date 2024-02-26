@@ -6,7 +6,6 @@ import Button from "../components/button/Button";
 import { useState } from "react";
 import AddCategory from "../components/album/AddCategory";
 import { CategoryProvider } from "../components/album/CategoryList";
-import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.div`
   width: 100vw;

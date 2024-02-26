@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
 const ShortSideBarStyle = styled.div`
-    height: 80px;
     width: 80px;
+    height: 80px;
     position: fixed;
+    z-index: 9999;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: rgba(249, 249, 249, 0.2);

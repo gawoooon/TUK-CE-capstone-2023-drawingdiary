@@ -189,9 +189,9 @@ function DiaryPage() {
       console.log(response.data.document);
       const sentimentResult = response.data.document.sentiment;
       
-      newDiaryText = diaryText + sentimentResult;
+      // newDiaryText = diaryText + sentimentResult;
 
-      console.log(newDiaryText);
+      // console.log(newDiaryText);
 
       // 소수점 두 자리까지 반올림하여 상태 업데이트 -- 어떤 값이 가장 큰지 비교해야 함
       setPositiveValue(Math.round(positive * 100) / 100);

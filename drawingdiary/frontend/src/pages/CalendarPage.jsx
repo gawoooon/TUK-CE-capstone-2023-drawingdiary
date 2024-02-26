@@ -7,7 +7,6 @@ import Calendar2 from "../components/Calendar2";
 import SideBar from "../components/sidebar/SideBar";
 import TrueComponent from "../components/TrueComponent";
 import FalseComponent from "../components/FalseComponent";
-import CalendarProfile from "../components/CalendarProfile";
 
 import { GrFormPreviousLink } from "react-icons/gr";
 
@@ -38,18 +37,6 @@ const LeftBox = styled.div`
   margin-right: 20px;
 `;
 
-const LeftTopBox = styled.div`
-  display: flex;
-  width: 100%;
-  height: 25%;
-`;
-
-const ProfileBox = styled.div`
-  display: ${({ showProfileBox }) => (showProfileBox ? "flex" : "none")};
-  width: 100%;
-  height: 100%;
-`;
-
 const MiddleBox = styled.div`
   display: flex;
   width: ${({ middleBoxWidth }) => middleBoxWidth};
@@ -77,8 +64,8 @@ const RightBox = styled.div`
 
 const PrevBtn = styled.button`
   display: ${({ prevBtnBox }) => (prevBtnBox ? "display" : "none")};
-  width: 10px;
-  height: 10px;
+  width: 30px;
+  height: 30px;
   font-size: 50px;
   color: #090071;
   border: none;
@@ -199,11 +186,6 @@ function CalendarPage() {
       <Body>
         <CalendarBox>
           <LeftBox leftBoxWidth={leftBoxWidth}>
-            {/* <LeftTopBox>
-              <ProfileBox showProfileBox={showProfileBox}>
-                <CalendarProfile />
-              </ProfileBox>
-            </LeftTopBox> */}
             <SideBar isOpen={isOpen} />
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
