@@ -161,8 +161,7 @@ function DiaryPage() {
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
 
-  // const [newDiaryText, setNewDiaryText] = useState('');
-  const newDiaryText = '';
+  const [newDiaryText, setNewDiaryText] = useState('');
 
   // 페이지 로딩 시 초기 메시지를 5초간 표시
   useEffect(() => {
@@ -184,17 +183,23 @@ function DiaryPage() {
 
       // 응답에서 감정분석 결과 추출
       const { positive, negative, neutral } = response.data.document.confidence;
-      console.log(response.data.document);
-      const sentimentResult = response.data.document.sentiment;
       
-      // newDiaryText = diaryText + sentimentResult;
-
-      // console.log(newDiaryText);
-
       // 소수점 두 자리까지 반올림하여 상태 업데이트 -- 어떤 값이 가장 큰지 비교해야 함
       setPositiveValue(Math.round(positive * 100) / 100);
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);
+
+      // 감정 분석 결과를 일기 내용에 반영시키는 부분
+      const sentimentResult = response.data.document.sentiment;
+      let sentimentContent = "";
+
+      if (sentimentResult === 'positive') {
+        setNewDiaryText(`${diaryText} + 따듯한 색감으로 생성시켜줘`);
+      } else if (sentimentContent === 'negative') {
+        setNewDiaryText(`${diaryText} + 차가운 색감으로 생성시켜줘`);
+      } else if (sentimentContent === 'neutral') {
+        setNewDiaryText(`${diaryText} + 베이지 색감으로 생성시켜줘`);
+      }
     } catch (error) {
       console.error("감정 분석 API 호출 중 오류 발생: ", error);
     }
@@ -232,7 +237,6 @@ function DiaryPage() {
       setShowInitialMessage(true);
       setTimeout(() => {
         setShowInitialMessage(false);
-        alert("30자 이상 적어주세요.");
       }, 5000);
       return;
     }

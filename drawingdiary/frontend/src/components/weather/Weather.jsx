@@ -54,7 +54,6 @@ const Weather = ({ date }) => {
     const getWeatherState = (weatherId) => {
         for(const [state, codes] of Object.entries(WeatherTypes)) {
             if (codes.includes(weatherId)) {
-                console.log("state : ", state);
                 return state;
             }
         }
@@ -91,11 +90,7 @@ const Weather = ({ date }) => {
             }, null);
             
             if (closestForecast && closestForecast.forecast) {
-                
-                // 자세한 날씨 : weather - description ex) 맑음 이런식으로 출력됨
-                const weatherDescription = closestForecast.forecast.weather[0].description.replace(/\s+/g, '').toLowerCase();
                 const weatherID = closestForecast.forecast.weather[0].id; // weather id 불러오기
-                console.log("weather id: ", weatherID);
 
                 // weatherType 객체와 매핑
                 const weatherState = getWeatherState(weatherID);
