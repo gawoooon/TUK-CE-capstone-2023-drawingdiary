@@ -33,9 +33,16 @@ const AddAlbumContainer = styled.div`
   justify-content: flex-end;
 `;
 
+const ErrorMessage = styled.div`
+  margin-right: 250px;
+  color: red;
+`;
+
 const AlbumPage = () => {
   const [isAddCategoryVisible, setAddCategoryVisible] = useState(false);
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleAddCategoryButtonClick = () => {
     setIsAddCategoryOpen(true);
@@ -43,7 +50,16 @@ const AlbumPage = () => {
 
   const handleClose = () => {
     setIsAddCategoryOpen(false);
+    setErrorMessage("");
   };
+
+  const handleErrorMessage = (message) => {
+    setErrorMessage(message);
+    
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 5000);
+  }
 
   return (
     <CategoryProvider>
@@ -51,6 +67,7 @@ const AlbumPage = () => {
         <Container>
           <ShortSidebar/>
           <AddAlbumContainer>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
             <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
             {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
             <AddCategory
@@ -58,7 +75,7 @@ const AlbumPage = () => {
               onclose={handleClose}
             />
           </AddAlbumContainer>
-          <AlbumBox  />
+          <AlbumBox  onErrorMessage={handleErrorMessage}/>
         </Container>
       </Background>
     </CategoryProvider>

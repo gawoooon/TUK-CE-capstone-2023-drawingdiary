@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import axios from 'axios';
 import { CategoryProvider } from "./components/album/CategoryList";
 
 import LoginPage from "./pages/LoginPage.jsx";

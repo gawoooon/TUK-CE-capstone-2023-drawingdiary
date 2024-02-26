@@ -51,8 +51,9 @@ const CategoryName = styled.text`
 `;
 
 
-const AlbumBox = () => {
+const AlbumBox = ({ onErrorMessage }) => {
     const { categoryList, removeCategory } = useCategory();
+    console.log(removeCategory);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
 
@@ -65,9 +66,9 @@ const AlbumBox = () => {
         setIsModalOpen(false);
     };
 
-    const handleConfirmDelete = () => {
+    const handleConfirmDelete = async () => {
         setIsModalOpen(false);
-        removeCategory(currentCategory);
+        removeCategory(currentCategory, onErrorMessage);
     };
     
     // 임의의 앨범 아이템 배열 생성 (1월 1일부터 1월 10일까지)
@@ -79,65 +80,50 @@ const AlbumBox = () => {
     
     return (
         <div>
-            {categoryList.length > 0 ? (
-                categoryList.map((category) => (
-                    <div key={category.memberID}>
-                        <div
+            {categoryList.map((category) => (
+                <div key={category.memberID}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'baseline',
+                            marginRight: '80px',
+                        }}>
+                        <CategoryName>{category.albumName}</CategoryName>
+                        <TrashButton onClick={() => handleDeleteClick(category)}/>
+
+                    </div>
+
+                    <Modal
+                        isOpen={isModalOpen}
+                        onClose={handleCloseModal}
+                        onConfirm={handleConfirmDelete}
+                    />
+
+                    <AlbumContainer>
+                        {albumItemEmpty.length > 0 ? (
+                            <ScrollSection>
+                                {albumItemEmpty.map((item, index) => (
+                                    <PictureContainer key={index}>
+                                        <DateText>{item.date}</DateText>
+                                        </PictureContainer>
+                                ))}
+                            </ScrollSection>
+                        ) : (
+                            <div
                             style={{
                                 display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'baseline',
-                                marginRight: '80px',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '100%',
+                                color: '#b3b3b3'
                             }}>
-                            <CategoryName>{category.albumName}</CategoryName>
-                            <TrashButton onClick={() => handleDeleteClick(category)}/>
-
-                        </div>
-
-                        <Modal
-                            isOpen={isModalOpen}
-                            onClose={handleCloseModal}
-                            onConfirm={handleConfirmDelete}
-                        />
-
-                        <AlbumContainer>
-                            {albumItemEmpty.length > 0 ? (
-                                <ScrollSection>
-                                    {albumItemEmpty.map((item, index) => (
-                                        <PictureContainer key={index}>
-                                            <DateText>{item.date}</DateText>
-                                        </PictureContainer>
-                                    ))}
-                                </ScrollSection>
-                            ) : (
-                                <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    height: '100%',
-                                    color: '#b3b3b3'
-                                }}>
-                                    앨범에 일기를 추가하려면 먼저 작성하세요.
-                                </div>
-                            )}
-                        </AlbumContainer>
-                    </div>
-                ))
-            ) : (
-                <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '290px', // AlbumContainer와 동일한 높이를 유지
-                    color: '#b3b3b3',
-                    margin: '10px -20px 30px 120px', // AlbumContainer와 동일한 마진을 유지
-                }}>
-                    {/* 이 부분은 나중에 삭제하고 사용자가 생성한 카테고리가 없으면 모두 기본으로 되어야 함 */}
-                    사용 가능한 카테고리가 없습니다. 
+                                앨범에 일기를 추가하려면 먼저 작성하세요.
+                            </div>
+                        )}
+                    </AlbumContainer>
                 </div>
-            )}
+            ))}
         </div>
     );
 };

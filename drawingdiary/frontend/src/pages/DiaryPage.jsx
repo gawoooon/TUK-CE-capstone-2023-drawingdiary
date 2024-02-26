@@ -11,8 +11,6 @@ import ImageOption from "../components/edit diary/ImageOption";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
-import axiosInstance from "../axios/axisoInstance";
-import { useAuth } from "../auth/context/AuthContext";
 
 const FlexContainer = styled.div`
   width: 100vw;

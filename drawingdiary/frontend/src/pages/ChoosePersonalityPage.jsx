@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import Background from "../components/Background";
 import ButtonForPersonality from "../components/button/ButtonForPersonality";
-import Button from "../components/button/Button";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from "react";
-import axiosInstance from "../axios/axisoInstance";
 import axios from "axios";
 
 const ContainerStyle = styled.div`

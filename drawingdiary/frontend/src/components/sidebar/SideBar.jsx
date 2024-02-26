@@ -91,6 +91,30 @@ const ProfileEmail = styled.div`
   font-size: 13px; // 프로필 이름의 폰트 크기 설정
 `;
 
+  const SignOut = styled.div`
+    width: 20px;
+    height: 20px;
+    padding-left: 20px;
+
+    img {
+      margin-right: 12px;
+    }
+  `;
+
+const SignOutButton = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  color: #333;
+  text-decoration: none;
+  margin-top: auto; // 메뉴 아이템들과 분리하기 위해 자동 마진 추가
+
+  &:hover {
+    background: #ececec;
+    border-left: 5px solid rgba(255, 184, 208, 0.58);
+  }
+`;
+
 
 const SideBar = ({ isOpen }) => {
 
@@ -145,7 +169,12 @@ const SideBar = ({ isOpen }) => {
           <img src="my-page.png" alt="MyPage" />
           <MenuItemText isOpen={isOpen}>My Page</MenuItemText>
         </MenuItem>
+        <SignOutButton to="/" isOpen={isOpen}>
+          <img src="sign-out.png" alt="Log out"/>
+          <MenuItemText isOpen={isOpen}>Log Out</MenuItemText>
+        </SignOutButton>
       </SideBarMenu>
+
       <ProfileSection>
         <ProfileImage src="user.png" alt="User" />
         <MenuItemText isOpen={isOpen}>
@@ -153,7 +182,7 @@ const SideBar = ({ isOpen }) => {
         </MenuItemText>
         <MenuItemText isOpen={isOpen}>
           <ProfileEmail>{userEmail}</ProfileEmail>
-          </MenuItemText>
+        </MenuItemText>
       </ProfileSection>
     </SideBarStyle>
   );

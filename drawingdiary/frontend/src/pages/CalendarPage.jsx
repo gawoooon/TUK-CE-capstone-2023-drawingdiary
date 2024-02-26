@@ -80,6 +80,8 @@ const ResultBox = styled.div`
   height: 95%;
 `;
 
+
+
 function CalendarPage() {
 
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
@@ -187,6 +189,7 @@ function CalendarPage() {
         <CalendarBox>
           <LeftBox leftBoxWidth={leftBoxWidth}>
             <SideBar isOpen={isOpen} />
+            
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
             <Calendar2
