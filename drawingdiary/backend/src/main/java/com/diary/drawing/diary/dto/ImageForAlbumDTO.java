@@ -4,12 +4,15 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ImageForAlbumDTO {
     private Long imageID;
@@ -17,12 +20,5 @@ public class ImageForAlbumDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private Long diaryID;
-
-    public ImageForAlbumDTO(Long imageID, String imageFile, LocalDate date, Long diaryID){
-        this.imageID = imageID;
-        this.imageFile = imageFile;
-        this.date = date;
-        this.diaryID = diaryID;
-    }
 
 }
