@@ -103,6 +103,8 @@ function LoginPage() {
       .then((response) => {
         login(response.data.accessToken, response.data.memberID);
         console.log("accessToken: ", response.data.accessToken);
+        console.log("email: ", email);
+        console.log("password: ", password);
         navigate("/calendar");
       })
       .catch((error) => {
