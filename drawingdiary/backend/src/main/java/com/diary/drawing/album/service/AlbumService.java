@@ -45,6 +45,7 @@ public class AlbumService {
         if(album == null){
             return addAlbum(new AlbumRequestDTO("기본"), member.getMemberID());
         }
+  
         return album;
     }
 

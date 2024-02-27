@@ -65,7 +65,7 @@ public class AlbumController {
     */
     @Operation(summary = "멤버별 앨범 리스트")
     @GetMapping("/api/album/list/{memberID}")
-    public List<AlbumListDTO> getAlbumList(@PathVariable Long memberID){
+    public List<AlbumListDTO> getAlbumList(@PathVariable("memberID") Long memberID){
         // member 존재한다면
         Optional<Member> m = memberRepository.findByMemberID(memberID);
 
