@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/* 삭제예정 */
 
 @Getter
 @AllArgsConstructor
