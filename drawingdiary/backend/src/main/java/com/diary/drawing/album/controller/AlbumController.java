@@ -52,7 +52,7 @@ public class AlbumController {
      * @Header AccessToken
      * @param 링크에 albumID
      */
-    @Operation(summary = "멤버별 앨범 리스트")
+    @Operation(summary = "토큰으로 앨범 삭제")
     @DeleteMapping("/api/album/{albumID}")
     public ResponseEntity<?> deleteAlbum(@PathVariable Long albumID, @AuthenticationPrincipal PrincipalDetails principalDetails){
         return albumService.deleteAlbum(albumID, principalDetails.getMemberID());
@@ -81,7 +81,7 @@ public class AlbumController {
      * @Header AccessToken
      *
     */
-    @Operation(summary = "멤버별 앨범 리스트")
+    @Operation(summary = "이미지 포함 앨범전체반환")
     @GetMapping("/api/album/all")
     public ResponseEntity<?> getAlbumAll(@AuthenticationPrincipal PrincipalDetails principalDetails){
         return albumService.getAllOfAlbum(principalDetails.getMemberID());

@@ -1,14 +1,20 @@
 package com.diary.drawing.diary.domain;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.common.BaseTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,25 +33,30 @@ public class Image extends BaseTime{
     @Column(length = 600)
     private String imageFile;
 
-    // @OneToOne  // 한개의 다이어리는 하나만
-    // @JoinColumn(name = "diaryID") // 외부키 references from diaryID
-    // private Diary diary;
-    
-    @OneToOne // 한개의 프롬포트는 하나만
-    @JoinColumn(name = "promptID") // 외부키 references from promptID
-    private Prompt prompt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러 이미지와 하나의 앨범
+    @JoinColumn(name = "albumID") // 외부키 references from albumid
+    private Album album;
+ 
 
     
 
     @Builder
-    public Image(String imageFile, Prompt prompt){
+    public Image(String imageFile, Album album, LocalDate date){
         this.imageFile = imageFile;
-        this.prompt = prompt;
+        this.album = album;
+        this.date = date;
     }
 
-    public void update(String imageFile, Prompt prompt){
+    // Date 안넣어도 됨
+    public void update(String imageFile, Album album){
         this.imageFile = imageFile;
-        this.prompt = prompt;
+        this.album = album;
     }
     
+    public void setAlbum(Album album){
+        this.album = album;
+    }
 }

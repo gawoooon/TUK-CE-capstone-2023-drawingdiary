@@ -13,7 +13,6 @@ import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.album.repository.AlbumRepository;
 import com.diary.drawing.diary.domain.Diary;
 import com.diary.drawing.diary.dto.CalenderDTO;
-import com.diary.drawing.diary.dto.CreateDiaryRequestDTO;
 import com.diary.drawing.diary.dto.DiaryRequestDTO;
 import com.diary.drawing.diary.dto.DiaryResponseDTO;
 import com.diary.drawing.diary.exception.DiaryExceptionType;
@@ -33,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DiaryService {
-    /* 임시적으로 생성전 다이어리를 만드는 서비스 */
+
     
     private final DiaryRepository diaryRepository;
     private final AlbumRepository albumRepository;
@@ -42,30 +41,6 @@ public class DiaryService {
     private final ValidateDiaryService validateDiaryService;
     private final ValidateMemberService validateMemberService;
 
-
-
-    /* 첫 생성시 임시 다이어리 객체 추가 */
-
-    @Transactional
-    public Long createTemporaryDiary(CreateDiaryRequestDTO requestDTO) throws Exception{
-        // 임시 다이어리 객체 생성
-        // TODO: token에서 memberid, 프런트에서 date
-        Optional<Member> m = memberRepository.findByMemberID(requestDTO.getMemberID());
-
-        // 기본 앨범 찾기
-        Album album = albumRepository.findByAlbumNameAndMember("기본", m.get());
-        
-
-        Diary temporaryDiary = Diary.builder()
-                .date(requestDTO.getDate())
-                .album(album)
-                .member(m.get())
-                .weather("none")
-                .build();
-
-        // 저장하여 ID 반환
-        return diaryRepository.save(temporaryDiary).getDiaryID();
-    }
 
     /* Date로 내용조회 */
     public DiaryResponseDTO getDiary(LocalDate date, Long memberID) throws Exception{
@@ -80,21 +55,6 @@ public class DiaryService {
         Diary diary = diaryRepository.findByDiaryID(diaryID);
         DiaryResponseDTO diaryResponseDTO = DiaryResponseDTO.from(diary);
         return diaryResponseDTO;
-    }
-
-    /* 다이어리 수정 메소드 */
-    @Transactional
-    public Diary updateDiary(DiaryRequestDTO diaryRequestDTO, Long diaryID){
-
-        // 다이어리 객체 찾기
-        Diary oldDiary = diaryRepository.findByDiaryID(diaryID);
-
-        // date album member 찾기
-        //TODO: 존재확인 validation 함수 추가로 예외처리
-        Album a = albumRepository.findByAlbumID(diaryRequestDTO.getAlbumID());
-        ImageStyle s = imageStyleRepository.findByStyleID(diaryRequestDTO.getStyleID());
-
-        return diaryRepository.save(oldDiary.update(diaryRequestDTO, a, s));
     }
 
     /* 년월, 멤버id로 모든 다이어리 return 하는 캘린더 서비스 */
@@ -130,11 +90,26 @@ public class DiaryService {
             .text(diaryRequestDTO.getText())
             .weather(diaryRequestDTO.getWeather())
             .date(diaryRequestDTO.getDate())
-            .album(album)
             .member(member.get())
             .imageStyle(style)
             .build();
         return diaryRepository.save(diary);
+    }
+
+    
+    /* 다이어리 수정 테스트 메소드 */
+    @Transactional
+    public Diary updateDiary(DiaryRequestDTO diaryRequestDTO, Long diaryID){
+
+        // 다이어리 객체 찾기
+        Diary oldDiary = diaryRepository.findByDiaryID(diaryID);
+
+        // date album member 찾기
+        //TODO: 존재확인 validation 함수 추가로 예외처리
+        Album a = albumRepository.findByAlbumID(diaryRequestDTO.getAlbumID());
+        ImageStyle s = imageStyleRepository.findByStyleID(diaryRequestDTO.getStyleID());
+
+        return diaryRepository.save(oldDiary.update(diaryRequestDTO, s));
     }
     
 

@@ -1,7 +1,6 @@
 package com.diary.drawing.diary.dto;
 
-import java.time.LocalDate;
-
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +11,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class CreateDiaryRequestDTO {
-    private LocalDate date;
-    private Long memberID;
+public class TestImageUpdateDTO  {
+    @Valid
+
+    private String imageFile;
+
+    private Long albumID;
+
+    private Long imageID;
 }
