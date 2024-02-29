@@ -19,16 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
     private final ImageRepository imageRepository;
 
-    /* 나중에 삭제하기! 파이썬으로 이미지 받는 메서드 생각해봤어 참고용으로 써줘!
-     * ImageRequestDTO 는 String imageFile, Diary diary, Prompt prompt
-     *
-     * public ImageRequestDTO generateImage(Diary diary, Prompt prompt){
-     *      ImageFile = prompt 기반으로 파이썬으로 generate하고 URL 받는 메소드(prompt)
-     *      ImageRequestDTO 에 String imageFile, Diary diary, Prompt prompt 넣어서 생성 후 return
-     * }
-     */
-
-
 
     /* 이미지 생성한것 저장 */
     //TODO: 완전히 구현 완료한 이후에 ImageRequestDTO로 넣기, 예외처리

@@ -10,6 +10,7 @@ import com.diary.drawing.comment.Comment;
 import com.diary.drawing.comment.CommentRepository;
 import com.diary.drawing.diary.domain.Diary;
 import com.diary.drawing.diary.domain.Image;
+import com.diary.drawing.diary.dto.DiaryResponseDTO;
 import com.diary.drawing.diary.dto.FinalDiaryRequestDTO;
 import com.diary.drawing.diary.repository.DiaryRepository;
 import com.diary.drawing.diary.repository.ImageRepository;
@@ -38,7 +39,7 @@ public class GenerateDiaryService {
     
 
     @Transactional
-    public ResponseEntity<Diary> generateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID){
+    public ResponseEntity<DiaryResponseDTO> generateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID){
 
         // 0. id로 멤버 객체 가져오기
         Member member = validateMemberService.validateMember(memberID);
@@ -79,7 +80,7 @@ public class GenerateDiaryService {
             .sentiment(sentiment)
             .build();
         diaryRepository.save(diary);
-        return ResponseEntity.ok(diary);
+        return ResponseEntity.ok(DiaryResponseDTO.from(diary));
 
     }
 
