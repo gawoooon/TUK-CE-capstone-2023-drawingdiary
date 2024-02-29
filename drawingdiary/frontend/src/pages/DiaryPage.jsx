@@ -84,26 +84,6 @@ const jumpAnimation = keyframes`
     100% { transform: translateY(0); }
 `;
 
-const RemoveButtonStyle = styled.button`
-  height: 50px;
-  width: 250px;
-  margin-bottom: 30px;
-  background-color: rgba(255, 184, 208, 0.5);
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border: none;
-  cursor: pointer;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
-  animation: ${(props) =>
-    props.animate
-      ? css`
-          ${jumpAnimation} 0.5s ease
-        `
-      : "none"};
-`;
-
 const SaveButtonStyle = styled.button`
   height: 50px;
   width: 250px;
@@ -152,11 +132,9 @@ function DiaryPage() {
 
   // message 부분
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
   const [showInitialMessage, setShowInitialMessage] = useState(true);
 
   const [animateSaveBtn, setAnimateSaveBtn] = useState(false);
-  const [animateCreateBtn, setAnimateCreateBtn] = useState(false);
 
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
@@ -261,7 +239,7 @@ function DiaryPage() {
     try {
       console.log("일기 내용 저장:", diaryText);
 
-      const imageApiUrl = "http://localhost:5000/api/diary/image";
+      const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
       const responseDiary = await fetch(imageApiUrl, {
         method: "POST",
         headers: {
@@ -352,19 +330,6 @@ function DiaryPage() {
   //   }),
   // });
 
-  // const handleDelete = () => {
-  //   // 삭제 요청 들어가야함 -- 일기와 합치고 나서 추가적으로 해야 함
-  //   setAnimateDeleteBtn(true);
-  //   setTimeout(() => {
-  //     setAnimateDeleteBtn(false);
-  //   }, 500);
-
-  //   setShowDelete(true);
-  //   setTimeout(() => {
-  //     setShowDelete(false);
-  //   }, 5000);
-  // };
-
   return (
     <div>
       <Background>
@@ -396,12 +361,6 @@ function DiaryPage() {
                   일기가 성공적으로 생성되었습니다!
                 </MessageText>
               )}
-
-              {showDelete && (
-                <MessageText color="#ff0000">
-                  일기가 삭제되었습니다.
-                </MessageText>
-              )}
             </MessageContainer>
 
             <EditDiaryArea>
@@ -420,14 +379,6 @@ function DiaryPage() {
                 justifyContent: "space-between",
               }}
             >
-              <ButtonContainer>
-                <RemoveButtonStyle
-                  onClick={handleCreate}
-                  animate={animateCreateBtn}
-                >
-                  생성
-                </RemoveButtonStyle>
-              </ButtonContainer>
 
               <ButtonContainer>
                 <SaveButtonStyle

@@ -1,12 +1,15 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MultiLabelBinarizer
 import pandas as pd
-import numpy as np
+
 
 def predict_user_style(age, gender):
     # 데이터 불러오기
-    file_path = 'C:/Users/jjiwo/TUK-CE-capstone-2023-drawingdiary/drawingdiary/recommender/data/data_set2.csv'
+    file_path = '/app/data/data_set2.csv'
     data = pd.read_csv(file_path)
 
     # 나이 범위 초기화, 필요한 스타일 수 초기화
@@ -69,4 +72,29 @@ def predict_user_style(age, gender):
     return predicted_styles_list[:required_styles_count]
 
 
+app = Flask(__name__)
+CORS(app)
 
+@app.route('/api/get-styles', methods=['POST'])
+def get_member_styles():
+
+    try :
+        data = request.get_json()
+        print(data)
+
+        user_age = data.get('age', '0')
+        user_gender = data.get('gender', '')
+
+        # 스타일 예측 실행
+        predicted_styles = predict_user_style(user_age, user_gender)
+
+        # 예측된 스타일을 JSON 형태로 반환
+        return jsonify({
+            'predicted_styles': predicted_styles
+        })
+    except Exception as e:
+        app.logger.error(f'Error processing request: {e}', exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5001)
