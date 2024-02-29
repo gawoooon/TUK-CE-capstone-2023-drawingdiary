@@ -138,7 +138,7 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
     setUserGender(gender);
     setUserName(response.data.name);
     
-    const apiUrl = "http://localhost:5001/api/get-styles"
+    const apiUrl = "http://127.0.0.1:5001/api/get-styles"
 
     try {
       const styleResponse = await fetch(apiUrl, {
@@ -155,7 +155,8 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
       if (styleResponse.ok) {
         const styleData = await styleResponse.json();
         setImageList(styleData.predicted_styles);
-      } else {
+      } 
+      else {
         console.log("스타일을 불러오는 중 에러가 발생했습니다.");
       }
     } catch (error) {
@@ -165,7 +166,7 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
 
   useEffect(() => {
     fetchOptionStyle();
-  });
+  }, []);
 
   useEffect(() => {
     onOptionSelect(isSelected);

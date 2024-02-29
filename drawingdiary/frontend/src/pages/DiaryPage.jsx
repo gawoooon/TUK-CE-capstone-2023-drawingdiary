@@ -239,7 +239,7 @@ function DiaryPage() {
     try {
       console.log("일기 내용 저장:", diaryText);
 
-      const imageApiUrl = "http://localhost:5000/api/diary/image";
+      const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
       const responseDiary = await fetch(imageApiUrl, {
         method: "POST",
         headers: {
