@@ -321,6 +321,37 @@ function DiaryPage() {
         setShowSuccess(false);
       }, 5000);
     }
+
+    // image post
+    // if (newImageUrl) {
+    //   try {
+    //     console.log("이미지 url", newImageUrl);
+
+    //     // 이미지 url post
+    //     const responseImg = await axios.post(
+    //       "http://localhost:8080/api/image/test/create",
+    //       {
+    //         imageFile: newImageUrl,
+    //         diaryID: 1,
+    //         promptID: 1,
+    //         headers: {
+    //           Authorization: `Bearer ${accessToken}`,
+    //         },
+    //       }
+    //     );
+
+    //     if (responseImg.status === 200) {
+    //       console.log("이미지 URL이 백엔드로 전송되었습니다.");
+    //     } else {
+    //       console.error("이미지 URL 전송 실패:", responseImg.status);
+    //     }
+    //   } catch (error) {
+    //     console.log("Error: ", error);
+    //   }
+    // } else {
+    //   alert("이미지를 먼저 생성해주세요요!");
+    // }
+
     // 날짜 데이터
     const formattedDate = new Date(date.year, date.month - 1, date.day);
 
@@ -363,34 +394,7 @@ function DiaryPage() {
       console.error("일기 전송 실패:", responseDiary.status);
     }
 
-    // if (newImageUrl) {
-    //   try {
-    //     console.log("이미지 url", newImageUrl);
-
-    //     // 이미지 url post
-    //     const responseImg = await axios.post(
-    //       "http://localhost:8080/api/image/test/create",
-    //       {
-    //         imageFile: newImageUrl,
-    //         diaryID: 1,
-    //         promptID: 1,
-    //         headers: {
-    //           Authorization: `Bearer ${accessToken}`,
-    //         },
-    //       }
-    //     );
-
-    //     if (responseImg.status === 200) {
-    //       console.log("이미지 URL이 백엔드로 전송되었습니다.");
-    //     } else {
-    //       console.error("이미지 URL 전송 실패:", responseImg.status);
-    //     }
-    //   } catch (error) {
-    //     console.log("Error: ", error);
-    //   }
-
     navigate("/calendar");
-    // }
   };
 
   // const apiUrl = "http://localhost:8080/api/diary/test/add";
