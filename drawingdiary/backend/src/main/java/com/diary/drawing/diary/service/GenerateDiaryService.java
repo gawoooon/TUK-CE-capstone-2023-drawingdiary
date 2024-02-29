@@ -1,5 +1,7 @@
 package com.diary.drawing.diary.service;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +45,10 @@ public class GenerateDiaryService {
     @Transactional
     public ResponseEntity<DiaryResponseDTO> generateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID){
 
-        // 0. id로 멤버 객체 가져오기
+        // 0. id로 멤버 객체 가져오기, 다이어리 유무 validate
         Member member = validateMemberService.validateMember(memberID);
+        Optional<Diary> test = diaryRepository.findByDateAndMember(finalDiaryRequestDTO.getDate(), member);
+        if(test.isPresent()) {throw new DiaryResponseException(DiaryExceptionType.ALREADY_EXIST_DIARY);}
 
         // 1. (없으면 sentiment 추가) Sentiment 객체 받아옴
         Sentiment sentiment = new Sentiment(finalDiaryRequestDTO.getConfidence());
@@ -125,16 +129,4 @@ public class GenerateDiaryService {
     }
 
 }
-
-    /* 완료버튼으로 다이어리 수정했을때 */
-    /* 메소드명: updateDiary(Diary diary, diaryRequestDTO) */
-    // 0. Member validate
-    // 1. id로 Diary 객체 받아옴
-    // 2. Diary 객체에서 코멘트 받아와서 수정
-    // 3. Diary 객체에서 sentiment 받아와서 수정
-// 프롬포트 남기던가 로그 남기던가
-    // 5. DIary 객체에서 image 받아와서 수정
-    // 5.0 Album 가져오기
-    // 6. Diary 객체에 다른 내용들 받아서 전체수정
-    // 7. Response로 수정 OK 싸인
 

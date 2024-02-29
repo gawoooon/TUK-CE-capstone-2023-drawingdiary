@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.album.repository.AlbumRepository;
+import com.diary.drawing.comment.CommentRepository;
 import com.diary.drawing.diary.domain.Diary;
 import com.diary.drawing.diary.dto.CalenderDTO;
 import com.diary.drawing.diary.dto.DiaryRequestDTO;
@@ -18,8 +20,10 @@ import com.diary.drawing.diary.dto.DiaryResponseDTO;
 import com.diary.drawing.diary.exception.DiaryExceptionType;
 import com.diary.drawing.diary.exception.DiaryResponseException;
 import com.diary.drawing.diary.repository.DiaryRepository;
+import com.diary.drawing.diary.repository.ImageRepository;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
 import com.diary.drawing.imagestyle.repository.ImageStyleRepository;
+import com.diary.drawing.sentiment.repository.SentimentRepository;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.repository.MemberRepository;
 import com.diary.drawing.user.service.ValidateMemberService;
@@ -32,9 +36,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DiaryService {
-
-    
     private final DiaryRepository diaryRepository;
+    private final SentimentRepository sentimentRepository;
+    private final ImageRepository imageRepository;
+    private final CommentRepository commentRepository;
     private final AlbumRepository albumRepository;
     private final MemberRepository memberRepository;
     private final ImageStyleRepository imageStyleRepository;
@@ -72,6 +77,19 @@ public class DiaryService {
             .map(diary -> new CalenderDTO(diary.getDate(), diary.getImage().getImageFile(), diary.getText()))
             .collect(Collectors.toList());
         return response;
+    }
+
+    @Transactional
+    public ResponseEntity<?> delete(LocalDate date, Long memberID){
+        Member member = validateMemberService.validateMember(memberID);
+        Diary diary = validateDiaryService.findByDateAndMember(date, member);
+
+        diaryRepository.delete(diary);
+        sentimentRepository.delete(diary.getSentiment());
+        imageRepository.delete(diary.getImage());
+        commentRepository.delete(diary.getComment());
+
+        return ResponseEntity.ok("일기 삭제가 완료되었습니다.");
     }
 
 

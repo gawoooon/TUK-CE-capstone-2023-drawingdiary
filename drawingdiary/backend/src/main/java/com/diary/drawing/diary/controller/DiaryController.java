@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +53,16 @@ public class DiaryController {
     @PutMapping("api/diary/{date}")
     public ResponseEntity<?> updateDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
         return generateDiaryService.updateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
+    }
+
+    /* 최종 일기 삭제
+     * 
+     * 
+     */
+    @Operation(summary = "최종 일기 삭제")
+    @DeleteMapping("api/diary/{date}")
+    public ResponseEntity<?> deleteDiary(@PathVariable LocalDate date, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        return diaryService.delete(date, principalDetails.getMemberID());
     }
 
     /* 일기 세부사항을 조회하는 api [GET]
