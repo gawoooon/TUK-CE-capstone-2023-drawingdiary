@@ -26,4 +26,8 @@ public class Comment {
         this.comment = comment;
     }
 
+    public void update(String comment){
+        this.comment = comment;
+    }
+
 }

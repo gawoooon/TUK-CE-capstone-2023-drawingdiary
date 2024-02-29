@@ -32,4 +32,5 @@ public class ValidateDiaryService {
                                 .orElseThrow(() -> new DiaryResponseException(DiaryExceptionType.NOT_FOUND_DIARY));
         }
 
+
 }

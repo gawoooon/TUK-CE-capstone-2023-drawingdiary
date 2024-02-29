@@ -44,6 +44,16 @@ public class DiaryController {
         return generateDiaryService.generateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
     }
 
+    /* 최종 일기 수정 api
+     * 
+     * 
+     */
+    @Operation(summary = "최종 일기 수정")
+    @PutMapping("api/diary/{date}")
+    public ResponseEntity<?> updateDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        return generateDiaryService.updateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
+    }
+
     /* 일기 세부사항을 조회하는 api [GET]
      *
      * @Header AccessToken

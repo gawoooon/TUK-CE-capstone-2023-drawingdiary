@@ -109,7 +109,7 @@ public class DiaryService {
         Album a = albumRepository.findByAlbumID(diaryRequestDTO.getAlbumID());
         ImageStyle s = imageStyleRepository.findByStyleID(diaryRequestDTO.getStyleID());
 
-        return diaryRepository.save(oldDiary.update(diaryRequestDTO, s));
+        return diaryRepository.save(oldDiary.testUpdate(diaryRequestDTO, s));
     }
     
 

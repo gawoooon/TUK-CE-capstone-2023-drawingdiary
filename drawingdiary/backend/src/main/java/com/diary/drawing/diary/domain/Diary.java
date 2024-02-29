@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.diary.drawing.comment.Comment;
 import com.diary.drawing.common.BaseTime;
 import com.diary.drawing.diary.dto.DiaryRequestDTO;
+import com.diary.drawing.diary.dto.FinalDiaryRequestDTO;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
 import com.diary.drawing.sentiment.domain.Sentiment;
 import com.diary.drawing.user.domain.Member;
@@ -81,7 +82,14 @@ public class Diary extends BaseTime{
         this.comment = comment;
     }
 
-    public Diary update(DiaryRequestDTO dto, ImageStyle imageStyle){
+    public Diary update(FinalDiaryRequestDTO dto, ImageStyle imageStyle){
+        this.text=dto.getText();
+        this.weather= Weather.valueOf(dto.getWeather());
+        this.imageStyle=imageStyle;
+        return this;
+    }
+
+    public Diary testUpdate(DiaryRequestDTO dto, ImageStyle imageStyle){
         this.text=dto.getText();
         this.weather= Weather.valueOf(dto.getWeather());
         this.imageStyle=imageStyle;

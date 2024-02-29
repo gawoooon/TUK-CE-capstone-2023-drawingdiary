@@ -12,6 +12,8 @@ public enum DiaryExceptionType implements BaseExceptionType {
     NOT_FOUND_DIARY(404, HttpStatus.NOT_FOUND, "일기 정보가 없습니다."),
     NOT_FOUND_ALBUM(404, HttpStatus.NOT_FOUND, "앨범 정보가 없습니다."),
     NOT_FOUND_IMAGE(404, HttpStatus.NOT_FOUND, "이미지 정보가 없습니다."),
+    NOT_FOUND_COMMENT(404, HttpStatus.NOT_FOUND, "코멘트 정보가 없습니다."),
+    NOT_FOUND_SENTIMENT(404, HttpStatus.NOT_FOUND, "감정분석 정보가 없습니다."),
     NOT_FOUND_DATE(404, HttpStatus.NOT_FOUND, "잘못된 날짜가 입력되었습니다."),
 
     UNAUTHERIZED_MEMBER(602, HttpStatus.UNAUTHORIZED, "작성자가 아닌 다른 회원이 수정 요청했습니다."),
