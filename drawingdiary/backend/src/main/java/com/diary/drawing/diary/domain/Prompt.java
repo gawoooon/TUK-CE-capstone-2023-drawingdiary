@@ -1,7 +1,6 @@
 package com.diary.drawing.diary.domain;
 
 import com.diary.drawing.common.BaseTime;
-import com.diary.drawing.sentiment.domain.Sentiment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,12 +32,10 @@ public class Prompt extends BaseTime{
     @JoinColumn(name = "diaryID") // 외부키 references from diaryID
     private Diary diary;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 하나의 프롬프트 하나의 감정
-    @JoinColumn(name = "sentimentID") // 외부키 references from sentimentID
-    private Sentiment sentiment;
+    private String sentiment;
 
     @Builder
-    public Prompt(String promptText, Diary diary, Sentiment sentiment){
+    public Prompt(String promptText, Diary diary, String sentiment){
         this.promptText = promptText;
         this.diary = diary;
         this.sentiment=sentiment;

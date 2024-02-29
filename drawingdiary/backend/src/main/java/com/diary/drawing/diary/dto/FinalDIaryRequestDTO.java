@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.diary.drawing.sentiment.dto.SentimentDTO.Confidence;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,15 +18,16 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Builder
-public class FinalDIaryRequestDTO {
+public class FinalDiaryRequestDTO {
     private String text;
     private String weather;
+    
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private Long albumID;
-    private String styleName;
+    private String styleName;   // 받아올때 이름으로
     private String imageFile;
-    private String sentiment;
+    private Confidence confidence;
     private String comment;
 
     

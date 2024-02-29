@@ -58,7 +58,6 @@ public class DiaryService {
 
         Diary temporaryDiary = Diary.builder()
                 .date(requestDTO.getDate())
-                .album(album)
                 .member(m.get())
                 .weather("none")
                 .build();
@@ -94,7 +93,7 @@ public class DiaryService {
         Album a = albumRepository.findByAlbumID(diaryRequestDTO.getAlbumID());
         ImageStyle s = imageStyleRepository.findByStyleID(diaryRequestDTO.getStyleID());
 
-        return diaryRepository.save(oldDiary.update(diaryRequestDTO, a, s));
+        return diaryRepository.save(oldDiary.update(diaryRequestDTO, s));
     }
 
     /* 년월, 멤버id로 모든 다이어리 return 하는 캘린더 서비스 */
@@ -130,7 +129,6 @@ public class DiaryService {
             .text(diaryRequestDTO.getText())
             .weather(diaryRequestDTO.getWeather())
             .date(diaryRequestDTO.getDate())
-            .album(album)
             .member(member.get())
             .imageStyle(style)
             .build();

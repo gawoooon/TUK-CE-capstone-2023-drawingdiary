@@ -19,6 +19,4 @@ public class ImageForAlbumDTO {
     private String imageFile;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    private Long diaryID;
-
 }
