@@ -328,12 +328,13 @@ function DiaryPage() {
       formattedDate.getMonth() + 1
     }-${formattedDate.getDate()}`;
 
+    console.log(weatherState);
     const responseDiary = await axios.post(
       "http://localhost:8080/api/diary/test/add",
       {
         text: diaryText,
         weather: weatherState,
-        dateID: dateString,
+        date: dateString,
         albumID: selectedAlbumID,
         memberID: memberID,
         styleID: 1,
