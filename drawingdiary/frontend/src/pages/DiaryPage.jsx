@@ -11,6 +11,7 @@ import ImageOption from "../components/edit diary/ImageOption";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
+import { useAuth } from "../auth/context/AuthContext";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -138,21 +139,29 @@ const MessageText = styled.div`
 `;
 
 function DiaryPage() {
-  // image 부분
+  const navigate = useNavigate();
+  const { memberID } = useAuth();
+
+  // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [newDiaryText, setNewDiaryText] = useState("");
 
+  // 날짜, 날씨
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
+  const [weatherState, setWeatherState] = useState("Unknown");
+
+  // 앨범
+  const [selectedAlbumID, setSelectedAlbumID] = useState(null);
 
   const [isTextValid, setIsTextValid] = useState(false);
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
   // message 부분
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
   const [showInitialMessage, setShowInitialMessage] = useState(true);
 
   const [animateSaveBtn, setAnimateSaveBtn] = useState(false);
@@ -162,7 +171,15 @@ function DiaryPage() {
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
 
-  const [newDiaryText, setNewDiaryText] = useState("");
+  // 날씨 상태를 업데이트하는 함수
+  const handleWeatherStateChange = (newWeatherState) => {
+    setWeatherState(newWeatherState);
+  };
+
+  // 앨범 상태를 업데이트하는 함수수
+  const handleSelectedAlbumChange = (onSelectAlbum) => {
+    setSelectedAlbumID(onSelectAlbum);
+  };
 
   // 페이지 로딩 시 초기 메시지를 5초간 표시
   useEffect(() => {
@@ -247,9 +264,9 @@ function DiaryPage() {
       setAnimateCreateBtn(false);
     }, 500);
 
-    setShowSuccess(true);
+    setShowCreate(true);
     setTimeout(() => {
-      setShowSuccess(false);
+      setShowCreate(false);
     }, 5000);
 
     // 감정 분석 실행
@@ -258,35 +275,35 @@ function DiaryPage() {
     setIsLoading(true);
 
     // 이미지 api
-    try {
-      console.log("일기 내용 저장:", diaryText);
+    // try {
+    //   console.log("일기 내용 저장:", diaryText);
 
-      const imageApiUrl = "http://localhost:5000/api/diary/image";
-      const responseDiary = await fetch(imageApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ diaryText }),
-      });
+    //   const imageApiUrl = "http://localhost:5000/api/diary/image";
+    //   const responseDiary = await fetch(imageApiUrl, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ diaryText }),
+    //   });
 
-      if (responseDiary.ok) {
-        const responseDate = await responseDiary.json();
-        console.log("일기:", responseDate);
+    //   if (responseDiary.ok) {
+    //     const responseDate = await responseDiary.json();
+    //     console.log("일기:", responseDate);
 
-        // url 받아오기
-        const imageUrl = responseDate.image?.imageUrl;
-        setIsLoading(false);
-        setNewImageUrl(imageUrl);
-      } else {
-        console.error("이미지 저장 실패:", responseDiary.status);
+    //     // url 받아오기
+    //     const imageUrl = responseDate.image?.imageUrl;
+    //     setIsLoading(false);
+    //     setNewImageUrl(imageUrl);
+    //   } else {
+    //     console.error("이미지 저장 실패:", responseDiary.status);
 
-        alert("이미지 저장에 실패하였습니다.");
-      }
-    } catch (error) {
-      console.error("Error diary:", error);
-      alert("일기 중에 오류가 발생하였습니다.");
-    }
+    //     alert("이미지 저장에 실패하였습니다.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error diary:", error);
+    //   alert("일기 중에 오류가 발생하였습니다.");
+    // }
   };
 
   // 저장 버튼 클릭 핸들러
@@ -304,35 +321,75 @@ function DiaryPage() {
         setShowSuccess(false);
       }, 5000);
     }
+    // 날짜 데이터
+    const formattedDate = new Date(date.year, date.month - 1, date.day);
 
-    if (newImageUrl) {
-      try {
-        console.log("이미지 url", newImageUrl);
+    const dateString = `${formattedDate.getFullYear()}-${
+      formattedDate.getMonth() + 1
+    }-${formattedDate.getDate()}`;
 
-        // 이미지 url post
-        const responseImg = await axios.post(
-          "http://localhost:8080/api/image/test/create",
-          {
-            imageFile: newImageUrl,
-            diaryID: 1,
-            promptID: 1,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-
-        if (responseImg.status === 200) {
-          console.log("이미지 URL이 백엔드로 전송되었습니다.");
-        } else {
-          console.error("이미지 URL 전송 실패:", responseImg.status);
-        }
-      } catch (error) {
-        console.log("Error: ", error);
+    const responseDiary = await axios.post(
+      "http://localhost:8080/api/diary/test/add",
+      {
+        text: diaryText,
+        weather: weatherState,
+        dateID: dateString,
+        albumID: selectedAlbumID,
+        memberID: memberID,
+        styleID: 1,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        //       }{
+        // method: "POST",
+        // headers: {
+        //   Authorization: `Bearer ${accessToken}`,
+        // },
+        // body: JSON.stringify({
+        //   // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
+        //   text: diaryText,
+        //   weather: weatherState,
+        //   dateID: dateString,
+        //   albumID: selectedAlbumID,
+        //   memberID: memberID,
+        //   styleID: 1,
+        // }),
       }
-
-      navigate("/calendar");
+    );
+    if (responseDiary.status === 200) {
+      console.log("일기가 백엔드로 전송되었습니다.");
+    } else {
+      console.error("일기 전송 실패:", responseDiary.status);
     }
+
+    // if (newImageUrl) {
+    //   try {
+    //     console.log("이미지 url", newImageUrl);
+
+    //     // 이미지 url post
+    //     const responseImg = await axios.post(
+    //       "http://localhost:8080/api/image/test/create",
+    //       {
+    //         imageFile: newImageUrl,
+    //         diaryID: 1,
+    //         promptID: 1,
+    //         headers: {
+    //           Authorization: `Bearer ${accessToken}`,
+    //         },
+    //       }
+    //     );
+
+    //     if (responseImg.status === 200) {
+    //       console.log("이미지 URL이 백엔드로 전송되었습니다.");
+    //     } else {
+    //       console.error("이미지 URL 전송 실패:", responseImg.status);
+    //     }
+    //   } catch (error) {
+    //     console.log("Error: ", error);
+    //   }
+
+    navigate("/calendar");
+    // }
   };
 
   // const apiUrl = "http://localhost:8080/api/diary/test/add";
@@ -372,8 +429,11 @@ function DiaryPage() {
           <ShortSidebar />
           <RightContainer>
             <TopContent>
-              <Weather date={date} />
-              <AlbumCategory />
+              <Weather
+                date={date}
+                onWeatherStateChange={handleWeatherStateChange}
+              />
+              <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
             </TopContent>
 
             <div
@@ -397,7 +457,7 @@ function DiaryPage() {
                 </MessageText>
               )}
 
-              {showDelete && (
+              {showCreate && (
                 <MessageText color="#ff0000">
                   일기가 삭제되었습니다.
                 </MessageText>
