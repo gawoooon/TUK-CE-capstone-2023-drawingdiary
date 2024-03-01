@@ -1,16 +1,16 @@
-package com.diary.drawing.email;
+package com.diary.drawing.imagestyle.dto;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.ToString;
 
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class EmailVerificationDTO {
-    public String email;
-    public String verificationCode;
+@ToString
+public class PredictRequestDTO {
+    private Integer age;
+    private char gender;
 }

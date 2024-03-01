@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../auth/context/AuthContext";
+import { format } from "date-fns";
 
 const ResultBox = styled.div`
   display: flex;
@@ -42,12 +44,16 @@ const AddBtn = styled.button`
   margin-top: 20px;
 `;
 
-function FalseComponent({ year, month, day }) {
+function FalseComponent({ year, month, day, selectedDate }) {
   const navigate = useNavigate();
+  const { memberID } = useAuth();
 
   const handleAdd = () => {
     // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    navigate("/diary/1", { state: {date: { year, month, day }}});
+    const formattedDate = format(selectedDate, "yyyyMMdd");
+    navigate(`/diary/${memberID}/${formattedDate}`, {
+      state: { date: { year, month, day } },
+    });
   };
 
   return (

@@ -4,23 +4,21 @@ import java.util.List;
 
 import com.diary.drawing.diary.dto.ImageForAlbumDTO;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
 @Getter
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AlbumAllDTO {
     private Long albumID;
     private String name;
     private List<ImageForAlbumDTO> images;
 
-    public AlbumAllDTO(Long albumID, String name, List<ImageForAlbumDTO> images){
-        this.albumID = albumID;
-        this.name = name;
-        this.images = images;
-    }
 
 }

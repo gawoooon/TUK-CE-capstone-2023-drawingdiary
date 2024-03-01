@@ -14,9 +14,10 @@ import com.diary.drawing.album.dto.AlbumRequestDTO;
 import com.diary.drawing.album.exception.AlbumExceptionType;
 import com.diary.drawing.album.exception.AlbumResponseException;
 import com.diary.drawing.album.repository.AlbumRepository;
-import com.diary.drawing.diary.domain.Diary;
+import com.diary.drawing.diary.domain.Image;
 import com.diary.drawing.diary.dto.ImageForAlbumDTO;
 import com.diary.drawing.diary.repository.DiaryRepository;
+import com.diary.drawing.diary.repository.ImageRepository;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.repository.MemberRepository;
 import com.diary.drawing.user.service.ValidateMemberService;
@@ -35,6 +36,7 @@ public class AlbumService {
     private final MemberRepository memberRepository;
     private final DiaryRepository diaryRepository;
     private final ValidateMemberService validateMemberService;
+    private final ImageRepository imageRepository;
 
     /* 기본 앨범 찾고, 없으면 새로 만들어서 return */
     @Transactional
@@ -45,6 +47,7 @@ public class AlbumService {
         if(album == null){
             return addAlbum(new AlbumRequestDTO("기본"), member.getMemberID());
         }
+  
         return album;
     }
 
@@ -116,10 +119,10 @@ public class AlbumService {
     @Transactional
     public ResponseEntity<?> insertAlbumToAlbum(Album from, Album to){
         if (from != null && to != null) {
-            List<Diary> diariesToUpdate = diaryRepository.findByAlbum(from);
-            for (Diary diary : diariesToUpdate) {
-                diary.setAlbum(to);
-                diaryRepository.save(diary);
+            List<Image> diariesToUpdate = imageRepository.findByAlbum(from);
+            for (Image image: diariesToUpdate) {
+                image.setAlbum(to);
+                imageRepository.save(image);
             }
             return ResponseEntity.ok("앨범 이전이 완료되었습니다.");
         }
@@ -141,13 +144,17 @@ public class AlbumService {
         return ResponseEntity.ok(response);
     }
 
-    // 다이어리에서 이미지 추출
+    // 이미지에서 이미지 추출(경량화했음)
     public List<ImageForAlbumDTO> getImagesOfAlbum(Album album){
-        List<Diary> diaries = diaryRepository.findByAlbum(album);
-        return diaries.stream()
-            .filter(diary -> diary != null && diary.getImage() != null)
-            .map(diary -> new ImageForAlbumDTO(diary.getImage().getImageID(), diary.getImage().getImageFile(), diary.getDate(), diary.getDiaryID()))
+        List<Image> images = imageRepository.findByAlbum(album);
+        return images.stream()
+            .map(image -> new ImageForAlbumDTO(image.getImageID(), image.getImageFile(), image.getDate()))
             .collect(Collectors.toList());
-    }
 
+        // List<Diary> diaries = diaryRepository.findByAlbum(album);
+        // return diaries.stream()
+        //     .filter(diary -> diary != null && diary.getImage() != null)
+        //     .map(diary -> new ImageForAlbumDTO(diary.getImage().getImageID(), diary.getImage().getImageFile(), diary.getDate(), diary.getDiaryID()))
+        //     .collect(Collectors.toList());
+    }
 }

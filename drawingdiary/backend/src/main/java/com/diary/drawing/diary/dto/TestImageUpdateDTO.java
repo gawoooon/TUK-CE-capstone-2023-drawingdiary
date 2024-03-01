@@ -1,11 +1,6 @@
 package com.diary.drawing.diary.dto;
 
-import java.time.LocalDate;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,17 +11,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class CalenderDTO {
+public class TestImageUpdateDTO  {
     @Valid
 
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
-
-    @NotNull
     private String imageFile;
 
-    private String text;
+    private Long albumID;
 
-
+    private Long imageID;
 }

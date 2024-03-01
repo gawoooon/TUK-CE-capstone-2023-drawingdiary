@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled, { keyframes, css } from "styled-components";
 import Background from "../components/Background";
@@ -122,6 +122,7 @@ function DiaryPage() {
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
@@ -139,7 +140,7 @@ function DiaryPage() {
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
 
-  const [newDiaryText, setNewDiaryText] = useState('');
+  const [newDiaryText, setNewDiaryText] = useState("");
 
   // 페이지 로딩 시 초기 메시지를 5초간 표시
   useEffect(() => {
@@ -161,7 +162,7 @@ function DiaryPage() {
 
       // 응답에서 감정분석 결과 추출
       const { positive, negative, neutral } = response.data.document.confidence;
-      
+
       // 소수점 두 자리까지 반올림하여 상태 업데이트 -- 어떤 값이 가장 큰지 비교해야 함
       setPositiveValue(Math.round(positive * 100) / 100);
       setNegativeValue(Math.round(negative * 100) / 100);
@@ -171,11 +172,11 @@ function DiaryPage() {
       const sentimentResult = response.data.document.sentiment;
       let sentimentContent = "";
 
-      if (sentimentResult === 'positive') {
+      if (sentimentResult === "positive") {
         setNewDiaryText(`${diaryText} + 따듯한 색감으로 생성시켜줘`);
-      } else if (sentimentContent === 'negative') {
+      } else if (sentimentContent === "negative") {
         setNewDiaryText(`${diaryText} + 차가운 색감으로 생성시켜줘`);
-      } else if (sentimentContent === 'neutral') {
+      } else if (sentimentContent === "neutral") {
         setNewDiaryText(`${diaryText} + 베이지 색감으로 생성시켜줘`);
       }
     } catch (error) {
@@ -208,9 +209,7 @@ function DiaryPage() {
   const isSaveButtonEnabled = isTextValid;
 
   // 저장 버튼 클릭 핸들러
-  const handleSave = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-
+  const handleCreate = async () => {
     if (diaryText.length < 30) {
       setShowInitialMessage(true);
       setTimeout(() => {
@@ -219,21 +218,22 @@ function DiaryPage() {
       return;
     }
 
-    if (isSaveButtonEnabled) {
-      setAnimateSaveBtn(true);
-      setTimeout(() => {
-        setAnimateSaveBtn(false);
-      }, 5000);
+    // ?? (((확인)))
 
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 5000);
-    }
+    setAnimateCreateBtn(true);
+    setTimeout(() => {
+      setAnimateCreateBtn(false);
+    }, 500);
 
-    setIsLoading(true);
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 5000);
+
     // 감정 분석 실행
     analyzeSentiment();
+
+    setIsLoading(true);
 
     // 이미지 api
     try {
@@ -256,41 +256,60 @@ function DiaryPage() {
         const imageUrl = responseDate.image?.imageUrl;
         setIsLoading(false);
         setNewImageUrl(imageUrl);
-
-        if (imageUrl) {
-          try {
-            console.log("이미지 url", imageUrl);
-
-            // 이미지 url post
-            const responseImg = await axios.post(
-              "http://localhost:8080/api/image/test/create",
-              {
-                imageFile: imageUrl,
-                diaryID: 1,
-                promptID: 1,
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              }
-            );
-
-            if (responseImg.status === 200) {
-              console.log("이미지 URL이 백엔드로 전송되었습니다.");
-            } else {
-              console.error("이미지 URL 전송 실패:", responseImg.status);
-            }
-          } catch (error) {
-            console.log("Error: ", error);
-          }
-        }
       } else {
         console.error("이미지 저장 실패:", responseDiary.status);
 
         alert("이미지 저장에 실패하였습니다.");
       }
     } catch (error) {
-      console.error("Error saving diary:", error);
-      alert("일기 저장 중에 오류가 발생하였습니다.");
+      console.error("Error diary:", error);
+      alert("일기 중에 오류가 발생하였습니다.");
+    }
+  };
+
+  // 저장 버튼 클릭 핸들러
+  const handleSave = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (isSaveButtonEnabled) {
+      setAnimateSaveBtn(true);
+      setTimeout(() => {
+        setAnimateSaveBtn(false);
+      }, 5000);
+
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+    }
+
+    if (newImageUrl) {
+      try {
+        console.log("이미지 url", newImageUrl);
+
+        // 이미지 url post
+        const responseImg = await axios.post(
+          "http://localhost:8080/api/image/test/create",
+          {
+            imageFile: newImageUrl,
+            diaryID: 1,
+            promptID: 1,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (responseImg.status === 200) {
+          console.log("이미지 URL이 백엔드로 전송되었습니다.");
+        } else {
+          console.error("이미지 URL 전송 실패:", responseImg.status);
+        }
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+
+      navigate("/calendar");
     }
   };
 
@@ -346,7 +365,10 @@ function DiaryPage() {
 
             <EditDiaryArea>
               <EditDiary onDiaryTextChange={handleDiaryTextChange} />
-              <ImageOption onOptionSelect={handleOptionSelect} isLoading={isLoading}/>
+              <ImageOption
+                onOptionSelect={handleOptionSelect}
+                isLoading={isLoading}
+              />
             </EditDiaryArea>
 
             <div

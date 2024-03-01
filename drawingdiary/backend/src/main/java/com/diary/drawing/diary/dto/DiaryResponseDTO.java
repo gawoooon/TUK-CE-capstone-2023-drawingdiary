@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.diary.drawing.diary.domain.Diary;
+import com.diary.drawing.sentiment.domain.Sentiment;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class DiaryResponseDTO {
     private Long styleID;
     private String styleName;
     private String imageURL;
-    private String sentiment;
+    private Sentiment sentiment;
     private String comment;
 
     public static DiaryResponseDTO from(Diary diary) {
@@ -31,12 +32,12 @@ public class DiaryResponseDTO {
                 .text(diary.getText())
                 .weather(diary.getWeather())
                 .date(diary.getDate())
-                .albumID(diary.getAlbum().getAlbumID())
-                .albumName(diary.getAlbum().getAlbumName())
+                .albumID(diary.getImage().getAlbum().getAlbumID())
+                .albumName(diary.getImage().getAlbum().getAlbumName())
                 .styleID(diary.getImageStyle().getStyleID())
                 .styleName(diary.getImageStyle().getStyleName())
                 .imageURL(diary.getImage().getImageFile())
-                .sentiment(diary.getSentiment().getSentiment())
+                .sentiment(diary.getSentiment())
                 .comment(diary.getComment().getComment())
                 .build();
     }
