@@ -3,6 +3,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import openai
 import os
+import logging
 
 app = Flask(__name__)
 CORS(app)
@@ -47,7 +48,7 @@ def save_diary():
         return jsonify(response)
 
     except Exception as e:
-        print("Error saving diary:",  repr(e))
+        app.logger.error("Error saving diary: %s", repr(e))  # 로깅으로 변경
         return jsonify({"success": False, "message": "Error saving diary"})
 
 
