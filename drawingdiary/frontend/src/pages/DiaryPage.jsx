@@ -309,6 +309,7 @@ function DiaryPage() {
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
     const accessToken = localStorage.getItem("accessToken");
+    console.log(accessToken);
 
     if (isSaveButtonEnabled) {
       setAnimateSaveBtn(true);
@@ -360,62 +361,39 @@ function DiaryPage() {
       } catch (error) {
         console.log("Error: ", error);
       }
-      // const responseDiary = await axios.post(
-      //   "http://localhost:8080/api/diary/test/add",
-      //   {
-      //     text: diaryText,
-      //     weather: weatherState,
-      //     date: dateString,
-      //     albumID: selectedAlbumID,
-      //     memberID: memberID,
-      //     styleID: 1,
-      //     headers: {
-      //       Authorization: `Bearer ${accessToken}`,
-      //     },
 
-      //   }
-      // );
-      // if (responseDiary.status === 200) {
-      //   console.log("일기가 백엔드로 전송되었습니다.");
-      // } else {
-      //   console.error("일기 전송 실패:", responseDiary.status);
-      // }
+      // 일기 생성
+      const responseDiary = await axios.post(
+        "http://localhost:8080/api/diary/add",
+        {
+          // styleName, comment 수정
+          text: diaryText,
+          weather: weatherState,
+          date: dateString,
+          albumID: selectedAlbumID,
+          styleName: "미니멀리즘",
+          imageFile: newImageUrl,
+          confidence: {
+            positive: positiveValue,
+            negative: negativeValue,
+            neutral: neutralValue,
+          },
+          comment: "string",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (responseDiary.status === 200) {
+        console.log("일기가 백엔드로 전송되었습니다.");
+        navigate("/calendar");
+      } else {
+        console.error("일기 전송 실패:", responseDiary.status);
+      }
     } else {
       alert("이미지를 먼저 생성해주세요!");
     }
-
-    navigate("/calendar");
   };
-
-  // const apiUrl = "http://localhost:8080/api/diary/test/add";
-  // const response = await fetch(apiUrl, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
-  //     text: diaryText,
-  //     weather: "날씨 맑음",
-  //     dateID: "1",
-  //     albumID: 1,
-  //     memberID: memberID,
-  //     styleID: 0,
-  //   }),
-  // });
-
-  // const handleDelete = () => {
-  //   // 삭제 요청 들어가야함 -- 일기와 합치고 나서 추가적으로 해야 함
-  //   setAnimateDeleteBtn(true);
-  //   setTimeout(() => {
-  //     setAnimateDeleteBtn(false);
-  //   }, 500);
-
-  //   setShowDelete(true);
-  //   setTimeout(() => {
-  //     setShowDelete(false);
-  //   }, 5000);
-  // };
 
   return (
     <div>
