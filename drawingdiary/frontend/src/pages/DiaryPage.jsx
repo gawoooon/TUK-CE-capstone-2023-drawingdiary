@@ -1,17 +1,17 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled, { css, keyframes } from "styled-components";
-import { useAuth } from "../auth/context/AuthContext";
+import axios from "axios";
+import styled, { keyframes, css } from "styled-components";
 import Background from "../components/Background";
-import AlbumCategory from "../components/album/AlbumCategory";
-import AIComment from "../components/edit diary/AIComment";
-import EditDiary from "../components/edit diary/EditDiary";
-import GeneratedImage from "../components/edit diary/GeneratedImage";
-import ImageOption from "../components/edit diary/ImageOption";
-import Sentiment from "../components/sentiment/Sentiment";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
+import AlbumCategory from "../components/album/AlbumCategory";
+import EditDiary from "../components/edit diary/EditDiary";
 import Weather from "../components/weather/Weather";
+import ImageOption from "../components/edit diary/ImageOption";
+import GeneratedImage from "../components/edit diary/GeneratedImage";
+import AIComment from "../components/edit diary/AIComment";
+import Sentiment from "../components/sentiment/Sentiment";
+import { useAuth } from "../auth/context/AuthContext";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -85,6 +85,26 @@ const jumpAnimation = keyframes`
     100% { transform: translateY(0); }
 `;
 
+const RemoveButtonStyle = styled.button`
+  height: 50px;
+  width: 250px;
+  margin-bottom: 30px;
+  background-color: rgba(255, 184, 208, 0.5);
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  animation: ${(props) =>
+    props.animate
+      ? css`
+          ${jumpAnimation} 0.5s ease
+        `
+      : "none"};
+`;
+
 const SaveButtonStyle = styled.button`
   height: 50px;
   width: 250px;
@@ -141,9 +161,11 @@ function DiaryPage() {
 
   // message 부분
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
   const [showInitialMessage, setShowInitialMessage] = useState(true);
 
   const [animateSaveBtn, setAnimateSaveBtn] = useState(false);
+  // const [animateCreateBtn, setAnimateCreateBtn] = useState(false);
 
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
@@ -237,10 +259,10 @@ function DiaryPage() {
 
     // ?? (((확인)))
 
-    setAnimateCreateBtn(true);
-    setTimeout(() => {
-      setAnimateCreateBtn(false);
-    }, 500);
+    // setAnimateCreateBtn(true);
+    // setTimeout(() => {
+    //   setAnimateCreateBtn(false);
+    // }, 500);
 
     setShowCreate(true);
     setTimeout(() => {
@@ -256,7 +278,7 @@ function DiaryPage() {
     try {
       console.log("일기 내용 저장:", diaryText);
 
-      const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
+      const imageApiUrl = "http://localhost:5000/api/diary/image";
       const responseDiary = await fetch(imageApiUrl, {
         method: "POST",
         headers: {
@@ -344,6 +366,7 @@ function DiaryPage() {
       const responseDiary = await axios.post(
         "http://localhost:8080/api/diary/add",
         {
+          // styleName, comment 수정
           text: diaryText,
           weather: weatherState,
           date: dateString,
@@ -356,14 +379,11 @@ function DiaryPage() {
             neutral: neutralValue,
           },
           comment: "string",
-        },
-        {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      
       if (responseDiary.status === 200) {
         console.log("일기가 백엔드로 전송되었습니다.");
         navigate("/calendar");
@@ -409,6 +429,12 @@ function DiaryPage() {
                   일기가 성공적으로 생성되었습니다!
                 </MessageText>
               )}
+
+              {showCreate && (
+                <MessageText color="#ff0000">
+                  일기가 삭제되었습니다.
+                </MessageText>
+              )}
             </MessageContainer>
 
             <EditDiaryArea>
@@ -427,6 +453,14 @@ function DiaryPage() {
                 justifyContent: "space-between",
               }}
             >
+              <ButtonContainer>
+                <RemoveButtonStyle
+                  onClick={handleCreate}
+            
+                >
+                  생성
+                </RemoveButtonStyle>
+              </ButtonContainer>
 
               <ButtonContainer>
                 <SaveButtonStyle
