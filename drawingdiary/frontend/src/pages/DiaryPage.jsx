@@ -274,36 +274,36 @@ function DiaryPage() {
 
     setIsLoading(true);
 
-    // 이미지 api
-    // try {
-    //   console.log("일기 내용 저장:", diaryText);
+    //이미지 api
+    try {
+      console.log("일기 내용 저장:", diaryText);
 
-    //   const imageApiUrl = "http://localhost:5000/api/diary/image";
-    //   const responseDiary = await fetch(imageApiUrl, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ diaryText }),
-    //   });
+      const imageApiUrl = "http://localhost:5000/api/diary/image";
+      const responseDiary = await fetch(imageApiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ diaryText }),
+      });
 
-    //   if (responseDiary.ok) {
-    //     const responseDate = await responseDiary.json();
-    //     console.log("일기:", responseDate);
+      if (responseDiary.ok) {
+        const responseDate = await responseDiary.json();
+        console.log("일기:", responseDate);
 
-    //     // url 받아오기
-    //     const imageUrl = responseDate.image?.imageUrl;
-    //     setIsLoading(false);
-    //     setNewImageUrl(imageUrl);
-    //   } else {
-    //     console.error("이미지 저장 실패:", responseDiary.status);
+        // url 받아오기
+        const imageUrl = responseDate.image?.imageUrl;
+        setIsLoading(false);
+        setNewImageUrl(imageUrl);
+      } else {
+        console.error("이미지 저장 실패:", responseDiary.status);
 
-    //     alert("이미지 저장에 실패하였습니다.");
-    //   }
-    // } catch (error) {
-    //   console.error("Error diary:", error);
-    //   alert("일기 중에 오류가 발생하였습니다.");
-    // }
+        alert("이미지 저장에 실패하였습니다.");
+      }
+    } catch (error) {
+      console.error("Error diary:", error);
+      alert("일기 중에 오류가 발생하였습니다.");
+    }
   };
 
   // 저장 버튼 클릭 핸들러
@@ -322,76 +322,66 @@ function DiaryPage() {
       }, 5000);
     }
 
-    // image post
-    // if (newImageUrl) {
-    //   try {
-    //     console.log("이미지 url", newImageUrl);
-
-    //     // 이미지 url post
-    //     const responseImg = await axios.post(
-    //       "http://localhost:8080/api/image/test/create",
-    //       {
-    //         imageFile: newImageUrl,
-    //         diaryID: 1,
-    //         promptID: 1,
-    //         headers: {
-    //           Authorization: `Bearer ${accessToken}`,
-    //         },
-    //       }
-    //     );
-
-    //     if (responseImg.status === 200) {
-    //       console.log("이미지 URL이 백엔드로 전송되었습니다.");
-    //     } else {
-    //       console.error("이미지 URL 전송 실패:", responseImg.status);
-    //     }
-    //   } catch (error) {
-    //     console.log("Error: ", error);
-    //   }
-    // } else {
-    //   alert("이미지를 먼저 생성해주세요요!");
-    // }
-
     // 날짜 데이터
     const formattedDate = new Date(date.year, date.month - 1, date.day);
 
-    const dateString = `${formattedDate.getFullYear()}-${
-      formattedDate.getMonth() + 1
-    }-${formattedDate.getDate()}`;
+    // 날짜 및 월을 두 자릿수로 표시하는 함수
+    const pad = (number) => (number < 10 ? `0${number}` : number);
 
-    console.log(weatherState);
-    const responseDiary = await axios.post(
-      "http://localhost:8080/api/diary/test/add",
-      {
-        text: diaryText,
-        weather: weatherState,
-        date: dateString,
-        albumID: selectedAlbumID,
-        memberID: memberID,
-        styleID: 1,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        //       }{
-        // method: "POST",
-        // headers: {
-        //   Authorization: `Bearer ${accessToken}`,
-        // },
-        // body: JSON.stringify({
-        //   // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
-        //   text: diaryText,
-        //   weather: weatherState,
-        //   dateID: dateString,
-        //   albumID: selectedAlbumID,
-        //   memberID: memberID,
-        //   styleID: 1,
-        // }),
+    // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
+    const dateString = `${formattedDate.getFullYear()}-${pad(
+      formattedDate.getMonth() + 1
+    )}-${pad(formattedDate.getDate())}`;
+
+    console.log(dateString);
+    //image post
+    if (newImageUrl) {
+      try {
+        console.log("이미지 url", newImageUrl);
+
+        // 이미지 url post
+        const responseImg = await axios.post(
+          "http://localhost:8080/api/image/test/create",
+          {
+            imageFile: newImageUrl,
+            albumID: selectedAlbumID,
+            date: dateString,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (responseImg.status === 200) {
+          console.log("이미지 URL이 백엔드로 전송되었습니다.");
+        } else {
+          console.error("이미지 URL 전송 실패:", responseImg.status);
+        }
+      } catch (error) {
+        console.log("Error: ", error);
       }
-    );
-    if (responseDiary.status === 200) {
-      console.log("일기가 백엔드로 전송되었습니다.");
+      // const responseDiary = await axios.post(
+      //   "http://localhost:8080/api/diary/test/add",
+      //   {
+      //     text: diaryText,
+      //     weather: weatherState,
+      //     date: dateString,
+      //     albumID: selectedAlbumID,
+      //     memberID: memberID,
+      //     styleID: 1,
+      //     headers: {
+      //       Authorization: `Bearer ${accessToken}`,
+      //     },
+
+      //   }
+      // );
+      // if (responseDiary.status === 200) {
+      //   console.log("일기가 백엔드로 전송되었습니다.");
+      // } else {
+      //   console.error("일기 전송 실패:", responseDiary.status);
+      // }
     } else {
-      console.error("일기 전송 실패:", responseDiary.status);
+      alert("이미지를 먼저 생성해주세요!");
     }
 
     navigate("/calendar");
