@@ -62,3 +62,34 @@ services:
     volumes:
       - ./redis/data:/data
       - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
+
+  generate_image:
+    build:
+      context: ./python/AI
+    env_file:
+      - ./.env
+    container_name: generateImage
+    restart: "always"
+    ports:
+      - "5000:5000"
+    volumes:
+      - './python/AI:/app'
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: app.py
+    command: flask run --host=0.0.0.0 --port=5000
+
+
+  recommender:
+    build:
+      context: ./python/recommender/models
+    container_name: recommender
+    restart: "always"
+    ports:
+      - "5001:5001"
+    volumes:
+      - './python/recommender/models:/app'
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: model.py
+    command: flask run --host=0.0.0.0 --port=5001

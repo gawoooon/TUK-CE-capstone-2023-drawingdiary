@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link, useAsyncError } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../auth/context/AuthContext";
 import axios from "axios";
@@ -17,7 +17,7 @@ const SideBarStyle = styled.div`
 `;
 
 const SideBarHeader = styled.div`
-  padding: 40px 20px; // 왼쪽 오른쪽 패딩 추가
+  padding: 50px 40px 25px 20px;
   margin-bottom: 40px; // 하단 여백 추가
   display: flex;
   align-items: center;
@@ -68,17 +68,16 @@ const MenuItemText = styled.span`
 `;
 
 const ProfileSection = styled.div`
-  padding: 30px;
-  margin-bottom: 20px;
+  padding: 25px 0 25px 25px;
   border-top: 1px solid #ddd; // 상단에 경계선 추가
-  min-height: 120px;
+  min-height: 100px;
 `;
 
 const ProfileImage = styled.img`
-  width: 50px;
-  min-height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%; // 이미지를 원형으로 만듭니다.
-  margin-bottom: 10px; // 프로필 이름과의 간격 설정
+  margin-bottom: 20px; // 프로필 이름과의 간격 설정
 `;
 
 const ProfileName = styled.div`
@@ -89,6 +88,21 @@ const ProfileName = styled.div`
 const ProfileEmail = styled.div`
   color: #333;
   font-size: 13px; // 프로필 이름의 폰트 크기 설정
+`;
+
+
+const SignOutButton = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  color: #333;
+  text-decoration: none;
+  margin-top: auto; // 메뉴 아이템들과 분리하기 위해 자동 마진 추가
+
+  &:hover {
+    background: #ececec;
+    border-left: 5px solid rgba(255, 184, 208, 0.58);
+  }
 `;
 
 
@@ -131,21 +145,26 @@ const SideBar = ({ isOpen }) => {
       <SideBarMenu>
         <MenuItem to="/calendar" isOpen={isOpen}>
           <img src="schedule.png" alt="Home" />
-          <MenuItemText isOpen={isOpen}>Home</MenuItemText>
+          <MenuItemText isOpen={isOpen}>캘린더</MenuItemText>
         </MenuItem>
         <MenuItem to="/album" isOpen={isOpen}>
           <img src="photo-album.png" alt="Album" />
-          <MenuItemText isOpen={isOpen}>Album</MenuItemText>
+          <MenuItemText isOpen={isOpen}>앨범</MenuItemText>
         </MenuItem>
         <MenuItem to="/stats" isOpen={isOpen}>
           <img src="graph.png" alt="Statics" />
-          <MenuItemText isOpen={isOpen}>Analytics</MenuItemText>
+          <MenuItemText isOpen={isOpen}>분석</MenuItemText>
         </MenuItem>
         <MenuItem to="/my" isOpen={isOpen}>
           <img src="my-page.png" alt="MyPage" />
-          <MenuItemText isOpen={isOpen}>My Page</MenuItemText>
+          <MenuItemText isOpen={isOpen}>마이페이지</MenuItemText>
         </MenuItem>
+        <SignOutButton to="/" isOpen={isOpen}>
+          <img src="sign-out.png" alt="Log out"/>
+          <MenuItemText isOpen={isOpen}>로그아웃</MenuItemText>
+        </SignOutButton>
       </SideBarMenu>
+
       <ProfileSection>
         <ProfileImage src="user.png" alt="User" />
         <MenuItemText isOpen={isOpen}>
@@ -153,7 +172,7 @@ const SideBar = ({ isOpen }) => {
         </MenuItemText>
         <MenuItemText isOpen={isOpen}>
           <ProfileEmail>{userEmail}</ProfileEmail>
-          </MenuItemText>
+        </MenuItemText>
       </ProfileSection>
     </SideBarStyle>
   );

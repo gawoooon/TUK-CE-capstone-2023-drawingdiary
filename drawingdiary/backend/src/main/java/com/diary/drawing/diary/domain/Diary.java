@@ -4,10 +4,10 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.diary.drawing.album.domain.Album;
 import com.diary.drawing.comment.Comment;
 import com.diary.drawing.common.BaseTime;
 import com.diary.drawing.diary.dto.DiaryRequestDTO;
+import com.diary.drawing.diary.dto.FinalDiaryRequestDTO;
 import com.diary.drawing.imagestyle.domain.ImageStyle;
 import com.diary.drawing.sentiment.domain.Sentiment;
 import com.diary.drawing.user.domain.Member;
@@ -38,7 +38,7 @@ public class Diary extends BaseTime{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diaryID;
 
-    @Column(length = 5000)
+    @Column(length = 300)
     private String text;
 
     @Enumerated(EnumType.STRING)
@@ -46,10 +46,6 @@ public class Diary extends BaseTime{
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-
-    @ManyToOne(fetch = FetchType.LAZY)  // 여러 다이어리와 하나의 앨범
-    @JoinColumn(name = "albumID") // 외부키 references from albumid
-    private Album album;
 
     @ManyToOne(fetch = FetchType.LAZY)  // 여러개의 다이어리와 하나의 인물
     @JoinColumn(name = "memberID") // 외부키 references from memberid
@@ -74,22 +70,28 @@ public class Diary extends BaseTime{
     
 
     @Builder
-    public Diary(String text, String weather, LocalDate date, Album album, Member member, ImageStyle imageStyle){
+    public Diary(String text, String weather, LocalDate date, Member member,
+                ImageStyle imageStyle, Image image, Sentiment sentiment, Comment comment){
         this.text = text;
         this.weather=Weather.valueOf(weather);
         this.date=date;
-        this.album=album;
         this.member=member;
         this.imageStyle=imageStyle;
-        this.image = null;
-        this.sentiment = null;
-        this.comment = null;
+        this.image = image;
+        this.sentiment = sentiment;
+        this.comment = comment;
     }
 
-    public Diary update(DiaryRequestDTO dto, Album album, ImageStyle imageStyle){
+    public Diary update(FinalDiaryRequestDTO dto, ImageStyle imageStyle){
         this.text=dto.getText();
         this.weather= Weather.valueOf(dto.getWeather());
-        this.album=album;
+        this.imageStyle=imageStyle;
+        return this;
+    }
+
+    public Diary testUpdate(DiaryRequestDTO dto, ImageStyle imageStyle){
+        this.text=dto.getText();
+        this.weather= Weather.valueOf(dto.getWeather());
         this.imageStyle=imageStyle;
         return this;
     }
@@ -97,11 +99,6 @@ public class Diary extends BaseTime{
     // 문자열로 weather 주기
     public String getWeather(){
         return this.weather.name();
-    }
-    
-    // Album set
-    public void setAlbum(Album album){
-        this.album = album;
     }
 
 }

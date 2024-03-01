@@ -3,12 +3,15 @@ package com.diary.drawing.album.dto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class AlbumRequestDTO {
     
@@ -18,9 +21,5 @@ public class AlbumRequestDTO {
     @NotEmpty(message = "앨범 이름을 비울 수 없습니다.")
     private String albumName;
 
-
-    public AlbumRequestDTO(String albumName){
-        this.albumName = albumName;
-    }
 
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import axios from 'axios';
 import { CategoryProvider } from "./components/album/CategoryList";
 
 import LoginPage from "./pages/LoginPage.jsx";
@@ -23,7 +22,7 @@ function App() {
         <Route path="/join" element={<JoinPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route
-          path="/diary/1"
+          path="/diary/:memberId/:dateId"
           element={
             <CategoryProvider>
               <DiaryPage />

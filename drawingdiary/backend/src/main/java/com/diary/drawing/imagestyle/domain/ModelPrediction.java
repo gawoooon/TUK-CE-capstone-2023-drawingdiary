@@ -34,13 +34,16 @@ public class ModelPrediction {
 
     private Long predictedStyle4;
 
+    private Long predictedStyle5;
+
     @Builder
-    public ModelPrediction(Member member, Long predictedStyle1, Long predictedStyle2, Long predictedStyle3, Long predictedStyle4){
+    public ModelPrediction(Member member, Long predictedStyle1, Long predictedStyle2, Long predictedStyle3, Long predictedStyle4, Long predictedStyle5){
         this.member=member;
         this.predictedStyle1=predictedStyle1;
         this.predictedStyle2=predictedStyle2;
         this.predictedStyle3=predictedStyle3;
         this.predictedStyle4=predictedStyle4;
+        this.predictedStyle5=predictedStyle5;
     }
 
 

@@ -1,5 +1,9 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Lottie from "react-lottie";
+import imageLoading from "../../animation/imageLodding.json"
+import ImageStyleLists from "./ImageStyleLists";
 
 const OptionContainer = styled.div`
   width: 450px;
@@ -51,7 +55,7 @@ const ButtonImage = styled.img`
 
 const DropdownContent = styled.div`
     max-height: 200px;
-    width: auto;
+    width: 150px;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: thin;
@@ -79,11 +83,25 @@ const DropdownItem = styled.a`
   }
 `;
 
-const ImageOption = ({ onOptionSelect }) => {
+const ImageOption = ({ onOptionSelect, isLoading }) => {
+  const LoadingOptions = {
+    loop:true,
+    autoplay: true,
+    animationData: imageLoading,
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [selectedButtonStyle, setSelectedButtonStyle] = useState(null);
   const [selectedDropdownOption, setSelectedDropdownOption] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
+
+  const [userName, setUserName] = useState("");
+  const [userAge, setUserAge] = useState(0);
+  const [userGender, setUserGender] = useState("");
+
+  const [imageList, setImageList] = useState([]);
+  const [nonDuplicateStyles, setNonDuplicateStyles] = useState([]);
+
+  const accessToken = localStorage.getItem('accessToken');
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -102,10 +120,60 @@ const ImageOption = ({ onOptionSelect }) => {
     setIsSelected(true);
   };
 
+  const fetchOptionStyle = async () => {
+    const response = await axios.get("http://localhost:8080/api/get-member", {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    const birthYear = parseInt(response.data.birth.split("-")[0]);
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - birthYear;
+
+    const genderCodes = { "S": "secret", "F": "female", "M": "male"};
+    const gender = genderCodes[response.data.gender] || "Unknown";
+
+    setUserAge(age);
+    setUserGender(gender);
+    setUserName(response.data.name);
+    
+    const apiUrl = "http://127.0.0.1:5001/api/get-styles"
+
+    try {
+      const styleResponse = await fetch(apiUrl, {
+        method: "POST", 
+        headers: {  
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          age: age,
+          gender: gender
+         })
+      });
+      
+      if (styleResponse.ok) {
+        const styleData = await styleResponse.json();
+        setImageList(styleData.predicted_styles);
+      } 
+      else {
+        console.log("스타일을 불러오는 중 에러가 발생했습니다.");
+      }
+    } catch (error) {
+      console.log("스타일을 불러오는 중 에러 발생: ", error);
+    }
+  };
+
   useEffect(() => {
-    // 옵션 선택 시 상위 컴포넌트로 상태 전달
+    fetchOptionStyle();
+  }, []);
+
+  useEffect(() => {
     onOptionSelect(isSelected);
-  }, [isSelected, onOptionSelect]);
+
+    const filterNonDuplicateStyles = ImageStyleLists.filter(style => !imageList.includes(style));
+    setNonDuplicateStyles(filterNonDuplicateStyles);
+  }, [isSelected, onOptionSelect, imageList]);
 
   return (
       <OptionContainer>
@@ -113,23 +181,27 @@ const ImageOption = ({ onOptionSelect }) => {
         <SelectedStyle>
           선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : selectedDropdownOption !== null ? selectedDropdownOption : "없음"}
         </SelectedStyle>
-        {Array.from({ length: 5 }, (_, index) => (
-          <ButtonStyle key={index} isSelected={selectedButtonStyle === index + 1} onClick={() => handleButtonStyleSelect(index + 1)}>
-            {index + 1}
-          </ButtonStyle>
-        ))}
+        {isLoading ? (
+          <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={100} width={100} />
+        ) : (
+          imageList.map((style, index) => (
+            <ButtonStyle key={index} isSelected={selectedButtonStyle === style} onClick={() => handleButtonStyleSelect(style)}>
+              {style}
+            </ButtonStyle>
+          ))
+        )}
 
         <div>
           <TextStyle>
-            님의 성격을 고려해 선별한 리스트입니다.<br></br>마음에 드시는 옵션이 없으면 더보기를 눌러주세요.
+            {userName}님의 성격을 고려해 선별한 리스트입니다.<br></br>마음에 드시는 옵션이 없으면 더보기를 눌러주세요.
           </TextStyle>
 
           <DropdownContainer>
             <ButtonImage onClick={toggleDropdown} src="/three-dots.png" alt="plus button" />
             <DropdownContent isOpen={isOpen}>
-              {Array.from({ length: 20 }, (_, index) => (
-                <DropdownItem key={index} onClick={() => handleDropdownOptionSelect(index + 6)}>
-                  {index + 6}
+              {nonDuplicateStyles.map((style, index) => (
+                <DropdownItem key={index} onClick={() => handleDropdownOptionSelect(style)}>
+                  {style}
                 </DropdownItem>
               ))}
             </DropdownContent>

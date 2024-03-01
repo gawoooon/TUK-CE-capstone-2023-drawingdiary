@@ -6,13 +6,14 @@ public enum Weather {
     clearsky,
     fewclouds,
     scatteredclouds,
-    brokenclouds,
+    clouds,
     showerrain,
-    rain,
+    lightrain,
     thunderstorm,
     snow,
     mist,
-    lightsnow
+    drizzle
+    
 
 
 }

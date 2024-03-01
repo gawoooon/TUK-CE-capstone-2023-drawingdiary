@@ -1,5 +1,7 @@
 package com.diary.drawing.sentiment.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,8 @@ public class SentimentDTO {
     @Data
     @NoArgsConstructor
     public static class Document {
+        @JsonProperty("sentiment")
+        private String sentiment;
         private Confidence confidence;
     }
 

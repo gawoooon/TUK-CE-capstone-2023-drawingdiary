@@ -15,7 +15,7 @@ const ModalBackground = styled.div`
 `;
 const ModalStyle = styled.div`
     width: 350px;
-    height: 180px;
+    height: 230px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -31,13 +31,28 @@ const ModalStyle = styled.div`
     align-items: center;
     font-size: 20px;
     font-weight: bold;
+
+    img {
+        margin-bottom: 30px;
+    }
 `;
 
 const ButtonContainer = styled.div`
     margin-top: 50px;
 `;
 
-const ButtonStyle = styled.button`
+const YesStyle = styled.button`
+    width: 100px;
+    height: 40px;
+    margin: 10px;
+    align-items: center;
+    font-size: 15px;
+    border-radius: 10px;
+    border: 2px solid rgba(106, 156, 253, 0.3);
+    background-color: white;
+`;
+
+const NoStyle = styled.button`
     width: 100px;
     height: 40px;
     margin: 10px;
@@ -48,16 +63,18 @@ const ButtonStyle = styled.button`
     background-color: rgba(106, 156, 253, 0.3);
 `;
 
+
 const Modal = ({ isOpen, onClose, onConfirm }) => {
     if(!isOpen) return null;
 
     return (
         <ModalBackground>
             <ModalStyle>
+                <img src="trash.png" />
                 <p>앨범을 삭제하시겠습니까?</p>
                 <ButtonContainer>
-                    <ButtonStyle onClick={onConfirm}>예</ButtonStyle>
-                    <ButtonStyle onClick={onClose}>아니오</ButtonStyle>
+                    <YesStyle onClick={onConfirm}>예</YesStyle>
+                    <NoStyle onClick={onClose}>아니오</NoStyle>
                 </ButtonContainer>
             </ModalStyle>
         </ModalBackground>

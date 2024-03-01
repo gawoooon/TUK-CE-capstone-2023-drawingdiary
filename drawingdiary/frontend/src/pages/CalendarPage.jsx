@@ -7,7 +7,7 @@ import Calendar2 from "../components/Calendar2";
 import SideBar from "../components/sidebar/SideBar";
 import TrueComponent from "../components/TrueComponent";
 import FalseComponent from "../components/FalseComponent";
-import CalendarProfile from "../components/CalendarProfile";
+import { useAuth } from "../auth/context/AuthContext";
 
 import { GrFormPreviousLink } from "react-icons/gr";
 
@@ -38,18 +38,6 @@ const LeftBox = styled.div`
   margin-right: 20px;
 `;
 
-const LeftTopBox = styled.div`
-  display: flex;
-  width: 100%;
-  height: 25%;
-`;
-
-const ProfileBox = styled.div`
-  display: ${({ showProfileBox }) => (showProfileBox ? "flex" : "none")};
-  width: 100%;
-  height: 100%;
-`;
-
 const MiddleBox = styled.div`
   display: flex;
   width: ${({ middleBoxWidth }) => middleBoxWidth};
@@ -72,13 +60,14 @@ const RightBox = styled.div`
   transition: opacity 1s ease-out, width 200ms ease-out;
   box-sizing: border-box;
   overflow: hidden; // 내용이 max-height를 넘어가지 않도록 설정
-  max-height: ${({ showRightBox }) => (showRightBox ? "1000px" : "0")}; // 점차적으로 높이가 늘어나게 설정
+  max-height: ${({ showRightBox }) =>
+    showRightBox ? "1000px" : "0"}; // 점차적으로 높이가 늘어나게 설정
 `;
 
 const PrevBtn = styled.button`
   display: ${({ prevBtnBox }) => (prevBtnBox ? "display" : "none")};
-  width: 10px;
-  height: 10px;
+  width: 30px;
+  height: 30px;
   font-size: 50px;
   color: #090071;
   border: none;
@@ -94,7 +83,6 @@ const ResultBox = styled.div`
 `;
 
 function CalendarPage() {
-
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
   const [middleBoxWidth, setMiddleBoxWidth] = useState("75%");
@@ -105,9 +93,10 @@ function CalendarPage() {
   const [prevBtnBox, setPrevBtnBox] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  const { memberID } = useAuth();
 
   const handleDateClick = async (day) => {
-
+    console.log(memberID);
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
       setLeftBoxWidth("25%");
@@ -199,11 +188,6 @@ function CalendarPage() {
       <Body>
         <CalendarBox>
           <LeftBox leftBoxWidth={leftBoxWidth}>
-            {/* <LeftTopBox>
-              <ProfileBox showProfileBox={showProfileBox}>
-                <CalendarProfile />
-              </ProfileBox>
-            </LeftTopBox> */}
             <SideBar isOpen={isOpen} />
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
@@ -225,12 +209,14 @@ function CalendarPage() {
                     year={selectedDate.getFullYear()}
                     month={selectedDate.getMonth() + 1}
                     day={selectedDate.getDate()}
+                    selectedDate={selectedDate}
                   />
                 ) : (
                   <FalseComponent
                     year={selectedDate.getFullYear()}
                     month={selectedDate.getMonth() + 1}
                     day={selectedDate.getDate()}
+                    selectedDate={selectedDate}
                   />
                 ))}
             </ResultBox>

@@ -7,6 +7,8 @@ const InputStyle = styled.input`
     padding-left: 10px;
     border: 1px solid #909090;
     border-radius: 10px;
+    outline: none;
+    font-size: 13px;
 `;
 
 const ShortInputField = ({ id, type, value, onChange, placeHolder }) => {

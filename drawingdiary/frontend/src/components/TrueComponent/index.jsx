@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
+import { format } from "date-fns";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const ResultBox = styled.div`
   display: flex;
@@ -58,19 +60,22 @@ const BottomBox = styled.div`
 `;
 
 const Divider = styled.hr`
-  width: 90%; 
+  width: 90%;
   border: none;
-  height: 1px; 
+  height: 1px;
   background-color: lightgray;
 `;
 
-function TrueComponent({year, month, day }) {
+function TrueComponent({ year, month, day, selectedDate }) {
   const navigate = useNavigate();
+  const { memberID } = useAuth();
 
   const handleEdit = () => {
     // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    navigate("/diary/1", { state: { date: { year, month, day } } });
-
+    const formattedDate = format(selectedDate, "yyyyMMdd");
+    navigate(`/diary/${memberID}/${formattedDate}`, {
+      state: { date: { year, month, day } },
+    });
   };
 
   return (
@@ -82,7 +87,7 @@ function TrueComponent({year, month, day }) {
         <EditBtn onClick={handleEdit}>편집하기</EditBtn>
       </TopBox>
       <MiddleBox></MiddleBox>
-      <Divider/>
+      <Divider />
       <BottomBox></BottomBox>
     </ResultBox>
   );
