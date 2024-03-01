@@ -18,6 +18,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>{
 
     Optional<Diary> findByDateAndMember(LocalDate date, Member member);
 
+    boolean existsByDateAndMember(LocalDate date, Member member);
+
     @Query("SELECT d FROM Diary d WHERE d.member = :member AND d.date BETWEEN :startDate AND :endDate")
     List<Diary> findByMemberAndDateBetween(Member member, LocalDate startDate, LocalDate endDate);
 

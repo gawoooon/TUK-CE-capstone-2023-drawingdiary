@@ -1,7 +1,5 @@
 package com.diary.drawing.diary.service;
 
-import java.util.Optional;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,8 +45,8 @@ public class GenerateDiaryService {
 
         // 0. id로 멤버 객체 가져오기, 다이어리 유무 validate
         Member member = validateMemberService.validateMember(memberID);
-        Optional<Diary> test = diaryRepository.findByDateAndMember(finalDiaryRequestDTO.getDate(), member);
-        if(test.isPresent()) {throw new DiaryResponseException(DiaryExceptionType.ALREADY_EXIST_DIARY);}
+        if(diaryRepository.existsByDateAndMember(finalDiaryRequestDTO.getDate(), member))
+            {throw new DiaryResponseException(DiaryExceptionType.ALREADY_EXIST_DIARY);}
 
         // 1. (없으면 sentiment 추가) Sentiment 객체 받아옴
         Sentiment sentiment = new Sentiment(finalDiaryRequestDTO.getConfidence());
