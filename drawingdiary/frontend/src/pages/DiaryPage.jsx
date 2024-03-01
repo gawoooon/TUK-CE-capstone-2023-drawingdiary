@@ -1,16 +1,17 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import styled, { keyframes, css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+import { useAuth } from "../auth/context/AuthContext";
 import Background from "../components/Background";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
 import AlbumCategory from "../components/album/AlbumCategory";
-import EditDiary from "../components/edit diary/EditDiary";
-import Weather from "../components/weather/Weather";
-import ImageOption from "../components/edit diary/ImageOption";
-import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
+import EditDiary from "../components/edit diary/EditDiary";
+import GeneratedImage from "../components/edit diary/GeneratedImage";
+import ImageOption from "../components/edit diary/ImageOption";
 import Sentiment from "../components/sentiment/Sentiment";
+import ShortSidebar from "../components/sidebar/ShortSidebar";
+import Weather from "../components/weather/Weather";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -118,14 +119,22 @@ const MessageText = styled.div`
 `;
 
 function DiaryPage() {
-  // image 부분
+  const navigate = useNavigate();
+  const { memberID } = useAuth();
+
+  // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [newDiaryText, setNewDiaryText] = useState("");
 
+  // 날짜, 날씨
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
+  const [weatherState, setWeatherState] = useState("Unknown");
+
+  // 앨범
+  const [selectedAlbumID, setSelectedAlbumID] = useState(null);
 
   const [isTextValid, setIsTextValid] = useState(false);
   const [isOptionSelected, setIsOptionSelected] = useState(false);
@@ -140,7 +149,15 @@ function DiaryPage() {
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
 
-  const [newDiaryText, setNewDiaryText] = useState("");
+  // 날씨 상태를 업데이트하는 함수
+  const handleWeatherStateChange = (newWeatherState) => {
+    setWeatherState(newWeatherState);
+  };
+
+  // 앨범 상태를 업데이트하는 함수수
+  const handleSelectedAlbumChange = (onSelectAlbum) => {
+    setSelectedAlbumID(onSelectAlbum);
+  };
 
   // 페이지 로딩 시 초기 메시지를 5초간 표시
   useEffect(() => {
@@ -225,9 +242,9 @@ function DiaryPage() {
       setAnimateCreateBtn(false);
     }, 500);
 
-    setShowSuccess(true);
+    setShowCreate(true);
     setTimeout(() => {
-      setShowSuccess(false);
+      setShowCreate(false);
     }, 5000);
 
     // 감정 분석 실행
@@ -235,7 +252,7 @@ function DiaryPage() {
 
     setIsLoading(true);
 
-    // 이미지 api
+    //이미지 api
     try {
       console.log("일기 내용 저장:", diaryText);
 
@@ -270,6 +287,7 @@ function DiaryPage() {
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
     const accessToken = localStorage.getItem("accessToken");
+    console.log(accessToken);
 
     if (isSaveButtonEnabled) {
       setAnimateSaveBtn(true);
@@ -283,6 +301,19 @@ function DiaryPage() {
       }, 5000);
     }
 
+    // 날짜 데이터
+    const formattedDate = new Date(date.year, date.month - 1, date.day);
+
+    // 날짜 및 월을 두 자릿수로 표시하는 함수
+    const pad = (number) => (number < 10 ? `0${number}` : number);
+
+    // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
+    const dateString = `${formattedDate.getFullYear()}-${pad(
+      formattedDate.getMonth() + 1
+    )}-${pad(formattedDate.getDate())}`;
+
+    console.log(dateString);
+    //image post
     if (newImageUrl) {
       try {
         console.log("이미지 url", newImageUrl);
@@ -292,8 +323,8 @@ function DiaryPage() {
           "http://localhost:8080/api/image/test/create",
           {
             imageFile: newImageUrl,
-            diaryID: 1,
-            promptID: 1,
+            albumID: selectedAlbumID,
+            date: dateString,
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -309,26 +340,40 @@ function DiaryPage() {
         console.log("Error: ", error);
       }
 
-      navigate("/calendar");
+      // 일기 생성
+      const responseDiary = await axios.post(
+        "http://localhost:8080/api/diary/add",
+        {
+          text: diaryText,
+          weather: weatherState,
+          date: dateString,
+          albumID: selectedAlbumID,
+          styleName: "미니멀리즘",
+          imageFile: newImageUrl,
+          confidence: {
+            positive: positiveValue,
+            negative: negativeValue,
+            neutral: neutralValue,
+          },
+          comment: "string",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      
+      if (responseDiary.status === 200) {
+        console.log("일기가 백엔드로 전송되었습니다.");
+        navigate("/calendar");
+      } else {
+        console.error("일기 전송 실패:", responseDiary.status);
+      }
+    } else {
+      alert("이미지를 먼저 생성해주세요!");
     }
   };
-
-  // const apiUrl = "http://localhost:8080/api/diary/test/add";
-  // const response = await fetch(apiUrl, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     // 여기는 추가적으로 수정을 꼭 꼭 꼭 해야 한다!
-  //     text: diaryText,
-  //     weather: "날씨 맑음",
-  //     dateID: "1",
-  //     albumID: 1,
-  //     memberID: memberID,
-  //     styleID: 0,
-  //   }),
-  // });
 
   return (
     <div>
@@ -337,8 +382,11 @@ function DiaryPage() {
           <ShortSidebar />
           <RightContainer>
             <TopContent>
-              <Weather date={date} />
-              <AlbumCategory />
+              <Weather
+                date={date}
+                onWeatherStateChange={handleWeatherStateChange}
+              />
+              <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
             </TopContent>
 
             <div

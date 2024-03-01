@@ -13,6 +13,7 @@ public enum Weather {
     snow,
     mist,
     drizzle
+    
 
 
 }
