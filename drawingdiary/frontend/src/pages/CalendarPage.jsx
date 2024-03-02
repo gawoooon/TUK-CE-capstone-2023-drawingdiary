@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { isSameDay } from "date-fns";
+import { isSameDay, setDate } from "date-fns";
 
 import Background from "../components/Background";
 import Calendar2 from "../components/Calendar2";
@@ -10,6 +10,8 @@ import FalseComponent from "../components/FalseComponent";
 import { useAuth } from "../auth/context/AuthContext";
 
 import { GrFormPreviousLink } from "react-icons/gr";
+import { CalendarProvider, useCalendar } from "../components/Calendar2/CalendarProvider";
+import axios from "axios";
 
 const Body = styled.body`
   display: flex;
@@ -87,29 +89,33 @@ function CalendarPage() {
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
   const [middleBoxWidth, setMiddleBoxWidth] = useState("75%");
   const [showRightBox, setShowRightBox] = useState(false);
-  const [showProfileBox, setShowProfileBox] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
   const [prevBtnBox, setPrevBtnBox] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+
   const { memberID } = useAuth();
+  const accessToken = localStorage.getItem('accessToken');
+  
+  const { year, month } = useCalendar();
+  const [data, setData] = useState([]);
+  const [date, setDate] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
+  const [text, setText] = useState("");
 
   const handleDateClick = async (day) => {
-    console.log(memberID);
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
       setLeftBoxWidth("25%");
       setRightBoxWidth("0%");
       setMiddleBoxWidth("75%");
       setShowRightBox(false);
-      setShowProfileBox(true);
       setSelectedDateHasData(false);
       setPrevBtnBox(false);
       setIsOpen(true);
     } else {
       setShowRightBox(true);
-      setShowProfileBox(false);
       setLeftBoxWidth("7%");
       setMiddleBoxWidth("65%");
       setRightBoxWidth("28%");
@@ -129,26 +135,38 @@ function CalendarPage() {
     }
   };
 
+  const fetchCalendar = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/calender/${year}-${month}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      setData(response.data);
+    } catch (error) {
+      console.log("error: ", error);
+    };
+  };
+
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
-      // 데이터를 가져옴
-      const simulateDataFetch = () => {
-        return new Promise((resolve) => {
-          const dataArray = [{ date: "2024-01-23" }, { date: "2024-01-24" }];
-          resolve(dataArray);
-        });
-      };
-
+      
       // 실제 데이터를 받아오는 부분
-      const dataArray = await simulateDataFetch();
+      const dateArray = data.map(entry => entry.date);
+      console.log("dataArray: ", dateArray);
 
       // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
-      const index = dataArray.findIndex((item) =>
-        isSameDay(new Date(item.date), date)
+      const index = data.findIndex((item) =>
+        isSameDay(new Date(item.date), date),
       );
+      console.log("index: ", index);
 
       //일치하면 인덱스 값/ 아니면 -1 반환 => 존재하면 true, 존재하지 않으면 false
+      if(index !== -1) {
+        setText(data[index].text);
+        setImageUrl(data[index].imageFile);
+      }
       const hasData = index !== -1;
       return hasData;
     } catch (error) {
@@ -159,6 +177,8 @@ function CalendarPage() {
 
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
+    fetchCalendar();
+
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
         setIsLoading(true);
@@ -191,10 +211,12 @@ function CalendarPage() {
             <SideBar isOpen={isOpen} />
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
-            <Calendar2
-              leftBoxWidth={leftBoxWidth}
-              onDateClick={handleDateClick}
-            />
+            <CalendarProvider>
+              <Calendar2
+                leftBoxWidth={leftBoxWidth}
+                onDateClick={handleDateClick}
+              />
+            </CalendarProvider>
           </MiddleBox>
 
           <RightBox showRightBox={showRightBox} rightBoxWidth={rightBoxWidth}>
@@ -210,6 +232,8 @@ function CalendarPage() {
                     month={selectedDate.getMonth() + 1}
                     day={selectedDate.getDate()}
                     selectedDate={selectedDate}
+                    text={text}
+                    image={imageUrl}
                   />
                 ) : (
                   <FalseComponent
