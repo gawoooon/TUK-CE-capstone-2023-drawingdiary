@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { format } from "date-fns";
 import { useAuth } from "../../auth/context/AuthContext";
 import { useState } from "react";
+import axios from "axios";
 
 const ResultBox = styled.div`
   display: flex;
@@ -85,17 +86,34 @@ const Divider = styled.hr`
 function TrueComponent({ year, month, day, selectedDate, image: imageUrl, text }) {
   const navigate = useNavigate();
   const { memberID } = useAuth();
+  const accessToken = localStorage.getItem('accessToken');
 
   const handleEdit = () => {
     // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
     const formattedDate = format(selectedDate, "yyyyMMdd");
+    console.log(selectedDate);
     navigate(`/diary/${memberID}/${formattedDate}`, {
       state: { date: { year, month, day } },
     });
   };
 
-  const handleRemove = () => {
+  const handleRemove = async () => {
+    const year = format(selectedDate, "yyyy");
+    const month = format(selectedDate, "MM");
+    const day = format(selectedDate, "dd");
 
+    console.log("year: ", year, ", month: ", month, ", day: ", day);
+
+    try {
+      const response = await axios.delete(`http://localhost:8080/api/diary/${year}-${month}-${day}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      console.log("response: ", response);
+    } catch (error) {
+      console.log("error: ", error.response.data);
+    }
   };
 
   return (

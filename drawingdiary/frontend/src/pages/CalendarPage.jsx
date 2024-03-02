@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { isSameDay, setDate } from "date-fns";
+import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 import Background from "../components/Background";
 import Calendar2 from "../components/Calendar2";
 import SideBar from "../components/sidebar/SideBar";
-import TrueComponent from "../components/TrueComponent";
 import FalseComponent from "../components/FalseComponent";
 import { useAuth } from "../auth/context/AuthContext";
 
@@ -84,6 +85,83 @@ const ResultBox = styled.div`
   height: 95%;
 `;
 
+const TrueComponentBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 30px 30px 30px 0px;
+  box-sizing: border-box;
+  transition: width 0.5s linear;
+`;
+const TopBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 5%;
+`;
+
+const DateBox = styled.div`
+  font-size: 22px;
+  font-weight: 800;
+  color: #090071;
+`;
+
+const EditBtn = styled.button`
+  width: 65px;
+  height: 34px;
+  border: none;
+  outline: none;
+  background-color: white;
+  font-size: 13px;
+  color: black;
+  cursor: pointer;
+  border-radius: 15px;
+  `;
+
+const RemoveBtn = styled.button`
+  width: 65px;
+  height: 34px;
+  border: none;
+  outline: none;
+  background-color: white;
+  font-size: 13px;
+  color: black;
+  cursor: pointer;
+  border-radius: 15px;
+`;
+
+const TrueComponentMidBox = styled.div`
+  width: 100%;
+  height: 50%;
+  border: none;
+  border-radius: 30px;
+`;
+
+const ImageBox = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
+`;
+
+const BottomBox = styled.div`
+  width: 95%;
+  height: 30%;
+  border: none;
+  border-radius: 30px;
+  padding: 8px;
+`;
+
+const Divider = styled.hr`
+  width: 100%;
+  border: none;
+  height: 1px;
+  background-color: lightgray;
+`;
+
 function CalendarPage() {
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
@@ -103,6 +181,12 @@ function CalendarPage() {
   const [date, setDate] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [text, setText] = useState("");
+
+  const navigate = useNavigate();
+  const [isSelectedYear, setIsSelectedYear] = useState("");
+  const [isSelectedMonth, setIsSelectedMonth] = useState("");
+  const [isSelectedDay, setIsSelectedDay] = useState("");
+
 
   const handleDateClick = async (day) => {
     if (isSameDay(day, selectedDate)) {
@@ -132,6 +216,30 @@ function CalendarPage() {
     if (selectedDate) {
       console.log("PrevBtn clicked. Selected Date:", selectedDate);
       handleDateClick(selectedDate);
+    }
+  };
+
+  const handleEdit = () => {
+    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
+    const formattedDate = format(selectedDate, "yyyyMMdd");
+    console.log(selectedDate);
+    navigate(`/diary/${memberID}/${formattedDate}`, {
+      state: { date: { isSelectedYear, isSelectedMonth, isSelectedDay } },
+    });
+  };
+
+  const handleRemove = async () => {
+
+    try {
+      const response = await axios.delete(`http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      fetchCalendar();
+      console.log("response: ", response);
+    } catch (error) {
+      console.log("error: ", error.response.data);
     }
   };
 
@@ -182,6 +290,9 @@ function CalendarPage() {
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
         setIsLoading(true);
+        setIsSelectedYear(format(selectedDate, "yyyy"));
+        setIsSelectedMonth(format(selectedDate, "MM"));
+        setIsSelectedDay(format(selectedDate, "dd"));
 
         try {
           // 클릭한 날짜
@@ -201,7 +312,7 @@ function CalendarPage() {
     };
 
     fetchDataAndUpdateState();
-  }, [selectedDate]);
+  }, [selectedDate, handleRemove]);
 
   return (
     <Background>
@@ -227,14 +338,19 @@ function CalendarPage() {
               {" "}
               {selectedDate &&
                 (selectedDateHasData ? (
-                  <TrueComponent
-                    year={selectedDate.getFullYear()}
-                    month={selectedDate.getMonth() + 1}
-                    day={selectedDate.getDate()}
-                    selectedDate={selectedDate}
-                    text={text}
-                    image={imageUrl}
-                  />
+                  <TrueComponentBox>
+                    <TopBox>
+                      <RemoveBtn onClick={handleRemove}>삭제</RemoveBtn>
+                      <DateBox>
+                        {isSelectedMonth}월{isSelectedDay}일
+                      </DateBox>
+                      <EditBtn onClick={handleEdit}>편집</EditBtn>
+                    </TopBox>
+                    <TrueComponentMidBox><ImageBox src={imageUrl} /></TrueComponentMidBox>
+                    <Divider />
+                    <BottomBox>{text}</BottomBox>
+                  </TrueComponentBox>
+
                 ) : (
                   <FalseComponent
                     year={selectedDate.getFullYear()}
