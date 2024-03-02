@@ -143,7 +143,7 @@ function DiaryPage() {
   const { memberID } = useAuth();
 
   // recommender
-  const [isRecommenderLoading, setIsRecommenderLoading] = useState(false);
+  const [isRecommenderLoading, setIsRecommenderLoading] = useState(true);
 
   // image
   const [newImageUrl, setNewImageUrl] = useState("");

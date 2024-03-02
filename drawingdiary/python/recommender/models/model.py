@@ -80,7 +80,6 @@ def get_member_styles():
 
     try :
         data = request.get_json()
-        print(data)
 
         user_age = data.get('age', '0')
         user_gender = data.get('gender', '')

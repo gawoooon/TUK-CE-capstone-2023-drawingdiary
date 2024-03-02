@@ -184,7 +184,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
           선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : selectedDropdownOption !== null ? selectedDropdownOption : "없음"}
         </SelectedStyle>
         {isLoading ? (
-          <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={300} width={300} />
+          <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={280} width={280} />
         ) : (
           imageList.map((style, index) => (
             <ButtonStyle key={index} isSelected={selectedButtonStyle === style} onClick={() => handleButtonStyleSelect(style)}>
