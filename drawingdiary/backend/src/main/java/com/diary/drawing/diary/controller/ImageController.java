@@ -1,8 +1,11 @@
 package com.diary.drawing.diary.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.album.domain.Album;
@@ -28,6 +31,12 @@ public class ImageController {
     private final PromptRepository promptRepository;
     private final ValidateAlbumService validateAlbumService;
     private final ValidateImageService validateImageService;
+
+    @Operation(summary = "이미지 URL에서 로컬 스토리지 저장 테스트용")
+    @PostMapping("/test/save")
+    public String testSaveImage(@RequestParam String imageUrl, @RequestParam LocalDate date) throws Exception {
+        return imageService.testSaveImageFromUrl(imageUrl, date);
+    }
 
     @Operation(summary = "이미지 생성 테스트용")
     @PostMapping("/test/create")

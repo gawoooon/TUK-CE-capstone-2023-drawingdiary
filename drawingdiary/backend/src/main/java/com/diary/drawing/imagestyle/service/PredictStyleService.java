@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.diary.drawing.imagestyle.domain.ModelPrediction;
@@ -38,12 +39,16 @@ public class PredictStyleService{
         PredictResponseDTO response = getStyles(predictRequestDTO);
 
         // 답변 null이면 오류 반환
-        if(response == null){return ResponseEntity.ofNullable("예측 생성에 실패했습니다.");}
-
-        List<String> getResponse = response.getPredicted_styles();
-        modelPrediction.update(getResponse);
-        modelPredictionRepository.save(modelPrediction);
-        return ResponseEntity.ok(response);
+        try{
+            List<String> getResponse = response.getPredicted_styles();
+            modelPrediction.update(getResponse);
+            modelPredictionRepository.save(modelPrediction);
+            return ResponseEntity.ok(response);
+        }
+        catch(NullPointerException e){
+            return ResponseEntity.ofNullable("예측 생성에 실패했습니다.");
+        }
+    
     }
 
     /* ModelPrediction을 찾고 있으면 반환하고 아니면 새로 생성함 */
@@ -78,10 +83,19 @@ public class PredictStyleService{
 
     // RestTemplate 객체 생성/요청 전송
     RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<PredictResponseDTO> response = restTemplate.exchange(url, HttpMethod.POST, entity, PredictResponseDTO.class);
+    ResponseEntity<PredictResponseDTO> response = null;
+
+    try {
+        response = restTemplate.exchange(url, HttpMethod.POST, entity, PredictResponseDTO.class);
+    } catch (RestClientException e) {
+        // 예외 처리 로직
+        System.out.println("API 호출 중 오류 발생: " + e.getMessage());
+        return null;
+    }
 
     return response.getBody();
-    }
+}
+
 
     /* 그냥 현재 추천 스타일 조회만 */
     public ResponseEntity<PredictResponseDTO> getExistPrediction(Long memberID){
