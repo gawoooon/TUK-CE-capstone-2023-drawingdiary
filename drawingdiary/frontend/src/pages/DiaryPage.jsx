@@ -1,17 +1,17 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import styled, { keyframes, css } from "styled-components";
-import Background from "../components/Background";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
-import AlbumCategory from "../components/album/AlbumCategory";
-import EditDiary from "../components/edit diary/EditDiary";
-import Weather from "../components/weather/Weather";
-import ImageOption from "../components/edit diary/ImageOption";
-import GeneratedImage from "../components/edit diary/GeneratedImage";
-import AIComment from "../components/edit diary/AIComment";
-import Sentiment from "../components/sentiment/Sentiment";
+import styled, { css, keyframes } from "styled-components";
 import { useAuth } from "../auth/context/AuthContext";
+import Background from "../components/Background";
+import AlbumCategory from "../components/album/AlbumCategory";
+import AIComment from "../components/edit diary/AIComment";
+import EditDiary from "../components/edit diary/EditDiary";
+import GeneratedImage from "../components/edit diary/GeneratedImage";
+import ImageOption from "../components/edit diary/ImageOption";
+import Sentiment from "../components/sentiment/Sentiment";
+import ShortSidebar from "../components/sidebar/ShortSidebar";
+import Weather from "../components/weather/Weather";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -344,24 +344,25 @@ function DiaryPage() {
       try {
         console.log("이미지 url", newImageUrl);
 
-        // 이미지 url post
-        const responseImg = await axios.post(
-          "http://localhost:8080/api/image/test/create",
-          {
-            imageFile: newImageUrl,
-            albumID: selectedAlbumID,
-            date: dateString,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+      //   // 이미지 url post
+      //    [가원] 주석처리함 이제 일기에서 일괄저장
+      //   const responseImg = await axios.post(
+      //     "http://localhost:8080/api/image/test/create",
+      //     {
+      //       imageFile: newImageUrl,
+      //       albumID: selectedAlbumID,
+      //       date: dateString,
+      //       headers: {
+      //         Authorization: `Bearer ${accessToken}`,
+      //       },
+      //     }
+      //   );
 
-        if (responseImg.status === 200) {
-          console.log("이미지 URL이 백엔드로 전송되었습니다.");
-        } else {
-          console.error("이미지 URL 전송 실패:", responseImg.status);
-        }
+      //   if (responseImg.status === 200) {
+      //     console.log("이미지 URL이 백엔드로 전송되었습니다.");
+      //   } else {
+      //     console.error("이미지 URL 전송 실패:", responseImg.status);
+      //   }
       } catch (error) {
         console.log("Error: ", error);
       }

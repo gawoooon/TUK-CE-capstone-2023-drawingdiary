@@ -21,26 +21,25 @@ def save_diary():
         diary_text = data.get('diaryText','')
         print("일기내용:",diary_text)
 
-        # OpenAI API에 전달하여 이미지 생성
+        # OpenAI API에 전달하여 이미지 생성, 원래 1024인거 512로 수정함
         prompt = "수채화" + diary_text
         response = openai.Image.create(
             model="dall-e-3",
             prompt=prompt,
             n=1,
-            size="1024x1024",
-            response_format="url",
+            size="512x512",
+            response_format="b64_json",
         )
 
         # 이미지 url을 클라이언트에게 전송
-        image_url = response.data[0].url
-        print("image_url:",image_url)
+        b64_json = response.data[0].b64_json
+        print("b64_json:",b64_json)
 
-       
         response = {
         "message": "Diary saved successfullyyyy",
         "diaryContent": diary_text,
         "image": {
-            "imageUrl": image_url
+            "imageUrl": b64_json
         }
     }
 

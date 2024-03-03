@@ -45,20 +45,25 @@ public class DiaryService {
     private final ImageStyleRepository imageStyleRepository;
     private final ValidateDiaryService validateDiaryService;
     private final ValidateMemberService validateMemberService;
+    private final ImageService imageService;
 
 
     /* Date로 내용조회 */
     public DiaryResponseDTO getDiary(LocalDate date, Long memberID) throws Exception{
         Member member = validateMemberService.validateMember(memberID);
         Diary diary = validateDiaryService.findByDateAndMember(date, member);
-        DiaryResponseDTO diaryResponseDTO = DiaryResponseDTO.from(diary);
+        //TODO: 여기 임시로 64로 주는거임 나중에 s3에 올려야함
+        String image64File = imageService.get64Image(diary.getImage().getImageFile());
+        DiaryResponseDTO diaryResponseDTO = DiaryResponseDTO.from(diary, image64File);
         return diaryResponseDTO;
     }
 
     /* diaryID로 내용조회 */
     public DiaryResponseDTO getDiaryID(Long diaryID) throws Exception{
         Diary diary = diaryRepository.findByDiaryID(diaryID);
-        DiaryResponseDTO diaryResponseDTO = DiaryResponseDTO.from(diary);
+        //TODO: 여기 임시로 64로 주는거임 나중에 s3에 올려야함
+        String image64File = imageService.get64Image(diary.getImage().getImageFile());
+        DiaryResponseDTO diaryResponseDTO = DiaryResponseDTO.from(diary, image64File);
         return diaryResponseDTO;
     }
 
@@ -74,7 +79,7 @@ public class DiaryService {
         List<Diary> calender = diaryRepository.findByMemberAndDateBetween(member, startDate, endDate);
         if (calender == null){ throw new DiaryResponseException(DiaryExceptionType.NOT_EXIST_CONTEXT);}
         List<CalenderDTO> response =  calender.stream()
-            .map(diary -> new CalenderDTO(diary.getDate(), diary.getImage().getImageFile(), diary.getText()))
+            .map(diary -> new CalenderDTO(diary.getDate(), imageService.get64Image(diary.getImage().getImageFile()), diary.getText()))  //TODO: 여기 S3대신 임시로 넣었음
             .collect(Collectors.toList());
         return response;
     }

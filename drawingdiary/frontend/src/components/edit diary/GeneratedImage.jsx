@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components";
-import Lottie from "react-lottie";
-import imageLodding from "../../animation/imageLodding.json";
 import { RiImageAddLine } from "react-icons/ri";
+import Lottie from "react-lottie";
+import styled from "styled-components";
+import imageLodding from "../../animation/imageLodding.json";
 
 const ImageContainer = styled.div`
   display: flex;
@@ -48,7 +48,8 @@ const GeneratedImage = ({ isLoading, newImageUrl }) => {
           />
         ) : newImageUrl ? (
           // 로딩이 완료되고 이미지가 존재할 때 이미지 표시
-          <ImageBox src={newImageUrl} alt="Generated Image" />
+          // [가원] base64로 돌아가도록 `data:image/png;base64, 추가
+          <ImageBox src={`data:image/png;base64,${newImageUrl}`} alt="Generated Image" />
         ) : (
           // 이미지가 존재하지 않을 때 다른 컴포넌트 표시
           <RiImageAddLine size="100" color="#a5bdff" />

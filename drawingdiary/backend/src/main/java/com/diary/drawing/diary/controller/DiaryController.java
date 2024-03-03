@@ -1,4 +1,5 @@
 package com.diary.drawing.diary.controller;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import com.diary.drawing.diary.service.DiaryService;
 import com.diary.drawing.diary.service.GenerateDiaryService;
 import com.diary.drawing.jwt.domain.PrincipalDetails;
 
+import io.jsonwebtoken.io.IOException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +43,7 @@ public class DiaryController {
 
     @Operation(summary = "최종 일기 생성")
     @PostMapping("api/diary/add")
-    public ResponseEntity<?> addDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> addDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException, FileNotFoundException, java.io.IOException{
         return generateDiaryService.generateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
     }
 
@@ -51,7 +53,7 @@ public class DiaryController {
      */
     @Operation(summary = "최종 일기 수정")
     @PutMapping("api/diary/{date}")
-    public ResponseEntity<?> updateDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> updateDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException, FileNotFoundException, java.io.IOException{
         return generateDiaryService.updateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
     }
 

@@ -27,7 +27,9 @@ public class DiaryResponseDTO {
     private Sentiment sentiment;
     private String comment;
 
-    public static DiaryResponseDTO from(Diary diary) {
+    public static DiaryResponseDTO from(Diary diary, String image64File) {
+                        // .imageURL(diary.getImage().getImageFile())
+                        
         return DiaryResponseDTO.builder()
                 .text(diary.getText())
                 .weather(diary.getWeather())
@@ -36,7 +38,7 @@ public class DiaryResponseDTO {
                 .albumName(diary.getImage().getAlbum().getAlbumName())
                 .styleID(diary.getImageStyle().getStyleID())
                 .styleName(diary.getImageStyle().getStyleName())
-                .imageURL(diary.getImage().getImageFile())
+                .imageURL(image64File)
                 .sentiment(diary.getSentiment())
                 .comment(diary.getComment().getComment())
                 .build();

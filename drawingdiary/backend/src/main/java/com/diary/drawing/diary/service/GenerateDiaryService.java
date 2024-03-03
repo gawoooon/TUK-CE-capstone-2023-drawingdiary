@@ -1,5 +1,7 @@
 package com.diary.drawing.diary.service;
 
+import java.io.FileNotFoundException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ import com.diary.drawing.sentiment.repository.SentimentRepository;
 import com.diary.drawing.user.domain.Member;
 import com.diary.drawing.user.service.ValidateMemberService;
 
+import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
 
 @Transactional(readOnly = true)
@@ -38,10 +41,11 @@ public class GenerateDiaryService {
     private final ImageRepository imageRepository;
     private final ImageStyleService imageStyleService;
     private final ValidateDiaryService validateDiaryService;
+    private final ImageService imageService;
     
 
     @Transactional
-    public ResponseEntity<DiaryResponseDTO> generateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID){
+    public ResponseEntity<DiaryResponseDTO> generateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID) throws IOException, FileNotFoundException, java.io.IOException{
 
         // 0. id로 멤버 객체 가져오기, 다이어리 유무 validate
         Member member = validateMemberService.validateMember(memberID);
@@ -62,12 +66,7 @@ public class GenerateDiaryService {
         // 3.2 이미지 스타일 가져오기
         ImageStyle imageStyle = imageStyleService.validateStyle(finalDiaryRequestDTO.getStyleName());
 
-        Image image = Image.builder()
-            .imageFile(finalDiaryRequestDTO.getImageFile())
-            .album(album)
-            .date(finalDiaryRequestDTO.getDate())
-            .build();
-        imageRepository.save(image);
+        Image image = imageService.createImage(finalDiaryRequestDTO.getImageFile(), album, finalDiaryRequestDTO.getDate());
 
         // 4. style count 1 오름 일단생략!!!!!!!
         // prompt? 로그찍기? 프롬프트에 추천 시스템 일치 OX 추가?
@@ -84,12 +83,12 @@ public class GenerateDiaryService {
             .sentiment(sentiment)
             .build();
         diaryRepository.save(diary);
-        return ResponseEntity.ok(DiaryResponseDTO.from(diary));
+        return ResponseEntity.ok(DiaryResponseDTO.from(diary, imageService.get64Image(image.getImageFile())));
 
     }
 
     @Transactional
-    public ResponseEntity<DiaryResponseDTO> updateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID){
+    public ResponseEntity<DiaryResponseDTO> updateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID) throws IOException, FileNotFoundException, java.io.IOException{
         // 0. Member validate
         Member member = validateMemberService.validateMember(memberID);
 
@@ -114,7 +113,7 @@ public class GenerateDiaryService {
         Album album = validateAlbumService.validateAlbum(finalDiaryRequestDTO.getAlbumID());
         Image image = diary.getImage();
         if(image == null){throw new DiaryResponseException(DiaryExceptionType.NOT_FOUND_IMAGE);}
-        image.update(finalDiaryRequestDTO.getImageFile(), album);
+        imageService.updateImage(finalDiaryRequestDTO.getImageFile(), album, image);
 
         //6.0 이미지 스타일 가져오기
         ImageStyle imageStyle = imageStyleService.validateStyle(finalDiaryRequestDTO.getStyleName());
@@ -122,7 +121,7 @@ public class GenerateDiaryService {
         // 업데이트
         diary.update(finalDiaryRequestDTO, imageStyle);
 
-        return ResponseEntity.ok(DiaryResponseDTO.from(diary));
+        return ResponseEntity.ok(DiaryResponseDTO.from(diary, imageService.get64Image(image.getImageFile())));
 
     }
 
