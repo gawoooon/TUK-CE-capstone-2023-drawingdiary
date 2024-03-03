@@ -19,6 +19,7 @@ const ImageContainer = styled.div`
   justify-content: center;
   padding: 10px;
 `;
+
 const ImageBox = styled.img`
   width: 100%;
   height: 100%;

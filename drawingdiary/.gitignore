@@ -43,7 +43,7 @@ out/
 /backend/src/resources/application.yml
 
 ### redis ###
-/redis/data/dump.rdb
+\redis\data\dump.rdb
 
 
 

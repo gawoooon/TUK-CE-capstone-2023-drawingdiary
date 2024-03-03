@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { isSameDay } from "date-fns";
+import { isSameDay, setDate } from "date-fns";
+import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 import Background from "../components/Background";
 import Calendar2 from "../components/Calendar2";
 import SideBar from "../components/sidebar/SideBar";
-import TrueComponent from "../components/TrueComponent";
 import FalseComponent from "../components/FalseComponent";
 import { useAuth } from "../auth/context/AuthContext";
 
 import { GrFormPreviousLink } from "react-icons/gr";
+import { CalendarProvider, useCalendar } from "../components/Calendar2/CalendarProvider";
+import axios from "axios";
 
 const Body = styled.body`
   display: flex;
@@ -82,34 +85,121 @@ const ResultBox = styled.div`
   height: 95%;
 `;
 
+const TrueComponentBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 30px 30px 30px 0px;
+  box-sizing: border-box;
+  transition: width 0.5s linear;
+`;
+const TopBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 5%;
+`;
+
+const DateBox = styled.div`
+  font-size: 22px;
+  font-weight: 800;
+  color: #090071;
+`;
+
+const EditBtn = styled.button`
+  width: 65px;
+  height: 34px;
+  border: none;
+  outline: none;
+  background-color: white;
+  font-size: 13px;
+  color: black;
+  cursor: pointer;
+  border-radius: 15px;
+  `;
+
+const RemoveBtn = styled.button`
+  width: 65px;
+  height: 34px;
+  border: none;
+  outline: none;
+  background-color: white;
+  font-size: 13px;
+  color: black;
+  cursor: pointer;
+  border-radius: 15px;
+`;
+
+const TrueComponentMidBox = styled.div`
+  width: 100%;
+  height: 50%;
+  border: none;
+  border-radius: 30px;
+`;
+
+const ImageBox = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
+`;
+
+const BottomBox = styled.div`
+  width: 95%;
+  height: 30%;
+  border: none;
+  border-radius: 30px;
+  padding: 8px;
+`;
+
+const Divider = styled.hr`
+  width: 100%;
+  border: none;
+  height: 1px;
+  background-color: lightgray;
+`;
+
 function CalendarPage() {
   const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
   const [middleBoxWidth, setMiddleBoxWidth] = useState("75%");
   const [showRightBox, setShowRightBox] = useState(false);
-  const [showProfileBox, setShowProfileBox] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
   const [prevBtnBox, setPrevBtnBox] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+
   const { memberID } = useAuth();
+  const accessToken = localStorage.getItem('accessToken');
+  
+  const { year, month } = useCalendar();
+  const [data, setData] = useState([]);
+  const [date, setDate] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
+  const [text, setText] = useState("");
+
+  const navigate = useNavigate();
+  const [isSelectedYear, setIsSelectedYear] = useState("");
+  const [isSelectedMonth, setIsSelectedMonth] = useState("");
+  const [isSelectedDay, setIsSelectedDay] = useState("");
+
 
   const handleDateClick = async (day) => {
-    console.log(memberID);
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
       setLeftBoxWidth("25%");
       setRightBoxWidth("0%");
       setMiddleBoxWidth("75%");
       setShowRightBox(false);
-      setShowProfileBox(true);
       setSelectedDateHasData(false);
       setPrevBtnBox(false);
       setIsOpen(true);
     } else {
       setShowRightBox(true);
-      setShowProfileBox(false);
       setLeftBoxWidth("7%");
       setMiddleBoxWidth("65%");
       setRightBoxWidth("28%");
@@ -129,26 +219,62 @@ function CalendarPage() {
     }
   };
 
+  const handleEdit = () => {
+    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
+    const formattedDate = format(selectedDate, "yyyyMMdd");
+    console.log(selectedDate);
+    navigate(`/diary/${memberID}/${formattedDate}`, {
+      state: { date: { isSelectedYear, isSelectedMonth, isSelectedDay } },
+    });
+  };
+
+  const handleRemove = async () => {
+
+    try {
+      const response = await axios.delete(`http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      fetchCalendar();
+      console.log("response: ", response);
+    } catch (error) {
+      console.log("error: ", error.response.data);
+    }
+  };
+
+  const fetchCalendar = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/calender/${year}-${month}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      setData(response.data);
+    } catch (error) {
+      console.log("error: ", error);
+    };
+  };
+
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
-      // 데이터를 가져옴
-      const simulateDataFetch = () => {
-        return new Promise((resolve) => {
-          const dataArray = [{ date: "2024-01-23" }, { date: "2024-01-24" }];
-          resolve(dataArray);
-        });
-      };
-
+      
       // 실제 데이터를 받아오는 부분
-      const dataArray = await simulateDataFetch();
+      const dateArray = data.map(entry => entry.date);
+      console.log("dataArray: ", dateArray);
 
       // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
-      const index = dataArray.findIndex((item) =>
-        isSameDay(new Date(item.date), date)
+      const index = data.findIndex((item) =>
+        isSameDay(new Date(item.date), date),
       );
+      console.log("index: ", index);
 
       //일치하면 인덱스 값/ 아니면 -1 반환 => 존재하면 true, 존재하지 않으면 false
+      if(index !== -1) {
+        setText(data[index].text);
+        setImageUrl(data[index].imageFile);
+      }
       const hasData = index !== -1;
       return hasData;
     } catch (error) {
@@ -159,9 +285,14 @@ function CalendarPage() {
 
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
+    fetchCalendar();
+
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
         setIsLoading(true);
+        setIsSelectedYear(format(selectedDate, "yyyy"));
+        setIsSelectedMonth(format(selectedDate, "MM"));
+        setIsSelectedDay(format(selectedDate, "dd"));
 
         try {
           // 클릭한 날짜
@@ -181,7 +312,7 @@ function CalendarPage() {
     };
 
     fetchDataAndUpdateState();
-  }, [selectedDate]);
+  }, [selectedDate, handleRemove]);
 
   return (
     <Background>
@@ -191,10 +322,12 @@ function CalendarPage() {
             <SideBar isOpen={isOpen} />
           </LeftBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
-            <Calendar2
-              leftBoxWidth={leftBoxWidth}
-              onDateClick={handleDateClick}
-            />
+            <CalendarProvider>
+              <Calendar2
+                leftBoxWidth={leftBoxWidth}
+                onDateClick={handleDateClick}
+              />
+            </CalendarProvider>
           </MiddleBox>
 
           <RightBox showRightBox={showRightBox} rightBoxWidth={rightBoxWidth}>
@@ -205,12 +338,19 @@ function CalendarPage() {
               {" "}
               {selectedDate &&
                 (selectedDateHasData ? (
-                  <TrueComponent
-                    year={selectedDate.getFullYear()}
-                    month={selectedDate.getMonth() + 1}
-                    day={selectedDate.getDate()}
-                    selectedDate={selectedDate}
-                  />
+                  <TrueComponentBox>
+                    <TopBox>
+                      <RemoveBtn onClick={handleRemove}>삭제</RemoveBtn>
+                      <DateBox>
+                        {isSelectedMonth}월{isSelectedDay}일
+                      </DateBox>
+                      <EditBtn onClick={handleEdit}>편집</EditBtn>
+                    </TopBox>
+                    <TrueComponentMidBox><ImageBox src={imageUrl} /></TrueComponentMidBox>
+                    <Divider />
+                    <BottomBox>{text}</BottomBox>
+                  </TrueComponentBox>
+
                 ) : (
                   <FalseComponent
                     year={selectedDate.getFullYear()}

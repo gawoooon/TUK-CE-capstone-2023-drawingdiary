@@ -159,10 +159,10 @@ const SideBar = ({ isOpen }) => {
           <img src="my-page.png" alt="MyPage" />
           <MenuItemText isOpen={isOpen}>마이페이지</MenuItemText>
         </MenuItem>
-        <SignOutButton to="/" isOpen={isOpen}>
+        <MenuItem to="/" isOpen={isOpen}>
           <img src="sign-out.png" alt="Log out"/>
           <MenuItemText isOpen={isOpen}>로그아웃</MenuItemText>
-        </SignOutButton>
+        </MenuItem>
       </SideBarMenu>
 
       <ProfileSection>

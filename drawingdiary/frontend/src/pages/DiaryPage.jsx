@@ -142,6 +142,9 @@ function DiaryPage() {
   const navigate = useNavigate();
   const { memberID } = useAuth();
 
+  // recommender
+  const [isRecommenderLoading, setIsRecommenderLoading] = useState(true);
+
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
@@ -183,6 +186,7 @@ function DiaryPage() {
 
   // 페이지 로딩 시 초기 메시지를 5초간 표시
   useEffect(() => {
+    setIsRecommenderLoading(true);
     const timer = setTimeout(() => {
       if (!isTextValid) {
         setShowInitialMessage(false);
@@ -441,7 +445,7 @@ function DiaryPage() {
               <EditDiary onDiaryTextChange={handleDiaryTextChange} />
               <ImageOption
                 onOptionSelect={handleOptionSelect}
-                isLoading={isLoading}
+                isRecommenderLoading={isRecommenderLoading}
               />
             </EditDiaryArea>
 
