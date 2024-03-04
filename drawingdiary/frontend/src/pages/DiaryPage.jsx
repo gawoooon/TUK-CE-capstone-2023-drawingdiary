@@ -282,8 +282,6 @@ function DiaryPage() {
       setShowCreate(false);
     }, 5000);
 
-    console.log("스타일", parentSelectedButtonStyle);
-
     if (parentSelectedButtonStyle) {
       // 감정 분석 실행
       analyzeSentiment();
@@ -298,7 +296,7 @@ function DiaryPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ diaryText }),
+          body: JSON.stringify({ diaryText, parentSelectedButtonStyle }),
         });
 
         if (responseDiary.ok) {
