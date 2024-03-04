@@ -147,7 +147,8 @@ function DiaryPage() {
   const [diaryText, setDiaryText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [newDiaryText, setNewDiaryText] = useState("");
-
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
+    useState(null);
   // 날짜, 날씨
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
@@ -228,9 +229,21 @@ function DiaryPage() {
   //   setIsTextValid(isValid);
   // };
 
-  // ImageOption에서 옵션 선택 여부 받기
-  const handleOptionSelect = (isSelected) => {
+  const handleOptionSelect = (isSelected, selectedButtonStyle) => {
     setIsOptionSelected(isSelected);
+    if (selectedButtonStyle === undefined && isSelected === true) {
+      console.log("dd");
+    } else {
+      setParentSelectedButtonStyle(selectedButtonStyle);
+    }
+
+    console.log(
+      "다이어리 페이지에서 선택한 스타일:",
+      parentSelectedButtonStyle,
+      isSelected
+    );
+
+    // Further actions or updates based on the selected style...
   };
 
   // Sentiment에 텍스트 전달
@@ -269,40 +282,44 @@ function DiaryPage() {
       setShowCreate(false);
     }, 5000);
 
-    // 감정 분석 실행
-    analyzeSentiment();
+    console.log("스타일", parentSelectedButtonStyle);
 
-    setIsLoading(true);
+    if (parentSelectedButtonStyle) {
+      // 감정 분석 실행
+      analyzeSentiment();
+      setIsLoading(true);
+      //이미지 api
+      try {
+        console.log("일기 내용 저장:", diaryText);
 
-    //이미지 api
-    try {
-      console.log("일기 내용 저장:", diaryText);
+        const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
+        const responseDiary = await fetch(imageApiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ diaryText }),
+        });
 
-      const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
-      const responseDiary = await fetch(imageApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ diaryText }),
-      });
+        if (responseDiary.ok) {
+          const responseDate = await responseDiary.json();
+          console.log("일기:", responseDate);
 
-      if (responseDiary.ok) {
-        const responseDate = await responseDiary.json();
-        console.log("일기:", responseDate);
+          // url 받아오기
+          const imageUrl = responseDate.image?.imageUrl;
+          setIsLoading(false);
+          setNewImageUrl(imageUrl);
+        } else {
+          console.error("이미지 저장 실패:", responseDiary.status);
 
-        // url 받아오기
-        const imageUrl = responseDate.image?.imageUrl;
-        setIsLoading(false);
-        setNewImageUrl(imageUrl);
-      } else {
-        console.error("이미지 저장 실패:", responseDiary.status);
-
-        alert("이미지 저장에 실패하였습니다.");
+          alert("이미지 저장에 실패하였습니다.");
+        }
+      } catch (error) {
+        console.error("Error diary:", error);
+        alert("일기 중에 오류가 발생하였습니다.");
       }
-    } catch (error) {
-      console.error("Error diary:", error);
-      alert("일기 중에 오류가 발생하였습니다.");
+    } else {
+      alert("이미지 스타일 먼저 생성해주세요!");
     }
   };
 
@@ -369,7 +386,7 @@ function DiaryPage() {
           weather: weatherState,
           date: dateString,
           albumID: selectedAlbumID,
-          styleName: "미니멀리즘",
+          styleName: parentSelectedButtonStyle,
           imageFile: newImageUrl,
           confidence: {
             positive: positiveValue,
@@ -386,6 +403,7 @@ function DiaryPage() {
       );
       if (responseDiary.status === 200) {
         console.log("일기가 백엔드로 전송되었습니다.");
+        alert("일기가 생성되었어요!");
         navigate("/calendar");
       } else {
         console.error("일기 전송 실패:", responseDiary.status);
@@ -454,10 +472,7 @@ function DiaryPage() {
               }}
             >
               <ButtonContainer>
-                <RemoveButtonStyle
-                  onClick={handleCreate}
-            
-                >
+                <RemoveButtonStyle onClick={handleCreate}>
                   생성
                 </RemoveButtonStyle>
               </ButtonContainer>
