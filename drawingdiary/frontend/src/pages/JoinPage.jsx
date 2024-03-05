@@ -148,6 +148,7 @@ const CreateAccount = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [isEmailVerified, setIsEmailVerified] = useState(false);
 
     const navigate = useNavigate();
 
@@ -156,7 +157,7 @@ const CreateAccount = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if(!name || !year || !month || !day || !gender || !email || !certification || !password || !confirmPassword) {
+        if(!name || !year || !month || !day || !gender || !email || !certification || !password || !confirmPassword || !isEmailVerified) {
           alert("모든 입력란을 채워주세요.");
           return;
         }
@@ -211,13 +212,29 @@ const CreateAccount = () => {
     const sendEmail = async () => {
       if(email !== '') {
         try {
-          const response = await axios.post('http://localhost:8080/api/email/codesending', { email })
+          const response = await axios.post('http://localhost:8080/api/email/codesending', { email } );
           console.log("response", response);
         } catch (error) {
           console.log("error: ", error);
         }
       } else {
         alert("이메일을 입력해주세요!");
+      }
+    };
+
+    const verifyCertification = async () => {
+      if(certification !== ''){
+        try {
+          const response = await axios.post('http://localhost:8080/api/email/verify', {
+            email: email,
+            verificationCode: certification
+          });
+          console.log("response: ", response);
+          setIsEmailVerified(true);
+          alert("이메일이 인증되었습니다.");
+        } catch (error) {
+          console.log("error: ", error);
+        }
       }
     };
       
@@ -323,7 +340,7 @@ const CreateAccount = () => {
                   onChange={(e) => setCheckCertification(e.target.value)}
                   placeHolder="인증번호 입력"/>
 
-                  <SmallButton text="확인"/>
+                  <VerifyButton onClick={verifyCertification}>확인</VerifyButton>
               
               </InputFieldStyle>
 
