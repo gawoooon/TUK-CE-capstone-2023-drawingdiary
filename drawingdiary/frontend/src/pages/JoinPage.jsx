@@ -113,7 +113,7 @@ const ButtonStyle = styled.button`
     border-radius: 20px;
     cursor: pointer;
     color: black;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
 `;
 
@@ -196,7 +196,7 @@ const CreateAccount = () => {
         })
         .then(response => {
           console.log('Success: ', response);
-          navigate('/choosePersonality', { state: { email }});
+          navigate('/choosePersonality', { state: { email, name }});
         })
         .catch(error => {
           if(error.response && error.response.status === 409) {

@@ -91,21 +91,6 @@ const ProfileEmail = styled.div`
 `;
 
 
-const SignOutButton = styled(MenuItem)`
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  color: #333;
-  text-decoration: none;
-  margin-top: auto; // 메뉴 아이템들과 분리하기 위해 자동 마진 추가
-
-  &:hover {
-    background: #ececec;
-    border-left: 5px solid rgba(255, 184, 208, 0.58);
-  }
-`;
-
-
 const SideBar = ({ isOpen }) => {
 
   const { memberID } = useAuth();
