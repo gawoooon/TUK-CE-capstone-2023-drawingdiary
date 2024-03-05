@@ -42,4 +42,4 @@ out/
 drawingdiary/backend/src/resources/
 
 ### redis ###
-drawingdiary/redis/data/
+drawingdiary/redis/data/dump.rdb

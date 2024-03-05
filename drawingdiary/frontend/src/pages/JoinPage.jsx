@@ -90,13 +90,12 @@ const ButtonContainer = styled.div `
 `;
 
 const ButtonStyle = styled.button`
-    height: 50px;
-    width: 250px;
+    height: 45px;
+    width: 180px;
     margin-bottom: 30px;
-    background-color: rgba(106, 156, 253, 0.3);
+    background-color: white;
+    border: 3px solid rgb(106, 156, 253, 0.3);
     border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border: none;
     cursor: pointer;
     color: black;
     font-size: 20px;
@@ -153,8 +152,7 @@ const CreateAccount = () => {
           confirmPasswordRef.current.focus();
           return;
         }
-        // 데이터 전송이 성공하면 지워야 함
-        // navigate('/choosePersonality');
+  
 
         // 생일 형식 설정 부분
         const birth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;

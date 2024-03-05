@@ -341,30 +341,6 @@ function DiaryPage() {
     console.log(dateString);
     //image post
     if (newImageUrl) {
-      try {
-        console.log("이미지 url", newImageUrl);
-
-        // 이미지 url post
-        const responseImg = await axios.post(
-          "http://localhost:8080/api/image/test/create",
-          {
-            imageFile: newImageUrl,
-            albumID: selectedAlbumID,
-            date: dateString,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-
-        if (responseImg.status === 200) {
-          console.log("이미지 URL이 백엔드로 전송되었습니다.");
-        } else {
-          console.error("이미지 URL 전송 실패:", responseImg.status);
-        }
-      } catch (error) {
-        console.log("Error: ", error);
-      }
 
       const responseDiary = await axios.post(
         "http://localhost:8080/api/diary/add",
