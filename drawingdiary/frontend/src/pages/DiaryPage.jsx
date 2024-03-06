@@ -146,7 +146,6 @@ function DiaryPage() {
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [newDiaryText, setNewDiaryText] = useState("");
   const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
     useState(null);
   // 날짜, 날씨
@@ -172,6 +171,7 @@ function DiaryPage() {
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
   const [sentimentResult, setSentimentResult] = useState("");
+  const [newDiaryText, setNewDiaryText] = useState("");
 
   // 날씨 상태를 업데이트하는 함수
   const handleWeatherStateChange = (newWeatherState) => {
@@ -223,20 +223,17 @@ function DiaryPage() {
       );
 
       setSentimentResult(maxSentimentName);
-      console.log("어라리", sentimentResult);
 
-      if (sentimentResult === "positive") {
-        setNewDiaryText("따듯한 색감으로 생성시켜줘");
+      if (maxSentimentName === "positive") {
+        setNewDiaryText("따듯한 색감");
       } else if (sentimentResult === "negative") {
-        setNewDiaryText("차가운 색감으로 생성시켜줘");
+        setNewDiaryText("차가운 색감");
       } else if (sentimentResult === "neutral") {
-        setNewDiaryText("베이지 색감으로 생성시켜줘");
+        setNewDiaryText("베이지 색감");
       }
     } catch (error) {
       console.error("감정 분석 API 호출 중 오류 발생: ", error);
     }
-
-    console.log("긍정", positiveValue, sentimentResult, newDiaryText);
   };
 
   // EditDiary에서 텍스트 길이 조건 충족 여부 받기
@@ -250,7 +247,6 @@ function DiaryPage() {
   const handleOptionSelect = (isSelected, selectedButtonStyle) => {
     setIsOptionSelected(isSelected);
     if (selectedButtonStyle === undefined && isSelected === true) {
-      console.log("dd");
     } else {
       setParentSelectedButtonStyle(selectedButtonStyle);
     }
@@ -260,8 +256,6 @@ function DiaryPage() {
       parentSelectedButtonStyle,
       isSelected
     );
-
-    // Further actions or updates based on the selected style...
   };
 
   // Sentiment에 텍스트 전달
@@ -307,6 +301,8 @@ function DiaryPage() {
       //이미지 api
       try {
         console.log("일기 내용 저장:", diaryText);
+        const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
+        console.log(resultDiaryText);
 
         const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
         const responseDiary = await fetch(imageApiUrl, {
@@ -314,7 +310,9 @@ function DiaryPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ diaryText, parentSelectedButtonStyle }),
+          body: JSON.stringify({
+            resultDiaryText,
+          }),
         });
 
         if (responseDiary.ok) {
