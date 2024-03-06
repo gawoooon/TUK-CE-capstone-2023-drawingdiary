@@ -171,6 +171,7 @@ function DiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
+  const [sentimentResult, setSentimentResult] = useState("");
 
   // 날씨 상태를 업데이트하는 함수
   const handleWeatherStateChange = (newWeatherState) => {
@@ -208,26 +209,43 @@ function DiaryPage() {
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);
 
+      const values = {
+        positive: positiveValue,
+        negative: negativeValue,
+        neutral: neutralValue,
+      };
+
       // 감정 분석 결과를 일기 내용에 반영시키는 부분
-      const sentimentResult = response.data.document.sentiment;
-      let sentimentContent = "";
+      const maxSentimentValue = Math.max(...Object.values(values));
+
+      const maxSentimentName = Object.keys(values).find(
+        (key) => values[key] === maxSentimentValue
+      );
+
+      setSentimentResult(maxSentimentName);
+      console.log("어라리", sentimentResult);
 
       if (sentimentResult === "positive") {
-        setNewDiaryText(`${diaryText} + 따듯한 색감으로 생성시켜줘`);
-      } else if (sentimentContent === "negative") {
-        setNewDiaryText(`${diaryText} + 차가운 색감으로 생성시켜줘`);
-      } else if (sentimentContent === "neutral") {
-        setNewDiaryText(`${diaryText} + 베이지 색감으로 생성시켜줘`);
+        setNewDiaryText("따듯한 색감으로 생성시켜줘");
+      } else if (sentimentResult === "negative") {
+        setNewDiaryText("차가운 색감으로 생성시켜줘");
+      } else if (sentimentResult === "neutral") {
+        setNewDiaryText("베이지 색감으로 생성시켜줘");
       }
     } catch (error) {
       console.error("감정 분석 API 호출 중 오류 발생: ", error);
     }
+
+    console.log("긍정", positiveValue, sentimentResult, newDiaryText);
   };
 
   // EditDiary에서 텍스트 길이 조건 충족 여부 받기
   // const handleTextChange = (isValid) => {
   //   setIsTextValid(isValid);
   // };
+  useEffect(() => {
+    analyzeSentiment();
+  }, [diaryText]);
 
   const handleOptionSelect = (isSelected, selectedButtonStyle) => {
     setIsOptionSelected(isSelected);
