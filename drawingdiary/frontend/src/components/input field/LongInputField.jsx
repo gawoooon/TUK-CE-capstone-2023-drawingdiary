@@ -4,13 +4,11 @@ const InputStyle = styled.input`
     height: 40px;
     width: 420px;
     padding-left: 10px;
-    border: 1px solid #909090;
-    border-radius: 10px;
     outline: none;
     font-size: 13px;
 `;
 
-const LongInputField = ({ id, type, value, onChange, placeHolder }) => {
+const LongInputField = ({ id, type, value, onChange, placeholder }) => {
 
     return(
         <InputStyle
@@ -18,7 +16,7 @@ const LongInputField = ({ id, type, value, onChange, placeHolder }) => {
             type={type}
             value={value}
             onChange={onChange}
-            placeholder={placeHolder}
+            placeholder={placeholder}
         />
     )
 };

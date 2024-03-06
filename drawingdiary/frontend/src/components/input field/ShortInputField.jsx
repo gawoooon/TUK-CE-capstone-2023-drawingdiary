@@ -5,13 +5,11 @@ const InputStyle = styled.input`
     width: 110px;
     margin: 0px 15px 30px 15px;
     padding-left: 10px;
-    border: 1px solid #909090;
-    border-radius: 10px;
     outline: none;
     font-size: 13px;
 `;
 
-const ShortInputField = ({ id, type, value, onChange, placeHolder }) => {
+const ShortInputField = ({ id, type, value, onChange, placeholder }) => {
 
     return(
         <InputStyle 
@@ -19,7 +17,7 @@ const ShortInputField = ({ id, type, value, onChange, placeHolder }) => {
             type={type}
             value={value}
             onChange={onChange}
-            placeholder={placeHolder}
+            placeholder={placeholder}
         />
     )
 };
