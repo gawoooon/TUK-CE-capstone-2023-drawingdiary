@@ -39,9 +39,10 @@ const SideBarMenu = styled.nav`
 const MenuItem = styled(Link)`
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 9px;
   color: #333;
   text-decoration: none;
+  font-size: 15px;
   
   img {
     width: 20px;
@@ -63,6 +64,7 @@ const MenuItemText = styled.span`
   visibility: ${({ isOpen }) => isOpen ? 'visible' : 'hidden'};
   transition: opacity 700ms ease-out;
   margin-left: 16px;
+  padding-top: 6px;
   white-space: nowrap;
   min-height: 20px;
 `;
