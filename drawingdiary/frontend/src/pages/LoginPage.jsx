@@ -32,8 +32,7 @@ const LoginBox = styled.form`
   width: 800px;
   height: 400px;
   background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
-  box-shadow: 2px 5px 2px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   padding: 70px 80px 40px 80px;
   box-sizing: border-box;
@@ -50,7 +49,7 @@ const LeftBox = styled.div`
 const JoinBtn = styled(Link)`
   padding-left: 30px;
   color: #989898;
-  opacity: 0.5;
+  opacity: 0.8;
   font-weight: 800;
   font-size: 16px;
   text-decoration: none;
@@ -59,7 +58,7 @@ const JoinBtn = styled(Link)`
 const RightBox = styled.div`
   width: 30%;
   height: 100%;
-  padding: 50px 10px 100px 55px;
+  padding: 30px 10px 110px 55px;
   box-sizing: border-box;
 `;
 
@@ -70,7 +69,8 @@ const LoginLostBtn = styled(Link)`
   color: #090071;
   text-align: right;
   text-decoration: none;
-  padding-top: 10px;
+  padding-top: 18px;
+  font-size: 18px;
 `;
 
 const ErrorMessageContainer = styled.div`

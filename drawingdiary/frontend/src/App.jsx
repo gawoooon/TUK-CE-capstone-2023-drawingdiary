@@ -12,6 +12,7 @@ import StatsPage from "./pages/StatsPage.jsx";
 import MyPage from "./pages/MyPage.jsx";
 import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
+import { CalendarProvider } from "./components/Calendar2/CalendarProvider.jsx";
 
 function App() {
   return (
@@ -20,7 +21,14 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/loginlost" element={<LoginLostPage />} />
         <Route path="/join" element={<JoinPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
+        <Route 
+          path="/calendar" 
+          element={
+            <CalendarProvider>
+              <CalendarPage />
+            </CalendarProvider>
+          } 
+        />
         <Route
           path="/diary/:memberId/:dateId"
           element={

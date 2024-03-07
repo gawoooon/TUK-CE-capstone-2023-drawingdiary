@@ -82,3 +82,4 @@ tasks.named('test') {
 processResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // 중복 파일을 포함하도록 설정
 }
+
