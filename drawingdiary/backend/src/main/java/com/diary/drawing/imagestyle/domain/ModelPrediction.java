@@ -1,5 +1,7 @@
 package com.diary.drawing.imagestyle.domain;
 
+import java.util.List;
+
 import com.diary.drawing.user.domain.Member;
 
 import jakarta.persistence.Entity;
@@ -8,42 +10,58 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "ModelPrediction")
 public class ModelPrediction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long predictionID;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 예측 취향 테이블과 한명의 유저
+    @OneToOne(fetch = FetchType.LAZY)  // 예측 취향 테이블과 한명의 유저
     @JoinColumn(name = "memberID") // 외부키 references from UserID
     private Member member;
 
-    /* predictedStyleID */
-    private Long predictedStyle1;
+    @NotBlank
+    private String style1;
 
-    private Long predictedStyle2;
+    @NotBlank
+    private String style2;
 
-    private Long predictedStyle3;
+    @NotBlank
+    private String style3;
 
-    private Long predictedStyle4;
+    @NotBlank
+    private String style4;
 
-    private Long predictedStyle5;
+    @NotBlank
+    private String style5;
 
     @Builder
-    public ModelPrediction(Member member, Long predictedStyle1, Long predictedStyle2, Long predictedStyle3, Long predictedStyle4, Long predictedStyle5){
+    public ModelPrediction(Member member, String style1, String style2, String style3, String style4, String style5){
         this.member=member;
-        this.predictedStyle1=predictedStyle1;
-        this.predictedStyle2=predictedStyle2;
-        this.predictedStyle3=predictedStyle3;
-        this.predictedStyle4=predictedStyle4;
-        this.predictedStyle5=predictedStyle5;
+        this.style1 = style1;
+        this.style2 = style2;
+        this.style3 = style3;
+        this.style4 = style4;
+        this.style5 = style5;
+    }
+
+    public void update(List<String> styles){
+        this.style1 = styles.get(0);
+        this.style2 = styles.get(1);
+        this.style3 = styles.get(2);
+        this.style4 = styles.get(3);
+        this.style5 = styles.get(4);
     }
 
 

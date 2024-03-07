@@ -34,10 +34,8 @@ public class MemberStylePreference {
 
     @Builder
     public MemberStylePreference(int frequency, Member member, ImageStyle imageStyle){
-        this.frequency = 0; // 기본
+        this.frequency = 0;
         this.member = member;
         this.imageStyle = imageStyle;
     }
-
-
 }

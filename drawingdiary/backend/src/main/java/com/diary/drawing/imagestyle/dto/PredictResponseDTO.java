@@ -1,5 +1,7 @@
 package com.diary.drawing.imagestyle.dto;
 
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +14,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class PredictRequestDTO {
-    private Integer age;
-    private char gender;
+public class PredictResponseDTO {
+    private List<String> predicted_styles;
 }
