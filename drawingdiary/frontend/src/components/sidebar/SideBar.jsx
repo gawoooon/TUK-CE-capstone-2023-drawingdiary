@@ -39,9 +39,10 @@ const SideBarMenu = styled.nav`
 const MenuItem = styled(Link)`
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 9px;
   color: #333;
   text-decoration: none;
+  font-size: 15px;
   
   img {
     width: 20px;
@@ -63,6 +64,7 @@ const MenuItemText = styled.span`
   visibility: ${({ isOpen }) => isOpen ? 'visible' : 'hidden'};
   transition: opacity 700ms ease-out;
   margin-left: 16px;
+  padding-top: 6px;
   white-space: nowrap;
   min-height: 20px;
 `;
@@ -88,21 +90,6 @@ const ProfileName = styled.div`
 const ProfileEmail = styled.div`
   color: #333;
   font-size: 13px; // 프로필 이름의 폰트 크기 설정
-`;
-
-
-const SignOutButton = styled(MenuItem)`
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  color: #333;
-  text-decoration: none;
-  margin-top: auto; // 메뉴 아이템들과 분리하기 위해 자동 마진 추가
-
-  &:hover {
-    background: #ececec;
-    border-left: 5px solid rgba(255, 184, 208, 0.58);
-  }
 `;
 
 
@@ -159,10 +146,10 @@ const SideBar = ({ isOpen }) => {
           <img src="my-page.png" alt="MyPage" />
           <MenuItemText isOpen={isOpen}>마이페이지</MenuItemText>
         </MenuItem>
-        <SignOutButton to="/" isOpen={isOpen}>
+        <MenuItem to="/" isOpen={isOpen}>
           <img src="sign-out.png" alt="Log out"/>
           <MenuItemText isOpen={isOpen}>로그아웃</MenuItemText>
-        </SignOutButton>
+        </MenuItem>
       </SideBarMenu>
 
       <ProfileSection>

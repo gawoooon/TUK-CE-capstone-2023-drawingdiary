@@ -11,7 +11,6 @@ import ImageOption from "../components/edit diary/ImageOption";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
-import { useAuth } from "../auth/context/AuthContext";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -22,13 +21,13 @@ const FlexContainer = styled.div`
 
 const RightContainer = styled.div`
   margin-left: 100px;
-  padding-top: 40px;
+  padding-top: 50px;
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 70px);
+  max-height: calc(100vh - 80px);
   box-sizing: border-box;
   &::-webkit-scrollbar {
     width: 8px;
@@ -85,7 +84,7 @@ const jumpAnimation = keyframes`
     100% { transform: translateY(0); }
 `;
 
-const RemoveButtonStyle = styled.button`
+const CreateButtonStyle = styled.button`
   height: 50px;
   width: 250px;
   margin-bottom: 30px;
@@ -140,14 +139,17 @@ const MessageText = styled.div`
 
 function DiaryPage() {
   const navigate = useNavigate();
-  const { memberID } = useAuth();
+
+  // recommender
+  const [isRecommenderLoading, setIsRecommenderLoading] = useState(true);
 
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(false);
+  const [isCommentLoading, setIsCommentLoading] = useState(false);
   const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
-    useState(null);
+  const [newDiaryText, setNewDiaryText] = useState("");
   // 날짜, 날씨
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
@@ -165,13 +167,15 @@ function DiaryPage() {
   const [showInitialMessage, setShowInitialMessage] = useState(true);
 
   const [animateSaveBtn, setAnimateSaveBtn] = useState(false);
-  // const [animateCreateBtn, setAnimateCreateBtn] = useState(false);
+  const [animateCreateBtn, setAnimateCreateBtn] = useState(false);
 
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
   const [sentimentResult, setSentimentResult] = useState("");
   const [newDiaryText, setNewDiaryText] = useState("");
+
+  const [commentText, setCommentText] = useState('');
 
   // 날씨 상태를 업데이트하는 함수
   const handleWeatherStateChange = (newWeatherState) => {
@@ -185,6 +189,7 @@ function DiaryPage() {
 
   // 페이지 로딩 시 초기 메시지를 5초간 표시
   useEffect(() => {
+    setIsRecommenderLoading(true);
     const timer = setTimeout(() => {
       if (!isTextValid) {
         setShowInitialMessage(false);
@@ -272,7 +277,7 @@ function DiaryPage() {
   // 일단 임시로 이걸로 하자
   const isSaveButtonEnabled = isTextValid;
 
-  // 저장 버튼 클릭 핸들러
+  // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
     if (diaryText.length < 30) {
       setShowInitialMessage(true);
@@ -282,12 +287,10 @@ function DiaryPage() {
       return;
     }
 
-    // ?? (((확인)))
-
-    // setAnimateCreateBtn(true);
-    // setTimeout(() => {
-    //   setAnimateCreateBtn(false);
-    // }, 500);
+    setAnimateCreateBtn(true);
+    setTimeout(() => {
+      setAnimateCreateBtn(false);
+    }, 500);
 
     setShowCreate(true);
     setTimeout(() => {
@@ -304,34 +307,58 @@ function DiaryPage() {
         const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
         console.log(resultDiaryText);
 
+    setIsImageLoading(true);
+    setIsCommentLoading(true);
+
+    //이미지 api
+    try {
+      if(diaryText !== '') {
+  
         const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
         const responseDiary = await fetch(imageApiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            resultDiaryText,
-          }),
+          body: JSON.stringify({ diaryText }),
         });
-
+  
         if (responseDiary.ok) {
           const responseDate = await responseDiary.json();
-          console.log("일기:", responseDate);
-
+  
           // url 받아오기
           const imageUrl = responseDate.image?.imageUrl;
-          setIsLoading(false);
+          setIsImageLoading(false);
           setNewImageUrl(imageUrl);
         } else {
           console.error("이미지 저장 실패:", responseDiary.status);
-
+  
           alert("이미지 저장에 실패하였습니다.");
         }
-      } catch (error) {
-        console.error("Error diary:", error);
-        alert("일기 중에 오류가 발생하였습니다.");
+
+        const responseComment = await fetch("http://127.0.0.1:5000/api/diary/comment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ diaryText }),
+        });
+
+        if (responseComment.ok) {
+          const comment = await responseComment.json();
+          setIsCommentLoading(false);
+          setCommentText(comment.comment);
+        } else {
+          console.error("코멘트 불러오기 실패: ", responseComment);
+        }
+
+      } else {
+        alert("일기를 먼저 작성해주세요!");
       }
+
+    } catch (error) {
+      console.error("Error diary:", error);
+      alert("일기 중에 오류가 발생하였습니다.");
     } else {
       alert("이미지 스타일 먼저 생성해주세요!");
     }
@@ -368,30 +395,6 @@ function DiaryPage() {
     console.log(dateString);
     //image post
     if (newImageUrl) {
-      try {
-        console.log("이미지 url", newImageUrl);
-
-        // 이미지 url post
-        const responseImg = await axios.post(
-          "http://localhost:8080/api/image/test/create",
-          {
-            imageFile: newImageUrl,
-            albumID: selectedAlbumID,
-            date: dateString,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-
-        if (responseImg.status === 200) {
-          console.log("이미지 URL이 백엔드로 전송되었습니다.");
-        } else {
-          console.error("이미지 URL 전송 실패:", responseImg.status);
-        }
-      } catch (error) {
-        console.log("Error: ", error);
-      }
 
       const responseDiary = await axios.post(
         "http://localhost:8080/api/diary/add",
@@ -407,7 +410,7 @@ function DiaryPage() {
             negative: negativeValue,
             neutral: neutralValue,
           },
-          comment: "string",
+          comment: commentText,
         },
         {
           headers: {
@@ -441,14 +444,6 @@ function DiaryPage() {
               <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
             </TopContent>
 
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            ></div>
-
             <MessageContainer>
               {showInitialMessage && (
                 <MessageText color="#707070" show={!isTextValid}>
@@ -473,22 +468,25 @@ function DiaryPage() {
               <EditDiary onDiaryTextChange={handleDiaryTextChange} />
               <ImageOption
                 onOptionSelect={handleOptionSelect}
-                isLoading={isLoading}
+                isRecommenderLoading={isRecommenderLoading}
               />
             </EditDiaryArea>
 
             <div
               style={{
-                marginLeft: "20px",
+                marginLeft: "10px",
                 marginRight: "20px",
+                marginTop: "15px",
                 display: "flex",
                 justifyContent: "space-between",
               }}
             >
               <ButtonContainer>
-                <RemoveButtonStyle onClick={handleCreate}>
+                <CreateButtonStyle 
+                  onClick={handleCreate}
+                  animate={animateCreateBtn}>
                   생성
-                </RemoveButtonStyle>
+                </CreateButtonStyle>
               </ButtonContainer>
 
               <ButtonContainer>
@@ -504,9 +502,9 @@ function DiaryPage() {
             </div>
 
             <ManageAIArea>
-              <GeneratedImage isLoading={isLoading} newImageUrl={newImageUrl} />
+              <GeneratedImage isLoading={isImageLoading} newImageUrl={newImageUrl} />
               <RightComponentsContainer>
-                <AIComment />
+                <AIComment text={commentText} isLoading={isCommentLoading} />
                 <Sentiment
                   positiveValue={positiveValue}
                   negativeValue={negativeValue}

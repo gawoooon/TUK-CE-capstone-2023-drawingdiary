@@ -6,7 +6,7 @@ const Btn = styled.button`
   border: none;
   outline: none;
   background-color: #c4d4f9;
-  box-shadow: 0 5px 2px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   font-size: 20px;
   font-weight: 800;

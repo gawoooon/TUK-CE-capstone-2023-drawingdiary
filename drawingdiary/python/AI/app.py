@@ -12,6 +12,25 @@ load_dotenv()
 # OpenAI API 키 설정
 openai.api_key =os.getenv("OPENAI_API_KEY")
 
+@app.route('/api/diary/comment', methods=['POST'])
+def save_comment():
+    try:
+        data = request.json
+        diary_text = data.get("diaryText", '')
+
+        prompt = diary_text + " 이 일기로 코멘트를 250자 이내로 작성해줘"
+
+        response = openai.ChatCompletion.create(
+            model="gpt-4.0",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+        chat_response = response.choices[0].message.content
+        return jsonify({"comment": chat_response})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route('/api/diary/image', methods=['POST'])
 def save_diary():
@@ -33,22 +52,17 @@ def save_diary():
 
         # 이미지 url을 클라이언트에게 전송
         image_url = response.data[0].url
-        print("image_url:",image_url)
 
-       
         response = {
-        "message": "Diary saved successfullyyyy",
-        "diaryContent": diary_text,
-        "image": {
-            "imageUrl": image_url
-        }
-    }
-
-        
+            "message": "Diary saved successfullyyyy",
+            "diaryContent": diary_text,
+            "image": {
+                "imageUrl": image_url
+            }
+        }   
         return jsonify(response)
 
     except Exception as e:
-        app.logger.error("Error saving diary: %s", repr(e))  # 로깅으로 변경
         return jsonify({"success": False, "message": "Error saving diary"})
 
 
