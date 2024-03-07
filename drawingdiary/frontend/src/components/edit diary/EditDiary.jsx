@@ -34,6 +34,7 @@ const WriteArea = styled.textarea`
   font-weight: bold;
   outline: none;
   resize: none;
+  line-height: 1.5;
 `;
 
 const EditDiary = ( { onDiaryTextChange }) => {

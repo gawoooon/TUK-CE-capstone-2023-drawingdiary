@@ -19,11 +19,11 @@ public class EmailAccountController {
     // 인증번호 전송, 잘 보내지면 알아서 상태코드 200
     // TODO: 이부분 responseEntity custom으로 바꾸던가 삭제하던가
     @PostMapping("/api/email/codesending")
-    public ResponseEntity<String> mailConfirm(@RequestBody String email) throws Exception{
+    public ResponseEntity<String> mailConfirm(@RequestBody EmailRequestDTO emailRequestDTO) throws Exception{
         try{
-            String code = emailService.sendSimpleMessage(email);
-            verificationService.saveVerificationCode(email, code);
-            return new ResponseEntity<String>(code, HttpStatus.OK);
+            String code = emailService.sendSimpleMessage(emailRequestDTO.getEmail());
+            verificationService.saveVerificationCode(emailRequestDTO.getEmail(), code);
+            return new ResponseEntity<String>(HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);

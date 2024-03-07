@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
 import { TrashButton } from "../button/DeleteButton";
 import Modal from "./Modal";
+import axios from "axios";
 
 const AlbumContainer = styled.div`
     width: 1190px;
-    height: 290px;
+    height: 260px;
     margin: 10px 0 30px 120px;
     padding: 10px;
     background-color: rgba(255, 255, 255, 0.5);
@@ -31,12 +32,20 @@ const ScrollSection = styled.div`
 
 const PictureContainer = styled.div`
     min-width: 210px;
-    height: 250px;
+    height: 230px;
     margin: 8px;
-    border: 1px solid #8C8C8C;
+    border: none;
     border-radius: 10px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    img {
+        width: 200px;
+        height: 200px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
 `;
 
 const DateText = styled.text`
@@ -52,10 +61,12 @@ const CategoryName = styled.text`
 
 
 const AlbumBox = ({ onErrorMessage }) => {
-    const { categoryList, removeCategory } = useCategory();
-    console.log(removeCategory);
+    const {  removeCategory } = useCategory();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
+    const [data, setData] = useState([]);
+
+    const accessToken = localStorage.getItem('accessToken');
 
     const handleDeleteClick = (category) => {
         setIsModalOpen(true);
@@ -70,18 +81,35 @@ const AlbumBox = ({ onErrorMessage }) => {
         setIsModalOpen(false);
         removeCategory(currentCategory, onErrorMessage);
     };
-    
-    // 임의의 앨범 아이템 배열 생성 (1월 1일부터 1월 10일까지)
-    // const albumItems = Array.from({ length: 10 }, (_, index) => ({
-    //     date: `1월 ${index + 1}일`,
-    // }));
-    
-    const albumItemEmpty = [];
+
+    useEffect(() => {
+        const fetchAlbum = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/album/all', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+                const newData = response.data.map(entry => ({
+                    name: entry.name,
+                    images: entry.images.map(img => ({
+                        date: img.date,
+                        imageFile: img.imageFile
+                    })).sort((a, b) => new Date(a.date) - new Date(b.date))
+                }));
+                setData(newData);
+                console.log("데이터: ", data);
+            } catch (error) {
+                console.log("error: ", error);
+            }
+        };
+        fetchAlbum();
+    }, [accessToken, data]);
     
     return (
         <div>
-            {categoryList.map((category) => (
-                <div key={category.memberID}>
+            {data.map((categoryEntry) => (
+                <div key={categoryEntry.name}>
                     <div
                         style={{
                             display: 'flex',
@@ -89,8 +117,8 @@ const AlbumBox = ({ onErrorMessage }) => {
                             alignItems: 'baseline',
                             marginRight: '80px',
                         }}>
-                        <CategoryName>{category.albumName}</CategoryName>
-                        <TrashButton onClick={() => handleDeleteClick(category)}/>
+                        <CategoryName>{categoryEntry.name}</CategoryName>
+                        <TrashButton onClick={() => handleDeleteClick(categoryEntry.name)}/>
 
                     </div>
 
@@ -101,12 +129,13 @@ const AlbumBox = ({ onErrorMessage }) => {
                     />
 
                     <AlbumContainer>
-                        {albumItemEmpty.length > 0 ? (
+                        {categoryEntry.images.length > 0 ? (
                             <ScrollSection>
-                                {albumItemEmpty.map((item, index) => (
+                                {categoryEntry.images.map((item, index) => (
                                     <PictureContainer key={index}>
                                         <DateText>{item.date}</DateText>
-                                        </PictureContainer>
+                                        <img src={item.imageFile} alt="Album" />
+                                    </PictureContainer>
                                 ))}
                             </ScrollSection>
                         ) : (

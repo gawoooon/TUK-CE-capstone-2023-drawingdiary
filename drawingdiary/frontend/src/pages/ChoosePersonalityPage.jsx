@@ -68,6 +68,8 @@ const ChoosePersonality = () => {
 
     const location = useLocation();
     const userEmail = location.state?.email; // 이메일 값을 불러옴
+    const userName = location.state?.name; // 이름 값을 불러옴
+    
 
     console.log(userEmail);
 
@@ -115,8 +117,8 @@ const ChoosePersonality = () => {
 
             <ContainerStyle>
 
-                <h3>OO님의 mbti를 골라주세요!</h3>
-                <h5>OO님이 고른 mbti는 어떤 그림체를 선호하는지 파악하는데 필요해요.</h5>
+                <h3>{userName}님의 mbti를 골라주세요!</h3>
+                <h5>{userName}님이 고른 mbti는 어떤 그림체를 선호하는지 파악하는데 필요해요.</h5>
 
                 <MBTIContainer>
                     {mbtiKeywords.map( (keyword) => (

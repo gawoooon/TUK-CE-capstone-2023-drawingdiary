@@ -6,6 +6,7 @@ import { GrFormPrevious } from "react-icons/gr";
 
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
+import { useCalendar } from "./CalendarProvider";
 
 const CalendarBox = styled.div`
   width: 100%;
@@ -234,8 +235,9 @@ const RenderCells = ({
 };
 
 function Calendar2({ onDateClick: parentOnDateClick }) {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const { currentMonth, setCurrentMonth } = useCalendar();
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -256,7 +258,7 @@ function Calendar2({ onDateClick: parentOnDateClick }) {
   };
 
   return (
-    <CalendarBox style={{}}>
+    <CalendarBox>
       <RenderHeader
         currentMonth={currentMonth}
         prevMonth={prevMonth}
@@ -270,6 +272,8 @@ function Calendar2({ onDateClick: parentOnDateClick }) {
       />
     </CalendarBox>
   );
-}
+
+};
+
 
 export default Calendar2;

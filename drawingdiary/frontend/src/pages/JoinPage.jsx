@@ -1,23 +1,21 @@
-import React, { useState, useRef } from 'react';
-import styled from "styled-components";
+import React, { useState, useRef, useEffect } from 'react';
+import styled, { keyframes, css } from "styled-components";
 import axios from 'axios';
 import Background from "../components/Background";
 import { useNavigate } from "react-router-dom";
 import LongInputField from '../components/input field/LongInputField';
 import ShortInputField from '../components/input field/ShortInputField';
-import SmallButton from "../components/button/SmallButton";
 
 const ContainerStyle = styled.div`
-  height: 700px;
-  width: 550px;
+  height: 670px;
+  width: 530px;
   position: fixed;
   z-index: 1;
   left: 50%;
   top: 50%; 
   transform: translate(-50%, -50%);
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid ;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -27,6 +25,18 @@ const ContainerStyle = styled.div`
     margin-top: 20px;
     margin-bottom: 10px;
   };
+  input {
+    border: none;
+    border-bottom: 1px solid rgba(56, 56, 56, 0.4);
+  }
+  select {
+    border: none;
+    border-bottom: 1px solid rgba(56, 56, 56, 0.4);
+  }
+  input::placeholder {
+    color: #808080;
+    font-weight: 600;
+  }
 `;
 
 const InputFieldStyle = styled.div`
@@ -37,8 +47,6 @@ const EmailInputStyle = styled.input`
   height: 40px;
   width: 350px;
   padding-left: 10px;
-  border: 1px solid #909090;
-  border-radius: 10px;
   outline: none;
   font-size: 13px;
 `;
@@ -46,13 +54,12 @@ const EmailInputStyle = styled.input`
 const SelectMonthContainer = styled.select`
   height: 45px;
   width: 125px;
-  margin: 0px 15px 30px 15px;
+  margin: 0px 15px 31px 15px;
   padding-left: 5px;
-  border: 1px solid #909090;
-  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  outline: none;
 `;
 
 const SelectGenderContainer = styled.select`
@@ -60,27 +67,39 @@ const SelectGenderContainer = styled.select`
   width: 435px;
   margin: 0px 15px 15px 15px;
   padding-left: 5px;
-  border: 1px solid #909090;
-  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  outline: none;
 `;
 
 const BirthDayContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  outline: none;
 `;
 
 const ConfilmPasswordStyle = styled.input`
   height: 40px;
   width: 420px;
   padding-left: 10px;
-  border: 1px solid #909090;
-  border-radius: 10px;
   outline: none;
   font-size: 13px;
+`;
+
+const VerifyButton = styled.button `
+  height: 40px;
+  width: 60px;
+  margin-left: 10px;
+  background-color: white;
+  border: 2px solid rgba(106, 156, 253, 0.4);
+  border-radius: 10px;
+  cursor: pointer;
+  color: black;
+  font-size: 13px;
+  text-align: center;
+  outline: none;
 `;
 
 const ButtonContainer = styled.div `
@@ -89,26 +108,35 @@ const ButtonContainer = styled.div `
     justify-content: center;
 `;
 
-const ButtonStyle = styled.button`
-    height: 50px;
-    width: 250px;
-    margin-bottom: 30px;
-    background-color: rgba(106, 156, 253, 0.3);
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border: none;
-    cursor: pointer;
-    color: black;
-    font-size: 20px;
-    font-weight: bold;
+const jumpAnimation = keyframes`
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
 `;
 
-const ErrorMessageContainer = styled.div`
+const ButtonStyle = styled.button`
+    height: 45px;
+    width: 200px;
+    margin-bottom: 30px;
+    background-color: rgb(106, 156, 253, 0.3);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    outline: none;
+    &:hover {
+      animation: ${jumpAnimation} 0.5s ease;
+    }
+`;
+
+const MessageContainer = styled.div`
   margin: 0 0 3px 20px;
   min-height: 20px;
 `;
 
-const ErrorMessage = styled.text`
+const Message = styled.text`
   font-size: 12px;
   font-weight: bold;
   color: red;
@@ -129,20 +157,26 @@ const CreateAccount = () => {
     const [month, setMonth] = useState('');
     const [day, setDay] = useState('');
     const [gender, setGender] = useState('');
-    const [email, setEmail] = useState('');
+    const [userEmail, setUserEmail] = useState('');
     const [certification, setCheckCertification] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [sendMessage, setSendMessage] = useState('');
+    const [verifyMessage, setVerifyMessage] = useState('');
+    const [isEmailVerified, setIsEmailVerified] = useState(false);
+
+    const [animateNextBtn, setAnimateNextBtn] = useState(false);
 
     const navigate = useNavigate();
 
     const confirmPasswordRef = useRef();
 
     const handleSubmit = (event) => {
+
         event.preventDefault();
 
-        if(!name || !year || !month || !day || !gender || !email || !certification || !password || !confirmPassword) {
+        if(!name || !year || !month || !day || !gender || !userEmail || !certification || !password || !confirmPassword || !isEmailVerified) {
           alert("모든 입력란을 채워주세요.");
           return;
         }
@@ -153,13 +187,10 @@ const CreateAccount = () => {
           confirmPasswordRef.current.focus();
           return;
         }
-        // 데이터 전송이 성공하면 지워야 함
-        // navigate('/choosePersonality');
+  
 
         // 생일 형식 설정 부분
         const birth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-
-        console.log("gender: ", gender);
 
         // 성별 형식 변경
         let genderForm;
@@ -171,19 +202,19 @@ const CreateAccount = () => {
           genderForm = "S";
         }
 
-        console.log('Sending data:', { name, email, password, birth, gender: genderForm });
+        console.log('Sending data:', { name, email: userEmail, password, birth, gender: genderForm });
         
         // 백엔드 api로 데이터 전송
         axios.post('http://localhost:8080/api/join', {
           name,
-          email,
+          email: userEmail,
           password,
           birth,
           gender: genderForm,
         })
         .then(response => {
           console.log('Success: ', response);
-          navigate('/choosePersonality', { state: { email }});
+          navigate('/choosePersonality', { state: { email: userEmail, name }});
         })
         .catch(error => {
           if(error.response && error.response.status === 409) {
@@ -192,8 +223,64 @@ const CreateAccount = () => {
             console.log('Error: ', error);
           }
         });
+
     };
 
+    const sendEmail = async (event) => {
+      event.preventDefault();
+      console.log("userEmail: ", userEmail);
+      if(userEmail !== '') {
+        try {
+          const response = await axios.post('http://localhost:8080/api/email/codesending', `${userEmail}`, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          console.log("response", response);
+          setSendMessage("이메일이 전송되었습니다.");
+        } catch (error) {
+          console.log("error: ", error);
+        }
+      } else {
+        alert("이메일을 입력해주세요!");
+      }
+    };
+
+    const verifyCertification = async (event) => {
+      event.preventDefault();
+      if(certification !== ''){
+        try {
+          const response = await axios.post('http://localhost:8080/api/email/verify', {
+            email: userEmail,
+            verificationCode: certification
+          });
+          console.log("response: ", response);
+          setIsEmailVerified(true);
+          setVerifyMessage('이메일이 인증되었습니다.')
+        } catch (error) {
+          console.log("error: ", error);
+        }
+      }
+    };
+
+    useEffect(() => {
+      if(errorMessage) {
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 2000);
+      }
+      if(sendMessage) {
+        setTimeout(() => {
+          setSendMessage('');
+        }, 2000);
+      }
+      if(verifyMessage) {
+        setTimeout(() => {
+          setVerifyMessage('');
+        }, 2000);
+      }
+    }, [errorMessage, sendMessage, verifyMessage]);
+      
     return (
         <Background>
 
@@ -201,9 +288,9 @@ const CreateAccount = () => {
 
             <h3>계정 만들기</h3>
 
-            <Divider/>
+            {/* <Divider/> */}
 
-            <form onSubmit={handleSubmit}>
+            <form autoComplete="off">
 
               <InputFieldStyle>
 
@@ -212,7 +299,7 @@ const CreateAccount = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeHolder="이름"
+                  placeholder="이름"
                 />
 
               </InputFieldStyle>
@@ -224,7 +311,7 @@ const CreateAccount = () => {
                   type="text"
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
-                  placeHolder="연"
+                  placeholder="연"
                 />
 
                 <SelectMonthContainer 
@@ -232,7 +319,7 @@ const CreateAccount = () => {
                   id='month'
                   value={month}
                   onChange={ (e) => setMonth(e.target.value)}
-                  style={{ color: month === "" ? '#808080' : 'initial' }}>
+                  style={{ color: month === "" ? '#808080' : 'initial', paddingTop: '2px' }}>
                   <option value="" disabled style={{ color: 'grey'}}>월</option>
                   <option value="1">1월</option>
                   <option value="2">2월</option>
@@ -254,7 +341,7 @@ const CreateAccount = () => {
                   type="text"
                   value={day}
                   onChange={(e) => setDay(e.target.value)}
-                  placeHolder="일"
+                  placeholder="일"
                 />
 
               </BirthDayContainer>
@@ -271,32 +358,34 @@ const CreateAccount = () => {
                 <option value="secret">공개안함</option>
               </SelectGenderContainer>
 
-              <ErrorMessageContainer>
-                {errorMessage && ( <ErrorMessage> {errorMessage} </ErrorMessage> )}
-              </ErrorMessageContainer>
+              <MessageContainer>
+                {errorMessage && ( <Message> {errorMessage} </Message> )}
+                {sendMessage && ( <Message> {sendMessage} </Message>)}
+                {verifyMessage && ( <Message> {verifyMessage} </Message>)}
+              </MessageContainer>
               
               <InputFieldStyle>
 
                 <EmailInputStyle
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={ (e) => setEmail(e.target.value)}
+                  value={userEmail}
+                  onChange={ (e) => setUserEmail(e.target.value)}
                   placeholder="이메일"/>
                 
-                <SmallButton text="인증"/>
+                <VerifyButton onClick={(e) => sendEmail(e)}>인증</VerifyButton>
+
               </InputFieldStyle>
 
               <InputFieldStyle>
 
                 <EmailInputStyle
                   id="certification"
-                  type="email"
                   value={certification}
                   onChange={(e) => setCheckCertification(e.target.value)}
-                  placeHolder="인증번호 입력"/>
+                  placeholder="인증번호 입력"/>
 
-                  <SmallButton text="확인"/>
+                  <VerifyButton onClick={(e) => verifyCertification(e)}>확인</VerifyButton>
               
               </InputFieldStyle>
 
@@ -307,7 +396,7 @@ const CreateAccount = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeHolder="비밀번호"
+                  placeholder="비밀번호"
                 />
 
               </InputFieldStyle>
@@ -319,14 +408,14 @@ const CreateAccount = () => {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeHolder="비밀번호 확인"
+                  placeholder="비밀번호 확인"
                   ref={confirmPasswordRef}
                 />
               
               </InputFieldStyle>
 
               <ButtonContainer>
-                <ButtonStyle type="submit" onClick={handleSubmit} herf="/choosePersonality">
+                <ButtonStyle animate={animateNextBtn} onClick={handleSubmit} herf="/choosePersonality">
                   다음
                 </ButtonStyle>
               </ButtonContainer>

@@ -83,7 +83,7 @@ const DropdownItem = styled.a`
   }
 `;
 
-const ImageOption = ({ onOptionSelect, isLoading }) => {
+const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   const LoadingOptions = {
     loop:true,
     autoplay: true,
@@ -93,6 +93,7 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
   const [selectedButtonStyle, setSelectedButtonStyle] = useState(null);
   const [selectedDropdownOption, setSelectedDropdownOption] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [userName, setUserName] = useState("");
   const [userAge, setUserAge] = useState(0);
@@ -154,6 +155,7 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
       
       if (styleResponse.ok) {
         const styleData = await styleResponse.json();
+        setIsLoading(!isRecommenderLoading);
         setImageList(styleData.predicted_styles);
       } 
       else {
@@ -182,7 +184,7 @@ const ImageOption = ({ onOptionSelect, isLoading }) => {
           선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : selectedDropdownOption !== null ? selectedDropdownOption : "없음"}
         </SelectedStyle>
         {isLoading ? (
-          <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={100} width={100} />
+          <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={280} width={280} />
         ) : (
           imageList.map((style, index) => (
             <ButtonStyle key={index} isSelected={selectedButtonStyle === style} onClick={() => handleButtonStyleSelect(style)}>
