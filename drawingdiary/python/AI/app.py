@@ -17,11 +17,12 @@ def save_comment():
     try:
         data = request.json
         diary_text = data.get("diaryText", '')
+        print(diary_text)
 
         prompt = diary_text + " 이 일기로 코멘트를 250자 이내로 작성해줘"
 
         response = openai.ChatCompletion.create(
-            model="gpt-4.0",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": prompt}
             ]

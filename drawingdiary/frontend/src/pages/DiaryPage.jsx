@@ -148,8 +148,7 @@ function DiaryPage() {
   const [diaryText, setDiaryText] = useState("");
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [isCommentLoading, setIsCommentLoading] = useState(false);
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
-  const [newDiaryText, setNewDiaryText] = useState("");
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(false);
   // 날짜, 날씨
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
@@ -300,65 +299,64 @@ function DiaryPage() {
     if (parentSelectedButtonStyle) {
       // 감정 분석 실행
       analyzeSentiment();
-      setIsLoading(true);
+      setIsImageLoading(true);
+      setIsCommentLoading(true);
       //이미지 api
       try {
         console.log("일기 내용 저장:", diaryText);
         const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
         console.log(resultDiaryText);
 
-    setIsImageLoading(true);
-    setIsCommentLoading(true);
 
-    //이미지 api
-    try {
-      if(diaryText !== '') {
-  
-        const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
-        const responseDiary = await fetch(imageApiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ diaryText }),
-        });
-  
-        if (responseDiary.ok) {
-          const responseDate = await responseDiary.json();
-  
-          // url 받아오기
-          const imageUrl = responseDate.image?.imageUrl;
-          setIsImageLoading(false);
-          setNewImageUrl(imageUrl);
+        if(diaryText !== '') {
+    
+          const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
+          const responseDiary = await fetch(imageApiUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ resultDiaryText }),
+          });
+    
+          if (responseDiary.ok) {
+            const responseDate = await responseDiary.json();
+    
+            // url 받아오기
+            const imageUrl = responseDate.image?.imageUrl;
+            setIsImageLoading(false);
+            setNewImageUrl(imageUrl);
+          } else {
+            console.error("이미지 저장 실패:", responseDiary.status);
+    
+            alert("이미지 저장에 실패하였습니다.");
+          }
+
+          const responseComment = await fetch("http://127.0.0.1:5000/api/diary/comment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ diaryText }),
+          });
+
+          if (responseComment.ok) {
+            const comment = await responseComment.json();
+            setIsCommentLoading(false);
+            setCommentText(comment.comment);
+            console.log(comment.comment);
+          } else {
+            console.error("코멘트 불러오기 실패: ", responseComment);
+          }
+
         } else {
-          console.error("이미지 저장 실패:", responseDiary.status);
-  
-          alert("이미지 저장에 실패하였습니다.");
+          alert("일기를 먼저 작성해주세요!");
         }
 
-        const responseComment = await fetch("http://127.0.0.1:5000/api/diary/comment", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ diaryText }),
-        });
-
-        if (responseComment.ok) {
-          const comment = await responseComment.json();
-          setIsCommentLoading(false);
-          setCommentText(comment.comment);
-        } else {
-          console.error("코멘트 불러오기 실패: ", responseComment);
-        }
-
-      } else {
-        alert("일기를 먼저 작성해주세요!");
+      } catch (error) {
+        console.error("Error diary:", error);
+        alert("일기 중에 오류가 발생하였습니다.");
       }
-
-    } catch (error) {
-      console.error("Error diary:", error);
-      alert("일기 중에 오류가 발생하였습니다.");
     } else {
       alert("이미지 스타일 먼저 생성해주세요!");
     }

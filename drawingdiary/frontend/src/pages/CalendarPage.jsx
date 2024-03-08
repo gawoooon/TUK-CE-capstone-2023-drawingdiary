@@ -221,13 +221,13 @@ function CalendarPage() {
 
   const handleEdit = () => {
     // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    const year = selectedDate.getFullYear();
+    const currentYear = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
     const day = selectedDate.getDate();
     const formattedDate = format(selectedDate, "yyyyMMdd");
     console.log(selectedDate);
     navigate(`/diary/${memberID}/${formattedDate}`, {
-      state: { date: { year, month, day } },
+      state: { date: { currentYear, month, day } },
     });
   };
 
