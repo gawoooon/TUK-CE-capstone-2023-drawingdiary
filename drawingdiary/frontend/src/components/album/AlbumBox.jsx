@@ -66,45 +66,51 @@ const AlbumBox = ({ onErrorMessage }) => {
     const [currentCategory, setCurrentCategory] = useState(null);
     const [data, setData] = useState([]);
 
+    const [album, setAlbum] = useState(false);
+
+
     const accessToken = localStorage.getItem('accessToken');
+    
+    const fetchAlbum = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/album/all', {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            console.log("response: ", response);
+            const newData = response.data.map(entry => ({
+                albumID: entry.albumID,
+                name: entry.name,
+                images: entry.images.map(img => ({
+                    date: img.date,
+                    imageFile: img.imageFile
+                })).sort((a, b) => new Date(a.date) - new Date(b.date))
+            }));
+            setData(newData);
+        } catch (error) {
+            console.log("error: ", error);
+        }
+    };
 
     const handleDeleteClick = (category) => {
         setIsModalOpen(true);
         setCurrentCategory(category);
+        console.log("category: ", category);
     };
-
+    
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-
+    
     const handleConfirmDelete = async () => {
         setIsModalOpen(false);
         removeCategory(currentCategory, onErrorMessage);
     };
 
     useEffect(() => {
-        const fetchAlbum = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/album/all', {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                })
-                const newData = response.data.map(entry => ({
-                    name: entry.name,
-                    images: entry.images.map(img => ({
-                        date: img.date,
-                        imageFile: img.imageFile
-                    })).sort((a, b) => new Date(a.date) - new Date(b.date))
-                }));
-                setData(newData);
-                console.log("데이터: ", data);
-            } catch (error) {
-                console.log("error: ", error);
-            }
-        };
         fetchAlbum();
-    }, [accessToken, data]);
+    }, [fetchAlbum]);
     
     return (
         <div>
@@ -118,7 +124,7 @@ const AlbumBox = ({ onErrorMessage }) => {
                             marginRight: '80px',
                         }}>
                         <CategoryName>{categoryEntry.name}</CategoryName>
-                        <TrashButton onClick={() => handleDeleteClick(categoryEntry.name)}/>
+                        <TrashButton onClick={() => handleDeleteClick(categoryEntry.albumID)}/>
 
                     </div>
 

@@ -275,7 +275,7 @@ function DiaryPage() {
     if(createBtn) {
       analyzeSentiment();
     }
-  }, [createBtn])
+  })
 
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {

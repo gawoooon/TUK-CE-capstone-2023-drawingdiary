@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
-import axiosInstance from '../../axios/axisoInstance';
 import { useAuth } from '../../auth/context/AuthContext';
 import axios from 'axios';
 
@@ -36,7 +35,7 @@ function useCategoryList (){
  
         if (newCategory && !categoryList.some(category => category.albumName === newCategory)) {
             try {
-                await axiosInstance.post('/api/album', {
+                await axios.post('http://localhost:8080/api/album', {
                     albumName: newCategory,
                 }, {
                     headers: {
@@ -56,8 +55,9 @@ function useCategoryList (){
     const removeCategory = async (categoryToRemove, onError) => {
 
         if(categoryToRemove) {
+            console.log("categoryToRemove: ", categoryToRemove);
             try {
-                await axiosInstance.delete(`/api/album/${categoryToRemove.albumID}`, {
+                await axios.delete(`http://localhost:8080/api/album/${categoryToRemove}`, {
                     headers : {
                         'Authorization': `Bearer ${accessToken}`
                     }
