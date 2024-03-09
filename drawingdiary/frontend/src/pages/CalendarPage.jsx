@@ -225,7 +225,7 @@ function CalendarPage() {
     const month = selectedDate.getMonth() + 1;
     const day = selectedDate.getDate();
     const formattedDate = format(selectedDate, "yyyyMMdd");
-    console.log(selectedDate);
+  
     navigate(`/diary/${memberID}/${formattedDate}`, {
       state: { date: { currentYear, month, day } },
     });
@@ -234,13 +234,12 @@ function CalendarPage() {
   const handleRemove = async () => {
 
     try {
-      const response = await axios.delete(`http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`, {
+      await axios.delete(`http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         }
       })
       fetchCalendar();
-      console.log("response: ", response);
     } catch (error) {
       console.log("error: ", error.response.data);
     }
@@ -265,13 +264,11 @@ function CalendarPage() {
       
       // 실제 데이터를 받아오는 부분
       const dateArray = data.map(entry => entry.date);
-      console.log("dataArray: ", dateArray);
 
       // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
       const index = data.findIndex((item) =>
         isSameDay(new Date(item.date), date),
       );
-      console.log("index: ", index);
 
       //일치하면 인덱스 값/ 아니면 -1 반환 => 존재하면 true, 존재하지 않으면 false
       if(index !== -1) {
@@ -303,7 +300,6 @@ function CalendarPage() {
 
           // 데이터 확인 결과에 따라 상태 업데이트
           setSelectedDateHasData(hasData);
-          // console.log("data:", hasData);
         } catch (error) {
           console.error("Error fetching data:", error);
           // 에러가 발생하면 데이터가 없는 것으로 간주
@@ -356,7 +352,7 @@ function CalendarPage() {
 
                 ) : (
                   <FalseComponent
-                    year={selectedDate.getFullYear()}
+                    currentYear={selectedDate.getFullYear()}
                     month={selectedDate.getMonth() + 1}
                     day={selectedDate.getDate()}
                     selectedDate={selectedDate}

@@ -140,15 +140,16 @@ const MessageText = styled.div`
 function DiaryPage() {
   const navigate = useNavigate();
 
-  // recommender
+  // loading
   const [isRecommenderLoading, setIsRecommenderLoading] = useState(true);
+  const [isImageLoading, setIsImageLoading] = useState(false);
+  const [isCommentLoading, setIsCommentLoading] = useState(false);
 
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
-  const [isImageLoading, setIsImageLoading] = useState(false);
-  const [isCommentLoading, setIsCommentLoading] = useState(false);
   const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(false);
+
   // 날짜, 날씨
   const location = useLocation();
   const { date } = location.state || {}; // 날짜 정보 수신
@@ -171,10 +172,12 @@ function DiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
-  const [sentimentResult, setSentimentResult] = useState("");
-  const [newDiaryText, setNewDiaryText] = useState("");
+  const [sentimentResult, setSentimentResult] = useState('');
 
+  const [newDiaryText, setNewDiaryText] = useState('');
   const [commentText, setCommentText] = useState('');
+
+  const [createBtn, setCreateBtn] = useState(false);
 
   // 날씨 상태를 업데이트하는 함수
   const handleWeatherStateChange = (newWeatherState) => {
@@ -240,14 +243,6 @@ function DiaryPage() {
     }
   };
 
-  // EditDiary에서 텍스트 길이 조건 충족 여부 받기
-  // const handleTextChange = (isValid) => {
-  //   setIsTextValid(isValid);
-  // };
-  useEffect(() => {
-    analyzeSentiment();
-  }, [diaryText]);
-
   const handleOptionSelect = (isSelected, selectedButtonStyle) => {
     setIsOptionSelected(isSelected);
     if (selectedButtonStyle === undefined && isSelected === true) {
@@ -276,6 +271,12 @@ function DiaryPage() {
   // 일단 임시로 이걸로 하자
   const isSaveButtonEnabled = isTextValid;
 
+  useEffect(() => {
+    if(createBtn) {
+      analyzeSentiment();
+    }
+  }, [createBtn])
+
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
     if (diaryText.length < 30) {
@@ -285,20 +286,23 @@ function DiaryPage() {
       }, 5000);
       return;
     }
-
+    
+    
     setAnimateCreateBtn(true);
     setTimeout(() => {
       setAnimateCreateBtn(false);
     }, 500);
-
+    
     setShowCreate(true);
     setTimeout(() => {
       setShowCreate(false);
     }, 5000);
 
+
     if (parentSelectedButtonStyle) {
-      // 감정 분석 실행
-      analyzeSentiment();
+      
+      setCreateBtn(true);
+
       setIsImageLoading(true);
       setIsCommentLoading(true);
       //이미지 api
@@ -380,17 +384,15 @@ function DiaryPage() {
     }
 
     // 날짜 데이터
-    const formattedDate = new Date(date.year, date.month - 1, date.day);
+    const formattedDate = new Date(date.currentYear, date.month - 1, date.day);
 
     // 날짜 및 월을 두 자릿수로 표시하는 함수
     const pad = (number) => (number < 10 ? `0${number}` : number);
 
     // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
-    const dateString = `${formattedDate.getFullYear()}-${pad(
-      formattedDate.getMonth() + 1
-    )}-${pad(formattedDate.getDate())}`;
+    const dateString = `${formattedDate.getFullYear()}-${pad(formattedDate.getMonth() + 1)}-${pad(formattedDate.getDate())}`;
 
-    console.log(dateString);
+    console.log("선택 날짜:", dateString);
     //image post
     if (newImageUrl) {
 

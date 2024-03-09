@@ -27,7 +27,7 @@ const Comment = styled.div`
     justify-content: center;
     overflow-y: auto;
     padding: 10px;
-    line-height: 1.5;
+    line-height: 1.7;
     &::-webkit-scrollbar {
         width: 8px;
     }

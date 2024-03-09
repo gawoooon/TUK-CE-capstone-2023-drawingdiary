@@ -44,7 +44,7 @@ const AddBtn = styled.button`
   margin-top: 20px;
 `;
 
-function FalseComponent({ year, month, day, selectedDate }) {
+function FalseComponent({ currentYear, month, day, selectedDate }) {
   const navigate = useNavigate();
   const { memberID } = useAuth();
 
@@ -52,7 +52,7 @@ function FalseComponent({ year, month, day, selectedDate }) {
     // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
     const formattedDate = format(selectedDate, "yyyyMMdd");
     navigate(`/diary/${memberID}/${formattedDate}`, {
-      state: { date: { year, month, day } },
+      state: { date: { currentYear, month, day } },
     });
   };
 
