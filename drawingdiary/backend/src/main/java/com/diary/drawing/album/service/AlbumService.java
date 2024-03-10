@@ -79,7 +79,8 @@ public class AlbumService {
     }
 
     /* 멤버별 앨범 리스트 return, 아무것도 없다면 빈 리스트 반환 */
-    public List<AlbumListDTO> getAlbumsByMember(Member member) {
+    public List<AlbumListDTO> getAlbumsByMember(Long memberID) {
+        Member member = validateMemberService.validateMember(memberID);
         List<Album> albums = albumRepository.findByMember(member);
             return albums.stream()
                         .map(album -> new AlbumListDTO(album.getAlbumID(), album.getAlbumName()))

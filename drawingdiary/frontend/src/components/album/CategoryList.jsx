@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
-import { useAuth } from '../../auth/context/AuthContext';
 import axios from 'axios';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useAuth } from '../../auth/context/AuthContext';
 
 export const CategoryContext = React.createContext();
 
@@ -13,7 +13,7 @@ function useCategoryList (){
     const fetchCategoryList = useCallback(async () => {
         if(memberID) {// 로그인 상태 확인
             try {
-                const response = await axios.get(`http://localhost:8080/api/album/list/${memberID}`, {
+                const response = await axios.get(`http://localhost:8080/api/album/list`, {  //[가원] api /{memberID} 사용X로 수정
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
                     }
