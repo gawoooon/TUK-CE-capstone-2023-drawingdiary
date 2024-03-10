@@ -102,6 +102,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
 
   const [imageList, setImageList] = useState([]);
   const [nonDuplicateStyles, setNonDuplicateStyles] = useState([]);
+  const [storedSelectedStyle, setStoredSelectedStyle] = useState(null);
 
   const accessToken = localStorage.getItem("accessToken");
 
@@ -113,6 +114,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     setSelectedButtonStyle(option);
     setSelectedDropdownOption(null);
     setIsSelected(true);
+    setStoredSelectedStyle(option);
     onOptionSelect(true, option); // 콜백 호출
   };
 
@@ -120,8 +122,19 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     setSelectedDropdownOption(option);
     setSelectedButtonStyle(null);
     setIsOpen(false);
+    setStoredSelectedStyle(option);
     setIsSelected(true);
   };
+
+  // Use if statements to check and store the selected style
+  useEffect(() => {
+    if (selectedButtonStyle !== null) {
+      setStoredSelectedStyle(selectedButtonStyle);
+    } else if (selectedDropdownOption !== null) {
+      setStoredSelectedStyle(selectedDropdownOption);
+    }
+    console.log("sksk", storedSelectedStyle);
+  }, [selectedButtonStyle, selectedDropdownOption]);
 
   const fetchOptionStyle = async () => {
     const response = await axios.get("http://localhost:8080/api/get-member", {
@@ -181,20 +194,30 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   }, [isSelected, onOptionSelect, imageList]);
 
   return (
-      <OptionContainer>
-        <h3>추천하는 이미지 스타일</h3>
-        <SelectedStyle>
-          선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : selectedDropdownOption !== null ? selectedDropdownOption : "없음"}
-        </SelectedStyle>
-        {isLoading ? (
-          <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={280} width={280} />
-        ) : (
-          imageList.map((style, index) => (
-            <ButtonStyle key={index} isSelected={selectedButtonStyle === style} onClick={() => handleButtonStyleSelect(style)}>
-              {style}
-            </ButtonStyle>
-          ))
-        )}
+    <OptionContainer>
+      <h3>추천하는 이미지 스타일</h3>
+      <SelectedStyle>
+        선택한 스타일:
+        {storedSelectedStyle !== null ? storedSelectedStyle : "없음"}
+      </SelectedStyle>
+      {isLoading ? (
+        <Lottie
+          isClickToPauseDisabled={true}
+          options={LoadingOptions}
+          height={280}
+          width={280}
+        />
+      ) : (
+        imageList.map((style, index) => (
+          <ButtonStyle
+            key={index}
+            isSelected={selectedButtonStyle === style}
+            onClick={() => handleButtonStyleSelect(style)}
+          >
+            {style}
+          </ButtonStyle>
+        ))
+      )}
 
       <div>
         <TextStyle>

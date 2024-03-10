@@ -148,7 +148,8 @@ function DiaryPage() {
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(false);
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
+    useState(false);
 
   // 날짜, 날씨
   const location = useLocation();
@@ -172,10 +173,10 @@ function DiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
-  const [sentimentResult, setSentimentResult] = useState('');
+  const [sentimentResult, setSentimentResult] = useState("");
 
-  const [newDiaryText, setNewDiaryText] = useState('');
-  const [commentText, setCommentText] = useState('');
+  const [newDiaryText, setNewDiaryText] = useState("");
+  const [commentText, setCommentText] = useState("");
 
   const [createBtn, setCreateBtn] = useState(false);
 
@@ -243,19 +244,36 @@ function DiaryPage() {
     }
   };
 
-  const handleOptionSelect = (isSelected, selectedButtonStyle) => {
-    setIsOptionSelected(isSelected);
-    if (selectedButtonStyle === undefined && isSelected === true) {
-    } else {
-      setParentSelectedButtonStyle(selectedButtonStyle);
-    }
+  // const handleOptionSelect = (isSelected, selectedButtonStyle) => {
+  //   setIsOptionSelected(isSelected);
+  //   if (selectedButtonStyle === undefined && isSelected === true) {
+  //   } else {
+  //     setParentSelectedButtonStyle(selectedButtonStyle);
+  //     console.log(
+  //       "다이어리 페이지에서 선택한 스타일:",
+  //       parentSelectedButtonStyle,
+  //       isSelected
+  //     );
+  //   }
+  // };
 
-    console.log(
-      "다이어리 페이지에서 선택한 스타일:",
-      parentSelectedButtonStyle,
-      isSelected
-    );
+  const handleOptionSelect = (isSelected, storedSelectedStyle) => {
+    setIsOptionSelected(isSelected);
+    console.log(storedSelectedStyle);
+    if (storedSelectedStyle === undefined && isSelected === true) {
+    } else {
+      setParentSelectedButtonStyle(storedSelectedStyle);
+    }
   };
+
+  useEffect(() => {
+    if (parentSelectedButtonStyle) {
+      console.log(
+        "다이어리 페이지에서 선택한 스타일:",
+        parentSelectedButtonStyle
+      );
+    }
+  }, [parentSelectedButtonStyle]);
 
   // Sentiment에 텍스트 전달
   const handleDiaryTextChange = (newText) => {
@@ -272,10 +290,10 @@ function DiaryPage() {
   const isSaveButtonEnabled = isTextValid;
 
   useEffect(() => {
-    if(createBtn) {
+    if (createBtn) {
       analyzeSentiment();
     }
-  })
+  });
 
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
@@ -286,21 +304,18 @@ function DiaryPage() {
       }, 5000);
       return;
     }
-    
-    
+
     setAnimateCreateBtn(true);
     setTimeout(() => {
       setAnimateCreateBtn(false);
     }, 500);
-    
+
     setShowCreate(true);
     setTimeout(() => {
       setShowCreate(false);
     }, 5000);
 
-
     if (parentSelectedButtonStyle) {
-      
       setCreateBtn(true);
 
       setIsImageLoading(true);
@@ -311,9 +326,7 @@ function DiaryPage() {
         const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
         console.log(resultDiaryText);
 
-
-        if(diaryText !== '') {
-    
+        if (diaryText !== "") {
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
           const responseDiary = await fetch(imageApiUrl, {
             method: "POST",
@@ -322,27 +335,30 @@ function DiaryPage() {
             },
             body: JSON.stringify({ resultDiaryText }),
           });
-    
+
           if (responseDiary.ok) {
             const responseDate = await responseDiary.json();
-    
+
             // url 받아오기
             const imageUrl = responseDate.image?.imageUrl;
             setIsImageLoading(false);
             setNewImageUrl(imageUrl);
           } else {
             console.error("이미지 저장 실패:", responseDiary.status);
-    
+
             alert("이미지 저장에 실패하였습니다.");
           }
 
-          const responseComment = await fetch("http://127.0.0.1:5000/api/diary/comment", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ diaryText }),
-          });
+          const responseComment = await fetch(
+            "http://127.0.0.1:5000/api/diary/comment",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ diaryText }),
+            }
+          );
 
           if (responseComment.ok) {
             const comment = await responseComment.json();
@@ -352,11 +368,9 @@ function DiaryPage() {
           } else {
             console.error("코멘트 불러오기 실패: ", responseComment);
           }
-
         } else {
           alert("일기를 먼저 작성해주세요!");
         }
-
       } catch (error) {
         console.error("Error diary:", error);
         alert("일기 중에 오류가 발생하였습니다.");
@@ -390,12 +404,13 @@ function DiaryPage() {
     const pad = (number) => (number < 10 ? `0${number}` : number);
 
     // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
-    const dateString = `${formattedDate.getFullYear()}-${pad(formattedDate.getMonth() + 1)}-${pad(formattedDate.getDate())}`;
+    const dateString = `${formattedDate.getFullYear()}-${pad(
+      formattedDate.getMonth() + 1
+    )}-${pad(formattedDate.getDate())}`;
 
     console.log("선택 날짜:", dateString);
     //image post
     if (newImageUrl) {
-
       const responseDiary = await axios.post(
         "http://localhost:8080/api/diary/add",
         {
@@ -482,9 +497,10 @@ function DiaryPage() {
               }}
             >
               <ButtonContainer>
-                <CreateButtonStyle 
+                <CreateButtonStyle
                   onClick={handleCreate}
-                  animate={animateCreateBtn}>
+                  animate={animateCreateBtn}
+                >
                   생성
                 </CreateButtonStyle>
               </ButtonContainer>
@@ -502,7 +518,10 @@ function DiaryPage() {
             </div>
 
             <ManageAIArea>
-              <GeneratedImage isLoading={isImageLoading} newImageUrl={newImageUrl} />
+              <GeneratedImage
+                isLoading={isImageLoading}
+                newImageUrl={newImageUrl}
+              />
               <RightComponentsContainer>
                 <AIComment text={commentText} isLoading={isCommentLoading} />
                 <Sentiment
