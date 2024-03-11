@@ -32,7 +32,7 @@ const LoginBox = styled.form`
   width: 800px;
   height: 400px;
   background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   padding: 70px 80px 40px 80px;
   box-sizing: border-box;
@@ -102,9 +102,6 @@ function LoginPage() {
       })
       .then((response) => {
         login(response.data.accessToken, response.data.memberID);
-        console.log("accessToken: ", response.data.accessToken);
-        console.log("email: ", email);
-        console.log("password: ", password);
         navigate("/calendar");
       })
       .catch((error) => {

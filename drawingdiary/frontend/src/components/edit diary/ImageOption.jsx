@@ -90,6 +90,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     autoplay: true,
     animationData: imageLoading,
   };
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedButtonStyle, setSelectedButtonStyle] = useState(null);
   const [selectedDropdownOption, setSelectedDropdownOption] = useState(null);
@@ -150,8 +151,8 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          age: age,
-          gender: gender,
+          age: userAge,
+          gender: userGender,
         }),
       });
 
