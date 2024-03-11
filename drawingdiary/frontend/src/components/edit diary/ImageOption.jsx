@@ -135,34 +135,32 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     const currentYear = new Date().getFullYear();
     const age = currentYear - birthYear;
 
-    const genderCodes = { S: "secret", F: "female", M: "male" };
-    const gender = genderCodes[response.data.gender] || "Unknown";
-
     setUserAge(age);
-    setUserGender(gender);
+    setUserGender(response.data.gender);
     setUserName(response.data.name);
 
-    const apiUrl = "http://127.0.0.1:5001/api/get-styles";
+    console.log("user age: ", userAge);
+    console.log("user gender: ", userGender);
 
     try {
-      const styleResponse = await fetch(apiUrl, {
-        method: "POST",
+      const styleResponse = await axios.post("http://localhost:8080/api/style", {
+        age: userAge,
+        gender: userGender,
+      }, {
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
-        body: JSON.stringify({
-          age: userAge,
-          gender: userGender,
-        }),
       });
+      
+      console.log("styles response: ", styleResponse);
+      const styleData = await styleResponse.data;
+      setIsLoading(!isRecommenderLoading);
+      setImageList(styleData.predicted_styles);
 
-      if (styleResponse.ok) {
-        const styleData = await styleResponse.json();
-        setIsLoading(!isRecommenderLoading);
-        setImageList(styleData.predicted_styles);
-      } else {
-        console.log("스타일을 불러오는 중 에러가 발생했습니다.");
-      }
+      // if (styleResponse.ok) {
+      // } else {
+      //   console.log("스타일을 불러오는 중 에러가 발생했습니다.");
+      // }
     } catch (error) {
       console.log("스타일을 불러오는 중 에러 발생: ", error);
     }
