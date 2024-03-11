@@ -259,7 +259,6 @@ function DiaryPage() {
 
   const handleOptionSelect = (isSelected, storedSelectedStyle) => {
     setIsOptionSelected(isSelected);
-    console.log(storedSelectedStyle);
     if (storedSelectedStyle === undefined && isSelected === true) {
     } else {
       setParentSelectedButtonStyle(storedSelectedStyle);

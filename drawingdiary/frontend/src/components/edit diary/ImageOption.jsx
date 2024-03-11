@@ -93,6 +93,8 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedButtonStyle, setSelectedButtonStyle] = useState(null);
   const [selectedDropdownOption, setSelectedDropdownOption] = useState(null);
+  const [storedSelectedStyle, setStoredSelectedStyle] = useState(null);
+
   const [isSelected, setIsSelected] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -102,7 +104,6 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
 
   const [imageList, setImageList] = useState([]);
   const [nonDuplicateStyles, setNonDuplicateStyles] = useState([]);
-  const [storedSelectedStyle, setStoredSelectedStyle] = useState(null);
 
   const accessToken = localStorage.getItem("accessToken");
 
@@ -122,8 +123,11 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     setSelectedDropdownOption(option);
     setSelectedButtonStyle(null);
     setIsOpen(false);
-    setStoredSelectedStyle(option);
     setIsSelected(true);
+    setStoredSelectedStyle(option);
+
+    // 선택한 드롭다운 옵션을 부모 컴포넌트로 전달
+    onOptionSelect(true, option);
   };
 
   // Use if statements to check and store the selected style
@@ -133,7 +137,6 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     } else if (selectedDropdownOption !== null) {
       setStoredSelectedStyle(selectedDropdownOption);
     }
-    console.log("sksk", storedSelectedStyle);
   }, [selectedButtonStyle, selectedDropdownOption]);
 
   const fetchOptionStyle = async () => {
