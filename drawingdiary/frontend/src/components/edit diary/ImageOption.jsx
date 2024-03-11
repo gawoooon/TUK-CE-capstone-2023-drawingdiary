@@ -102,6 +102,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   const [userGender, setUserGender] = useState("");
 
   const [imageList, setImageList] = useState([]);
+  const [list, setList] = useState(false);
   const [nonDuplicateStyles, setNonDuplicateStyles] = useState([]);
 
   const accessToken = localStorage.getItem("accessToken");
@@ -153,14 +154,15 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       });
       
       console.log("styles response: ", styleResponse);
-      const styleData = await styleResponse.data;
-      setIsLoading(!isRecommenderLoading);
-      setImageList(styleData.predicted_styles);
 
-      // if (styleResponse.ok) {
-      // } else {
-      //   console.log("스타일을 불러오는 중 에러가 발생했습니다.");
-      // }
+      if(list === false) {
+        const styleData = await styleResponse.data;
+        setIsLoading(!isRecommenderLoading);
+        setImageList(styleData.predicted_styles);
+        setList(true);
+        return;
+      }
+
     } catch (error) {
       console.log("스타일을 불러오는 중 에러 발생: ", error);
     }
