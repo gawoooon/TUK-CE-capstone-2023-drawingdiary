@@ -102,7 +102,6 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   const [userGender, setUserGender] = useState("");
 
   const [imageList, setImageList] = useState([]);
-  const [list, setList] = useState(false);
   const [nonDuplicateStyles, setNonDuplicateStyles] = useState([]);
 
   const accessToken = localStorage.getItem("accessToken");
@@ -144,6 +143,21 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     console.log("user gender: ", userGender);
 
     try {
+      const getStyle = await axios.get("http://localhost:8080/api/test/style", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+      });
+      
+      console.log("getStyle response: ", getStyle);
+
+      setIsLoading(!isRecommenderLoading);
+      setImageList(getStyle.data.predicted_styles);
+    
+      return;
+
+
+    } catch (error) {
       const styleResponse = await axios.post("http://localhost:8080/api/style", {
         age: userAge,
         gender: userGender,
@@ -152,19 +166,8 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
           Authorization: `Bearer ${accessToken}`
         },
       });
-      
-      console.log("styles response: ", styleResponse);
-
-      if(list === false) {
-        const styleData = await styleResponse.data;
-        setIsLoading(!isRecommenderLoading);
-        setImageList(styleData.predicted_styles);
-        setList(true);
-        return;
-      }
-
-    } catch (error) {
-      console.log("스타일을 불러오는 중 에러 발생: ", error);
+      setIsLoading(!isRecommenderLoading);
+      setImageList(styleResponse.data.predicted_styles);
     }
   };
 
