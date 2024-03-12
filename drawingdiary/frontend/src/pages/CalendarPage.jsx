@@ -267,10 +267,6 @@ function CalendarPage() {
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
-      
-      // 실제 데이터를 받아오는 부분
-      const dateArray = data.map(entry => entry.date);
-
       // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
       const index = data.findIndex((item) =>
         isSameDay(new Date(item.date), date),

@@ -125,51 +125,49 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   };
 
   const fetchOptionStyle = async () => {
-    const response = await axios.get("http://localhost:8080/api/get-member", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    const birthYear = parseInt(response.data.birth.split("-")[0]);
-    const currentYear = new Date().getFullYear();
-    const age = currentYear - birthYear;
-
-    setUserAge(age);
-    setUserGender(response.data.gender);
-    setUserName(response.data.name);
-
-    console.log("user age: ", userAge);
-    console.log("user gender: ", userGender);
-
     try {
-      const getStyle = await axios.get("http://localhost:8080/api/test/style", {
+      const response = await axios.get("http://localhost:8080/api/get-member", {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
         },
       });
-      
-      console.log("getStyle response: ", getStyle);
-
-      setIsLoading(!isRecommenderLoading);
-      setImageList(getStyle.data.predicted_styles);
-    
-      return;
-
-
+  
+      const birthYear = parseInt(response.data.birth.split("-")[0]);
+      const currentYear = new Date().getFullYear();
+      const age = currentYear - birthYear;
+  
+      setUserAge(age);
+      setUserGender(response.data.gender);
+      setUserName(response.data.name);
+  
+      try {
+        const styleResponse = await axios.get("http://localhost:8080/api/test/style", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+        })
+        setIsLoading(!isRecommenderLoading);
+        setImageList(styleResponse.data.predicted_styles);
+      } catch (error) {
+        if(error.response && error.response.status === 500) {
+          const fallbackResponse = await axios.post("http://localhost:8080/api/style", {
+            age: userAge,
+            gender: userGender,
+          }, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            },
+          });
+          setIsLoading(!isRecommenderLoading);
+          setImageList(fallbackResponse.data.predicted_styles);
+        } else {
+          throw error;
+        }
+      }
     } catch (error) {
-      const styleResponse = await axios.post("http://localhost:8080/api/style", {
-        age: userAge,
-        gender: userGender,
-      }, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-      });
-      setIsLoading(!isRecommenderLoading);
-      setImageList(styleResponse.data.predicted_styles);
+      console.log("error: ", error);
     }
-  };
+  }
 
   useEffect(() => {
     fetchOptionStyle();

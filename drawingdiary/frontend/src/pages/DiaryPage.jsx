@@ -184,7 +184,7 @@ function DiaryPage() {
     setWeatherState(newWeatherState);
   };
 
-  // 앨범 상태를 업데이트하는 함수수
+  // 앨범 상태를 업데이트하는 함수
   const handleSelectedAlbumChange = (onSelectAlbum) => {
     setSelectedAlbumID(onSelectAlbum);
   };
@@ -287,7 +287,6 @@ function DiaryPage() {
       return;
     }
     
-    
     setAnimateCreateBtn(true);
     setTimeout(() => {
       setAnimateCreateBtn(false);
@@ -307,10 +306,7 @@ function DiaryPage() {
       setIsCommentLoading(true);
       //이미지 api
       try {
-        console.log("일기 내용 저장:", diaryText);
         const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
-        console.log(resultDiaryText);
-
 
         if(diaryText !== '') {
     
@@ -348,7 +344,6 @@ function DiaryPage() {
             const comment = await responseComment.json();
             setIsCommentLoading(false);
             setCommentText(comment.comment);
-            console.log(comment.comment);
           } else {
             console.error("코멘트 불러오기 실패: ", responseComment);
           }
@@ -369,7 +364,6 @@ function DiaryPage() {
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
     const accessToken = localStorage.getItem("accessToken");
-    console.log(accessToken);
 
     if (isSaveButtonEnabled) {
       setAnimateSaveBtn(true);
@@ -395,6 +389,8 @@ function DiaryPage() {
     console.log("선택 날짜:", dateString);
     //image post
     if (newImageUrl) {
+
+      console.log("album id: ", selectedAlbumID);
 
       const responseDiary = await axios.post(
         "http://localhost:8080/api/diary/add",
