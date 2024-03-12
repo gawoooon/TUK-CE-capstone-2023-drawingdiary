@@ -173,9 +173,7 @@ function DiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
-  const [sentimentResult, setSentimentResult] = useState("");
 
-  const [newDiaryText, setNewDiaryText] = useState("");
   const [commentText, setCommentText] = useState("");
 
   const [createBtn, setCreateBtn] = useState(false);
@@ -230,32 +228,17 @@ function DiaryPage() {
         (key) => values[key] === maxSentimentValue
       );
 
-      setSentimentResult(maxSentimentName);
-
       if (maxSentimentName === "positive") {
-        setNewDiaryText("따듯한 색감");
-      } else if (sentimentResult === "negative") {
-        setNewDiaryText("차가운 색감");
-      } else if (sentimentResult === "neutral") {
-        setNewDiaryText("베이지 색감");
+        return "따듯한 색감";
+      } else if (maxSentimentName === "negative") {
+        return "차가운 색감";
+      } else if (maxSentimentName === "neutral") {
+        return "베이지 색감";
       }
     } catch (error) {
       console.error("감정 분석 API 호출 중 오류 발생: ", error);
     }
   };
-
-  // const handleOptionSelect = (isSelected, selectedButtonStyle) => {
-  //   setIsOptionSelected(isSelected);
-  //   if (selectedButtonStyle === undefined && isSelected === true) {
-  //   } else {
-  //     setParentSelectedButtonStyle(selectedButtonStyle);
-  //     console.log(
-  //       "다이어리 페이지에서 선택한 스타일:",
-  //       parentSelectedButtonStyle,
-  //       isSelected
-  //     );
-  //   }
-  // };
 
   const handleOptionSelect = (isSelected, storedSelectedStyle) => {
     setIsOptionSelected(isSelected);
@@ -292,7 +275,7 @@ function DiaryPage() {
     if (createBtn) {
       analyzeSentiment();
     }
-  });
+  }, [createBtn, diaryText]);
 
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
@@ -316,13 +299,14 @@ function DiaryPage() {
 
     if (parentSelectedButtonStyle) {
       setCreateBtn(true);
-
       setIsImageLoading(true);
       setIsCommentLoading(true);
-      //이미지 api
+
       try {
-        console.log("일기 내용 저장:", diaryText);
-        const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
+        // 감정 분석 결과를 받아오기
+        const newDiaryTextResult = await analyzeSentiment();
+
+        const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryTextResult}`;
         console.log(resultDiaryText);
 
         if (diaryText !== "") {
@@ -344,7 +328,6 @@ function DiaryPage() {
             setNewImageUrl(imageUrl);
           } else {
             console.error("이미지 저장 실패:", responseDiary.status);
-
             alert("이미지 저장에 실패하였습니다.");
           }
 
