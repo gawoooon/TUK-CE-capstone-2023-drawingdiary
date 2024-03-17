@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Lottie from "react-lottie";
 import imageLoading from "../../animation/imageLodding.json";
-import ImageStyleLists from "./ImageStyleLists";
+import ImageStyleLists from "../edit diary/ImageStyleLists";
 
 const OptionContainer = styled.div`
   width: 450px;
@@ -84,7 +84,7 @@ const DropdownItem = styled.a`
   }
 `;
 
-const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
+const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption }) => {
   const LoadingOptions = {
     loop: true,
     autoplay: true,
@@ -94,8 +94,6 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedButtonStyle, setSelectedButtonStyle] = useState(null);
   const [selectedDropdownOption, setSelectedDropdownOption] = useState(null);
-  const [storedSelectedStyle, setStoredSelectedStyle] = useState(null);
-
   const [isSelected, setIsSelected] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -116,7 +114,6 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     setSelectedButtonStyle(option);
     setSelectedDropdownOption(null);
     setIsSelected(true);
-    setStoredSelectedStyle(option);
     onOptionSelect(true, option); // 콜백 호출
   };
 
@@ -125,20 +122,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     setSelectedButtonStyle(null);
     setIsOpen(false);
     setIsSelected(true);
-    setStoredSelectedStyle(option);
-
-    // 선택한 드롭다운 옵션을 부모 컴포넌트로 전달
-    onOptionSelect(true, option);
   };
-
-  // Use if statements to check and store the selected style
-  useEffect(() => {
-    if (selectedButtonStyle !== null) {
-      setStoredSelectedStyle(selectedButtonStyle);
-    } else if (selectedDropdownOption !== null) {
-      setStoredSelectedStyle(selectedDropdownOption);
-    }
-  }, [selectedButtonStyle, selectedDropdownOption]);
 
   const fetchOptionStyle = async () => {
     try {
@@ -199,30 +183,20 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   }, [isSelected, onOptionSelect, imageList]);
 
   return (
-    <OptionContainer>
-      <h3>추천하는 이미지 스타일</h3>
-      <SelectedStyle>
-        선택한 스타일:
-        {storedSelectedStyle !== null ? storedSelectedStyle : "없음"}
-      </SelectedStyle>
-      {isLoading ? (
-        <Lottie
-          isClickToPauseDisabled={true}
-          options={LoadingOptions}
-          height={280}
-          width={280}
-        />
-      ) : (
-        imageList.map((style, index) => (
-          <ButtonStyle
-            key={index}
-            isSelected={selectedButtonStyle === style}
-            onClick={() => handleButtonStyleSelect(style)}
-          >
-            {style}
-          </ButtonStyle>
-        ))
-      )}
+      <OptionContainer>
+        <h3>추천하는 이미지 스타일</h3>
+        <SelectedStyle>
+          선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : selectedDropdownOption !== null ? selectedDropdownOption : `${selectedOption}`}
+        </SelectedStyle>
+        {isLoading ? (
+          <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={280} width={280} />
+        ) : (
+          imageList.map((style, index) => (
+            <ButtonStyle key={index} isSelected={selectedButtonStyle === style} onClick={() => handleButtonStyleSelect(style)}>
+              {style}
+            </ButtonStyle>
+          ))
+        )}
 
       <div>
         <TextStyle>
@@ -252,4 +226,4 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   );
 };
 
-export default ImageOption;
+export default ShowImageOption;

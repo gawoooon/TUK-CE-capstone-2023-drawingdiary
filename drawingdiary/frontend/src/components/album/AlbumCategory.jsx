@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
+import { useAuth } from "../../auth/context/AuthContext";
+import axios from "axios";
 
 const CategoryStyle = styled.select`
   width: 220px;
@@ -16,15 +18,38 @@ const CategoryStyle = styled.select`
 
 const AlbumCategory = ({ onSelectAlbum }) => {
   const { categoryList } = useCategory();
-  const [selectedAlbumID, setSelectedAlbumID] = useState(1);
+  const accessToken = localStorage.getItem('accessToken');
+  const [selectedAlbumID, setSelectedAlbumID] = useState(0);
+
+  const fetchBaseCategory = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/album/list", {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      const baseIndex = response.data.findIndex(item => item.albumName === "기본");
+      if(baseIndex !== -1) {
+        const baseID = response.data[baseIndex].albumID;
+        setSelectedAlbumID(baseID);
+        console.log("selectedAlbumID: ", baseID);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   useEffect(() => {
+    if(selectedAlbumID === 0) {
+      fetchBaseCategory();
+    }
     onSelectAlbum(selectedAlbumID);
   }, [selectedAlbumID]);
 
   const handleAlbumChange = (event) => {
     // 선택한 앨범의 ID를 상태에 저장
     setSelectedAlbumID(event.target.value);
+    console.log("target", event.target.value);
   };
 
   return (

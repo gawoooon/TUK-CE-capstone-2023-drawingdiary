@@ -13,6 +13,7 @@ import MyPage from "./pages/MyPage.jsx";
 import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
 import { CalendarProvider } from "./components/Calendar2/CalendarProvider.jsx";
+import ShowDiaryPage from "./pages/ShowDiaryPage.jsx";
 
 function App() {
   return (
@@ -34,6 +35,15 @@ function App() {
           element={
             <CategoryProvider>
               <DiaryPage />
+            </CategoryProvider>
+          }
+        />
+
+        <Route
+          path="/showDiary/:memberId/:dateId"
+          element={
+            <CategoryProvider>
+              <ShowDiaryPage />
             </CategoryProvider>
           }
         />

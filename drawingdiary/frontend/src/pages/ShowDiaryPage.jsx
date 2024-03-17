@@ -5,12 +5,13 @@ import styled, { keyframes, css } from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import AlbumCategory from "../components/album/AlbumCategory";
-import EditDiary from "../components/edit diary/EditDiary";
-import Weather from "../components/weather/Weather";
-import ImageOption from "../components/edit diary/ImageOption";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
-import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
+import ShowWeather from "../components/show/ShowWeather";
+import ShowDiary from "../components/show/ShowDiary";
+import ShowImageOption from "../components/show/ShowImageOption";
+import ShowAIComment from "../components/show/ShowAIComment";
+import ShowGeneratedImage from "../components/show/ShowGeneratedImage";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -137,8 +138,11 @@ const MessageText = styled.div`
   font-weight: bold;
 `;
 
-function DiaryPage() {
+function ShowDiaryPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { diaryData } = location.state || {};
+  const { date } = location.state || {}; // 날짜 정보 수신
 
   // loading
   const [isRecommenderLoading, setIsRecommenderLoading] = useState(true);
@@ -147,13 +151,10 @@ function DiaryPage() {
 
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
-  const [diaryText, setDiaryText] = useState("");
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
-    useState(false);
+  const [diaryText, setDiaryText] = useState(diaryData.diaryText);
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(false);
 
   // 날짜, 날씨
-  const location = useLocation();
-  const { date } = location.state || {}; // 날짜 정보 수신
   const [weatherState, setWeatherState] = useState("Unknown");
 
   // 앨범
@@ -173,14 +174,23 @@ function DiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
+  const [sentimentResult, setSentimentResult] = useState('');
 
-  const [commentText, setCommentText] = useState("");
+  const [newDiaryText, setNewDiaryText] = useState('');
+  const [commentText, setCommentText] = useState('');
+  const [style, setStyle] = useState('');
 
   const [createBtn, setCreateBtn] = useState(false);
 
-  // 날씨 상태를 업데이트하는 함수
-  const handleWeatherStateChange = (newWeatherState) => {
-    setWeatherState(newWeatherState);
+  const fetchDiary = () => {
+    setWeatherState(diaryData.weather);
+    setDiaryText(diaryData.diaryText);
+    setNewImageUrl(diaryData.image);
+    setStyle(diaryData.style);
+    setCommentText(diaryData.comment);
+    setPositiveValue(diaryData.sentiment.positive);
+    setNegativeValue(diaryData.sentiment.negative);
+    setNeutralValue(diaryData.sentiment.neutral);
   };
 
   // 앨범 상태를 업데이트하는 함수
@@ -228,54 +238,56 @@ function DiaryPage() {
         (key) => values[key] === maxSentimentValue
       );
 
+      setSentimentResult(maxSentimentName);
+
       if (maxSentimentName === "positive") {
-        return "따듯한 색감";
-      } else if (maxSentimentName === "negative") {
-        return "차가운 색감";
-      } else if (maxSentimentName === "neutral") {
-        return "베이지 색감";
+        setNewDiaryText("따듯한 색감");
+      } else if (sentimentResult === "negative") {
+        setNewDiaryText("차가운 색감");
+      } else if (sentimentResult === "neutral") {
+        setNewDiaryText("베이지 색감");
       }
     } catch (error) {
       console.error("감정 분석 API 호출 중 오류 발생: ", error);
     }
   };
 
-  const handleOptionSelect = (isSelected, storedSelectedStyle) => {
+  const handleOptionSelect = (isSelected, selectedButtonStyle) => {
     setIsOptionSelected(isSelected);
-    if (storedSelectedStyle === undefined && isSelected === true) {
+    if (selectedButtonStyle === undefined && isSelected === true) {
     } else {
-      setParentSelectedButtonStyle(storedSelectedStyle);
+      setParentSelectedButtonStyle(selectedButtonStyle);
     }
-  };
 
-  useEffect(() => {
-    if (parentSelectedButtonStyle) {
-      console.log(
-        "다이어리 페이지에서 선택한 스타일:",
-        parentSelectedButtonStyle
-      );
-    }
-  }, [parentSelectedButtonStyle]);
+    console.log(
+      "다이어리 페이지에서 선택한 스타일:",
+      parentSelectedButtonStyle,
+      isSelected
+    );
+  };
 
   // Sentiment에 텍스트 전달
   const handleDiaryTextChange = (newText) => {
+    console.log("여기는 show diary page");
     setIsTextValid(newText.length >= 30);
     setDiaryText(newText);
-    if (newText.length > 0) {
+    console.log("바뀐 텍스트: ", newText);
+    if (newText.length < 30) {
+      setShowInitialMessage(true);
+    } else {
       setShowInitialMessage(false);
     }
   };
 
-  // 저장 버튼 활성화 조건
-  // const isSaveButtonEnabled = isTextValid && isOptionSelected;
-  // 일단 임시로 이걸로 하자
   const isSaveButtonEnabled = isTextValid;
 
   useEffect(() => {
-    if (createBtn) {
+    if(createBtn) {
       analyzeSentiment();
+    } else {
+        fetchDiary();
     }
-  }, [createBtn, diaryText]);
+  }, [createBtn]);
 
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
@@ -286,41 +298,30 @@ function DiaryPage() {
       }, 5000);
       return;
     }
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 6fd506d7bd07e0ee76291aac6842060432da8e2f
     setAnimateCreateBtn(true);
     setTimeout(() => {
       setAnimateCreateBtn(false);
     }, 500);
-
+    
     setShowCreate(true);
     setTimeout(() => {
       setShowCreate(false);
     }, 5000);
 
+
     if (parentSelectedButtonStyle) {
+      
       setCreateBtn(true);
+
       setIsImageLoading(true);
       setIsCommentLoading(true);
-
+      //이미지 api
       try {
-<<<<<<< HEAD
-        // 감정 분석 결과를 받아오기
-        const newDiaryTextResult = await analyzeSentiment();
-
-        const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryTextResult}`;
-        console.log(resultDiaryText);
-
-        if (diaryText !== "") {
-=======
         const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
 
         if(diaryText !== '') {
     
->>>>>>> 6fd506d7bd07e0ee76291aac6842060432da8e2f
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
           const responseDiary = await fetch(imageApiUrl, {
             method: "POST",
@@ -329,29 +330,27 @@ function DiaryPage() {
             },
             body: JSON.stringify({ resultDiaryText }),
           });
-
+    
           if (responseDiary.ok) {
             const responseDate = await responseDiary.json();
-
+    
             // url 받아오기
             const imageUrl = responseDate.image?.imageUrl;
             setIsImageLoading(false);
             setNewImageUrl(imageUrl);
           } else {
             console.error("이미지 저장 실패:", responseDiary.status);
+    
             alert("이미지 저장에 실패하였습니다.");
           }
 
-          const responseComment = await fetch(
-            "http://127.0.0.1:5000/api/diary/comment",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ diaryText }),
-            }
-          );
+          const responseComment = await fetch("http://127.0.0.1:5000/api/diary/comment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ diaryText }),
+          });
 
           if (responseComment.ok) {
             const comment = await responseComment.json();
@@ -360,9 +359,11 @@ function DiaryPage() {
           } else {
             console.error("코멘트 불러오기 실패: ", responseComment);
           }
+
         } else {
           alert("일기를 먼저 작성해주세요!");
         }
+
       } catch (error) {
         console.error("Error diary:", error);
         alert("일기 중에 오류가 발생하였습니다.");
@@ -395,21 +396,17 @@ function DiaryPage() {
     const pad = (number) => (number < 10 ? `0${number}` : number);
 
     // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
-    const dateString = `${formattedDate.getFullYear()}-${pad(
-      formattedDate.getMonth() + 1
-    )}-${pad(formattedDate.getDate())}`;
+    const dateString = `${formattedDate.getFullYear()}-${pad(formattedDate.getMonth() + 1)}-${pad(formattedDate.getDate())}`;
 
     console.log("선택 날짜:", dateString);
     //image post
     if (newImageUrl) {
-<<<<<<< HEAD
-=======
 
       console.log("album id: ", selectedAlbumID);
 
->>>>>>> 6fd506d7bd07e0ee76291aac6842060432da8e2f
-      const responseDiary = await axios.post(
-        "http://localhost:8080/api/diary/add",
+      // 일기 수정
+      const responseDiary = await axios.put(
+        `http://localhost:8080/api/diary/${dateString}`,
         {
           text: diaryText,
           weather: weatherState,
@@ -449,9 +446,9 @@ function DiaryPage() {
           <ShortSidebar />
           <RightContainer>
             <TopContent>
-              <Weather
+              <ShowWeather
                 date={date}
-                onWeatherStateChange={handleWeatherStateChange}
+                weatherIcon={weatherState}
               />
               <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
             </TopContent>
@@ -465,7 +462,7 @@ function DiaryPage() {
 
               {showSuccess && (
                 <MessageText color="#008000" show={isTextValid}>
-                  일기가 성공적으로 생성되었습니다!
+                  일기가 성공적으로 수정되었습니다!
                 </MessageText>
               )}
 
@@ -477,10 +474,11 @@ function DiaryPage() {
             </MessageContainer>
 
             <EditDiaryArea>
-              <EditDiary onDiaryTextChange={handleDiaryTextChange} />
-              <ImageOption
+              <ShowDiary onDiaryTextChange={handleDiaryTextChange} showText={diaryText} />
+              <ShowImageOption
                 onOptionSelect={handleOptionSelect}
                 isRecommenderLoading={isRecommenderLoading}
+                selectedOption={style}
               />
             </EditDiaryArea>
 
@@ -494,10 +492,9 @@ function DiaryPage() {
               }}
             >
               <ButtonContainer>
-                <CreateButtonStyle
+                <CreateButtonStyle 
                   onClick={handleCreate}
-                  animate={animateCreateBtn}
-                >
+                  animate={animateCreateBtn}>
                   생성
                 </CreateButtonStyle>
               </ButtonContainer>
@@ -515,12 +512,9 @@ function DiaryPage() {
             </div>
 
             <ManageAIArea>
-              <GeneratedImage
-                isLoading={isImageLoading}
-                newImageUrl={newImageUrl}
-              />
+              <ShowGeneratedImage isLoading={isImageLoading} newImageUrl={newImageUrl} />
               <RightComponentsContainer>
-                <AIComment text={commentText} isLoading={isCommentLoading} />
+                <ShowAIComment text={commentText} isLoading={isCommentLoading} />
                 <Sentiment
                   positiveValue={positiveValue}
                   negativeValue={negativeValue}
@@ -535,4 +529,4 @@ function DiaryPage() {
   );
 }
 
-export default DiaryPage;
+export default ShowDiaryPage;

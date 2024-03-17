@@ -6,7 +6,6 @@ export const CategoryContext = React.createContext();
 
 function useCategoryList (){
     const [categoryList, setCategoryList] = useState([]);
-    const [error, setError] = useState(null); // 에러 상태 추가
     const { memberID } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
     const accessToken = localStorage.getItem('accessToken');
 
@@ -19,6 +18,7 @@ function useCategoryList (){
                     }
                 });
                 const fetchedCategoryList = response.data;
+                console.log("fetchedCategoryList: ", fetchedCategoryList);
                 setCategoryList(fetchedCategoryList);
             } catch (error) {
                 console.error("카테고리 리스트를 불러오는 중 에러 발생: ", error);

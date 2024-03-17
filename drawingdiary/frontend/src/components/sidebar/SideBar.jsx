@@ -10,9 +10,8 @@ const SideBarStyle = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-  background-color: #f9f9f9;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 0.3);
   box-sizing: border-box;
 `;
 
@@ -51,11 +50,8 @@ const MenuItem = styled(Link)`
     transition: background 0.3s, box-shadow 0.3s;
   }
 
-
   &:hover {
-    background: ${({ isOpen }) => isOpen ? '#ececec' : 'transparent'};
-    width: ${({ isOpen }) => isOpen ? '245px' : 'auto'};
-    border-left: ${({ isOpen }) => isOpen ? '5px solid rgba(255, 184, 208, 0.58)' : 'none'};
+    border-left: 5px solid #d9d9d9;
   }
 `;
 
