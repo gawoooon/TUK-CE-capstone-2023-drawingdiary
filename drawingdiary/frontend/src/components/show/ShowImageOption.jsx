@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Lottie from "react-lottie";
 import imageLoading from "../../animation/imageLodding.json";
-import ImageStyleLists from "./ImageStyleLists";
+import ImageStyleLists from "../edit diary/ImageStyleLists";
 
 const OptionContainer = styled.div`
   width: 450px;
@@ -84,7 +84,7 @@ const DropdownItem = styled.a`
   }
 `;
 
-const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
+const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption }) => {
   const LoadingOptions = {
     loop: true,
     autoplay: true,
@@ -186,7 +186,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       <OptionContainer>
         <h3>추천하는 이미지 스타일</h3>
         <SelectedStyle>
-          선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : selectedDropdownOption !== null ? selectedDropdownOption : "없음"}
+          선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : selectedDropdownOption !== null ? selectedDropdownOption : `${selectedOption}`}
         </SelectedStyle>
         {isLoading ? (
           <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={280} width={280} />
@@ -226,4 +226,4 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   );
 };
 
-export default ImageOption;
+export default ShowImageOption;

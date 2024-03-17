@@ -24,7 +24,7 @@ const TextBox = styled.input`
   align-items: center;
   width: 80%;
   height: 100%;
-  color: #989898;
+  color: black;
   border: none;
   outline: none;
   padding: 0 20px;

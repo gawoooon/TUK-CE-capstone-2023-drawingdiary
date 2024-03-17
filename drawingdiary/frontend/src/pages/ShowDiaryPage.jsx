@@ -5,12 +5,13 @@ import styled, { keyframes, css } from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import AlbumCategory from "../components/album/AlbumCategory";
-import EditDiary from "../components/edit diary/EditDiary";
-import Weather from "../components/weather/Weather";
-import ImageOption from "../components/edit diary/ImageOption";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
-import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
+import ShowWeather from "../components/show/ShowWeather";
+import ShowDiary from "../components/show/ShowDiary";
+import ShowImageOption from "../components/show/ShowImageOption";
+import ShowAIComment from "../components/show/ShowAIComment";
+import ShowGeneratedImage from "../components/show/ShowGeneratedImage";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -137,8 +138,11 @@ const MessageText = styled.div`
   font-weight: bold;
 `;
 
-function DiaryPage() {
+function ShowDiaryPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { diaryData } = location.state || {};
+  const { date } = location.state || {}; // 날짜 정보 수신
 
   // loading
   const [isRecommenderLoading, setIsRecommenderLoading] = useState(true);
@@ -147,12 +151,10 @@ function DiaryPage() {
 
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
-  const [diaryText, setDiaryText] = useState("");
+  const [diaryText, setDiaryText] = useState(diaryData.diaryText);
   const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(false);
 
   // 날짜, 날씨
-  const location = useLocation();
-  const { date } = location.state || {}; // 날짜 정보 수신
   const [weatherState, setWeatherState] = useState("Unknown");
 
   // 앨범
@@ -176,12 +178,19 @@ function DiaryPage() {
 
   const [newDiaryText, setNewDiaryText] = useState('');
   const [commentText, setCommentText] = useState('');
+  const [style, setStyle] = useState('');
 
   const [createBtn, setCreateBtn] = useState(false);
 
-  // 날씨 상태를 업데이트하는 함수
-  const handleWeatherStateChange = (newWeatherState) => {
-    setWeatherState(newWeatherState);
+  const fetchDiary = () => {
+    setWeatherState(diaryData.weather);
+    setDiaryText(diaryData.diaryText);
+    setNewImageUrl(diaryData.image);
+    setStyle(diaryData.style);
+    setCommentText(diaryData.comment);
+    setPositiveValue(diaryData.sentiment.positive);
+    setNegativeValue(diaryData.sentiment.negative);
+    setNeutralValue(diaryData.sentiment.neutral);
   };
 
   // 앨범 상태를 업데이트하는 함수
@@ -259,23 +268,26 @@ function DiaryPage() {
 
   // Sentiment에 텍스트 전달
   const handleDiaryTextChange = (newText) => {
+    console.log("여기는 show diary page");
     setIsTextValid(newText.length >= 30);
     setDiaryText(newText);
-    if (newText.length > 0) {
+    console.log("바뀐 텍스트: ", newText);
+    if (newText.length < 30) {
+      setShowInitialMessage(true);
+    } else {
       setShowInitialMessage(false);
     }
   };
 
-  // 저장 버튼 활성화 조건
-  // const isSaveButtonEnabled = isTextValid && isOptionSelected;
-  // 일단 임시로 이걸로 하자
   const isSaveButtonEnabled = isTextValid;
 
   useEffect(() => {
     if(createBtn) {
       analyzeSentiment();
+    } else {
+        fetchDiary();
     }
-  })
+  }, [createBtn]);
 
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
@@ -392,8 +404,9 @@ function DiaryPage() {
 
       console.log("album id: ", selectedAlbumID);
 
-      const responseDiary = await axios.post(
-        "http://localhost:8080/api/diary/add",
+      // 일기 수정
+      const responseDiary = await axios.put(
+        `http://localhost:8080/api/diary/${dateString}`,
         {
           text: diaryText,
           weather: weatherState,
@@ -433,9 +446,9 @@ function DiaryPage() {
           <ShortSidebar />
           <RightContainer>
             <TopContent>
-              <Weather
+              <ShowWeather
                 date={date}
-                onWeatherStateChange={handleWeatherStateChange}
+                weatherIcon={weatherState}
               />
               <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
             </TopContent>
@@ -449,7 +462,7 @@ function DiaryPage() {
 
               {showSuccess && (
                 <MessageText color="#008000" show={isTextValid}>
-                  일기가 성공적으로 생성되었습니다!
+                  일기가 성공적으로 수정되었습니다!
                 </MessageText>
               )}
 
@@ -461,10 +474,11 @@ function DiaryPage() {
             </MessageContainer>
 
             <EditDiaryArea>
-              <EditDiary onDiaryTextChange={handleDiaryTextChange} />
-              <ImageOption
+              <ShowDiary onDiaryTextChange={handleDiaryTextChange} showText={diaryText} />
+              <ShowImageOption
                 onOptionSelect={handleOptionSelect}
                 isRecommenderLoading={isRecommenderLoading}
+                selectedOption={style}
               />
             </EditDiaryArea>
 
@@ -498,9 +512,9 @@ function DiaryPage() {
             </div>
 
             <ManageAIArea>
-              <GeneratedImage isLoading={isImageLoading} newImageUrl={newImageUrl} />
+              <ShowGeneratedImage isLoading={isImageLoading} newImageUrl={newImageUrl} />
               <RightComponentsContainer>
-                <AIComment text={commentText} isLoading={isCommentLoading} />
+                <ShowAIComment text={commentText} isLoading={isCommentLoading} />
                 <Sentiment
                   positiveValue={positiveValue}
                   negativeValue={negativeValue}
@@ -515,4 +529,4 @@ function DiaryPage() {
   );
 }
 
-export default DiaryPage;
+export default ShowDiaryPage;

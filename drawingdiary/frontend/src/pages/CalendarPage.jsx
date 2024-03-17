@@ -28,15 +28,14 @@ const CalendarBox = styled.div`
   height: 100%;
   border-radius: 30px;
   background-color: white;
-  box-shadow: 3px 10px 5px 0 rgba(0, 0, 0, 0.1);
+  padding-left: 20px;
 `;
+
 const LeftBox = styled.div`
   display: flex;
   flex-direction: column;
   width: ${({ leftBoxWidth }) => leftBoxWidth};
   height: 100%;
-  background-color: #f9f9f9;
-  border-radius: 30px 0 0 30px;
   transition: opacity 200ms ease-out, width 200ms ease-out;
   margin-right: 20px;
 `;
@@ -45,8 +44,7 @@ const MiddleBox = styled.div`
   display: flex;
   width: ${({ middleBoxWidth }) => middleBoxWidth};
   height: 100%;
-  background-color: white;
-  border-radius: 0 30px 30px 0;
+  border-radius: 30px;
   padding: 40px 10px;
   box-sizing: border-box;
   transition: opacity 200ms ease-out, width 200ms ease-out;
@@ -59,7 +57,6 @@ const RightBox = styled.div`
   flex-direction: column;
   height: 100%;
   padding: 40px 0;
-  border-radius: 0 30px 30px 0;
   transition: opacity 1s ease-out, width 200ms ease-out;
   box-sizing: border-box;
   overflow: hidden; // 내용이 max-height를 넘어가지 않도록 설정
@@ -77,7 +74,7 @@ const PrevBtn = styled.button`
   outline: none;
   cursor: pointer;
   background: transparent;
-  transition: width 200ms linear;
+  transition: opacity 1s ease-out, width 200ms ease-out;
 `;
 
 const ResultBox = styled.div`
@@ -91,10 +88,12 @@ const TrueComponentBox = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  padding: 30px 30px 30px 0px;
+  margin-left: 15px;
+  padding: 30px 50px 10px 0;
   box-sizing: border-box;
   transition: width 0.5s linear;
 `;
+
 const TopBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -119,6 +118,9 @@ const EditBtn = styled.button`
   color: black;
   cursor: pointer;
   border-radius: 15px;
+  &:hover {
+    background-color: #f9f9f9;
+  }
   `;
 
 const RemoveBtn = styled.button`
@@ -131,6 +133,9 @@ const RemoveBtn = styled.button`
   color: black;
   cursor: pointer;
   border-radius: 15px;
+  &:hover {
+    background-color: #f9f9f9;
+  }
 `;
 
 const TrueComponentMidBox = styled.div`
@@ -145,6 +150,7 @@ const ImageBox = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 30px;
+  margin-top: 20px;
 `;
 
 const BottomBox = styled.div`
@@ -153,6 +159,8 @@ const BottomBox = styled.div`
   border: none;
   border-radius: 30px;
   padding: 8px;
+  line-height: 1.3;
+  margin-top: 20px;
 `;
 
 const Divider = styled.hr`
@@ -160,17 +168,17 @@ const Divider = styled.hr`
   border: none;
   height: 1px;
   background-color: lightgray;
+  margin-top: 40px;
 `;
 
 function CalendarPage() {
-  const [leftBoxWidth, setLeftBoxWidth] = useState("25%");
+  const [leftBoxWidth, setLeftBoxWidth] = useState("17%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
-  const [middleBoxWidth, setMiddleBoxWidth] = useState("75%");
+  const [middleBoxWidth, setMiddleBoxWidth] = useState("100%");
   const [showRightBox, setShowRightBox] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
   const [prevBtnBox, setPrevBtnBox] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
   const { memberID } = useAuth();
@@ -178,7 +186,6 @@ function CalendarPage() {
   
   const { year, month } = useCalendar();
   const [data, setData] = useState([]);
-  const [date, setDate] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [text, setText] = useState("");
 
@@ -191,9 +198,9 @@ function CalendarPage() {
   const handleDateClick = async (day) => {
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
-      setLeftBoxWidth("25%");
+      setLeftBoxWidth("17%");
       setRightBoxWidth("0%");
-      setMiddleBoxWidth("75%");
+      setMiddleBoxWidth("100%");
       setShowRightBox(false);
       setSelectedDateHasData(false);
       setPrevBtnBox(false);
@@ -201,12 +208,11 @@ function CalendarPage() {
     } else {
       setShowRightBox(true);
       setLeftBoxWidth("7%");
-      setMiddleBoxWidth("65%");
-      setRightBoxWidth("28%");
+      setMiddleBoxWidth("66%");
+      setRightBoxWidth("34%");
       setSelectedDate(day); // selectedDate 상태 업데이트
       setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
       setPrevBtnBox(true);
-      setIsLoading(true); // 데이터 로딩 시작
       setIsOpen(false);
     }
   };
@@ -261,10 +267,6 @@ function CalendarPage() {
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
-      
-      // 실제 데이터를 받아오는 부분
-      const dateArray = data.map(entry => entry.date);
-
       // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
       const index = data.findIndex((item) =>
         isSameDay(new Date(item.date), date),
@@ -289,7 +291,6 @@ function CalendarPage() {
 
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
-        setIsLoading(true);
         setIsSelectedYear(format(selectedDate, "yyyy"));
         setIsSelectedMonth(format(selectedDate, "MM"));
         setIsSelectedDay(format(selectedDate, "dd"));
@@ -304,8 +305,6 @@ function CalendarPage() {
           console.error("Error fetching data:", error);
           // 에러가 발생하면 데이터가 없는 것으로 간주
           setSelectedDateHasData(false);
-        } finally {
-          setIsLoading(false);
         }
       }
     };
@@ -316,10 +315,10 @@ function CalendarPage() {
   return (
     <Background>
       <Body>
-        <CalendarBox>
           <LeftBox leftBoxWidth={leftBoxWidth}>
             <SideBar isOpen={isOpen} />
           </LeftBox>
+        <CalendarBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
             <CalendarProvider>
               <Calendar2
