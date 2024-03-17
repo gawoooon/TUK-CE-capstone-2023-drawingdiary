@@ -23,6 +23,7 @@ const ScrollSection = styled.div`
     flex-direction: row;
     align-items: center;
     overflow-x: auto;
+    overflow-y: hidden;
     &::-webkit-scrollbar {
         height: 8px;
     }
@@ -32,36 +33,47 @@ const ScrollSection = styled.div`
     }
 `;
 
-const PictureContainer = styled.button`
+const PictureContainer = styled.div`
     min-width: 210px;
     height: 230px;
     margin: 8px;
-    border: none;
-    border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: transparent;
+    
+    :hover {
+        img {
+            transform: scale(1.05);
+        }
+    }
+`;
+
+const DateText = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    padding-top: 5px;
+    border-radius: 10px;
+
     img {
         width: 200px;
         height: 200px;
         border-radius: 10px;
-        margin-top: 10px;
+        margin: 10px 5px 5px 5px;
+        transition: transform 0.2s ease;
     }
 `;
 
-const DateText = styled.text`
-    font-size: 20px;
-    font-weight: bold;
-`;
-
-const CategoryName = styled.text`
+const CategoryName = styled.div`
     font-size: 25px;
     font-weight: bold;
     margin-left: 130px;
 `;
-
 
 const AlbumBox = ({ onErrorMessage }) => {
     const {  removeCategory } = useCategory();
@@ -178,8 +190,10 @@ const AlbumBox = ({ onErrorMessage }) => {
                             <ScrollSection>
                                 {categoryEntry.images.map((item, index) => (
                                     <PictureContainer key={index} onClick={() => handleShowDetails(item.date)}>
-                                        <DateText>{item.date}</DateText>
-                                        <img src={item.imageFile} alt="Album" />
+                                        <DateText>
+                                            {item.date}
+                                            <img src={item.imageFile} alt="Album" />
+                                        </DateText>
                                     </PictureContainer>
                                 ))}
                             </ScrollSection>
