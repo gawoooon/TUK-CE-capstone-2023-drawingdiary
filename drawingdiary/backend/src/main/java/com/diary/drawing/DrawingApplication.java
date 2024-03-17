@@ -7,7 +7,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.diary.drawing.jwt.repository.RefreshTokenRepository;
+import com.diary.drawing.global.jwt.repository.RefreshTokenRepository;
 
 
 
