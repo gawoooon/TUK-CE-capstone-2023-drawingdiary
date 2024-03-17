@@ -286,11 +286,6 @@ function DiaryPage() {
       }, 5000);
       return;
     }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 6fd506d7bd07e0ee76291aac6842060432da8e2f
     setAnimateCreateBtn(true);
     setTimeout(() => {
       setAnimateCreateBtn(false);
@@ -307,7 +302,6 @@ function DiaryPage() {
       setIsCommentLoading(true);
 
       try {
-<<<<<<< HEAD
         // 감정 분석 결과를 받아오기
         const newDiaryTextResult = await analyzeSentiment();
 
@@ -315,12 +309,6 @@ function DiaryPage() {
         console.log(resultDiaryText);
 
         if (diaryText !== "") {
-=======
-        const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
-
-        if(diaryText !== '') {
-    
->>>>>>> 6fd506d7bd07e0ee76291aac6842060432da8e2f
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
           const responseDiary = await fetch(imageApiUrl, {
             method: "POST",
@@ -402,12 +390,6 @@ function DiaryPage() {
     console.log("선택 날짜:", dateString);
     //image post
     if (newImageUrl) {
-<<<<<<< HEAD
-=======
-
-      console.log("album id: ", selectedAlbumID);
-
->>>>>>> 6fd506d7bd07e0ee76291aac6842060432da8e2f
       const responseDiary = await axios.post(
         "http://localhost:8080/api/diary/add",
         {
