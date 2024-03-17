@@ -42,6 +42,7 @@ const PictureContainer = styled.button`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: transparent;
     img {
         width: 200px;
         height: 200px;
@@ -69,16 +70,6 @@ const AlbumBox = ({ onErrorMessage }) => {
     const [data, setData] = useState([]);
 
     const navigate = useNavigate();
-
-    // const [diary, setDiary] = useState("");
-    // const [weather, setWeather] = useState("");
-    // const [date, setDate] = useState("");
-    // const [albumID, setAlbumID] = useState(0);
-    // const [style, setStyle] = useState("");
-    // const [image, setImage] = useState("");
-    // const [confidence, setConfidence] = useState([]);
-    // const [comment, setComment] = useState("");
-
 
     const { memberID } = useAuth();
     const accessToken = localStorage.getItem('accessToken');

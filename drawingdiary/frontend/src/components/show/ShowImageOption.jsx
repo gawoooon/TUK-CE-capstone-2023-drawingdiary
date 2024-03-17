@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Lottie from "react-lottie";
 import imageLoading from "../../animation/imageLodding.json";
-import ImageStyleLists from "./ImageStyleLists";
+import ImageStyleLists from "../edit diary/ImageStyleLists";
 
 const OptionContainer = styled.div`
   width: 450px;

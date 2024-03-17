@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import WeatherTypes from "./WeatherTypes";
+import WeatherTypes from "../weather/WeatherTypes";
 
 const WeatherContainer = styled.div`
   width: 287px;
@@ -31,15 +31,8 @@ const DateText = styled.text`
   font-weight: bold;
 `;
 
-const LoadingImage = styled.img`
-  width: 30px;
-  height: 30px;
-  margin-left: 5px;
-  margin-right: 20px;
-`;
 
 const ShowWeather = ({ date, weatherIcon }) => {
-    console.log("weatherIcon: ", weatherIcon);
 
   const formatDate = (date) => {
     const newDate = new Date(date.currentYear, date.month - 1, date.day);

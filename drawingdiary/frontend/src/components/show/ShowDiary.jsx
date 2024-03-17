@@ -43,6 +43,7 @@ const ShowDiary = ( { onDiaryTextChange, showText }) => {
     console.log("showText: ", showText);
 
     const handleDiaryTextChange = (e) => {
+        console.log("여기는 show diary");
         const newText = e.target.value;
         setDiaryText(newText);
         onDiaryTextChange(newText);
