@@ -5,7 +5,6 @@ import styled, { keyframes, css } from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import AlbumCategory from "../components/album/AlbumCategory";
-import GeneratedImage from "../components/edit diary/GeneratedImage";
 import Sentiment from "../components/sentiment/Sentiment";
 import ShowWeather from "../components/show/ShowWeather";
 import ShowDiary from "../components/show/ShowDiary";
@@ -268,10 +267,8 @@ function ShowDiaryPage() {
 
   // Sentiment에 텍스트 전달
   const handleDiaryTextChange = (newText) => {
-    console.log("여기는 show diary page");
     setIsTextValid(newText.length >= 30);
     setDiaryText(newText);
-    console.log("바뀐 텍스트: ", newText);
     if (newText.length < 30) {
       setShowInitialMessage(true);
     } else {
@@ -398,11 +395,8 @@ function ShowDiaryPage() {
     // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
     const dateString = `${formattedDate.getFullYear()}-${pad(formattedDate.getMonth() + 1)}-${pad(formattedDate.getDate())}`;
 
-    console.log("선택 날짜:", dateString);
     //image post
     if (newImageUrl) {
-
-      console.log("album id: ", selectedAlbumID);
 
       // 일기 수정
       const responseDiary = await axios.put(
@@ -428,7 +422,6 @@ function ShowDiaryPage() {
         }
       );
       if (responseDiary.status === 200) {
-        console.log("일기가 백엔드로 전송되었습니다.");
         alert("일기가 생성되었어요!");
         navigate("/calendar");
       } else {

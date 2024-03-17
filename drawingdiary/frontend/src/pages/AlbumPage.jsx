@@ -40,16 +40,15 @@ const ErrorMessage = styled.div`
 
 const AlbumPage = () => {
   const [isAddCategoryVisible, setAddCategoryVisible] = useState(false);
-  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleAddCategoryButtonClick = () => {
-    setIsAddCategoryOpen(true);
+    setAddCategoryVisible(true);
   };
 
   const handleClose = () => {
-    setIsAddCategoryOpen(false);
+    setAddCategoryVisible(false);
     setErrorMessage("");
   };
 
@@ -71,7 +70,7 @@ const AlbumPage = () => {
             <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
             {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
             <AddCategory
-              isOpen={isAddCategoryOpen}
+              isOpen={isAddCategoryVisible}
               onclose={handleClose}
             />
           </AddAlbumContainer>
