@@ -11,6 +11,7 @@ import ShowDiary from "../components/show/ShowDiary";
 import ShowImageOption from "../components/show/ShowImageOption";
 import ShowAIComment from "../components/show/ShowAIComment";
 import ShowGeneratedImage from "../components/show/ShowGeneratedImage";
+import Background2 from "../components/Background/index2";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -40,7 +41,7 @@ const RightContainer = styled.div`
 
 const TopContent = styled.div`
   height: 50px;
-  margin-top: 20px;
+  margin-top: 70px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -70,6 +71,7 @@ const RightComponentsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-right: 30px;
 `;
 
 const ButtonContainer = styled.div`
@@ -434,7 +436,7 @@ function ShowDiaryPage() {
 
   return (
     <div>
-      <Background>
+      <Background2>
         <FlexContainer>
           <ShortSidebar />
           <RightContainer>
@@ -517,7 +519,7 @@ function ShowDiaryPage() {
             </ManageAIArea>
           </RightContainer>
         </FlexContainer>
-      </Background>
+      </Background2>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ReactApexChart from 'react-apexcharts';
 
 const DonutChartContainer = styled.div`
-  width: 410px; /* 원하는 너비로 설정하세요 */
+  width: 520px; /* 원하는 너비로 설정하세요 */
 `;
 
 const DonutChart = ({ positiveValue, negativeValue, neutralValue }) => {

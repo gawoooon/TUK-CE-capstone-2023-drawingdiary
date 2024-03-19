@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import DonutChart from './DonutChart';
 
 const Container = styled.div`
-  width: 450px;
-  height: 340px;
+  width: 700px;
+  height: 460px;
   margin: 10px 30px 10px 0;
   background-color: rgba(256, 256, 256, 0.1);
   border-radius: 30px;
