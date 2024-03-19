@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,7 @@ public class S3Uploader {
 
     private static final String S3_BUCKET_DIRECTORY_NAME = "static";
 
+    @Autowired
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")

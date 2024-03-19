@@ -1,16 +1,16 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import styled, { keyframes, css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Background from "../components/Background";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
 import AlbumCategory from "../components/album/AlbumCategory";
-import EditDiary from "../components/edit diary/EditDiary";
-import Weather from "../components/weather/Weather";
-import ImageOption from "../components/edit diary/ImageOption";
-import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
+import EditDiary from "../components/edit diary/EditDiary";
+import GeneratedImage from "../components/edit diary/GeneratedImage";
+import ImageOption from "../components/edit diary/ImageOption";
 import Sentiment from "../components/sentiment/Sentiment";
+import ShortSidebar from "../components/sidebar/ShortSidebar";
+import Weather from "../components/weather/Weather";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -325,6 +325,7 @@ function DiaryPage() {
             const imageUrl = responseDate.image?.imageUrl;
             setIsImageLoading(false);
             setNewImageUrl(imageUrl);
+            
           } else {
             console.error("이미지 저장 실패:", responseDiary.status);
             alert("이미지 저장에 실패하였습니다.");
