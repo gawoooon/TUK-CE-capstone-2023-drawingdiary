@@ -116,7 +116,6 @@ const AlbumBox = ({ onErrorMessage }) => {
                 }
             });
             const dataArray = response.data;
-            console.log("dataArray: ", dataArray);
 
             const diaryText = dataArray.text;
             const weather = dataArray.weather;
@@ -131,7 +130,7 @@ const AlbumBox = ({ onErrorMessage }) => {
             const sentiment = dataArray.sentiment;
 
             navigate(`/showDiary/${memberID}/${currentYear}${month}${day}`, {
-                state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment} },
+                state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment } },
             });
             
 

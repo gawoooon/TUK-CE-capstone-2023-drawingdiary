@@ -11,6 +11,7 @@ import ImageOption from "../components/edit diary/ImageOption";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
 import AIComment from "../components/edit diary/AIComment";
 import Sentiment from "../components/sentiment/Sentiment";
+import Background2 from "../components/Background/index2";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -52,7 +53,7 @@ const TopContent = styled.div`
 const EditDiaryArea = styled.div`
   width: 100%;
   height: 500px;
-  margin: 30px 20px 0px 10px;
+  margin: 50px 20px 0px 10px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -70,6 +71,7 @@ const RightComponentsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-right: 30px;
 `;
 
 const ButtonContainer = styled.div`
@@ -107,7 +109,7 @@ const CreateButtonStyle = styled.button`
 const SaveButtonStyle = styled.button`
   height: 50px;
   width: 250px;
-  margin-bottom: 30px;
+  margin: 0 30px 30px 0;
   background-color: rgba(106, 156, 253, 0.3);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -426,7 +428,7 @@ function DiaryPage() {
 
   return (
     <div>
-      <Background>
+      <Background2>
         <FlexContainer>
           <ShortSidebar />
           <RightContainer>
@@ -512,7 +514,7 @@ function DiaryPage() {
             </ManageAIArea>
           </RightContainer>
         </FlexContainer>
-      </Background>
+      </Background2>
     </div>
   );
 }

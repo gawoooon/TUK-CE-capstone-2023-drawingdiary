@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
-import { useAuth } from "../../auth/context/AuthContext";
 import axios from "axios";
 
 const CategoryStyle = styled.select`
