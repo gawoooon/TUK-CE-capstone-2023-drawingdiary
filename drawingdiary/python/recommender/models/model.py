@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MultiLabelBinarizer
 import pandas as pd
+import logging
 
 
 def predict_user_style(age, gender):
@@ -69,6 +70,8 @@ def predict_user_style(age, gender):
         if style not in predicted_styles_list:
             predicted_styles_list.append(style)
 
+    app.logger.info(f'Predicted styles: {predicted_styles_list[:required_styles_count]}')
+
     return predicted_styles_list[:required_styles_count]
 
 
@@ -79,13 +82,23 @@ CORS(app)
 def get_member_styles():
 
     try :
-        data = request.get_json()
+        response = request.get_json()
+        app.logger.info(f'data : {response}')
 
-        user_age = data.get('age', '0')
-        user_gender = data.get('gender', '')
+        user_age = response.get('age', '0')
+        user_gender = response.get('gender', '')
+
+        new_user_gender = ""
+
+        if(user_gender == "M") :
+            new_user_gender = "male"
+        elif(user_gender == "F") :
+            new_user_gender = "female"
+        else:
+            new_user_gender = "secret"
 
         # 스타일 예측 실행
-        predicted_styles = predict_user_style(user_age, user_gender)
+        predicted_styles = predict_user_style(user_age, new_user_gender)
 
         # 예측된 스타일을 JSON 형태로 반환
         return jsonify({
@@ -94,6 +107,9 @@ def get_member_styles():
     except Exception as e:
         app.logger.error(f'Error processing request: {e}', exc_info=True)
         return jsonify({'error': 'Internal server error'}), 500
+    
+if not app.debug:
+    app.logger.setLevel(logging.INFO)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=False, port=5001)

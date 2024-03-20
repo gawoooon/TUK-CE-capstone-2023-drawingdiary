@@ -4,8 +4,8 @@ import styled from "styled-components";
 import imageLodding from "../../animation/imageLodding.json";
 
 const Container = styled.div`
-    width: 700px;
-    height: 250px;
+    width: 600px;
+    height: 300px;
     margin: 10px 30px 10px 0;
     background-color: rgba(106, 156, 253, 0.3);
     border-radius: 30px;
@@ -21,8 +21,8 @@ const Container = styled.div`
 `;
 
 const Comment = styled.div`
-    width: 650px;
-    height: 320px;
+    width: 550px;
+    height: 280px;
     display: flex;
     justify-content: center;
     overflow-y: auto;

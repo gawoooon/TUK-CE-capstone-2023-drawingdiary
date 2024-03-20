@@ -6,7 +6,7 @@ import imageLoading from "../../animation/imageLodding.json";
 import ImageStyleLists from "./ImageStyleLists";
 
 const Container = styled.div`
-  width: 700px;
+  width: 600px;
   height: 415px;
   margin: 10px 60px 10px 0;
   background-color: rgba(255, 255, 255, 0.3);
@@ -65,14 +65,13 @@ const RightContainer = styled.div`
   }
 `;
 
-
 const SelectedStyle = styled.div`
   font-size: 15px;
   margin-top: 5px;
 `;
 
 const LeftBtnStyle = styled.button`
-  width: 650px;
+  width: 500px;
   min-height: 40px;
   margin-top: 15px;
   background-color: ${(props) =>
@@ -84,7 +83,7 @@ const LeftBtnStyle = styled.button`
 `;
 
 const RightBtnStyle = styled.button`
-  width: 650px;
+  width: 500px;
   min-height: 40px;
   margin: 5px 0;
   background-color: ${(props) =>
@@ -96,7 +95,7 @@ const RightBtnStyle = styled.button`
 `;
 
 const TextStyle = styled.div`
-  margin-top: 3px;
+  padding-top: 10px;
   font-size: 13px;
   color: #787878;
 `;
@@ -168,60 +167,75 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     }
   }, [selectedButtonStyle]);
 
-  const fetchOptionStyle = async () => {
+  const fetchUserInfo = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/get-member", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-  
+
       const birthYear = parseInt(response.data.birth.split("-")[0]);
       const currentYear = new Date().getFullYear();
-      const age = currentYear - birthYear;
-  
-      setUserAge(age);
-      setUserGender(response.data.gender);
+
+      setUserAge(currentYear - birthYear);
+
+      const genderChar = response.data.gender;
+
+      setUserGender(genderChar);
       setUserName(response.data.name);
+      
+    } catch(error) {
+      console.log("error: ", error);
+    }
+    console.log('info 완료')
+  };
   
-      try {
-        const styleResponse = await axios.get("http://localhost:8080/api/test/style", {
+  const fetchOptionStyle = async () => {
+    try {
+      const styleResponse = await axios.get("http://localhost:8080/api/test/style", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+      })
+      setIsLoading(!isRecommenderLoading);
+
+      const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
+        return ImageStyleLists.find(style => style.name === styleName);
+      });
+      setRecommendedStyles(updateRecommendedStyles);
+    } catch (error) {
+      if(error.response && error.response.status === 500) {
+        const fallbackResponse = await axios.post("http://localhost:8080/api/style", {
+          age: userAge,
+          gender: userGender,
+        }, {
           headers: {
             Authorization: `Bearer ${accessToken}`
           },
-        })
+        });
         setIsLoading(!isRecommenderLoading);
-        setRecommendedStyles(styleResponse.data.predicted_styles);
-      } catch (error) {
-        if(error.response && error.response.status === 500) {
-          const fallbackResponse = await axios.post("http://localhost:8080/api/style", {
-            age: userAge,
-            gender: userGender,
-          }, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            },
-          });
-          setIsLoading(!isRecommenderLoading);
-          setRecommendedStyles(fallbackResponse.data.predicted_styles);
-        } else {
-          throw error;
-        }
+        const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
+          return ImageStyleLists.find(style => style.name === styleName);
+        });
+        setRecommendedStyles(updateRecommendedStyles);
       }
-    } catch (error) {
-      console.log("error: ", error);
     }
   }
 
   useEffect(() => {
-    fetchOptionStyle();
-  }, []);
+    if(userAge !== 0 || userGender !== "") {
+      fetchOptionStyle();
+    } else {
+      fetchUserInfo();
+    }
+  }, [userAge, userGender]);
 
   useEffect(() => {
     onOptionSelect(isSelected);
 
     const filterNonDuplicateStyles = ImageStyleLists.filter(
-      (style) => !recommendedStyles.includes(style)
+      style => !recommendedStyles.map(rStyle => rStyle.name).includes(style.name)
     );
     setOtherStyles(filterNonDuplicateStyles);
   }, [isSelected, onOptionSelect, recommendedStyles]);
@@ -234,7 +248,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       </TopContainer>
       <Description>
         <TextStyle>
-          {userName}님의 성격을 고려해 선별한 리스트입니다.마음에
+          {userName}님과 비슷한 사용자들이 선택한 스타일입니다. 마음에
           드시는 옵션이 없으면 더보기를 눌러주세요.
         </TextStyle>
       </Description>
@@ -255,9 +269,9 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
             recommendedStyles.map((style, index) => (
               <LeftBtnStyle
                 key={index}
-                isSelected={selectedButtonStyle === style}
-                onClick={() => handleButtonStyleSelect(style)}>
-                {style}
+                isSelected={selectedButtonStyle === style.name}
+                onClick={() => handleButtonStyleSelect(style.name)}>
+                {`${style.name}: ${style.description}`}
               </LeftBtnStyle>
             ))
           )}
@@ -266,9 +280,9 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
           {otherStyles.map((style, index) => (
             <RightBtnStyle
               key={index}
-              isSelected={selectedButtonStyle === style}
-              onClick={() => handleButtonStyleSelect(style)}>
-                {style}
+              isSelected={selectedButtonStyle === style.name}
+              onClick={() => handleButtonStyleSelect(style.name)}>
+                {`${style.name}: ${style.description}`}
             </RightBtnStyle>
           ))}
         </RightContainer>

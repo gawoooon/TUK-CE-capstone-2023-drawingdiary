@@ -41,7 +41,7 @@ const RightContainer = styled.div`
 
 const TopContent = styled.div`
   height: 50px;
-  margin-top: 70px;
+  margin-top: 20px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
