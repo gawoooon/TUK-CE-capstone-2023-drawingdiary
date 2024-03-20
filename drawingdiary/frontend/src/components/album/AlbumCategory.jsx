@@ -43,7 +43,7 @@ const AlbumCategory = ({ onSelectAlbum }) => {
       fetchBaseCategory();
     }
     onSelectAlbum(selectedAlbumID);
-  }, [selectedAlbumID]);
+  }, [selectedAlbumID, fetchBaseCategory]);
 
   const handleAlbumChange = (event) => {
     // 선택한 앨범의 ID를 상태에 저장
