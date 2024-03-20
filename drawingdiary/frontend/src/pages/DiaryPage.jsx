@@ -217,12 +217,6 @@ function DiaryPage() {
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);
 
-      const values = {
-        positive: positiveValue,
-        negative: negativeValue,
-        neutral: neutralValue,
-      };
-
       // 감정 분석 결과를 일기 내용에 반영시키는 부분
 
       const maxSentimentValue = response.data.document.sentiment;
