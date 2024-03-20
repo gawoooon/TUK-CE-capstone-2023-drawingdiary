@@ -12,6 +12,8 @@ import com.diary.drawing.domain.diary.domain.Image;
 public interface ImageRepository extends JpaRepository<Image, Long>{
 
     Image findByImageID(Long imageID);
-    List<Image> findByAlbum(Album album);
+    List<Image> findByAlbum(Album album);   // 생성순
+    List<Image> findByAlbumOrderByDateAsc(Album album); // 날짜순
+
 }
     
