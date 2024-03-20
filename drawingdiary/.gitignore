@@ -39,7 +39,9 @@ out/
 .env
 
 ### application.properties ###
-drawingdiary/backend/src/resources/
+
+### application.yml ###
+application-secret.yml
 
 ### redis ###
 redis\data\dump.rdb
