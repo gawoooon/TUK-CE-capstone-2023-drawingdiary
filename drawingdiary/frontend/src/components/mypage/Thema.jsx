@@ -6,7 +6,7 @@ const ThemaBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
-  padding: 0 20px 25px 20px;
+  padding: 0 20px 15px 20px;
   box-sizing: border-box;
 `;
 
@@ -44,12 +44,17 @@ const ThemaColor = styled.div`
   height: 50px;
   border-radius: 50%;
   cursor: pointer;
-  ${(props) => css`
+  ${(props) => `
     background: ${props.background};
   `}
 `;
 
-function Thema() {
+function Thema({ onColorChange }) {
+  // body 배경색 변경 함수
+  const handleColorChange = (color) => {
+    onColorChange(color);
+  };
+
   return (
     <ThemaBox>
       <ThemaTextBox>
@@ -59,19 +64,24 @@ function Thema() {
 
       <ThemaColorBox>
         <ThemaColor
-          background={css`linear-gradient(45deg,rgb(106, 156, 253), rgb(174, 229, 255))`}
+          background="linear-gradient(45deg,rgb(106, 156, 253), rgb(174, 229, 255))"
+          onClick={() => handleColorChange(1)}
         ></ThemaColor>
         <ThemaColor
-          background={css`linear-gradient(45deg, rgb(255, 184, 208), rgba(106, 156, 253, 0.7))`}
+          background="linear-gradient(45deg, rgb(255, 184, 208), rgba(106, 156, 253, 0.7))"
+          onClick={() => handleColorChange(2)}
         ></ThemaColor>
         <ThemaColor
-          background={css`linear-gradient(45deg, rgb(255, 227, 224), rgb(255, 186, 209))`}
+          background="linear-gradient(45deg, rgb(255, 227, 224), rgb(255, 186, 209))"
+          onClick={() => handleColorChange(3)}
         ></ThemaColor>
         <ThemaColor
-          background={css`linear-gradient(45deg,rgb(11, 58, 152),rgb(254, 229, 225))`}
+          background="linear-gradient(45deg,rgb(11, 58, 152),rgb(254, 229, 225))"
+          onClick={() => handleColorChange(4)}
         ></ThemaColor>
         <ThemaColor
-          background={css`linear-gradient(45deg,rgb(166, 220, 250),rgb(4, 52, 149))`}
+          background="linear-gradient(45deg,rgb(166, 220, 250),rgb(4, 52, 149))"
+          onClick={() => handleColorChange(5)}
         ></ThemaColor>
       </ThemaColorBox>
     </ThemaBox>

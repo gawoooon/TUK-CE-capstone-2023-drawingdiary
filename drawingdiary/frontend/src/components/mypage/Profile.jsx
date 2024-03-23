@@ -6,6 +6,8 @@ const ProfileBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 30px 30px 0 0;
+  box-sizing: border-box;
 `;
 
 const ProfileImg = styled.div`

@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
@@ -40,15 +41,16 @@ const MyPageBottomBox = styled.div`
 `;
 
 function MyPage() {
+  const [backgroundColor, setBackgroundColor] = React.useState(2);
   return (
     <div>
-      <Background>
+      <Background backgroundColor={backgroundColor}>
         <ShortSidebar />
         <MyPageBody>
           <MyPageBox>
             <MyPageTopBox>
               <Profile />
-              <Thema />
+              <Thema onColorChange={setBackgroundColor} />
             </MyPageTopBox>
             <MyPageBottomBox>
               <Information />
