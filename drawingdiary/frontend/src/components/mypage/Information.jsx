@@ -76,12 +76,12 @@ const InfoProfileEmail = styled.div`
   font-weight: bold;
 `;
 
-function Information() {
+function Information({ onPopupToggle }) {
   return (
     <InfoBox>
       <InfoTop>
         기본정보
-        <InfoBtn>수정</InfoBtn>
+        <InfoBtn onClick={onPopupToggle}>수정</InfoBtn>
       </InfoTop>
       <InfoBottom>
         <InfoProfileBox>

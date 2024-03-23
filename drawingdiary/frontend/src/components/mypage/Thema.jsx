@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const ThemaBox = styled.div`
   width: 60%;
@@ -53,6 +53,7 @@ function Thema({ onColorChange }) {
   // body 배경색 변경 함수
   const handleColorChange = (color) => {
     onColorChange(color);
+    console.log(color)
   };
 
   return (

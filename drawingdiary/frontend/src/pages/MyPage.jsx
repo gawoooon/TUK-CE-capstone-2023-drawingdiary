@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import Information from "../components/mypage/Information";
 import Profile from "../components/mypage/Profile";
 import Thema from "../components/mypage/Thema";
+import Popup from "../components/mypage/Popup";
 
 const MyPageBody = styled.div`
   display: flex;
@@ -42,6 +43,13 @@ const MyPageBottomBox = styled.div`
 
 function MyPage() {
   const [backgroundColor, setBackgroundColor] = React.useState(2);
+  const [isPopupVisible, setPopupVisible] = useState(false); // 팝업 창의 가시성을 관리하는 상태
+
+  // 팝업 창을 토글하는 함수
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  };
+
   return (
     <div>
       <Background backgroundColor={backgroundColor}>
@@ -53,10 +61,11 @@ function MyPage() {
               <Thema onColorChange={setBackgroundColor} />
             </MyPageTopBox>
             <MyPageBottomBox>
-              <Information />
+              <Information onPopupToggle={togglePopup} />
             </MyPageBottomBox>
           </MyPageBox>
         </MyPageBody>
+        {isPopupVisible && <Popup onClose={togglePopup} />}
       </Background>
     </div>
   );
