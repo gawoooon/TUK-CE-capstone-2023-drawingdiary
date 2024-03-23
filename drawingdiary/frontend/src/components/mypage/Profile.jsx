@@ -1,38 +1,41 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const ProfileBox = styled.div`
+  width: 40%;
   display: flex;
-  border-bottom: 1px solid rgba(163, 163, 163, 0.3);
-  padding: 5px 0;
-  ${(props) =>
-    !props.hasBorder &&
-    css`
-      border-bottom: none;
-    `}
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
-const ProfileIcon = styled.div`
-  width: 80px;
-  height: 50px;
+const ProfileImg = styled.div`
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: pink;
+  margin-bottom: 20px;
+`;
+
+const ProfileName = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  font-size: 25px;
+  font-weight: bold;
+  padding-bottom: 5px;
 `;
 
-const ProfileText = styled.div`
+const ProfileEmail = styled.div`
   display: flex;
   align-items: center;
   font-size: 15px;
-  font-weight: bold;
 `;
 
-function Profile({ icon: Icon, text, hasBorder }) {
+function Profile() {
   return (
-    <ProfileBox hasBorder={hasBorder}>
-      <ProfileIcon>
-        <Icon size={36} color="#727272" />
-      </ProfileIcon>
-      <ProfileText> {text}</ProfileText>
+    <ProfileBox>
+      <ProfileImg />
+      <ProfileName>NICKNAME</ProfileName>
+      <ProfileEmail>00000@gmail.com</ProfileEmail>
     </ProfileBox>
   );
 }

@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import Information from "../components/mypage/Information";
+import Profile from "../components/mypage/Profile";
+import Thema from "../components/mypage/Thema";
 
 const MyPageBody = styled.div`
   display: flex;
@@ -17,14 +19,16 @@ const MyPageBox = styled.div`
   background-color: white;
   box-shadow: 3px 10px 5px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  padding: 50px 0;
+  padding: 50px 150px;
   box-sizing: border-box;
 `;
 
 const MyPageTopBox = styled.div`
   width: 100%;
   height: 35%;
-  background-color: pink;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const MyPageBottomBox = styled.div`
@@ -42,7 +46,10 @@ function MyPage() {
         <ShortSidebar />
         <MyPageBody>
           <MyPageBox>
-            <MyPageTopBox></MyPageTopBox>
+            <MyPageTopBox>
+              <Profile />
+              <Thema />
+            </MyPageTopBox>
             <MyPageBottomBox>
               <Information />
             </MyPageBottomBox>

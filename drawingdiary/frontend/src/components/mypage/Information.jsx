@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
 import { FaBirthdayCake } from "react-icons/fa";
-import Profile from "./Profile";
+import Line from "./Line";
 
 const InfoBox = styled.div`
-  width: 600px;
+  width: 100%;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -91,13 +91,13 @@ function Information() {
             <InfoProfileEmail>0000@gmail.com</InfoProfileEmail>
           </InfoProfileNameEmailBox>
         </InfoProfileBox>
-        <Profile
+        <Line
           icon={MdOutlinePhoneIphone}
           text="010-0000-0000"
           hasBorder={true}
         />
-        <Profile icon={MdEmail} text="000000@gmail.com" hasBorder={true}/>
-        <Profile icon={FaBirthdayCake} text="2002/12/12" hasBorder={false} />
+        <Line icon={MdEmail} text="000000@gmail.com" hasBorder={true} />
+        <Line icon={FaBirthdayCake} text="2002/12/12" hasBorder={false} />
       </InfoBottom>
     </InfoBox>
   );
