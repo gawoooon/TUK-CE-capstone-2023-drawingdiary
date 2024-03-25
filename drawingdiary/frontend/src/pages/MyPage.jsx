@@ -7,6 +7,11 @@ import Profile from "../components/mypage/Profile";
 import Thema from "../components/mypage/Thema";
 import Popup from "../components/mypage/Popup";
 
+const MyPageBackground = styled.div`
+  width: 100%;
+  height: 100hv;
+`;
+
 const MyPageBody = styled.div`
   display: flex;
   align-items: center;
@@ -51,7 +56,7 @@ function MyPage() {
   };
 
   return (
-    <div>
+    <MyPageBackground>
       <Background backgroundColor={backgroundColor}>
         <ShortSidebar />
         <MyPageBody>
@@ -65,9 +70,9 @@ function MyPage() {
             </MyPageBottomBox>
           </MyPageBox>
         </MyPageBody>
-        {isPopupVisible && <Popup onClose={togglePopup} />}
       </Background>
-    </div>
+      {isPopupVisible && <Popup onClose={togglePopup} />}
+    </MyPageBackground>
   );
 }
 
