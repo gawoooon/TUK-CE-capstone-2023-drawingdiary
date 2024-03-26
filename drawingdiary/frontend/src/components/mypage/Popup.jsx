@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { useState } from "react"; // useState 추가
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
 import PopupLine from "./PopupLine";
@@ -119,11 +120,11 @@ const ProfileImgNameBox = styled.div`
   height: 100%;
 `;
 
-const ProfileImg = styled.div`
+const ProfileImg = styled.img`
   height: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 50px;
-  background-color: pink;
+  object-fit: contain;
 `;
 
 const ProfileName = styled.div`
@@ -141,7 +142,10 @@ const ProfileImgUploadBox = styled.div`
   justify-content: end;
 `;
 
-const ProfileImgUpload = styled.button`
+const ProfileImgUpload = styled.label`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 150px;
   height: 40px;
   background-color: white;
@@ -152,7 +156,26 @@ const ProfileImgUpload = styled.button`
   cursor: pointer;
 `;
 
+const HiddenFileInput = styled.input`
+  /* 파일 업로드를 위한 숨겨진 input */
+  display: none;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50px;
+`;
+
 function Popup({ onClose }) {
+  const [profileImage, setProfileImage] = useState(null); // 업로드한 이미지 상태 추가
+
+  // 파일 선택 시 이벤트 처리 함수
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const imageUrl = URL.createObjectURL(selectedFile);
+      setProfileImage(imageUrl);
+    }
+  };
+
   return (
     <>
       <BackgroundOverlay />
@@ -165,11 +188,18 @@ function Popup({ onClose }) {
           <ProfileTop>
             <ProfileTopBody>
               <ProfileImgNameBox>
-                <ProfileImg></ProfileImg>
+                <ProfileImg src={profileImage}></ProfileImg>
                 <ProfileName>NAME</ProfileName>
               </ProfileImgNameBox>
               <ProfileImgUploadBox>
-                <ProfileImgUpload>사진올리기</ProfileImgUpload>
+                <ProfileImgUpload>
+                  사진올리기
+                  <HiddenFileInput
+                    type="file"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                  />
+                </ProfileImgUpload>
               </ProfileImgUploadBox>
             </ProfileTopBody>
           </ProfileTop>
