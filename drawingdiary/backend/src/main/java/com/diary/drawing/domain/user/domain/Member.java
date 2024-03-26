@@ -82,14 +82,20 @@ public class Member {
     public void setPersonality(String personality) {
         this.personality = personality;
     }
-    
 
+    // 패스워드 조회
+    public String getPassword() {
+        return this.password;
+    }
 
+    // 이메일 수정
+    public void updateEmail(String email) {
+        this.email = email;
+    }
 
-
-
-
-
-
+    // 비밀번호 수정
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
     
 }

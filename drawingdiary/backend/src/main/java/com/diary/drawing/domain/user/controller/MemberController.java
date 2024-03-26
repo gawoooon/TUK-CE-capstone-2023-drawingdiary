@@ -106,4 +106,6 @@ public class MemberController {
         return ResponseEntity.ok().body("성격 유형이 업데이트 되었습니다.");
     }
 
+    
+
 }

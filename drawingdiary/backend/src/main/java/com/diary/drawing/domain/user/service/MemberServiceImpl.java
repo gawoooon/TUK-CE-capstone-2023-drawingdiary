@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
+import com.diary.drawing.domain.user.exception.MemberExceptionType;
+import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -80,6 +82,18 @@ public class MemberServiceImpl implements MemberService{
             .theme(targetMemeber.getTheme())
             .build();
         return getMemberDTO;
+    }
+
+    // password 업데이트
+    @Transactional
+    @Override
+    public void updatePassword(Long memberID, String oldpassword, String newpassword){
+        Member targetMemeber = validateMemberService.validateMember(memberID);
+        if(!bCryptPasswordEncoder.matches(oldpassword, targetMemeber.getPassword())){
+            throw new MemberResponseException(MemberExceptionType.WRONG_PASSWORD);}
+        String encPassword = bCryptPasswordEncoder.encode(newpassword);
+        targetMemeber.updatePassword(encPassword);
+        memberRepository.save(targetMemeber);
     }
 
 

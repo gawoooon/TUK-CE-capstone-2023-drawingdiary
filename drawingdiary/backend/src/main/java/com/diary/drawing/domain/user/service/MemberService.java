@@ -13,4 +13,5 @@ public interface MemberService {
     public  String getEmailByMemberID(Long memberID);
     public Optional<Member> findByEmail(String email); //이메일로 멤버 찾기
     public GetMemberDTO getMember(Long memberID);
+    public void updatePassword(Long memberID, String oldpassword, String newpassword);
 }
