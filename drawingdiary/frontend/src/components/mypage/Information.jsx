@@ -40,7 +40,7 @@ const InfoBtn = styled.button`
 const InfoBottom = styled.div`
   width: 100%;
   height: 85%;
-  padding: 15px 30px;
+  padding: 15px 20px;
   box-sizing: border-box;
 `;
 

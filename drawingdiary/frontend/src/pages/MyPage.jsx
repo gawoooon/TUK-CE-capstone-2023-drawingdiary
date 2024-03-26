@@ -26,7 +26,7 @@ const MyPageBox = styled.div`
   background-color: white;
   box-shadow: 3px 10px 5px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  padding: 50px 150px;
+  padding: 50px 155px;
   box-sizing: border-box;
 `;
 
