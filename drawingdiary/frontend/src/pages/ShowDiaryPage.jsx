@@ -226,27 +226,16 @@ function ShowDiaryPage() {
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);
 
-      const values = {
-        positive: positiveValue,
-        negative: negativeValue,
-        neutral: neutralValue,
-      };
+      const maxSentimentValue = response.data.document.sentiment;
 
-      // 감정 분석 결과를 일기 내용에 반영시키는 부분
-      const maxSentimentValue = Math.max(...Object.values(values));
+      console.log(maxSentimentValue);
 
-      const maxSentimentName = Object.keys(values).find(
-        (key) => values[key] === maxSentimentValue
-      );
-
-      setSentimentResult(maxSentimentName);
-
-      if (maxSentimentName === "positive") {
-        setNewDiaryText("따듯한 색감");
-      } else if (sentimentResult === "negative") {
-        setNewDiaryText("차가운 색감");
-      } else if (sentimentResult === "neutral") {
-        setNewDiaryText("베이지 색감");
+      if (maxSentimentValue === "positive") {
+        return "따듯한 색감";
+      } else if (maxSentimentValue === "negative") {
+        return "차가운 색감";
+      } else if (maxSentimentValue === "neutral") {
+        return "베이지 색감";
       }
     } catch (error) {
       console.error("감정 분석 API 호출 중 오류 발생: ", error);

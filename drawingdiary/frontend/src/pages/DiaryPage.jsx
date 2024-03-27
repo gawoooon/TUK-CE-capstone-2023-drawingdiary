@@ -217,24 +217,17 @@ function DiaryPage() {
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);
 
-      const values = {
-        positive: positiveValue,
-        negative: negativeValue,
-        neutral: neutralValue,
-      };
-
       // 감정 분석 결과를 일기 내용에 반영시키는 부분
-      const maxSentimentValue = Math.max(...Object.values(values));
 
-      const maxSentimentName = Object.keys(values).find(
-        (key) => values[key] === maxSentimentValue
-      );
+      const maxSentimentValue = response.data.document.sentiment;
 
-      if (maxSentimentName === "positive") {
+      console.log(maxSentimentValue);
+
+      if (maxSentimentValue === "positive") {
         return "따듯한 색감";
-      } else if (maxSentimentName === "negative") {
+      } else if (maxSentimentValue === "negative") {
         return "차가운 색감";
-      } else if (maxSentimentName === "neutral") {
+      } else if (maxSentimentValue === "neutral") {
         return "베이지 색감";
       }
     } catch (error) {
