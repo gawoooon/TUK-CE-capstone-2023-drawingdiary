@@ -31,7 +31,6 @@ const AlbumCategory = ({ onSelectAlbum }) => {
       if(baseIndex !== -1) {
         const baseID = response.data[baseIndex].albumID;
         setSelectedAlbumID(baseID);
-        console.log("selectedAlbumID: ", baseID);
       }
     } catch (error) {
       console.log("error: ", error);

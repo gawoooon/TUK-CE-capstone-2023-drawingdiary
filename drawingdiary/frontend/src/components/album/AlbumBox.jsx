@@ -82,6 +82,7 @@ const AlbumBox = ({ onErrorMessage }) => {
     const [data, setData] = useState([]);
 
     const navigate = useNavigate();
+    const [checkList, setCheckList] = useState(false);
 
     const { memberID } = useAuth();
     const accessToken = localStorage.getItem('accessToken');
@@ -92,8 +93,8 @@ const AlbumBox = ({ onErrorMessage }) => {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
-            })
-            console.log("response: ", response);
+            });
+            
             const newData = response.data.map(entry => ({
                 albumID: entry.albumID,
                 name: entry.name,
@@ -159,8 +160,11 @@ const AlbumBox = ({ onErrorMessage }) => {
     };
 
     useEffect(() => {
-        fetchAlbum();
-    }, [fetchAlbum]);
+        if(!checkList) {
+            fetchAlbum();
+            setCheckList(!checkList);
+        }
+    }, [fetchAlbum, checkList]);
     
     return (
         <div>

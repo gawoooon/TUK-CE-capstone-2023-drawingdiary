@@ -90,7 +90,7 @@ const AddCategory = ({ categoryList, isOpen, onclose }) => {
 
     if(!isOpen) return null;
     
-    const handleAddButtonClick = async () => {
+    const handleAddButtonClick = () => {
 
         if (newCategory.trim() === "") {
             setShowBlankMessage(true);
