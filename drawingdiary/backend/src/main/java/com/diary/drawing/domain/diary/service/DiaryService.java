@@ -63,7 +63,7 @@ public class DiaryService {
     }
 
     /* 년월, 멤버id로 모든 다이어리 return 하는 캘린더 서비스 */
-    public List<CalenderDTO> calender(int year, int month, Long memberID){
+    public List<CalenderDTO> calender( int year, int month,  Long memberID){
         Member member = validateMemberService.validateMember(memberID);
 
         // 년월로 startDate와 endDate 얻기
