@@ -84,6 +84,24 @@ public class MemberServiceImpl implements MemberService{
         return getMemberDTO;
     }
 
+    // // 프로필 사진 변경
+    // @Transactional
+    // @Override
+    // public void updateProfileImage(Long memberID, String profileimage){
+    //     Member targetMemeber = validateMemberService.validateMember(memberID);
+
+    // }
+
+    // email 업데이트
+    @Transactional
+    @Override
+    public void updateEmail(Long memberID, String newemail){
+        Member targetMemeber = validateMemberService.validateMember(memberID);
+        targetMemeber.updateEmail(newemail);
+        memberRepository.save(targetMemeber);
+    }
+
+
     // password 업데이트
     @Transactional
     @Override

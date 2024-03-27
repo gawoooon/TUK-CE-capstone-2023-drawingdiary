@@ -97,5 +97,7 @@ public class Member {
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
+
+    // 프로필 이미지 수정
     
 }
