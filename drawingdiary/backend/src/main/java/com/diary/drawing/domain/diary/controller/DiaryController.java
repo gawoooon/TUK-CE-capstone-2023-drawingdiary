@@ -24,10 +24,12 @@ import com.diary.drawing.global.jwt.domain.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "Diary", description = "Diary API")
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class DiaryController {
 
     private final DiaryService diaryService;
@@ -42,6 +44,8 @@ public class DiaryController {
     @Operation(summary = "최종 일기 생성")
     @PostMapping("api/diary/add")
     public ResponseEntity<?> addDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        log.info("일기 생성 요청: 사용자 ID {}", principalDetails.getMemberID());
+        log.info("일기 생성 요청: requestbody{}", finalDiaryRequestDTO);
         return generateDiaryService.generateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
     }
 
@@ -85,6 +89,7 @@ public class DiaryController {
     @Operation(summary = "캘린더용 한달 미리보기 리스트 반환")
     @GetMapping("/api/calender/{year}-{month}")
     public List<CalenderDTO> getCalender(@PathVariable("year") int year,  @PathVariable("month") int month, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        log.info("일기 미리보기 요청: 사용자 ID {}", principalDetails.getMemberID());
         return diaryService.calender(year, month, principalDetails.getMemberID());
     }
 

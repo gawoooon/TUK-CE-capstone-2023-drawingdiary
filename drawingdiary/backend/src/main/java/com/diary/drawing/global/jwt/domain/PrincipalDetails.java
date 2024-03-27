@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 
 //일반 로그인과 oath2 로그인을 한번에 다루는 클래스
 @Getter
 @Builder
+@Slf4j
 public class PrincipalDetails implements UserDetails{
     
     private final Long memberID;
@@ -43,6 +45,12 @@ public class PrincipalDetails implements UserDetails{
     //     });
     //     return collect;
     // }
+
+    public Long getMemberID() {
+        log.info("getMemberID 호출됨: 반환되는 memberID {}", memberID);
+        return memberID;
+    }
+
 
     @Override
     public String getPassword() {   // User 비밀번호 리턴
