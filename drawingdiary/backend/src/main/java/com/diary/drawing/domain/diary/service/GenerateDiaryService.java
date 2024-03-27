@@ -1,5 +1,7 @@
 package com.diary.drawing.domain.diary.service;
 
+import java.io.IOException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import com.diary.drawing.domain.sentiment.domain.Sentiment;
 import com.diary.drawing.domain.sentiment.repository.SentimentRepository;
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.service.ValidateMemberService;
+import com.diary.drawing.global.s3.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,10 +41,11 @@ public class GenerateDiaryService {
     private final ImageRepository imageRepository;
     private final ImageStyleService imageStyleService;
     private final ValidateDiaryService validateDiaryService;
+    private final S3Uploader s3Uploader;
     
 
     @Transactional
-    public ResponseEntity<DiaryResponseDTO> generateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID){
+    public ResponseEntity<DiaryResponseDTO> generateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID) throws IOException{
 
         // 0. id로 멤버 객체 가져오기, 다이어리 유무 validate
         Member member = validateMemberService.validateMember(memberID);
@@ -61,9 +65,10 @@ public class GenerateDiaryService {
         Album album = validateAlbumService.validateAlbum(finalDiaryRequestDTO.getAlbumID());
         // 3.2 이미지 스타일 가져오기
         ImageStyle imageStyle = imageStyleService.validateStyle(finalDiaryRequestDTO.getStyleName());
+        String imageUrl = s3Uploader.uploadImage(finalDiaryRequestDTO.getImageFile(), finalDiaryRequestDTO.getDate());
 
         Image image = Image.builder()
-            .imageFile(finalDiaryRequestDTO.getImageFile())
+            .imageFile(imageUrl)
             .album(album)
             .date(finalDiaryRequestDTO.getDate())
             .build();

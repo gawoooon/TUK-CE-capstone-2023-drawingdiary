@@ -1,4 +1,5 @@
 package com.diary.drawing.domain.diary.controller;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class DiaryController {
 
     @Operation(summary = "최종 일기 생성")
     @PostMapping("api/diary/add")
-    public ResponseEntity<?> addDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> addDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException{
         return generateDiaryService.generateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
     }
 

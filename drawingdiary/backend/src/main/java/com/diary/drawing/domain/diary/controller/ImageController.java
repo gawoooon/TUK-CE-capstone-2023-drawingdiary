@@ -1,15 +1,13 @@
 package com.diary.drawing.domain.diary.controller;
 
-import java.time.LocalDate;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.domain.album.domain.Album;
 import com.diary.drawing.domain.album.service.ValidateAlbumService;
+import com.diary.drawing.domain.diary.dto.TestImageS3DTO;
 import com.diary.drawing.domain.diary.dto.TestImageServiceDTO;
 import com.diary.drawing.domain.diary.dto.TestImageUpdateDTO;
 import com.diary.drawing.domain.diary.service.ImageService;
@@ -50,8 +48,8 @@ public class ImageController {
     
     @Operation(summary = "이미지 URL에서 s3 저장 테스트용")
     @PostMapping("/test/save")
-    public String testSaveImage(@RequestParam String imageUrl, @RequestParam LocalDate date) throws Exception {
-        return imageService.testSaveImageFromUrl(imageUrl, date);
+    public String testSaveImage(@RequestBody TestImageS3DTO testImageS3DTO) throws Exception {
+        return imageService.saveImageFromUrl(testImageS3DTO.getImageFile(), testImageS3DTO.getDate());
     }
 
 
