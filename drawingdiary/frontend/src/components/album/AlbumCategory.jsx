@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
-import { useAuth } from "../../auth/context/AuthContext";
 import axios from "axios";
 
 const CategoryStyle = styled.select`
@@ -32,7 +31,6 @@ const AlbumCategory = ({ onSelectAlbum }) => {
       if(baseIndex !== -1) {
         const baseID = response.data[baseIndex].albumID;
         setSelectedAlbumID(baseID);
-        console.log("selectedAlbumID: ", baseID);
       }
     } catch (error) {
       console.log("error: ", error);
@@ -44,7 +42,7 @@ const AlbumCategory = ({ onSelectAlbum }) => {
       fetchBaseCategory();
     }
     onSelectAlbum(selectedAlbumID);
-  }, [selectedAlbumID]);
+  }, [selectedAlbumID, fetchBaseCategory]);
 
   const handleAlbumChange = (event) => {
     // 선택한 앨범의 ID를 상태에 저장

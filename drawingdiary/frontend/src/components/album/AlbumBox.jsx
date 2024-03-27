@@ -82,6 +82,7 @@ const AlbumBox = ({ onErrorMessage }) => {
     const [data, setData] = useState([]);
 
     const navigate = useNavigate();
+    const [checkList, setCheckList] = useState(false);
 
     const { memberID } = useAuth();
     const accessToken = localStorage.getItem('accessToken');
@@ -92,8 +93,8 @@ const AlbumBox = ({ onErrorMessage }) => {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
-            })
-            console.log("response: ", response);
+            });
+            
             const newData = response.data.map(entry => ({
                 albumID: entry.albumID,
                 name: entry.name,
@@ -116,7 +117,6 @@ const AlbumBox = ({ onErrorMessage }) => {
                 }
             });
             const dataArray = response.data;
-            console.log("dataArray: ", dataArray);
 
             const diaryText = dataArray.text;
             const weather = dataArray.weather;
@@ -131,7 +131,7 @@ const AlbumBox = ({ onErrorMessage }) => {
             const sentiment = dataArray.sentiment;
 
             navigate(`/showDiary/${memberID}/${currentYear}${month}${day}`, {
-                state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment} },
+                state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment } },
             });
             
 
@@ -160,8 +160,11 @@ const AlbumBox = ({ onErrorMessage }) => {
     };
 
     useEffect(() => {
-        fetchAlbum();
-    }, [fetchAlbum]);
+        if(!checkList) {
+            fetchAlbum();
+            setCheckList(!checkList);
+        }
+    }, [fetchAlbum, checkList]);
     
     return (
         <div>

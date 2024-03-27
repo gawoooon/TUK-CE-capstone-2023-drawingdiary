@@ -11,6 +11,7 @@ import ImageOption from "../components/edit diary/ImageOption";
 import Sentiment from "../components/sentiment/Sentiment";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import Weather from "../components/weather/Weather";
+import Background2 from "../components/Background/index2";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -52,7 +53,7 @@ const TopContent = styled.div`
 const EditDiaryArea = styled.div`
   width: 100%;
   height: 500px;
-  margin: 30px 20px 0px 10px;
+  margin: 50px 20px 0px 10px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -70,6 +71,7 @@ const RightComponentsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-right: 30px;
 `;
 
 const ButtonContainer = styled.div`
@@ -107,7 +109,7 @@ const CreateButtonStyle = styled.button`
 const SaveButtonStyle = styled.button`
   height: 50px;
   width: 250px;
-  margin-bottom: 30px;
+  margin: 0 30px 30px 0;
   background-color: rgba(106, 156, 253, 0.3);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -215,24 +217,17 @@ function DiaryPage() {
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);
 
-      const values = {
-        positive: positiveValue,
-        negative: negativeValue,
-        neutral: neutralValue,
-      };
-
       // 감정 분석 결과를 일기 내용에 반영시키는 부분
-      const maxSentimentValue = Math.max(...Object.values(values));
 
-      const maxSentimentName = Object.keys(values).find(
-        (key) => values[key] === maxSentimentValue
-      );
+      const maxSentimentValue = response.data.document.sentiment;
 
-      if (maxSentimentName === "positive") {
+      console.log(maxSentimentValue);
+
+      if (maxSentimentValue === "positive") {
         return "따듯한 색감";
-      } else if (maxSentimentName === "negative") {
+      } else if (maxSentimentValue === "negative") {
         return "차가운 색감";
-      } else if (maxSentimentName === "neutral") {
+      } else if (maxSentimentValue === "neutral") {
         return "베이지 색감";
       }
     } catch (error) {
@@ -427,7 +422,7 @@ function DiaryPage() {
 
   return (
     <div>
-      <Background>
+      <Background2>
         <FlexContainer>
           <ShortSidebar />
           <RightContainer>
@@ -513,7 +508,7 @@ function DiaryPage() {
             </ManageAIArea>
           </RightContainer>
         </FlexContainer>
-      </Background>
+      </Background2>
     </div>
   );
 }

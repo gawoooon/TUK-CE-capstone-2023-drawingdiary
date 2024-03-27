@@ -147,7 +147,7 @@ public class AlbumService {
 
     // 이미지에서 이미지 추출(경량화했음)
     public List<ImageForAlbumDTO> getImagesOfAlbum(Album album){
-        List<Image> images = imageRepository.findByAlbum(album);
+        List<Image> images = imageRepository.findByAlbumOrderByDateAsc(album);
         return images.stream()
             .map(image -> new ImageForAlbumDTO(image.getImageID(), image.getImageFile(), image.getDate()))
             .collect(Collectors.toList());

@@ -172,6 +172,8 @@ const Divider = styled.hr`
 `;
 
 function CalendarPage() {
+  const navigate = useNavigate();
+
   const [leftBoxWidth, setLeftBoxWidth] = useState("17%");
   const [rightBoxWidth, setRightBoxWidth] = useState("0%");
   const [middleBoxWidth, setMiddleBoxWidth] = useState("100%");
@@ -189,7 +191,6 @@ function CalendarPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [text, setText] = useState("");
 
-  const navigate = useNavigate();
   const [isSelectedYear, setIsSelectedYear] = useState("");
   const [isSelectedMonth, setIsSelectedMonth] = useState("");
   const [isSelectedDay, setIsSelectedDay] = useState("");
@@ -225,16 +226,44 @@ function CalendarPage() {
     }
   };
 
-  const handleEdit = () => {
-    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
+  const handleEdit = async () => {
+
     const currentYear = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
     const day = selectedDate.getDate();
-    const formattedDate = format(selectedDate, "yyyyMMdd");
+    const formattedDate = new Date(currentYear, month - 1, day);
+    
+    // 날짜 및 월을 두 자릿수로 표시하는 함수
+    const pad = (number) => (number < 10 ? `0${number}` : number);
+
+    // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
+    const dateString = `${formattedDate.getFullYear()}-${pad(
+      formattedDate.getMonth() + 1
+    )}-${pad(formattedDate.getDate())}`;
+
+    try {
+      const response = await axios.get(`http://localhost:8080/api/diary/${dateString}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      const dataArray = response.data;
+      console.log(dataArray);
   
-    navigate(`/diary/${memberID}/${formattedDate}`, {
-      state: { date: { currentYear, month, day } },
-    });
+      const diaryText = dataArray.text;
+      const weather = dataArray.weather;
+      const albumName = dataArray.albumName;
+      const image = dataArray.imageURL;
+      const comment = dataArray.comment;
+      const style = dataArray.styleName;
+      const sentiment = dataArray.sentiment;
+    
+      navigate(`/showDiary/${memberID}/${formattedDate}`, {
+        state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment } },
+      });
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   const handleRemove = async () => {
