@@ -41,6 +41,7 @@ out/
 ### application.properties ###
 drawingdiary/redis/data/dump.rdb
 drawingdiary/backend/src/main/resources/application.yml
+drawingdiary/backend/src/main/resources/application-secret.yml
 
 ### application.yml ###
 application-secret.yml
