@@ -45,7 +45,6 @@ public class DiaryController {
     @PostMapping("api/diary/add")
     public ResponseEntity<?> addDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
         log.info("일기 생성 요청: 사용자 ID {}", principalDetails.getMemberID());
-        log.info("일기 생성 요청: requestbody{}", finalDiaryRequestDTO);
         return generateDiaryService.generateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
     }
 
