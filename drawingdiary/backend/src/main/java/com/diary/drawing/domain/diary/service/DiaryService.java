@@ -29,9 +29,11 @@ import com.diary.drawing.domain.user.repository.MemberRepository;
 import com.diary.drawing.domain.user.service.ValidateMemberService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 
+@Slf4j
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
@@ -65,6 +67,8 @@ public class DiaryService {
     /* 년월, 멤버id로 모든 다이어리 return 하는 캘린더 서비스 */
     public List<CalenderDTO> calender( int year, int month,  Long memberID){
         Member member = validateMemberService.validateMember(memberID);
+        // 확인용 로그찍기
+        log.info("일기 미리보기 요청: 사용자 ID {}", memberID);
 
         // 년월로 startDate와 endDate 얻기
         YearMonth yearMonth = YearMonth.of(year, month);
@@ -79,6 +83,7 @@ public class DiaryService {
         return response;
     }
 
+    @SuppressWarnings("null") //TODO: 임시
     @Transactional
     public ResponseEntity<?> delete(LocalDate date, Long memberID){
         Member member = validateMemberService.validateMember(memberID);

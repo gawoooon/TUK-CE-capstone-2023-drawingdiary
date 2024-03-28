@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.diary.drawing.domain.diary.domain.Diary;
@@ -21,7 +22,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>{
     boolean existsByDateAndMember(LocalDate date, Member member);
 
     @Query("SELECT d FROM Diary d WHERE d.member = :member AND d.date BETWEEN :startDate AND :endDate")
-    List<Diary> findByMemberAndDateBetween(Member member, LocalDate startDate, LocalDate endDate);
+    List<Diary> findByMemberAndDateBetween(@Param("member") Member member, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
 
 }
 
