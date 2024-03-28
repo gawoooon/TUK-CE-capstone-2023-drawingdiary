@@ -175,7 +175,6 @@ function ShowDiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
-  const [sentimentResult, setSentimentResult] = useState('');
 
   const [newDiaryText, setNewDiaryText] = useState('');
   const [commentText, setCommentText] = useState('');
@@ -192,6 +191,8 @@ function ShowDiaryPage() {
     setPositiveValue(diaryData.sentiment.positive);
     setNegativeValue(diaryData.sentiment.negative);
     setNeutralValue(diaryData.sentiment.neutral);
+
+    console.log("sentiment: ", diaryData.sentiment);
   };
 
   // 앨범 상태를 업데이트하는 함수

@@ -195,6 +195,8 @@ function CalendarPage() {
   const [isSelectedMonth, setIsSelectedMonth] = useState("");
   const [isSelectedDay, setIsSelectedDay] = useState("");
 
+  const [checkCalendar, setCheckCalendar] = useState(false);
+
 
   const handleDateClick = async (day) => {
     if (isSameDay(day, selectedDate)) {
@@ -316,7 +318,11 @@ function CalendarPage() {
 
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
-    fetchCalendar();
+
+    if(!checkCalendar) {
+      fetchCalendar();
+      setCheckCalendar(!checkCalendar);
+    }
 
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
@@ -339,7 +345,7 @@ function CalendarPage() {
     };
 
     fetchDataAndUpdateState();
-  }, [selectedDate, handleRemove]);
+  }, [selectedDate, handleRemove, checkCalendar]);
 
   return (
     <Background>
