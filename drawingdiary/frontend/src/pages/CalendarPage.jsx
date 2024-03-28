@@ -260,7 +260,7 @@ function CalendarPage() {
       const style = dataArray.styleName;
       const sentiment = dataArray.sentiment;
     
-      navigate(`/showDiary/${memberID}/${formattedDate}`, {
+      navigate(`/showDiary/${memberID}/${dateString}`, {
         state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment } },
       });
     } catch (error) {
