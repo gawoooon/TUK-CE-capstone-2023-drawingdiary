@@ -53,11 +53,14 @@ public class Member {
 
     private int theme; // 화면 테마
 
+    @Column(unique = true, length = 75)
+    private String phoneNumber;
+
     @Override
     public String toString(){
         return "UserID: " + this.memberID + "Name: " +  this.name + "Email: " + this.email + "Password: " + this.password
                 + "Birth: " + this.birth + "Gender: " + this.gender + "ProfileImage: " + this.profileImage
-                + "Personality: " + this.personality + "theme: " + this.theme;
+                + "Personality: " + this.personality + "theme: " + this.theme + "PhoneNumber" + this.phoneNumber;
     }
 
     public Member(){}
@@ -71,6 +74,7 @@ public class Member {
         this.password = password;
         this.role = MemberRole.ROLE_USER;   //기본값 설정
         this.theme = 1; // 기본값 설정
+        this.phoneNumber = "000-0000-000";  // 임시 설정
     }
 
     // 문자열로 role 주기
@@ -96,6 +100,11 @@ public class Member {
     // 비밀번호 수정
     public void updatePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    // 전화번호 수정
+    public void updatePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     // 프로필 이미지 수정

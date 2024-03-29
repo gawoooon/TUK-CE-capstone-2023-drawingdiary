@@ -40,6 +40,7 @@ out/
 
 ### application.properties ###
 drawingdiary/backend/src/resources/
+application-secret.yml
 
 ### redis ###
 redis\data\dump.rdb

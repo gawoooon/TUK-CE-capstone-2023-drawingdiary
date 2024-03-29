@@ -28,4 +28,6 @@ public class GetMemberDTO {
     private String profileImage;
 
     private int theme;
+
+    private String phoneNumber;
 }

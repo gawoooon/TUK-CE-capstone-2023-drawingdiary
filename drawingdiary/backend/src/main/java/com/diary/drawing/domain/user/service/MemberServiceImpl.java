@@ -2,7 +2,9 @@ package com.diary.drawing.domain.user.service;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Random;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
+import com.diary.drawing.domain.user.dto.PhoneVerificationResponseDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
+import com.diary.drawing.global.util.SmsUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +29,8 @@ public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ValidateMemberService validateMemberService;
+    private final SmsUtil smsUtil;
+    private final SmsVerificationService smsVerificationService;
 
     // 회원 가입 (예외처리 나중에)
     @Override
@@ -80,6 +86,7 @@ public class MemberServiceImpl implements MemberService{
             .personality(targetMemeber.getPersonality())
             .profileImage(targetMemeber.getProfileImage())  // 임시 url 넣기
             .theme(targetMemeber.getTheme())
+            .phoneNumber(targetMemeber.getPhoneNumber())
             .build();
         return getMemberDTO;
     }
@@ -113,6 +120,52 @@ public class MemberServiceImpl implements MemberService{
         targetMemeber.updatePassword(encPassword);
         memberRepository.save(targetMemeber);
     }
+
+    // phoneNumber 업데이트
+    @Transactional
+    @Override
+    public void updatePhoneNumber(Long memberID, String newPhoneNumber){
+        Member targetMemeber = validateMemberService.validateMember(memberID);
+        targetMemeber.updatePhoneNumber(newPhoneNumber);
+        memberRepository.save(targetMemeber);
+    }
+
+    // 전화번호 인증
+    public String sendSms(String phoneNumber){
+        Member targetMemeber = memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(()->
+                new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER));
+        
+        //String receiverEmail = targetMemeber.getEmail();
+        String verificationCode = createKey();
+        smsUtil.sendOne(phoneNumber, verificationCode);
+
+        return verificationCode;
+    }
+
+        // 인증번호 만드는 메소드
+    public static String createKey(){
+        StringBuffer key = new StringBuffer();
+        Random random = new Random();
+
+        for (int i=0; i<6; i++){    // 6자리
+            key.append(random.nextInt(10)); //0~9까지 랜덤 생성
+        }
+        return key.toString();
+    }
+
+        // 이메일 찾아서 반환
+    public ResponseEntity<?> findEmailByPhoneNumber(String phoneNumber, String code){
+
+        if(smsVerificationService.verifyNumber(phoneNumber, code)){
+            Member targetMember = memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(()-> new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER));
+            PhoneVerificationResponseDTO responseDTO = new PhoneVerificationResponseDTO(targetMember.getEmail());
+            return ResponseEntity.ok(responseDTO);
+        } else{
+            throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);
+        }
+    }
+
+
 
 
     

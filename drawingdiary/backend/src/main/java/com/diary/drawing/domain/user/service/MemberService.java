@@ -15,4 +15,5 @@ public interface MemberService {
     public GetMemberDTO getMember(Long memberID);
     public void updatePassword(Long memberID, String oldpassword, String newpassword);
     public void updateEmail(Long memberID, String newemail);
+    public void updatePhoneNumber(Long memberID, String newPhoneNumber);
 }
