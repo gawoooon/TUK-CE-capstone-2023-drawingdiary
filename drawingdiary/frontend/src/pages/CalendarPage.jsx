@@ -198,26 +198,6 @@ function CalendarPage() {
   const [isSelectedMonth, setIsSelectedMonth] = useState("");
   const [isSelectedDay, setIsSelectedDay] = useState("");
 
-  useEffect(() => {
-    fetchCalendar();
-  }, []); // 컴포넌트가 처음으로 렌더링될 때만 실행
-
-  const fetchCalendar = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/calender/${year}-${month}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setData(response.data);
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  };
-
   const handleDateClick = async (day) => {
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
@@ -317,30 +297,47 @@ function CalendarPage() {
     }
   };
 
-  // fetchData 함수를 useEffect 외부에서 선언
-  // const fetchData = async (date) => {
-  //   try {
-  //     // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
-  //     const index = data.findIndex((item) =>
-  //       isSameDay(new Date(item.date), date)
-  //     );
+  const fetchCalendar = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/calender/${year}-${month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setData(response.data);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
-  //     //일치하면 인덱스 값/ 아니면 -1 반환 => 존재하면 true, 존재하지 않으면 false
-  //     if (index !== -1) {
-  //       setText(data[index].text);
-  //       setImageUrl(data[index].imageFile);
-  //     }
-  //     const hasData = index !== -1;
-  //     return hasData;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     return false; // 에러가 발생하면 데이터가 없는 것으로 처리
-  //   }
-  // };
+  // fetchData 함수를 useEffect 외부에서 선언
+  const fetchData = async (date) => {
+    try {
+      // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
+      const index = data.findIndex((item) =>
+        isSameDay(new Date(item.date), date)
+      );
+
+      //일치하면 인덱스 값/ 아니면 -1 반환 => 존재하면 true, 존재하지 않으면 false
+      if (index !== -1) {
+        setText(data[index].text);
+        setImageUrl(data[index].imageFile);
+      }
+      const hasData = index !== -1;
+      return hasData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return false; // 에러가 발생하면 데이터가 없는 것으로 처리
+    }
+  };
 
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
-  // fetchDataAndUpdateState 함수를 useEffect 외부로 이동
   useEffect(() => {
+    fetchCalendar();
+
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
         setIsSelectedYear(format(selectedDate, "yyyy"));
@@ -348,28 +345,21 @@ function CalendarPage() {
         setIsSelectedDay(format(selectedDate, "dd"));
 
         try {
-          const index = data.findIndex((item) =>
-            isSameDay(new Date(item.date), selectedDate)
-          );
-          const hasData = index !== -1;
+          // 클릭한 날짜
+          const hasData = await fetchData(selectedDate);
 
-          if (hasData) {
-            setText(data[index].text);
-            setImageUrl(data[index].imageFile);
-          }
-
+          // 데이터 확인 결과에 따라 상태 업데이트
           setSelectedDateHasData(hasData);
         } catch (error) {
           console.error("Error fetching data:", error);
+          // 에러가 발생하면 데이터가 없는 것으로 간주
           setSelectedDateHasData(false);
         }
       }
     };
 
-    if (selectedDate) {
-      fetchDataAndUpdateState();
-    }
-  }, [selectedDate]);
+    fetchDataAndUpdateState();
+  }, [selectedDate, handleRemove]);
 
   return (
     <Background>
@@ -392,29 +382,31 @@ function CalendarPage() {
               <GrFormPreviousLink />
             </PrevBtn>
             <ResultBox>
-              {selectedDate && selectedDateHasData ? (
-                <TrueComponentBox>
-                  <TopBox>
-                    <RemoveBtn onClick={handleRemove}>삭제</RemoveBtn>
-                    <DateBox>
-                      {isSelectedMonth}월{isSelectedDay}일
-                    </DateBox>
-                    <EditBtn onClick={handleEdit}>편집</EditBtn>
-                  </TopBox>
-                  <TrueComponentMidBox>
-                    <ImageBox src={imageUrl} />
-                  </TrueComponentMidBox>
-                  <Divider />
-                  <BottomBox>{text}</BottomBox>
-                </TrueComponentBox>
-              ) : selectedDate ? (
-                <FalseComponent
-                  currentYear={selectedDate.getFullYear()}
-                  month={selectedDate.getMonth() + 1}
-                  day={selectedDate.getDate()}
-                  selectedDate={selectedDate}
-                />
-              ) : null}{" "}
+              {" "}
+              {selectedDate &&
+                (selectedDateHasData ? (
+                  <TrueComponentBox>
+                    <TopBox>
+                      <RemoveBtn onClick={handleRemove}>삭제</RemoveBtn>
+                      <DateBox>
+                        {isSelectedMonth}월{isSelectedDay}일
+                      </DateBox>
+                      <EditBtn onClick={handleEdit}>편집</EditBtn>
+                    </TopBox>
+                    <TrueComponentMidBox>
+                      <ImageBox src={imageUrl} />
+                    </TrueComponentMidBox>
+                    <Divider />
+                    <BottomBox>{text}</BottomBox>
+                  </TrueComponentBox>
+                ) : (
+                  <FalseComponent
+                    currentYear={selectedDate.getFullYear()}
+                    month={selectedDate.getMonth() + 1}
+                    day={selectedDate.getDate()}
+                    selectedDate={selectedDate}
+                  />
+                ))}
             </ResultBox>
           </RightBox>
         </CalendarBox>

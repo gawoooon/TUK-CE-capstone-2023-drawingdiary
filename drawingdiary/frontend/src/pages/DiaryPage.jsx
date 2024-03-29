@@ -15,7 +15,7 @@ import Background2 from "../components/Background/index2";
 
 const FlexContainer = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
 `;

@@ -15,7 +15,7 @@ import Background2 from "../components/Background/index2";
 
 const FlexContainer = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
 `;
@@ -153,7 +153,8 @@ function ShowDiaryPage() {
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState(diaryData.diaryText);
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(false);
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
+    useState(false);
 
   // 날짜, 날씨
   const [weatherState, setWeatherState] = useState("Unknown");
@@ -175,11 +176,11 @@ function ShowDiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
-  const [sentimentResult, setSentimentResult] = useState('');
+  const [sentimentResult, setSentimentResult] = useState("");
 
-  const [newDiaryText, setNewDiaryText] = useState('');
-  const [commentText, setCommentText] = useState('');
-  const [style, setStyle] = useState('');
+  const [newDiaryText, setNewDiaryText] = useState("");
+  const [commentText, setCommentText] = useState("");
+  const [style, setStyle] = useState("");
 
   const [createBtn, setCreateBtn] = useState(false);
 
@@ -270,10 +271,10 @@ function ShowDiaryPage() {
   const isSaveButtonEnabled = isTextValid;
 
   useEffect(() => {
-    if(createBtn) {
+    if (createBtn) {
       analyzeSentiment();
     } else {
-        fetchDiary();
+      fetchDiary();
     }
   }, [createBtn]);
 
@@ -286,20 +287,18 @@ function ShowDiaryPage() {
       }, 5000);
       return;
     }
-    
+
     setAnimateCreateBtn(true);
     setTimeout(() => {
       setAnimateCreateBtn(false);
     }, 500);
-    
+
     setShowCreate(true);
     setTimeout(() => {
       setShowCreate(false);
     }, 5000);
 
-
     if (parentSelectedButtonStyle) {
-      
       setCreateBtn(true);
 
       setIsImageLoading(true);
@@ -308,8 +307,7 @@ function ShowDiaryPage() {
       try {
         const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
 
-        if(diaryText !== '') {
-    
+        if (diaryText !== "") {
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
           const responseDiary = await fetch(imageApiUrl, {
             method: "POST",
@@ -318,27 +316,30 @@ function ShowDiaryPage() {
             },
             body: JSON.stringify({ resultDiaryText }),
           });
-    
+
           if (responseDiary.ok) {
             const responseDate = await responseDiary.json();
-    
+
             // url 받아오기
             const imageUrl = responseDate.image?.imageUrl;
             setIsImageLoading(false);
             setNewImageUrl(imageUrl);
           } else {
             console.error("이미지 저장 실패:", responseDiary.status);
-    
+
             alert("이미지 저장에 실패하였습니다.");
           }
 
-          const responseComment = await fetch("http://127.0.0.1:5000/api/diary/comment", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ diaryText }),
-          });
+          const responseComment = await fetch(
+            "http://127.0.0.1:5000/api/diary/comment",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ diaryText }),
+            }
+          );
 
           if (responseComment.ok) {
             const comment = await responseComment.json();
@@ -347,11 +348,9 @@ function ShowDiaryPage() {
           } else {
             console.error("코멘트 불러오기 실패: ", responseComment);
           }
-
         } else {
           alert("일기를 먼저 작성해주세요!");
         }
-
       } catch (error) {
         console.error("Error diary:", error);
         alert("일기 중에 오류가 발생하였습니다.");
@@ -384,11 +383,12 @@ function ShowDiaryPage() {
     const pad = (number) => (number < 10 ? `0${number}` : number);
 
     // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
-    const dateString = `${formattedDate.getFullYear()}-${pad(formattedDate.getMonth() + 1)}-${pad(formattedDate.getDate())}`;
+    const dateString = `${formattedDate.getFullYear()}-${pad(
+      formattedDate.getMonth() + 1
+    )}-${pad(formattedDate.getDate())}`;
 
     //image post
     if (newImageUrl) {
-
       // 일기 수정
       const responseDiary = await axios.put(
         `http://localhost:8080/api/diary/${dateString}`,
@@ -430,10 +430,7 @@ function ShowDiaryPage() {
           <ShortSidebar />
           <RightContainer>
             <TopContent>
-              <ShowWeather
-                date={date}
-                weatherIcon={weatherState}
-              />
+              <ShowWeather date={date} weatherIcon={weatherState} />
               <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
             </TopContent>
 
@@ -458,7 +455,10 @@ function ShowDiaryPage() {
             </MessageContainer>
 
             <EditDiaryArea>
-              <ShowDiary onDiaryTextChange={handleDiaryTextChange} showText={diaryText} />
+              <ShowDiary
+                onDiaryTextChange={handleDiaryTextChange}
+                showText={diaryText}
+              />
               <ShowImageOption
                 onOptionSelect={handleOptionSelect}
                 isRecommenderLoading={isRecommenderLoading}
@@ -476,9 +476,10 @@ function ShowDiaryPage() {
               }}
             >
               <ButtonContainer>
-                <CreateButtonStyle 
+                <CreateButtonStyle
                   onClick={handleCreate}
-                  animate={animateCreateBtn}>
+                  animate={animateCreateBtn}
+                >
                   생성
                 </CreateButtonStyle>
               </ButtonContainer>
@@ -496,9 +497,15 @@ function ShowDiaryPage() {
             </div>
 
             <ManageAIArea>
-              <ShowGeneratedImage isLoading={isImageLoading} newImageUrl={newImageUrl} />
+              <ShowGeneratedImage
+                isLoading={isImageLoading}
+                newImageUrl={newImageUrl}
+              />
               <RightComponentsContainer>
-                <ShowAIComment text={commentText} isLoading={isCommentLoading} />
+                <ShowAIComment
+                  text={commentText}
+                  isLoading={isCommentLoading}
+                />
                 <Sentiment
                   positiveValue={positiveValue}
                   negativeValue={negativeValue}
