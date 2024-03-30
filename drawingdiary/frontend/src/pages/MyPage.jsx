@@ -4,7 +4,7 @@ import Background from "../components/Background";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import Information from "../components/mypage/Information";
 import Profile from "../components/mypage/Profile";
-import Thema from "../components/mypage/Thema";
+import Theme from "../components/mypage/Theme";
 import Popup from "../components/mypage/Popup";
 
 const MyPageBackground = styled.div`
@@ -63,7 +63,7 @@ function MyPage() {
           <MyPageBox>
             <MyPageTopBox>
               <Profile />
-              <Thema onColorChange={setBackgroundColor} />
+              <Theme onColorChange={setBackgroundColor} />
             </MyPageTopBox>
             <MyPageBottomBox>
               <Information onPopupToggle={togglePopup} />
