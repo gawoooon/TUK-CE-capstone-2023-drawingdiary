@@ -82,6 +82,11 @@ public class Member {
     public void setPersonality(String personality) {
         this.personality = personality;
     }
+
+    // 테마 업데이트
+    public void updateTheme(int newTheme){
+        this.theme = newTheme;
+    }
     
 
 

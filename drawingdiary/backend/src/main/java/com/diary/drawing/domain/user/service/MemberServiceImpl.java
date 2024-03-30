@@ -3,6 +3,7 @@ package com.diary.drawing.domain.user.service;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,6 +81,16 @@ public class MemberServiceImpl implements MemberService{
             .theme(targetMemeber.getTheme())
             .build();
         return getMemberDTO;
+    }
+
+    // 테마 수정하는 메소드
+    @Transactional
+    @Override
+    public ResponseEntity<?> updateTheme (Long memberID, int newTheme){
+        Member targetMemeber = validateMemberService.validateMember(memberID);
+        targetMemeber.updateTheme(newTheme);
+        memberRepository.save(targetMemeber);
+        return ResponseEntity.ok("테마 변경이 완료되었습니다.");
     }
 
 

@@ -47,7 +47,6 @@ public class PrincipalDetails implements UserDetails{
     // }
 
     public Long getMemberID() {
-        log.info("getMemberID 호출됨: 반환되는 memberID {}", memberID);
         return memberID;
     }
 

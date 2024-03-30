@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
 import com.diary.drawing.domain.user.dto.PersonalityUpdateDTO;
+import com.diary.drawing.domain.user.dto.ThemeUpdateDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
@@ -26,6 +28,7 @@ import com.diary.drawing.global.jwt.domain.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
 
 @Tag(name = "Member", description = "Member API")
 @RestController
@@ -104,6 +107,16 @@ public class MemberController {
         memberService.joinMemberPersonality(member, updateDTO.getPersonality());
 
         return ResponseEntity.ok().body("성격 유형이 업데이트 되었습니다.");
+    }
+
+    /* 테마 업데이트 api
+     * @param int theme
+     */
+    @Operation(summary = "회원가입")
+    @PutMapping("/theme")
+    public ResponseEntity<?> updateTheme (@RequestBody ThemeUpdateDTO themeUpdateDTO,
+                                            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return memberService.updateTheme(principalDetails.getMemberID(), themeUpdateDTO.getTheme());
     }
 
 }
