@@ -2,10 +2,11 @@ package com.diary.drawing.domain.user.controller;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,29 +16,33 @@ import com.diary.drawing.domain.album.dto.AlbumRequestDTO;
 import com.diary.drawing.domain.album.service.AlbumService;
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
+import com.diary.drawing.domain.user.dto.MemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
 import com.diary.drawing.domain.user.dto.PersonalityUpdateDTO;
+import com.diary.drawing.domain.user.dto.PhoneRequestDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
 import com.diary.drawing.domain.user.service.MemberService;
+import com.diary.drawing.domain.user.service.SmsVerificationService;
 import com.diary.drawing.global.jwt.domain.PrincipalDetails;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @Tag(name = "Member", description = "Member API")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 
 public class MemberController {
-    @Autowired
-    private MemberService memberService;
-    @Autowired
-    private AlbumService albumService;
-    @Autowired
-    private MemberRepository memberRepository;
+
+    private final MemberService memberService;
+    private final AlbumService albumService;
+    private final MemberRepository memberRepository;
+    private final SmsVerificationService smsVerificationService;
 
 
     // 로그인은 jwt AuthController 에 구현되어있음
@@ -92,7 +97,10 @@ public class MemberController {
 
     
 
-    // 성격 속성에 값을 추가하는 부분 따로 구현해놔서 이렇게 해야 한다고 함
+    /*  성격 속성에 값 저장
+    *   @Param String email
+    */
+    @Operation(summary = "성격 속성 저장")
     @PostMapping("/updatePersonality")
     public ResponseEntity<?> updatePersonality(@RequestBody PersonalityUpdateDTO updateDTO) {
         Optional<Member> memberOptional = memberService.findByEmail(updateDTO.getEmail());
@@ -105,6 +113,48 @@ public class MemberController {
 
         return ResponseEntity.ok().body("성격 유형이 업데이트 되었습니다.");
     }
+
+    /*  마이페이지 업데이트 api
+     *  @Param
+     *
+     */
+    @Operation(summary = "마이페이지 업데이트")
+    @PatchMapping("/sms/verify")
+    public ResponseEntity<?> verify(@RequestBody MemberDTO.NameUpdate nameDTO,
+                                    @RequestBody MemberDTO.EmailUpdate emailDTO,
+                                    @RequestBody MemberDTO.PasswordUpdate passwordDTO,
+                                    @RequestBody MemberDTO.PhoneNumberUpdate phoneNumberDTO,
+                                    @AuthenticationPrincipal PrincipalDetails principalDetails){
+        return memberService.patchMypage(principalDetails.getMemberID(), nameDTO, emailDTO, passwordDTO, phoneNumberDTO);
+    }
+
+
+    /* 문자 인증 코드 보내는 api
+     *  @param String phoneNumber
+     */
+    @Operation(summary = "문자 인증 코드 생성/전달")
+    @PostMapping("/sms/codesending")
+    public ResponseEntity<String> phoneNumberConfirm(@RequestBody PhoneRequestDTO.codeSendingDTO codeSendingDTO) {
+        try{
+            String code = memberService.sendSms(codeSendingDTO.getPhoneNumber());
+            smsVerificationService.saveVerificationCode(codeSendingDTO.getPhoneNumber(), code);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /* 문자 인증 코드 확인하는 api
+     * @Param String email, String code
+     * return email or error
+     */
+    @Operation(summary = "문자 인증 코드 확인")
+    @PostMapping("/sms/verify")
+    public ResponseEntity<?> verify(@RequestBody PhoneRequestDTO.verifyDTO verifyDTO){
+        return memberService.findEmailByPhoneNumber(verifyDTO.getPhoneNumber(), verifyDTO.getCode());
+    }
+    
 
     
 

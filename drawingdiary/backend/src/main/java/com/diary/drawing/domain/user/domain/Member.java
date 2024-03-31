@@ -107,6 +107,11 @@ public class Member {
         this.phoneNumber = phoneNumber;
     }
 
+    // 닉네임 수정
+    public void updateName(String nickname) {
+        this.name = nickname;
+    }
+
     // 프로필 이미지 수정
     
 }

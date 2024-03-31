@@ -11,8 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
+import com.diary.drawing.domain.user.dto.MemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
-import com.diary.drawing.domain.user.dto.PhoneVerificationResponseDTO;
+import com.diary.drawing.domain.user.dto.PhoneResponseDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
@@ -99,36 +100,62 @@ public class MemberServiceImpl implements MemberService{
 
     // }
 
+    
+    // nickname 업데이트
+    @Transactional
+    @Override
+    public void updateName(Member targetMember, String newname){
+        targetMember.updateName(newname);
+        memberRepository.save(targetMember);
+    }
+
+
     // email 업데이트
     @Transactional
     @Override
-    public void updateEmail(Long memberID, String newemail){
-        Member targetMemeber = validateMemberService.validateMember(memberID);
-        targetMemeber.updateEmail(newemail);
-        memberRepository.save(targetMemeber);
+    public void updateEmail(Member targetMember, String newemail){
+        targetMember.updateEmail(newemail);
+        memberRepository.save(targetMember);
     }
 
 
     // password 업데이트
     @Transactional
     @Override
-    public void updatePassword(Long memberID, String oldpassword, String newpassword){
-        Member targetMemeber = validateMemberService.validateMember(memberID);
-        if(!bCryptPasswordEncoder.matches(oldpassword, targetMemeber.getPassword())){
+    public void updatePassword(Member targetMember, String oldpassword, String newpassword){
+        if(!bCryptPasswordEncoder.matches(oldpassword, targetMember.getPassword())){
             throw new MemberResponseException(MemberExceptionType.WRONG_PASSWORD);}
         String encPassword = bCryptPasswordEncoder.encode(newpassword);
-        targetMemeber.updatePassword(encPassword);
-        memberRepository.save(targetMemeber);
+        targetMember.updatePassword(encPassword);
+        memberRepository.save(targetMember);
     }
 
     // phoneNumber 업데이트
     @Transactional
     @Override
-    public void updatePhoneNumber(Long memberID, String newPhoneNumber){
-        Member targetMemeber = validateMemberService.validateMember(memberID);
-        targetMemeber.updatePhoneNumber(newPhoneNumber);
-        memberRepository.save(targetMemeber);
+    public void updatePhoneNumber(Member targetMember, String newPhoneNumber){
+        targetMember.updatePhoneNumber(newPhoneNumber);
+        memberRepository.save(targetMember);
     }
+
+    // patch로 마이페이지 개인정보 수정
+    // TODO: 아직 patch null 처리랑 오류 잡기 안함
+    @Transactional
+    @Override
+    public ResponseEntity<?> patchMypage(Long memberID,
+                            MemberDTO.NameUpdate nameDTO,
+                            MemberDTO.EmailUpdate emailDTO,
+                            MemberDTO.PasswordUpdate passwordDTO,
+                            MemberDTO.PhoneNumberUpdate phoneNumberDTO){
+        Member targetMemeber = validateMemberService.validateMember(memberID);
+        updateEmail(targetMemeber, emailDTO.getNewEmail());
+        updateName(targetMemeber, nameDTO.getNewName());
+        updatePassword(targetMemeber, passwordDTO.getOldPassword(), passwordDTO.getNewPassword());
+        updatePhoneNumber(targetMemeber, phoneNumberDTO.getPhoneNumber());
+        memberRepository.save(targetMemeber);
+        return ResponseEntity.ok("마이페이지 변경이 완료되었습니다");
+    }
+
 
     // 전화번호 인증
     public String sendSms(String phoneNumber){
@@ -158,7 +185,7 @@ public class MemberServiceImpl implements MemberService{
 
         if(smsVerificationService.verifyNumber(phoneNumber, code)){
             Member targetMember = memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(()-> new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER));
-            PhoneVerificationResponseDTO responseDTO = new PhoneVerificationResponseDTO(targetMember.getEmail());
+            PhoneResponseDTO responseDTO = new PhoneResponseDTO(targetMember.getEmail());
             return ResponseEntity.ok(responseDTO);
         } else{
             throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);

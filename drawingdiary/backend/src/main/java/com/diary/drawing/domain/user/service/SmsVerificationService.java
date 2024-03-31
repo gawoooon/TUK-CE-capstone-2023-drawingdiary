@@ -16,8 +16,8 @@ public class SmsVerificationService {
     private static final String VERIFICATION_CODE_KEY_PREFIX = "phone-verification-code:";
 
     // 코드 저장하는 시간 10분
-    public void saveVerificationCode(String email, String originVerificationCode){
-        String key = VERIFICATION_CODE_KEY_PREFIX + email;
+    public void saveVerificationCode(String phoneNumber, String originVerificationCode){
+        String key = VERIFICATION_CODE_KEY_PREFIX + phoneNumber;
         redisTemplate.opsForValue().set(key, originVerificationCode, 10, TimeUnit.MINUTES);
     }
 
