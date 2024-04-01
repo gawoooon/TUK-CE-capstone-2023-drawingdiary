@@ -237,13 +237,15 @@ const RenderCells = ({
 function Calendar2({ onDateClick: parentOnDateClick }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const { currentMonth, setCurrentMonth } = useCalendar();
+  const { setMonth, currentMonth, setCurrentMonth } = useCalendar();
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
+    setMonth(format((currentMonth), "yyyy"));
   };
   const nextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
+    setMonth(format(currentMonth, "MM"));
   };
 
   const onDateClick = (day) => {

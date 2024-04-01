@@ -186,7 +186,7 @@ function CalendarPage() {
   const { memberID } = useAuth();
   const accessToken = localStorage.getItem('accessToken');
   
-  const { year, month } = useCalendar();
+  const { year, setYear, month, setMonth } = useCalendar();
   const [data, setData] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [text, setText] = useState("");
@@ -242,7 +242,7 @@ function CalendarPage() {
     const dateString = `${formattedDate.getFullYear()}-${pad(
       formattedDate.getMonth() + 1
     )}-${pad(formattedDate.getDate())}`;
-
+    
     try {
       const response = await axios.get(`http://localhost:8080/api/diary/${dateString}`, {
         headers: {
@@ -269,7 +269,7 @@ function CalendarPage() {
   };
 
   const handleRemove = async () => {
-
+    
     try {
       await axios.delete(`http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`, {
         headers: {
@@ -288,13 +288,13 @@ function CalendarPage() {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         }
-      })
+      });
       setData(response.data);
     } catch (error) {
       console.log("error: ", error);
     };
   };
-
+  
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
@@ -319,11 +319,14 @@ function CalendarPage() {
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
 
-    if(!checkCalendar) {
+    if(selectedDate) {
+      setYear(format(selectedDate, "yyyy"));
+      setMonth(format(selectedDate, "MM"));
       fetchCalendar();
-      setCheckCalendar(!checkCalendar);
+    } else {
+      fetchCalendar();
     }
-
+    
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
         setIsSelectedYear(format(selectedDate, "yyyy"));
@@ -345,7 +348,7 @@ function CalendarPage() {
     };
 
     fetchDataAndUpdateState();
-  }, [selectedDate, handleRemove, checkCalendar]);
+  }, [selectedDate, checkCalendar, year, month]);
 
   return (
     <Background>

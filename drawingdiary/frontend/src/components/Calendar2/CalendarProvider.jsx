@@ -18,7 +18,7 @@ export const CalendarProvider = ({ children }) => {
 
   }, [currentMonth]);
 
-  const value = { year, month, currentMonth, setCurrentMonth };
+  const value = { year, setYear, month, setMonth, currentMonth, setCurrentMonth };
 
   return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 };
