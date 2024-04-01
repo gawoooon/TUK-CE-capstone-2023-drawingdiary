@@ -153,7 +153,7 @@ function ShowDiaryPage() {
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState(diaryData.diaryText);
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(false);
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(true);
 
   // 날짜, 날씨
   const [weatherState, setWeatherState] = useState("Unknown");
@@ -191,8 +191,6 @@ function ShowDiaryPage() {
     setPositiveValue(diaryData.sentiment.positive);
     setNegativeValue(diaryData.sentiment.negative);
     setNeutralValue(diaryData.sentiment.neutral);
-
-    console.log("sentiment: ", diaryData.sentiment);
   };
 
   // 앨범 상태를 업데이트하는 함수
@@ -297,7 +295,6 @@ function ShowDiaryPage() {
     setTimeout(() => {
       setShowCreate(false);
     }, 5000);
-
 
     if (parentSelectedButtonStyle) {
       

@@ -191,7 +191,8 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-      })
+      });
+      
       setIsLoading(!isRecommenderLoading);
 
       const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {

@@ -75,6 +75,14 @@ const CategoryName = styled.div`
     margin-left: 130px;
 `;
 
+const Divider = styled.hr`
+    width: 100%;
+    border: none;
+    height: 1px;
+    background-color: lightgray;
+    margin-top: 10px;
+`;
+
 const AlbumBox = ({ onErrorMessage }) => {
     const {  removeCategory } = useCategory();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,6 +95,7 @@ const AlbumBox = ({ onErrorMessage }) => {
     const { memberID } = useAuth();
     const accessToken = localStorage.getItem('accessToken');
     
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchAlbum = async () => {
         try {
             const response = await axios.get('http://localhost:8080/api/album/all', {
@@ -212,7 +221,8 @@ const AlbumBox = ({ onErrorMessage }) => {
                                 앨범에 일기를 추가하려면 먼저 작성하세요.
                             </div>
                         )}
-                    </AlbumContainer>
+                        </AlbumContainer>
+                    <Divider/>
                 </div>
             ))}
         </div>

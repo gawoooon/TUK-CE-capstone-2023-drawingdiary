@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { format, addMonths, subMonths } from "date-fns";
-import { MdNavigateNext } from "react-icons/md";
-import { GrFormPrevious } from "react-icons/gr";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
@@ -53,7 +52,7 @@ const HeaderEndBox = styled.div`
   width: 33%;
   height: 100%;
   color: #b7b7b7;
-  font-size: 40px;
+  font-size: 35px;
   font-weight: 900;
   cursor: pointer;
 `;
@@ -157,7 +156,7 @@ const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
       </HeaderMiddleBox>
       <HeaderEndBox>
         <GrFormPrevious onClick={prevMonth} />
-        <MdNavigateNext onClick={nextMonth} />
+        <GrFormNext onClick={nextMonth} />
       </HeaderEndBox>
     </HeaderBox>
   );

@@ -65,10 +65,11 @@ const RightBox = styled.div`
 `;
 
 const PrevBtn = styled.button`
+  margin-top: 15px;
   display: ${({ prevBtnBox }) => (prevBtnBox ? "display" : "none")};
-  width: 30px;
-  height: 30px;
-  font-size: 50px;
+  width: 35px;
+  height: 35px;
+  font-size: 35px;
   color: #090071;
   border: none;
   outline: none;
@@ -160,7 +161,7 @@ const BottomBox = styled.div`
   border-radius: 30px;
   padding: 8px;
   line-height: 1.3;
-  margin-top: 20px;
+  margin-top: 40px;
 `;
 
 const Divider = styled.hr`
@@ -168,7 +169,7 @@ const Divider = styled.hr`
   border: none;
   height: 1px;
   background-color: lightgray;
-  margin-top: 40px;
+  margin-top: 10px;
 `;
 
 function CalendarPage() {
@@ -348,7 +349,7 @@ function CalendarPage() {
     };
 
     fetchDataAndUpdateState();
-  }, [selectedDate, checkCalendar, year, month]);
+  }, [selectedDate, checkCalendar, year, month, handleRemove]);
 
   return (
     <Background>
@@ -378,12 +379,12 @@ function CalendarPage() {
                     <TopBox>
                       <RemoveBtn onClick={handleRemove}>삭제</RemoveBtn>
                       <DateBox>
-                        {isSelectedMonth}월{isSelectedDay}일
+                        {isSelectedMonth}월 {isSelectedDay}일
                       </DateBox>
                       <EditBtn onClick={handleEdit}>편집</EditBtn>
                     </TopBox>
-                    <TrueComponentMidBox><ImageBox src={imageUrl} /></TrueComponentMidBox>
                     <Divider />
+                    <TrueComponentMidBox><ImageBox src={imageUrl} /></TrueComponentMidBox>
                     <BottomBox>{text}</BottomBox>
                   </TrueComponentBox>
 
