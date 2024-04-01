@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { isSameDay, setDate } from "date-fns";
 import { format } from "date-fns";
@@ -198,6 +198,38 @@ function CalendarPage() {
   const [isSelectedMonth, setIsSelectedMonth] = useState("");
   const [isSelectedDay, setIsSelectedDay] = useState("");
 
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userTheme, setUserTheme] = useState("");
+
+  const fetchUserName = useCallback(async () => {
+    if (memberID) {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await axios.get(
+          "http://localhost:8080/api/get-member",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        setUserName(response.data.name);
+        setUserEmail(response.data.email);
+        setUserTheme(response.data.theme);
+
+        localStorage.setItem("selectedColor", response.data.theme);
+      } catch (error) {
+        console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
+      }
+    }
+  }, [memberID]);
+
+  useEffect(() => {
+    fetchUserName();
+  }, [memberID, fetchUserName]);
+
   const handleDateClick = async (day) => {
     if (isSameDay(day, selectedDate)) {
       setSelectedDate(null);
@@ -365,7 +397,7 @@ function CalendarPage() {
     <Background>
       <Body>
         <LeftBox leftBoxWidth={leftBoxWidth}>
-          <SideBar isOpen={isOpen} />
+          <SideBar isOpen={isOpen} userName={userName} userEmail={userEmail} />
         </LeftBox>
         <CalendarBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>

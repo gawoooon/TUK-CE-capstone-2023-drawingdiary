@@ -13,7 +13,6 @@ const BackgroundColor = styled.body`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* background: linear-gradient(45deg, rgba(255, 184, 208, 0.58), rgba(106, 156, 253, 0.4)); */
   background: ${(props) => getColor(props.backgroundColor)};
   width: 100%;
   height: 100vh;
@@ -33,9 +32,9 @@ const BackgroundBox = styled.div`
 const getColor = (color) => {
   switch (color) {
     case 1:
-      return "linear-gradient(45deg,rgb(106, 156, 253), rgb(174, 229, 255))";
+      return " linear-gradient(45deg, rgb(255, 184, 208), rgba(106, 156, 253, 0.7))";
     case 2:
-      return "linear-gradient(45deg, rgb(255, 184, 208), rgba(106, 156, 253, 0.7))";
+      return "linear-gradient(45deg,rgb(106, 156, 253), rgb(174, 229, 255))";
     case 3:
       return "linear-gradient(45deg, rgb(255, 227, 224), rgb(255, 186, 209))";
     case 4:
@@ -48,10 +47,14 @@ const getColor = (color) => {
 };
 
 function Background({ children, backgroundColor }) {
+  const storedColor = parseInt(localStorage.getItem("selectedColor"));
+
   return (
     <>
       <GlobalStyle />
-      <BackgroundColor backgroundColor={backgroundColor}>
+      <BackgroundColor
+        backgroundColor={backgroundColor ? backgroundColor : storedColor}
+      >
         <BackgroundBox>{children}</BackgroundBox>
       </BackgroundColor>
     </>

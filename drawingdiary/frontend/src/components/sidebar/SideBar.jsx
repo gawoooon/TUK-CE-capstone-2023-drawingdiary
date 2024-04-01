@@ -1,8 +1,5 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "../../auth/context/AuthContext";
-import axios from "axios";
 
 const SideBarStyle = styled.div`
   display: flex;
@@ -42,7 +39,7 @@ const MenuItem = styled(Link)`
   color: #333;
   text-decoration: none;
   font-size: 15px;
-  
+
   img {
     width: 20px;
     height: 20px;
@@ -56,8 +53,8 @@ const MenuItem = styled(Link)`
 `;
 
 const MenuItemText = styled.span`
-  opacity: ${({ isOpen }) => isOpen ? 1 : 0};
-  visibility: ${({ isOpen }) => isOpen ? 'visible' : 'hidden'};
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
   transition: opacity 700ms ease-out;
   margin-left: 16px;
   padding-top: 6px;
@@ -88,36 +85,12 @@ const ProfileEmail = styled.div`
   font-size: 13px; // 프로필 이름의 폰트 크기 설정
 `;
 
+const SideBar = ({ isOpen, userName, userEmail }) => {
+  const handleLogout = () => {
+    localStorage.removeItem("selectedColor");
 
-const SideBar = ({ isOpen }) => {
-
-  const { memberID } = useAuth();
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-
-  const fetchUserName = useCallback(async () => {
-    if (memberID) {
-      try {
-        const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.get('http://localhost:8080/api/get-member', {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        });
-
-        setUserName(response.data.name);
-        setUserEmail(response.data.email);
-
-      } catch (error) {
-        console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
-      }
-    }
-  }, [memberID]);
-
-  useEffect(() => {
-    fetchUserName();
-  }, [memberID, fetchUserName]);
-
+    // 로그아웃 기능 추가
+  };
 
   return (
     <SideBarStyle>
@@ -143,8 +116,10 @@ const SideBar = ({ isOpen }) => {
           <MenuItemText isOpen={isOpen}>마이페이지</MenuItemText>
         </MenuItem>
         <MenuItem to="/" isOpen={isOpen}>
-          <img src="sign-out.png" alt="Log out"/>
-          <MenuItemText isOpen={isOpen}>로그아웃</MenuItemText>
+          <img src="sign-out.png" alt="Log out" />
+          <MenuItemText isOpen={isOpen} onClick={handleLogout}>
+            로그아웃
+          </MenuItemText>
         </MenuItem>
       </SideBarMenu>
 

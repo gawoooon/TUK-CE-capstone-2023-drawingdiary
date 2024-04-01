@@ -52,11 +52,15 @@ const ThemeColor = styled.div`
 `;
 
 function Theme({ onColorChange }) {
-  const [selectedNumber, setSelectedNumber] = useState(null);
+  const [selectedNumber, setSelectedNumber] = useState(
+    localStorage.getItem("selectedColor")
+  );
+
   // body 배경색 변경 함수
   const handleColorChange = (color) => {
     onColorChange(color);
     setSelectedNumber(color);
+    console.log(selectedNumber);
   };
 
   // 저장 버튼 클릭 시
@@ -77,6 +81,7 @@ function Theme({ onColorChange }) {
           }
         );
         if (responseTheme.status === 200) {
+          localStorage.setItem("selectedColor", selectedNumber);
           console.log("테마가 업데이트되었습니다.");
           alert("테마가 업데이트되었습니다!");
         } else {
@@ -105,11 +110,11 @@ function Theme({ onColorChange }) {
 
       <ThemeColorBox>
         <ThemeColor
-          background="linear-gradient(45deg,rgb(106, 156, 253), rgb(174, 229, 255))"
+          background="linear-gradient(45deg, rgb(255, 184, 208), rgba(106, 156, 253, 0.7)) "
           onClick={() => handleColorChange(1)}
         ></ThemeColor>
         <ThemeColor
-          background="linear-gradient(45deg, rgb(255, 184, 208), rgba(106, 156, 253, 0.7))"
+          background="linear-gradient(45deg,rgb(106, 156, 253), rgb(174, 229, 255))"
           onClick={() => handleColorChange(2)}
         ></ThemeColor>
         <ThemeColor

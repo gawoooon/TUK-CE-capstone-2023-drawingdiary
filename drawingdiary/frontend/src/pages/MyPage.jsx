@@ -47,7 +47,7 @@ const MyPageBottomBox = styled.div`
 `;
 
 function MyPage() {
-  const [backgroundColor, setBackgroundColor] = React.useState(2);
+  const [backgroundColor, setBackgroundColor] = useState("");
   const [isPopupVisible, setPopupVisible] = useState(false); // 팝업 창의 가시성을 관리하는 상태
 
   // 팝업 창을 토글하는 함수
