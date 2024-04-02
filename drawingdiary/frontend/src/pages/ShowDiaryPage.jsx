@@ -153,7 +153,7 @@ function ShowDiaryPage() {
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState(diaryData.diaryText);
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(false);
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(true);
 
   // 날짜, 날씨
   const [weatherState, setWeatherState] = useState("Unknown");
@@ -175,7 +175,6 @@ function ShowDiaryPage() {
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
-  const [sentimentResult, setSentimentResult] = useState('');
 
   const [newDiaryText, setNewDiaryText] = useState('');
   const [commentText, setCommentText] = useState('');
@@ -296,7 +295,6 @@ function ShowDiaryPage() {
     setTimeout(() => {
       setShowCreate(false);
     }, 5000);
-
 
     if (parentSelectedButtonStyle) {
       

@@ -1,5 +1,6 @@
 package com.diary.drawing.domain.diary.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.diary.drawing.domain.diary.domain.Image;
 import com.diary.drawing.domain.diary.exception.DiaryExceptionType;
 import com.diary.drawing.domain.diary.exception.DiaryResponseException;
 import com.diary.drawing.domain.diary.repository.ImageRepository;
+import com.diary.drawing.global.s3.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class ImageService {
     private final ImageRepository imageRepository;
+    private final S3Uploader s3Uploader;
 
 
     /* 이미지 생성한것 저장 */
@@ -55,7 +58,7 @@ public class ImageService {
 
     }
 
-    public String testSaveImageFromUrl(String imageUrl, LocalDate date){
-        return "wow";
+    public String saveImageFromUrl(String imageUrl, LocalDate date) throws IOException{
+        return s3Uploader.uploadImage(imageUrl, date, "d");
     }
 }

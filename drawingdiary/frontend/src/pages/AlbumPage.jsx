@@ -8,8 +8,8 @@ import AddCategory from "../components/album/AddCategory";
 import { CategoryProvider } from "../components/album/CategoryList";
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 95%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -28,7 +28,7 @@ const Container = styled.div`
 const AddAlbumContainer = styled.div`
   position: relative;
   margin-top: 20px;
-  margin-right: 70px;
+  margin-right: 30px;
   display: flex;
   justify-content: flex-end;
 `;

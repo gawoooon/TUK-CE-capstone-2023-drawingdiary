@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { isSameDay, setDate } from "date-fns";
+import { isSameDay } from "date-fns";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
@@ -65,10 +65,11 @@ const RightBox = styled.div`
 `;
 
 const PrevBtn = styled.button`
+  margin-top: 15px;
   display: ${({ prevBtnBox }) => (prevBtnBox ? "display" : "none")};
-  width: 30px;
-  height: 30px;
-  font-size: 50px;
+  width: 35px;
+  height: 35px;
+  font-size: 35px;
   color: #090071;
   border: none;
   outline: none;
@@ -160,7 +161,7 @@ const BottomBox = styled.div`
   border-radius: 30px;
   padding: 8px;
   line-height: 1.3;
-  margin-top: 20px;
+  margin-top: 40px;
 `;
 
 const Divider = styled.hr`
@@ -168,7 +169,7 @@ const Divider = styled.hr`
   border: none;
   height: 1px;
   background-color: lightgray;
-  margin-top: 40px;
+  margin-top: 10px;
 `;
 
 function CalendarPage() {
@@ -186,7 +187,7 @@ function CalendarPage() {
   const { memberID } = useAuth();
   const accessToken = localStorage.getItem('accessToken');
   
-  const { year, month } = useCalendar();
+  const { year, setYear, month, setMonth } = useCalendar();
   const [data, setData] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [text, setText] = useState("");
@@ -194,6 +195,8 @@ function CalendarPage() {
   const [isSelectedYear, setIsSelectedYear] = useState("");
   const [isSelectedMonth, setIsSelectedMonth] = useState("");
   const [isSelectedDay, setIsSelectedDay] = useState("");
+
+  const [checkCalendar, setCheckCalendar] = useState(false);
 
 
   const handleDateClick = async (day) => {
@@ -240,7 +243,7 @@ function CalendarPage() {
     const dateString = `${formattedDate.getFullYear()}-${pad(
       formattedDate.getMonth() + 1
     )}-${pad(formattedDate.getDate())}`;
-
+    
     try {
       const response = await axios.get(`http://localhost:8080/api/diary/${dateString}`, {
         headers: {
@@ -258,7 +261,7 @@ function CalendarPage() {
       const style = dataArray.styleName;
       const sentiment = dataArray.sentiment;
     
-      navigate(`/showDiary/${memberID}/${formattedDate}`, {
+      navigate(`/showDiary/${memberID}/${dateString}`, {
         state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment } },
       });
     } catch (error) {
@@ -267,7 +270,7 @@ function CalendarPage() {
   };
 
   const handleRemove = async () => {
-
+    
     try {
       await axios.delete(`http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`, {
         headers: {
@@ -286,13 +289,13 @@ function CalendarPage() {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         }
-      })
+      });
       setData(response.data);
     } catch (error) {
       console.log("error: ", error);
     };
   };
-
+  
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
@@ -316,8 +319,15 @@ function CalendarPage() {
 
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
-    fetchCalendar();
 
+    if(selectedDate) {
+      setYear(format(selectedDate, "yyyy"));
+      setMonth(format(selectedDate, "MM"));
+      fetchCalendar();
+    } else {
+      fetchCalendar();
+    }
+    
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
         setIsSelectedYear(format(selectedDate, "yyyy"));
@@ -339,7 +349,7 @@ function CalendarPage() {
     };
 
     fetchDataAndUpdateState();
-  }, [selectedDate, handleRemove]);
+  }, [selectedDate, checkCalendar, year, month, handleRemove]);
 
   return (
     <Background>
@@ -369,12 +379,12 @@ function CalendarPage() {
                     <TopBox>
                       <RemoveBtn onClick={handleRemove}>삭제</RemoveBtn>
                       <DateBox>
-                        {isSelectedMonth}월{isSelectedDay}일
+                        {isSelectedMonth}월 {isSelectedDay}일
                       </DateBox>
                       <EditBtn onClick={handleEdit}>편집</EditBtn>
                     </TopBox>
-                    <TrueComponentMidBox><ImageBox src={imageUrl} /></TrueComponentMidBox>
                     <Divider />
+                    <TrueComponentMidBox><ImageBox src={imageUrl} /></TrueComponentMidBox>
                     <BottomBox>{text}</BottomBox>
                   </TrueComponentBox>
 
