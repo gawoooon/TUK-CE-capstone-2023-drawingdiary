@@ -52,7 +52,7 @@ public class DiaryController {
      */
     @Operation(summary = "최종 일기 수정")
     @PutMapping("api/diary/{date}")
-    public ResponseEntity<?> updateDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> updateDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException{
         return generateDiaryService.updateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
     }
 

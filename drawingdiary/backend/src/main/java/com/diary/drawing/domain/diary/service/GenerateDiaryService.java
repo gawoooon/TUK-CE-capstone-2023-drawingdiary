@@ -65,7 +65,7 @@ public class GenerateDiaryService {
         Album album = validateAlbumService.validateAlbum(finalDiaryRequestDTO.getAlbumID());
         // 3.2 이미지 스타일 가져오기
         ImageStyle imageStyle = imageStyleService.validateStyle(finalDiaryRequestDTO.getStyleName());
-        String imageUrl = s3Uploader.uploadImage(finalDiaryRequestDTO.getImageFile(), finalDiaryRequestDTO.getDate());
+        String imageUrl = s3Uploader.uploadImage(finalDiaryRequestDTO.getImageFile(), finalDiaryRequestDTO.getDate(), "d");
 
         Image image = Image.builder()
             .imageFile(imageUrl)
@@ -94,7 +94,7 @@ public class GenerateDiaryService {
     }
 
     @Transactional
-    public ResponseEntity<DiaryResponseDTO> updateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID){
+    public ResponseEntity<DiaryResponseDTO> updateDiary(FinalDiaryRequestDTO finalDiaryRequestDTO, Long memberID) throws IOException{
         // 0. Member validate
         Member member = validateMemberService.validateMember(memberID);
 
@@ -117,9 +117,14 @@ public class GenerateDiaryService {
         // 5. Dㅑary 객체에서 image 받아와서 수정{
         // 5.1 먼저 Album validate
         Album album = validateAlbumService.validateAlbum(finalDiaryRequestDTO.getAlbumID());
+        
         Image image = diary.getImage();
         if(image == null){throw new DiaryResponseException(DiaryExceptionType.NOT_FOUND_IMAGE);}
-        image.update(finalDiaryRequestDTO.getImageFile(), album);
+
+        String imageState = s3Uploader.deleteImage(image.getImageFile());
+        String imageUrl = s3Uploader.uploadImage(finalDiaryRequestDTO.getImageFile(), finalDiaryRequestDTO.getDate(), "d");
+
+        image.update(imageUrl, album);
 
         //6.0 이미지 스타일 가져오기
         ImageStyle imageStyle = imageStyleService.validateStyle(finalDiaryRequestDTO.getStyleName());
