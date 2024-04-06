@@ -1,6 +1,7 @@
 package com.diary.drawing.domain.user.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Random;
 
@@ -17,10 +18,13 @@ import com.diary.drawing.domain.user.dto.PhoneResponseDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
+import com.diary.drawing.global.s3.S3Uploader;
 import com.diary.drawing.global.util.SmsUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -32,6 +36,7 @@ public class MemberServiceImpl implements MemberService{
     private final ValidateMemberService validateMemberService;
     private final SmsUtil smsUtil;
     private final SmsVerificationService smsVerificationService;
+    private final S3Uploader s3Uploader;
 
     // 회원 가입 (예외처리 나중에)
     @Override
@@ -92,32 +97,41 @@ public class MemberServiceImpl implements MemberService{
         return getMemberDTO;
     }
 
-    // // 프로필 사진 변경
-    // @Transactional
-    // @Override
-    // public void updateProfileImage(Long memberID, String profileimage){
-    //     Member targetMemeber = validateMemberService.validateMember(memberID);
-
-    // }
-
-    
-    // nickname 업데이트
-    @Transactional
     @Override
-    public void updateName(Member targetMember, String newname){
-        targetMember.updateName(newname);
-        memberRepository.save(targetMember);
+    public boolean validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO){
+        Member targetMember = validateMemberService.validateMember(memberID);
+        if(!bCryptPasswordEncoder.matches(passwordDTO.getOldPassword(), targetMember.getPassword())){
+            throw new MemberResponseException(MemberExceptionType.WRONG_PASSWORD);
+        }
+        else {return true;}
+
     }
 
-
-    // email 업데이트
+    // 프로필 사진 변경
     @Transactional
     @Override
-    public void updateEmail(Member targetMember, String newemail){
-        targetMember.updateEmail(newemail);
-        memberRepository.save(targetMember);
-    }
+    public void updateProfileImage(Member targetMember, String profileimage) {
 
+        // 0. profileimage = '__NULL__' 이라면 프로필 이미지를 삭제하고 null 값이 된다.
+        if(profileimage == "__NULL__"){
+            String imageState = s3Uploader.deleteImage(targetMember.getProfileImage());
+            targetMember.updateProfileImage(null);
+            return;
+        }
+
+        // 1. 오늘 날짜 가져오기
+        LocalDate today = LocalDate.now();
+
+        // 2. s3 업로드
+        try {
+            String imageUrl = s3Uploader.uploadImage(profileimage, today, "p");
+            // 3. update
+            targetMember.updateProfileImage(imageUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new MemberResponseException(MemberExceptionType.ERROR_UPDATE_PROFILEIMAGE);
+        }
+    }
 
     // password 업데이트
     @Transactional
@@ -130,39 +144,32 @@ public class MemberServiceImpl implements MemberService{
         memberRepository.save(targetMember);
     }
 
-    // phoneNumber 업데이트
-    @Transactional
-    @Override
-    public void updatePhoneNumber(Member targetMember, String newPhoneNumber){
-        targetMember.updatePhoneNumber(newPhoneNumber);
-        memberRepository.save(targetMember);
-    }
 
     // patch로 마이페이지 개인정보 수정
-    // TODO: 아직 patch null 처리랑 오류 잡기 안함
+    // TODO: patch의 null인지 실수로 보내지지 않았는지 구별 불가능
     @Transactional
     @Override
-    public ResponseEntity<?> patchMypage(Long memberID,
-                            MemberDTO.NameUpdate nameDTO,
-                            MemberDTO.EmailUpdate emailDTO,
-                            MemberDTO.PasswordUpdate passwordDTO,
-                            MemberDTO.PhoneNumberUpdate phoneNumberDTO){
-        Member targetMemeber = validateMemberService.validateMember(memberID);
-        updateEmail(targetMemeber, emailDTO.getNewEmail());
-        updateName(targetMemeber, nameDTO.getNewName());
-        updatePassword(targetMemeber, passwordDTO.getOldPassword(), passwordDTO.getNewPassword());
-        updatePhoneNumber(targetMemeber, phoneNumberDTO.getPhoneNumber());
-        memberRepository.save(targetMemeber);
+    public ResponseEntity<?> patchMypage(Long memberID, MemberDTO.MemberUpdate memberDTO){
+        //1. 해당 멤버 객체
+        Member targetMember = validateMemberService.validateMember(memberID);
+
+        if(memberDTO.getNewEmail() != null) targetMember.updateEmail(memberDTO.getNewEmail());
+        if(memberDTO.getNewName() != null) targetMember.updateName(memberDTO.getNewName());
+        if (memberDTO.getNewPassword() != null && memberDTO.getOldPassword() != null) 
+                                    updatePassword(targetMember, memberDTO.getOldPassword(), memberDTO.getNewPassword());
+        if(memberDTO.getNewPhoneNumber() != null) targetMember.updatePhoneNumber(memberDTO.getNewPhoneNumber());
+        if(memberDTO.getNewProfileImage() != null) updateProfileImage(targetMember, memberDTO.getNewProfileImage());
+        memberRepository.save(targetMember);
         return ResponseEntity.ok("마이페이지 변경이 완료되었습니다");
     }
 
 
     // 전화번호 인증
     public String sendSms(String phoneNumber){
-        Member targetMemeber = memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(()->
+        // 1. 전화번호로 member 객체 찾고 나오지 않으면 오류
+        Member targetMember = memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(()->
                 new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER));
         
-        //String receiverEmail = targetMemeber.getEmail();
         String verificationCode = createKey();
         smsUtil.sendOne(phoneNumber, verificationCode);
 

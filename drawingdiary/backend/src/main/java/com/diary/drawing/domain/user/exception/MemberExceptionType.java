@@ -11,6 +11,7 @@ public enum MemberExceptionType implements BaseExceptionType {
     ALREADY_EXIST_EMAIL(600, HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."), // OK -> CONFLICT
     WRONG_PASSWORD(601,HttpStatus.UNAUTHORIZED, "비밀번호가 잘못되었습니다."), // OK -> UNAUTHORIZED
     ERROR_GET_MEMBER(404, HttpStatus.NOT_FOUND, "회원 정보를 받아올 수 없습니다."),
+    ERROR_UPDATE_PROFILEIMAGE(415, HttpStatus.NOT_FOUND, "프로필 이미지 업로드에 실패했습니다."),
     NOT_FOUND_MEMBER(404, HttpStatus.NOT_FOUND, "회원 정보가 없습니다."); // OK -> NOT_FOUND
 
 

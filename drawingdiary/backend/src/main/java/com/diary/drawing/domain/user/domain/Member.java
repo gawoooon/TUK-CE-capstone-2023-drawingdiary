@@ -113,5 +113,8 @@ public class Member {
     }
 
     // 프로필 이미지 수정
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
     
 }

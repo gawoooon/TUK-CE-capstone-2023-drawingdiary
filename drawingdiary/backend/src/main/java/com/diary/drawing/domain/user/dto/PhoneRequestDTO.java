@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
 
 public class PhoneRequestDTO {
 
+    @Jacksonized
     @Getter
     @Builder
     @AllArgsConstructor
@@ -22,8 +24,9 @@ public class PhoneRequestDTO {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class verifyDTO {
-        public String PhoneNumber;
-        public String code;
-    }
+        private String phoneNumber;
+        private String code;
+}
+
 }
 

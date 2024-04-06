@@ -1,5 +1,6 @@
 package com.diary.drawing.domain.user.service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -20,15 +21,11 @@ public interface MemberService {
     public  String getEmailByMemberID(Long memberID);
     public GetMemberDTO getMember(Long memberID);
 
+    public boolean validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO);
+
     public void updatePassword(Member targetMember, String oldpassword, String newpassword);
-    public void updateEmail(Member targetMember, String newemail);
-    public void updatePhoneNumber(Member targetMember, String newPhoneNumber);
-    public void updateName(Member targetMember, String newname);
-    public ResponseEntity<?> patchMypage(Long memberID,
-                            MemberDTO.NameUpdate nameDTO,
-                            MemberDTO.EmailUpdate emailDTO,
-                            MemberDTO.PasswordUpdate passwordDTO,
-                            MemberDTO.PhoneNumberUpdate phoneNumberDTO);
+    public void updateProfileImage(Member targetMember, String profileimage) throws IOException;
+    public ResponseEntity<?> patchMypage(Long memberID, MemberDTO.MemberUpdate memberDTO);
 
     public String sendSms(String phoneNumber);
 }
