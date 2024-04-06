@@ -130,7 +130,7 @@ public class MemberController {
      *  @Param
      *
      */
-    @Operation(summary = "마이페이지 업데이트")
+    @Operation(summary = "마이페이지 업데이트", description = " 업데이트 하지 않는 요소는 null 넣거나 아예 body에 포함하지 않음. / profileimage 지우고 싶다면  __NULL__ 입력")
     @PatchMapping("/mypage")
     public ResponseEntity<?> verify(@Valid @RequestBody MemberDTO.MemberUpdate memberDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
         return memberService.patchMypage(principalDetails.getMemberID(), memberDTO);
