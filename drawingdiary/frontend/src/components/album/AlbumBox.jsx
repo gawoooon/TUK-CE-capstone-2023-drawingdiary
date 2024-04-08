@@ -48,7 +48,7 @@ const PictureContainer = styled.div`
     align-items: center;
     background-color: transparent;
     
-    :hover {
+    &:hover {
         img {
             transform: scale(1.05);
         }
