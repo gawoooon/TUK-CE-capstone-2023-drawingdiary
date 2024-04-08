@@ -33,11 +33,13 @@ const ProfileEmail = styled.div`
 `;
 
 function Profile() {
+  const setEmail = localStorage.getItem("setEmail");
+  const setName = localStorage.getItem("setName");
   return (
     <ProfileBox>
       <ProfileImg />
-      <ProfileName>NICKNAME</ProfileName>
-      <ProfileEmail>00000@gmail.com</ProfileEmail>
+      <ProfileName>{setName}</ProfileName>
+      <ProfileEmail>{setEmail}</ProfileEmail>
     </ProfileBox>
   );
 }

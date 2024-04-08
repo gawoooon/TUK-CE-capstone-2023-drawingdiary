@@ -77,6 +77,9 @@ const InfoProfileEmail = styled.div`
 `;
 
 function Information({ onPopupToggle }) {
+  const setEmail = localStorage.getItem("setEmail");
+  const setName = localStorage.getItem("setName");
+  const setBirth = localStorage.getItem("setBirth");
   return (
     <InfoBox>
       <InfoTop>
@@ -87,8 +90,8 @@ function Information({ onPopupToggle }) {
         <InfoProfileBox>
           <InfoProfileImg></InfoProfileImg>
           <InfoProfileNameEmailBox>
-            <InfoProfileName>Name</InfoProfileName>
-            <InfoProfileEmail>0000@gmail.com</InfoProfileEmail>
+            <InfoProfileName>{setName}</InfoProfileName>
+            <InfoProfileEmail>{setEmail}</InfoProfileEmail>
           </InfoProfileNameEmailBox>
         </InfoProfileBox>
         <Line
@@ -96,8 +99,8 @@ function Information({ onPopupToggle }) {
           text="010-0000-0000"
           hasBorder={true}
         />
-        <Line icon={MdEmail} text="000000@gmail.com" hasBorder={true} />
-        <Line icon={FaBirthdayCake} text="2002/12/12" hasBorder={false} />
+        <Line icon={MdEmail} text={setEmail} hasBorder={true} />
+        <Line icon={FaBirthdayCake} text={setBirth} hasBorder={false} />
       </InfoBottom>
     </InfoBox>
   );

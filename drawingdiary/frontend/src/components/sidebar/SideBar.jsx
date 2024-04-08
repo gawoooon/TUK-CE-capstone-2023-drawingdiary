@@ -88,6 +88,9 @@ const ProfileEmail = styled.div`
 const SideBar = ({ isOpen, userName, userEmail }) => {
   const handleLogout = () => {
     localStorage.removeItem("selectedColor");
+    localStorage.removeItem("setName");
+    localStorage.removeItem("setEmail");
+    localStorage.removeItem("setBirth");
 
     // 로그아웃 기능 추가
   };

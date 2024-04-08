@@ -200,7 +200,7 @@ function CalendarPage() {
 
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [userTheme, setUserTheme] = useState("");
+  const [userBirth, setUserBirth] = useState("");
 
   const fetchUserName = useCallback(async () => {
     if (memberID) {
@@ -217,8 +217,10 @@ function CalendarPage() {
 
         setUserName(response.data.name);
         setUserEmail(response.data.email);
-        setUserTheme(response.data.theme);
 
+        localStorage.setItem("setName", response.data.name);
+        localStorage.setItem("setEmail", response.data.email);
+        localStorage.setItem("setBirth", response.data.birth);
         localStorage.setItem("selectedColor", response.data.theme);
       } catch (error) {
         console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
@@ -397,7 +399,12 @@ function CalendarPage() {
     <Background>
       <Body>
         <LeftBox leftBoxWidth={leftBoxWidth}>
-          <SideBar isOpen={isOpen} userName={userName} userEmail={userEmail} />
+          <SideBar
+            isOpen={isOpen}
+            userBirth={userBirth}
+            userName={userName}
+            userEmail={userEmail}
+          />
         </LeftBox>
         <CalendarBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>

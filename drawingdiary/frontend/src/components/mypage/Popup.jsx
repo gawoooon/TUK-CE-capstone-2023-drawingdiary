@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { useState } from "react"; // useState 추가
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
 import PopupLine from "./PopupLine";
@@ -100,7 +100,7 @@ const ProfileTop = styled.div`
   width: 100%;
   height: 17%;
   background-color: white;
-  border-bottom: 2px solid rgb(144, 144, 144);
+  border-bottom: 2px solid rgba(106, 156, 253, 0.4);
   margin-bottom: 20px;
 `;
 
@@ -115,9 +115,9 @@ const ProfileTopBody = styled.div`
 
 const ProfileImgNameBox = styled.div`
   display: flex;
-  align-items: center;
   width: 65%;
   height: 100%;
+  align-items: end;
 `;
 
 const ProfileImg = styled.img`
@@ -126,12 +126,30 @@ const ProfileImg = styled.img`
   border-radius: 50px;
   object-fit: contain;
 `;
-
-const ProfileName = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 20px;
+const ProfileNameBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
   box-sizing: border-box;
+  color: rgb(144, 144, 144);
+  border-bottom: 2px solid rgb(144, 144, 144);
+  width: 150px;
+  height: 45px;
+\
+`;
+
+const ProfileName = styled.input`
+  width: 140px;
+  font-size: 20px;
+  padding: 5px;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  color: #a3a3a3;
+  ::placeholder {
+    color: #a3a3a3;
+  }
 `;
 
 const ProfileImgUploadBox = styled.div`
@@ -165,17 +183,35 @@ const HiddenFileInput = styled.input`
 `;
 
 function Popup({ onClose }) {
+  const [setName, setSetName] = useState("");
   const [profileImage, setProfileImage] = useState(null); // 업로드한 이미지 상태 추가
 
   // 파일 선택 시 이벤트 처리 함수
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      const imageUrl = URL.createObjectURL(selectedFile);
-      setProfileImage(imageUrl);
+      convertToBase64(selectedFile, (base64Image) => {
+        console.log(base64Image); // base64 문자열 출력
+        setProfileImage(base64Image);
+      });
     }
   };
 
+  // 파일을 base64로 변환하는 함수
+  const convertToBase64 = (file, callback) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => callback(reader.result);
+    reader.onerror = (error) => console.error("Error: ", error);
+  };
+
+  // setName을 placeholder로 보내기
+  useEffect(() => {
+    const storedName = localStorage.getItem("setName");
+    if (storedName) {
+      setSetName(storedName);
+    }
+  }, []);
   return (
     <>
       <BackgroundOverlay />
@@ -189,7 +225,12 @@ function Popup({ onClose }) {
             <ProfileTopBody>
               <ProfileImgNameBox>
                 <ProfileImg src={profileImage}></ProfileImg>
-                <ProfileName>NAME</ProfileName>
+                <ProfileNameBox>
+                  <ProfileName
+                    value={setName}
+                    onChange={(e) => setSetName(e.target.value)}
+                  />
+                </ProfileNameBox>
               </ProfileImgNameBox>
               <ProfileImgUploadBox>
                 <ProfileImgUpload>
