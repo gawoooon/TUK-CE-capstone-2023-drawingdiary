@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useAuth } from '../../auth/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export const CategoryContext = React.createContext();
 
@@ -8,6 +9,8 @@ function useCategoryList (){
     const [categoryList, setCategoryList] = useState([]);
     const { memberID } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
     const accessToken = localStorage.getItem('accessToken');
+
+    const navigate = useNavigate();
 
     const fetchCategoryList = useCallback(async () => {
         if(memberID) {// 로그인 상태 확인
@@ -18,7 +21,6 @@ function useCategoryList (){
                     }
                 });
                 const fetchedCategoryList = response.data;
-                console.log("fetchedCategoryList: ", fetchedCategoryList);
                 setCategoryList(fetchedCategoryList);
             } catch (error) {
                 console.error("카테고리 리스트를 불러오는 중 에러 발생: ", error);
@@ -42,8 +44,7 @@ function useCategoryList (){
                         'Authorization': `Bearer ${accessToken}`
                     }
                 });
-                // 성공적으로 카테고리가 추가되면 리스트를 다시 불러옴
-                fetchCategoryList();
+                window.location.replace('/album');
 
             } catch (error) {
                 console.log("카테고리 추가 중 에러 발생: ", error);
@@ -62,8 +63,7 @@ function useCategoryList (){
                         'Authorization': `Bearer ${accessToken}`
                     }
                 });
-                // 성공적으로 카테고리 삭제 후 리스트를 다시 불러옴
-                fetchCategoryList();
+                window.location.replace('/album');
             } catch (error) {
                 if (error.response.data.errorCode === 600) {
                     console.log("에러코드: ", error.response.data.errorCode);

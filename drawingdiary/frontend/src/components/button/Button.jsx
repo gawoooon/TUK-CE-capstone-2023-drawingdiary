@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const ButtonContainer = styled.div `
@@ -11,8 +11,8 @@ const ButtonStyle = styled.button`
     height: 50px;
     width: 180px;
     margin-bottom: 30px;
-    background-color: rgba(106, 156, 253, 0.3);
-    border-radius: 20px;
+    background-color: rgba(106, 156, 253, 0.5);
+    border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border: none;
     cursor: pointer;

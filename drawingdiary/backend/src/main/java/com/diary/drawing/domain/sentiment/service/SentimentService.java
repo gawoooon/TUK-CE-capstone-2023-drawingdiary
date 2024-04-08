@@ -23,7 +23,7 @@ public class SentimentService {
     @Value("${naver.api.key.id}")
     private String apiKeyId;
 
-    @Value("${naver.api.key}")
+    @Value("${naver.api.key.secret}")
     private String apiKey;
 
     public Sentiment validatSentiment(Long sentimentID) {

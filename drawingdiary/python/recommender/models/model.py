@@ -14,7 +14,7 @@ def predict_user_style(age, gender):
     data = pd.read_csv(file_path)
 
     # 나이 범위 초기화, 필요한 스타일 수 초기화
-    age_range = 1
+    age_range = 2
     required_styles_count = 5
 
     # 예측된 스타일을 저장할 집합 초기화

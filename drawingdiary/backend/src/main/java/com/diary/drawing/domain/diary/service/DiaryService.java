@@ -27,6 +27,7 @@ import com.diary.drawing.domain.sentiment.repository.SentimentRepository;
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.repository.MemberRepository;
 import com.diary.drawing.domain.user.service.ValidateMemberService;
+import com.diary.drawing.global.s3.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,7 @@ public class DiaryService {
     private final ImageStyleRepository imageStyleRepository;
     private final ValidateDiaryService validateDiaryService;
     private final ValidateMemberService validateMemberService;
+    private final S3Uploader s3Uploader;
 
 
     /* Date로 내용조회 */
@@ -84,6 +86,8 @@ public class DiaryService {
     }
 
     @SuppressWarnings("null") //TODO: 임시
+
+    /* 다이어리 삭제 */
     @Transactional
     public ResponseEntity<?> delete(LocalDate date, Long memberID){
         Member member = validateMemberService.validateMember(memberID);
@@ -91,6 +95,9 @@ public class DiaryService {
 
         diaryRepository.delete(diary);
         sentimentRepository.delete(diary.getSentiment());
+
+        // 이미지 삭제
+        String imageState = s3Uploader.deleteImage(diary.getImage().getImageFile());
         imageRepository.delete(diary.getImage());
         commentRepository.delete(diary.getComment());
 

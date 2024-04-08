@@ -35,6 +35,13 @@ dependencies {
     testImplementation 'io.projectreactor:reactor-test'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:3.2.2'
 
+    // s3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation "com.amazonaws:aws-java-sdk-s3:1.12.395"
+
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
     //스프링 시큐리티
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
@@ -66,6 +73,9 @@ dependencies {
 
     // s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // 메세지 인증
+    implementation 'net.nurigo:sdk:4.3.0'
 }
 
 sourceSets {

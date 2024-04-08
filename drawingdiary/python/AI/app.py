@@ -48,17 +48,17 @@ def save_diary():
             prompt=prompt,
             n=1,
             size="1024x1024",
-            response_format="url",
+            response_format="b64_json",
         )
 
-        # 이미지 url을 클라이언트에게 전송
-        image_url = response.data[0].url
+        # 이미지 base64을 클라이언트에게 전송
+        b64_json = response.data[0].b64_json
 
         response = {
             "message": "Diary saved successfullyyyy",
             "diaryContent": diary_text,
             "image": {
-                "imageUrl": image_url
+                "imageUrl": b64_json
             }
         }   
         return jsonify(response)
