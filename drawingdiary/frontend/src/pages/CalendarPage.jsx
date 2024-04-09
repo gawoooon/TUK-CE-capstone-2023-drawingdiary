@@ -188,8 +188,8 @@ function CalendarPage() {
   const [isOpen, setIsOpen] = useState(true);
 
   const { memberID } = useAuth();
-  const accessToken = localStorage.getItem('accessToken');
-  
+  const accessToken = localStorage.getItem("accessToken");
+
   const { year, setYear, month, setMonth } = useCalendar();
   const [data, setData] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
@@ -277,7 +277,7 @@ function CalendarPage() {
     const dateString = `${formattedDate.getFullYear()}-${pad(
       formattedDate.getMonth() + 1
     )}-${pad(formattedDate.getDate())}`;
-    
+
     try {
       const response = await axios.get(
         `http://localhost:8080/api/diary/${dateString}`,
@@ -297,9 +297,20 @@ function CalendarPage() {
       const comment = dataArray.comment;
       const style = dataArray.styleName;
       const sentiment = dataArray.sentiment;
-    
+
       navigate(`/showDiary/${memberID}/${dateString}`, {
-        state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment } },
+        state: {
+          date: { currentYear, month, day },
+          diaryData: {
+            weather,
+            albumName,
+            diaryText,
+            style,
+            image,
+            comment,
+            sentiment,
+          },
+        },
       });
     } catch (error) {
       console.log("error: ", error);
@@ -307,7 +318,6 @@ function CalendarPage() {
   };
 
   const handleRemove = async () => {
-    
     try {
       await axios.delete(
         `http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`,
@@ -338,7 +348,7 @@ function CalendarPage() {
       console.log("error: ", error);
     }
   };
-  
+
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
@@ -362,15 +372,14 @@ function CalendarPage() {
 
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
-
-    if(selectedDate) {
+    if (selectedDate) {
       setYear(format(selectedDate, "yyyy"));
       setMonth(format(selectedDate, "MM"));
       fetchCalendar();
     } else {
       fetchCalendar();
     }
-    
+
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
         setIsSelectedYear(format(selectedDate, "yyyy"));

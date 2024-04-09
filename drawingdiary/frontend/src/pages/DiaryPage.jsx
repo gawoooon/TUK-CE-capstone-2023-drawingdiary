@@ -321,7 +321,6 @@ function DiaryPage() {
             const imageUrl = responseDate.image?.imageUrl;
             setIsImageLoading(false);
             setNewImageUrl(imageUrl);
-            
           } else {
             console.error("이미지 저장 실패:", responseDiary.status);
             alert("이미지 저장에 실패하였습니다.");
