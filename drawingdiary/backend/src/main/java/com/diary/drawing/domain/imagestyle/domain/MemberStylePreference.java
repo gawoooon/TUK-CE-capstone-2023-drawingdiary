@@ -34,8 +34,13 @@ public class MemberStylePreference {
 
     @Builder
     public MemberStylePreference(int frequency, Member member, ImageStyle imageStyle){
-        this.frequency = 0;
+        this.frequency = frequency;
         this.member = member;
         this.imageStyle = imageStyle;
+    }
+
+    // 업데이트
+    public void updateFrequency(){
+        this.frequency++;
     }
 }
