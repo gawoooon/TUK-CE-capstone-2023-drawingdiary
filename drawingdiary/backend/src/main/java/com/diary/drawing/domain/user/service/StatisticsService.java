@@ -115,7 +115,7 @@ public class StatisticsService {
 
         Map<Integer, Long> weeklyDiaryCounts = exist.stream()
             .filter(date -> !date.isBefore(twoMonthsAgo) && !date.isAfter(today))
-            .collect(Collectors.groupingBy(date -> date.get(ChronoField.ALIGNED_WEEK_OF_YEAR), Collectors.counting()));
+            .collect(Collectors.groupingBy(date -> date.get(ChronoField.ALIGNED_WEEK_OF_MONTH), Collectors.counting()));
 
         double average = weeklyDiaryCounts.values().stream()
             .mapToLong(count -> count)
