@@ -25,14 +25,14 @@ public class Sentiment {
 
     public Sentiment(Confidence confidence){
         this.positive = confidence.getPositive();
-        this.negative = confidence.getNeutral();
-        this.neutral = confidence.getNegative();
+        this.negative = confidence.getNegative();
+        this.neutral = confidence.getNeutral();
     }
 
     public Sentiment fromConfidence(Confidence confidence){
         this.positive = confidence.getPositive();
-        this.negative = confidence.getNeutral();
-        this.neutral = confidence.getNegative();
+        this.negative = confidence.getNegative();
+        this.neutral = confidence.getNeutral();
         return this;
     }
 }

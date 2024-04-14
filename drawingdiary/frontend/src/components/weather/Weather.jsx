@@ -147,7 +147,7 @@ const Weather = ({ date, onWeatherStateChange }) => {
     <WeatherContainer>
       <WeatherContent>
         {loading ? (
-          <LoadingImage src="/icons8-loading.gif" alt="loading" />
+          <LoadingImage src="/Spinner.gif" alt="loading" />
         ) : (
           <WeatherImage src={weather.icon} alt="Weather Icon" />
         )}

@@ -25,6 +25,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "react-icons": "^5.0.1",
-        "react-lottie": "^1.2.4"
+        "react-lottie": "^1.2.4",
+        "react-spinners": "^0.13.8"
     }
 }

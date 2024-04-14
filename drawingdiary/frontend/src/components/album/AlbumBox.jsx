@@ -7,8 +7,13 @@ import axios from "axios";
 import { useAuth } from "../../auth/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
 const AlbumContainer = styled.div`
-    width: 1190px;
+    width: 1130px;
     height: 260px;
     margin: 10px 0 30px 120px;
     padding: 10px;
@@ -22,8 +27,8 @@ const ScrollSection = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     &::-webkit-scrollbar {
         height: 8px;
     }
@@ -43,7 +48,7 @@ const PictureContainer = styled.div`
     align-items: center;
     background-color: transparent;
     
-    :hover {
+    &:hover {
         img {
             transform: scale(1.05);
         }
@@ -69,13 +74,36 @@ const DateText = styled.div`
     }
 `;
 
+const AlbumHeaders = styled.div`
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: ${(props) => (props.isOpen ? "0" : "20px")};
+`;
+
+const CategoryHeader = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
 const CategoryName = styled.div`
-    font-size: 25px;
+    font-size: 23px;
     font-weight: bold;
     margin-left: 130px;
 `;
 
-const AlbumBox = ({ onErrorMessage }) => {
+const OpenBtn = styled.img`
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
+`;
+
+
+function AlbumBox({ onErrorMessage }) {
     const {  removeCategory } = useCategory();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
@@ -86,7 +114,10 @@ const AlbumBox = ({ onErrorMessage }) => {
 
     const { memberID } = useAuth();
     const accessToken = localStorage.getItem('accessToken');
+
+    const [categoryOpenStates, setCategoryOpenStates] = useState([]);
     
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchAlbum = async () => {
         try {
             const response = await axios.get('http://localhost:8080/api/album/all', {
@@ -101,7 +132,7 @@ const AlbumBox = ({ onErrorMessage }) => {
                 images: entry.images.map(img => ({
                     date: img.date,
                     imageFile: img.imageFile
-                })).sort((a, b) => new Date(a.date) - new Date(b.date))
+                }))
             }));
             setData(newData);
         } catch (error) {
@@ -159,6 +190,13 @@ const AlbumBox = ({ onErrorMessage }) => {
         removeCategory(currentCategory, onErrorMessage);
     };
 
+    const toggleCategory = (categoryId) => {
+        setCategoryOpenStates(prev => ({
+            ...prev,
+            [categoryId]: !prev[categoryId] // 해당 카테고리의 상태 토글
+        }))
+    }
+
     useEffect(() => {
         if(!checkList) {
             fetchAlbum();
@@ -167,7 +205,7 @@ const AlbumBox = ({ onErrorMessage }) => {
     }, [fetchAlbum, checkList]);
     
     return (
-        <div>
+        <Container>
             {data.map((categoryEntry) => (
                 <div key={categoryEntry.name}>
                     <div
@@ -177,9 +215,17 @@ const AlbumBox = ({ onErrorMessage }) => {
                             alignItems: 'baseline',
                             marginRight: '80px',
                         }}>
-                        <CategoryName>{categoryEntry.name}</CategoryName>
-                        <TrashButton onClick={() => handleDeleteClick(categoryEntry.albumID)}/>
-
+                        <AlbumHeaders isOpen={categoryOpenStates[categoryEntry.albumID]}>
+                            <CategoryHeader>
+                                <CategoryName>{categoryEntry.name}</CategoryName>
+                                {categoryOpenStates[categoryEntry.albumID] ? (
+                                    <OpenBtn src="/minus-solid.svg" alt="close" onClick={() => toggleCategory(categoryEntry.albumID)} />
+                                ) : (
+                                    <OpenBtn src="/plus-solid.svg" alt="open" onClick={() => toggleCategory(categoryEntry.albumID)} />
+                                )}
+                            </CategoryHeader>
+                            <TrashButton onClick={() => handleDeleteClick(categoryEntry.albumID)}/>
+                        </AlbumHeaders>
                     </div>
 
                     <Modal
@@ -187,35 +233,36 @@ const AlbumBox = ({ onErrorMessage }) => {
                         onClose={handleCloseModal}
                         onConfirm={handleConfirmDelete}
                     />
-
-                    <AlbumContainer>
-                        {categoryEntry.images.length > 0 ? (
-                            <ScrollSection>
-                                {categoryEntry.images.map((item, index) => (
-                                    <PictureContainer key={index} onClick={() => handleShowDetails(item.date)}>
-                                        <DateText>
-                                            {item.date}
-                                            <img src={item.imageFile} alt="Album" />
-                                        </DateText>
-                                    </PictureContainer>
-                                ))}
-                            </ScrollSection>
-                        ) : (
-                            <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '100%',
-                                color: '#b3b3b3'
-                            }}>
-                                앨범에 일기를 추가하려면 먼저 작성하세요.
-                            </div>
-                        )}
-                    </AlbumContainer>
+                    {categoryOpenStates[categoryEntry.albumID] && (
+                        <AlbumContainer>
+                            {categoryEntry.images.length > 0 ? (
+                                <ScrollSection>
+                                    {categoryEntry.images.map((item, index) => (
+                                        <PictureContainer key={index} onClick={() => handleShowDetails(item.date)}>
+                                            <DateText>
+                                                {item.date}
+                                                <img src={item.imageFile} alt="Album" />
+                                            </DateText>
+                                        </PictureContainer>
+                                    ))}
+                                </ScrollSection>
+                            ) : (
+                                <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: '100%',
+                                    color: '#b3b3b3'
+                                }}>
+                                    앨범에 일기를 추가하려면 먼저 작성하세요.
+                                </div>
+                            )}
+                        </AlbumContainer>
+                    )}
                 </div>
             ))}
-        </div>
+        </Container>
     );
 };
 

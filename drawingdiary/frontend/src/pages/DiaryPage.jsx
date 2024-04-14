@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
-import Background from "../components/Background";
 import AlbumCategory from "../components/album/AlbumCategory";
 import AIComment from "../components/edit diary/AIComment";
 import EditDiary from "../components/edit diary/EditDiary";
@@ -15,7 +14,7 @@ import Background2 from "../components/Background/index2";
 
 const FlexContainer = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
 `;
@@ -210,6 +209,8 @@ function DiaryPage() {
       });
 
       // 응답에서 감정분석 결과 추출
+      console.log(response.data.document.confidence);
+
       const { positive, negative, neutral } = response.data.document.confidence;
 
       // 소수점 두 자리까지 반올림하여 상태 업데이트 -- 어떤 값이 가장 큰지 비교해야 함
@@ -320,7 +321,6 @@ function DiaryPage() {
             const imageUrl = responseDate.image?.imageUrl;
             setIsImageLoading(false);
             setNewImageUrl(imageUrl);
-            
           } else {
             console.error("이미지 저장 실패:", responseDiary.status);
             alert("이미지 저장에 실패하였습니다.");

@@ -14,7 +14,7 @@ public class EmailVerificationService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    private static final String VERIFICATION_CODE_KEY_PREFIX = "verification-code:";
+    private static final String VERIFICATION_CODE_KEY_PREFIX = "email-verification-code:";
 
     // 코드 저장하는 시간 5분
     public void saveVerificationCode(String email, String originVerificationCode){

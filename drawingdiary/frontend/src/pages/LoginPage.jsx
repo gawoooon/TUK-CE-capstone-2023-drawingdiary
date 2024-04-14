@@ -91,6 +91,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { login } = useAuth();
+  localStorage.setItem("selectedColor", 0);
 
   const handleLogin = async (e) => {
     e.preventDefault();
