@@ -131,7 +131,7 @@ const jumpAnimation = keyframes`
 
 const ButtonStyle = styled.button`
     height: 45px;
-    width: 585px;
+    width: 400px;
     margin-bottom: 30px;
     background-color: rgb(106, 156, 253, 0.3);
     border: none;
@@ -453,7 +453,9 @@ const CreateAccount = () => {
                     <option value="secret">공개안함</option>
                   </SelectGenderContainer>
 
-                  <InputFieldStyle>
+                  {/* -- 전화번호 입력 부분 -- */}
+
+                  {/* <InputFieldStyle>
                   
                     <PhoneInputStyle 
                       id='phoneNumber'
@@ -465,7 +467,7 @@ const CreateAccount = () => {
 
                     <VerifyButton onClick={(e) => sendEmail(e)}>인증</VerifyButton>
 
-                  </InputFieldStyle>
+                  </InputFieldStyle> */}
 
                   <InputFieldStyle>
 
