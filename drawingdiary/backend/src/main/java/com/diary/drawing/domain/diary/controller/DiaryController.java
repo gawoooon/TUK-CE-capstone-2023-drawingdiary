@@ -25,10 +25,12 @@ import com.diary.drawing.global.jwt.domain.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "Diary", description = "Diary API")
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class DiaryController {
 
     private final DiaryService diaryService;
@@ -52,7 +54,7 @@ public class DiaryController {
      */
     @Operation(summary = "최종 일기 수정")
     @PutMapping("api/diary/{date}")
-    public ResponseEntity<?> updateDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> updateDiary(@RequestBody FinalDiaryRequestDTO finalDiaryRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException{
         return generateDiaryService.updateDiary(finalDiaryRequestDTO, principalDetails.getMemberID());
     }
 
@@ -62,7 +64,7 @@ public class DiaryController {
      */
     @Operation(summary = "최종 일기 삭제")
     @DeleteMapping("api/diary/{date}")
-    public ResponseEntity<?> deleteDiary(@PathVariable LocalDate date, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> deleteDiary(@PathVariable("date") LocalDate date, @AuthenticationPrincipal PrincipalDetails principalDetails){
         return diaryService.delete(date, principalDetails.getMemberID());
     }
 
@@ -73,7 +75,7 @@ public class DiaryController {
      */
     @Operation(summary = "특정 날짜 일기 자세히 조회")
     @GetMapping("/api/diary/{date}")
-    public ResponseEntity<?> getDiary(@PathVariable LocalDate date, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
+    public ResponseEntity<?> getDiary(@PathVariable("date") LocalDate date, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
         DiaryResponseDTO responseDTO = diaryService.getDiary(date, principalDetails.getMemberID());
         return ResponseEntity.ok().body(responseDTO);
     }
@@ -85,10 +87,10 @@ public class DiaryController {
 
     @Operation(summary = "캘린더용 한달 미리보기 리스트 반환")
     @GetMapping("/api/calender/{year}-{month}")
-    public List<CalenderDTO> getCalender(@PathVariable int year, @PathVariable int month, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public List<CalenderDTO> getCalender(@PathVariable("year") int year,  @PathVariable("month") int month, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        log.info("일기 미리보기 요청: 사용자 ID {}", principalDetails.getMemberID());
         return diaryService.calender(year, month, principalDetails.getMemberID());
     }
-
 
     @Operation(summary = "테스트 - 추가")
     @PostMapping("/api/diary/test/add")
@@ -98,7 +100,7 @@ public class DiaryController {
 
     @Operation(summary = "테스트 - 수정")
     @PutMapping("/api/diary/test/update/{id}")
-    public ResponseEntity<Void> testupdateDiary(@RequestBody DiaryRequestDTO diaryRequestDTO, @PathVariable Long id){
+    public ResponseEntity<Void> testupdateDiary(@RequestBody DiaryRequestDTO diaryRequestDTO, @PathVariable("id") Long id){
         diaryService.updateDiary(diaryRequestDTO, id);
         return ResponseEntity.noContent().build();
     }

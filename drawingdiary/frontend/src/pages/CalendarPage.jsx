@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { isSameDay } from "date-fns";
 import { format } from "date-fns";
@@ -11,7 +11,10 @@ import FalseComponent from "../components/FalseComponent";
 import { useAuth } from "../auth/context/AuthContext";
 
 import { GrFormPreviousLink } from "react-icons/gr";
-import { CalendarProvider, useCalendar } from "../components/Calendar2/CalendarProvider";
+import {
+  CalendarProvider,
+  useCalendar,
+} from "../components/Calendar2/CalendarProvider";
 import axios from "axios";
 
 const Body = styled.body`
@@ -122,7 +125,7 @@ const EditBtn = styled.button`
   &:hover {
     background-color: #f9f9f9;
   }
-  `;
+`;
 
 const RemoveBtn = styled.button`
   width: 65px;
@@ -185,8 +188,8 @@ function CalendarPage() {
   const [isOpen, setIsOpen] = useState(true);
 
   const { memberID } = useAuth();
-  const accessToken = localStorage.getItem('accessToken');
-  
+  const accessToken = localStorage.getItem("accessToken");
+
   const { year, setYear, month, setMonth } = useCalendar();
   const [data, setData] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
@@ -196,8 +199,40 @@ function CalendarPage() {
   const [isSelectedMonth, setIsSelectedMonth] = useState("");
   const [isSelectedDay, setIsSelectedDay] = useState("");
 
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userBirth, setUserBirth] = useState("");
   const [checkCalendar, setCheckCalendar] = useState(false);
 
+  const fetchUserName = useCallback(async () => {
+    if (memberID) {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await axios.get(
+          "http://localhost:8080/api/get-member",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        setUserName(response.data.name);
+        setUserEmail(response.data.email);
+
+        localStorage.setItem("setName", response.data.name);
+        localStorage.setItem("setEmail", response.data.email);
+        localStorage.setItem("setBirth", response.data.birth);
+        localStorage.setItem("selectedColor", response.data.theme);
+      } catch (error) {
+        console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
+      }
+    }
+  }, [memberID]);
+
+  useEffect(() => {
+    fetchUserName();
+  }, [memberID, fetchUserName]);
 
   const handleDateClick = async (day) => {
     if (isSameDay(day, selectedDate)) {
@@ -230,12 +265,11 @@ function CalendarPage() {
   };
 
   const handleEdit = async () => {
-
     const currentYear = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
     const day = selectedDate.getDate();
     const formattedDate = new Date(currentYear, month - 1, day);
-    
+
     // 날짜 및 월을 두 자릿수로 표시하는 함수
     const pad = (number) => (number < 10 ? `0${number}` : number);
 
@@ -243,16 +277,19 @@ function CalendarPage() {
     const dateString = `${formattedDate.getFullYear()}-${pad(
       formattedDate.getMonth() + 1
     )}-${pad(formattedDate.getDate())}`;
-    
+
     try {
-      const response = await axios.get(`http://localhost:8080/api/diary/${dateString}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
+      const response = await axios.get(
+        `http://localhost:8080/api/diary/${dateString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      });
+      );
       const dataArray = response.data;
       console.log(dataArray);
-  
+
       const diaryText = dataArray.text;
       const weather = dataArray.weather;
       const albumName = dataArray.albumName;
@@ -260,9 +297,20 @@ function CalendarPage() {
       const comment = dataArray.comment;
       const style = dataArray.styleName;
       const sentiment = dataArray.sentiment;
-    
+
       navigate(`/showDiary/${memberID}/${dateString}`, {
-        state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment } },
+        state: {
+          date: { currentYear, month, day },
+          diaryData: {
+            weather,
+            albumName,
+            diaryText,
+            style,
+            image,
+            comment,
+            sentiment,
+          },
+        },
       });
     } catch (error) {
       console.log("error: ", error);
@@ -270,13 +318,15 @@ function CalendarPage() {
   };
 
   const handleRemove = async () => {
-    
     try {
-      await axios.delete(`http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
+      await axios.delete(
+        `http://localhost:8080/api/diary/${isSelectedYear}-${isSelectedMonth}-${isSelectedDay}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      })
+      );
       fetchCalendar();
     } catch (error) {
       console.log("error: ", error);
@@ -285,27 +335,30 @@ function CalendarPage() {
 
   const fetchCalendar = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/calender/${year}-${month}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
+      const response = await axios.get(
+        `http://localhost:8080/api/calender/${year}-${month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      });
+      );
       setData(response.data);
     } catch (error) {
       console.log("error: ", error);
-    };
+    }
   };
-  
+
   // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
       // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
       const index = data.findIndex((item) =>
-        isSameDay(new Date(item.date), date),
+        isSameDay(new Date(item.date), date)
       );
 
       //일치하면 인덱스 값/ 아니면 -1 반환 => 존재하면 true, 존재하지 않으면 false
-      if(index !== -1) {
+      if (index !== -1) {
         setText(data[index].text);
         setImageUrl(data[index].imageFile);
       }
@@ -319,15 +372,14 @@ function CalendarPage() {
 
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
-
-    if(selectedDate) {
+    if (selectedDate) {
       setYear(format(selectedDate, "yyyy"));
       setMonth(format(selectedDate, "MM"));
       fetchCalendar();
     } else {
       fetchCalendar();
     }
-    
+
     const fetchDataAndUpdateState = async () => {
       if (selectedDate) {
         setIsSelectedYear(format(selectedDate, "yyyy"));
@@ -354,9 +406,14 @@ function CalendarPage() {
   return (
     <Background>
       <Body>
-          <LeftBox leftBoxWidth={leftBoxWidth}>
-            <SideBar isOpen={isOpen} />
-          </LeftBox>
+        <LeftBox leftBoxWidth={leftBoxWidth}>
+          <SideBar
+            isOpen={isOpen}
+            userBirth={userBirth}
+            userName={userName}
+            userEmail={userEmail}
+          />
+        </LeftBox>
         <CalendarBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
             <CalendarProvider>
@@ -383,11 +440,12 @@ function CalendarPage() {
                       </DateBox>
                       <EditBtn onClick={handleEdit}>편집</EditBtn>
                     </TopBox>
+                    <TrueComponentMidBox>
+                      <ImageBox src={imageUrl} />
+                    </TrueComponentMidBox>
                     <Divider />
-                    <TrueComponentMidBox><ImageBox src={imageUrl} /></TrueComponentMidBox>
                     <BottomBox>{text}</BottomBox>
                   </TrueComponentBox>
-
                 ) : (
                   <FalseComponent
                     currentYear={selectedDate.getFullYear()}

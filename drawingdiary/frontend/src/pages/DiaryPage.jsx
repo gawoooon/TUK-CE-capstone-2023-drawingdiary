@@ -14,7 +14,7 @@ import Background2 from "../components/Background/index2";
 
 const FlexContainer = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
 `;
@@ -321,7 +321,6 @@ function DiaryPage() {
             const imageUrl = responseDate.image?.imageUrl;
             setIsImageLoading(false);
             setNewImageUrl(imageUrl);
-            
           } else {
             console.error("이미지 저장 실패:", responseDiary.status);
             alert("이미지 저장에 실패하였습니다.");

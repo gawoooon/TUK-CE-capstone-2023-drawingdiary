@@ -59,6 +59,6 @@ public class ImageService {
     }
 
     public String saveImageFromUrl(String imageUrl, LocalDate date) throws IOException{
-        return s3Uploader.uploadImage(imageUrl, date);
+        return s3Uploader.uploadImage(imageUrl, date, "d");
     }
 }

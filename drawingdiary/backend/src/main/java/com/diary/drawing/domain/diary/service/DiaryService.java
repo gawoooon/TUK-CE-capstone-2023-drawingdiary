@@ -27,11 +27,14 @@ import com.diary.drawing.domain.sentiment.repository.SentimentRepository;
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.repository.MemberRepository;
 import com.diary.drawing.domain.user.service.ValidateMemberService;
+import com.diary.drawing.global.s3.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 
+@Slf4j
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
@@ -45,6 +48,7 @@ public class DiaryService {
     private final ImageStyleRepository imageStyleRepository;
     private final ValidateDiaryService validateDiaryService;
     private final ValidateMemberService validateMemberService;
+    private final S3Uploader s3Uploader;
 
 
     /* Date로 내용조회 */
@@ -63,8 +67,10 @@ public class DiaryService {
     }
 
     /* 년월, 멤버id로 모든 다이어리 return 하는 캘린더 서비스 */
-    public List<CalenderDTO> calender(int year, int month, Long memberID){
+    public List<CalenderDTO> calender( int year, int month,  Long memberID){
         Member member = validateMemberService.validateMember(memberID);
+        // 확인용 로그찍기
+        log.info("일기 미리보기 요청: 사용자 ID {}", memberID);
 
         // 년월로 startDate와 endDate 얻기
         YearMonth yearMonth = YearMonth.of(year, month);
@@ -79,6 +85,9 @@ public class DiaryService {
         return response;
     }
 
+    @SuppressWarnings("null") //TODO: 임시
+
+    /* 다이어리 삭제 */
     @Transactional
     public ResponseEntity<?> delete(LocalDate date, Long memberID){
         Member member = validateMemberService.validateMember(memberID);
@@ -86,6 +95,9 @@ public class DiaryService {
 
         diaryRepository.delete(diary);
         sentimentRepository.delete(diary.getSentiment());
+
+        // 이미지 삭제
+        String imageState = s3Uploader.deleteImage(diary.getImage().getImageFile());
         imageRepository.delete(diary.getImage());
         commentRepository.delete(diary.getComment());
 
