@@ -6,6 +6,7 @@ import { MdEmail } from "react-icons/md";
 import PopupLine from "./PopupLine";
 import { RiLock2Fill } from "react-icons/ri";
 
+// 팝업창
 const BackgroundOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -36,6 +37,7 @@ const PopupBox = styled.div`
   box-sizing: border-box;
 `;
 
+// 팝업창 상단
 const PopupTop = styled.div`
   display: flex;
   align-items: center;
@@ -55,6 +57,7 @@ const PopupTopCloseBtn = styled.button`
   background-color: white;
 `;
 
+// 팝업창 하단 - 수정 버튼
 const PopupBottom = styled.div`
   width: 100%;
   height: 7%;
@@ -85,6 +88,7 @@ const PopupBottomEditBtn = styled.button`
   }
 `;
 
+// 팝업창 중단
 const PopupBody = styled.div`
   display: flex;
   flex-direction: column;
@@ -95,29 +99,24 @@ const PopupBody = styled.div`
   padding: 10px 0;
 `;
 
+// 프로필
 const ProfileTop = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  align-items: end;
   width: 100%;
   height: 17%;
   background-color: white;
   border-bottom: 2px solid rgba(106, 156, 253, 0.4);
   margin-bottom: 20px;
-`;
-
-const ProfileTopBody = styled.div`
-  display: flex;
-  width: 100%;
-  height: 90%;
-  background-color: white;
   padding: 10px 0px;
-  box-sizing: border-box;
 `;
 
-const ProfileImgNameBox = styled.div`
+// 프로필 이미지
+const ProfileImgBox = styled.div`
   display: flex;
-  width: 65%;
-  height: 100%;
+  width: 100px;
+  height: 100px;
   align-items: end;
 `;
 
@@ -127,23 +126,16 @@ const ProfileImg = styled.img`
   border-radius: 50px;
   object-fit: contain;
 `;
-const ProfileNameBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 20px;
-  box-sizing: border-box;
-  color: rgb(144, 144, 144);
-  border-bottom: 2px solid rgb(144, 144, 144);
-  width: 150px;
-  height: 45px;
-\
-`;
 
+// 프로필 이름
 const ProfileName = styled.input`
+  display: flex;
+  align-items: end;
   width: 140px;
+  height: 50px;
   font-size: 20px;
   padding: 5px;
+  margin: 0px 10px;
   box-sizing: border-box;
   outline: none;
   border: none;
@@ -151,16 +143,10 @@ const ProfileName = styled.input`
   ::placeholder {
     color: #a3a3a3;
   }
+  border-bottom: 2px solid rgb(144, 144, 144);
 `;
 
-const ProfileImgUploadBox = styled.div`
-  width: 35%;
-  height: 100%;
-  display: flex;
-  align-items: end;
-  justify-content: end;
-`;
-
+// 프로필 이미지 업로드
 const ProfileImgUpload = styled.label`
   display: flex;
   align-items: center;
@@ -183,10 +169,7 @@ const HiddenFileInput = styled.input`
   border-radius: 50px;
 `;
 
-const paddingForTitle = css`
-  padding: 10px 10px 0 10px;
-`;
-
+// 팝업창
 const PopupLineBox = styled.div`
   display: flex;
   align-items: center;
@@ -195,7 +178,6 @@ const PopupLineBox = styled.div`
   width: 100%;
   height: 45px;
   box-sizing: border-box;
-  ${(props) => props.hasTitle && paddingForTitle}
 `;
 
 const PopupLineIcon = styled.div`
@@ -215,23 +197,18 @@ const PopupLineInput = styled.input`
   border-bottom: 1px solid rgba(56, 56, 56, 0.4);
 `;
 
-// const PopupLineTitle = styled.div`
-//   display: flex;
-//   align-items: center;
-//   width: 250px;
-//   height: 100%;
-//   font-size: 15px;
-//   font-weight: bold;
-// `;
-
-const PopupLineBtnBox = styled.div`
-  width: 70px;
+const PopupLineTitle = styled.div`
+  display: flex;
+  align-items: center;
+  width: 250px;
   height: 100%;
+  font-size: 15px;
+  font-weight: bold;
 `;
 
 const PopupLineBtn = styled.button`
-  width: 100%;
-  height: 100%;
+  width: 50px;
+  height: 30px;
   background-color: white;
   border: 2px solid rgba(106, 156, 253, 0.4);
   border-radius: 10px;
@@ -240,6 +217,25 @@ const PopupLineBtn = styled.button`
   font-size: 13px;
   text-align: center;
   outline: none;
+  font-weight: bold;
+`;
+
+const PopupLineBtnBox = styled.div`
+  width: 70px;
+  height: 100%;
+  background-color: white;
+`;
+
+// 인증 문구
+const MessageContainer = styled.div`
+  margin: 0 0 3px 20px;
+  min-height: 20px;
+`;
+
+const Message = styled.text`
+  font-size: 12px;
+  font-weight: bold;
+  color: red;
 `;
 
 function Popup({ onClose }) {
@@ -249,7 +245,15 @@ function Popup({ onClose }) {
 
   // 문자 인증
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneCertification, setPhoneCertification] = useState("");
+  const [verifySnsMessage, setVerifySnsMessage] = useState("");
+  const [errorSnsMessage, setErrorSnsMessage] = useState("");
+
+  // 이메일 인증
   const [userEmail, setUserEmail] = useState("");
+  const [certification, setCheckCertification] = useState("");
+  const [verifyMessage, setVerifyMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   // 파일 선택 시 이벤트 처리 함수
   const handleFileChange = (e) => {
@@ -302,6 +306,26 @@ function Popup({ onClose }) {
     }
   };
 
+  const verifyPhoneCertification = async (event) => {
+    event.preventDefault();
+    if (phoneCertification !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/sms/verify",
+          {
+            phoneNumber: phoneNumber,
+            code: phoneCertification,
+          }
+        );
+        console.log("response: ", response);
+        setVerifySnsMessage("인증되었습니다.");
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    }
+  };
+
+  // 이메일 인증
   const sendEmail = async (event) => {
     event.preventDefault();
     console.log("userEmail: ", userEmail);
@@ -325,6 +349,53 @@ function Popup({ onClose }) {
     }
   };
 
+  const verifyCertification = async (event) => {
+    event.preventDefault();
+    if (certification !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/email/verify",
+          {
+            email: userEmail,
+            verificationCode: certification,
+          }
+        );
+        console.log("response: ", response);
+        setVerifyMessage("이메일이 인증되었습니다.");
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (errorSnsMessage) {
+      setTimeout(() => {
+        setErrorSnsMessage("");
+      }, 2000);
+    }
+
+    if (verifySnsMessage) {
+      setTimeout(() => {
+        setVerifySnsMessage("");
+      }, 2000);
+    }
+  }, [errorSnsMessage, verifySnsMessage]);
+
+  useEffect(() => {
+    if (errorSnsMessage) {
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 2000);
+    }
+
+    if (verifySnsMessage) {
+      setTimeout(() => {
+        setVerifyMessage("");
+      }, 2000);
+    }
+  }, [errorMessage, verifyMessage]);
+
   return (
     <>
       <BackgroundOverlay />
@@ -333,29 +404,24 @@ function Popup({ onClose }) {
           <PopupTopText>기본정보</PopupTopText>
           <PopupTopCloseBtn onClick={onClose}>X</PopupTopCloseBtn>
         </PopupTop>
+
         <PopupBody>
           <ProfileTop>
-            <ProfileTopBody>
-              <ProfileImgNameBox>
-                <ProfileImg src={profileImage}></ProfileImg>
-                <ProfileNameBox>
-                  <ProfileName
-                    value={setName}
-                    onChange={(e) => setSetName(e.target.value)}
-                  />
-                </ProfileNameBox>
-              </ProfileImgNameBox>
-              <ProfileImgUploadBox>
-                <ProfileImgUpload>
-                  사진올리기
-                  <HiddenFileInput
-                    type="file"
-                    onChange={handleFileChange}
-                    accept="image/*"
-                  />
-                </ProfileImgUpload>
-              </ProfileImgUploadBox>
-            </ProfileTopBody>
+            <ProfileImgBox>
+              <ProfileImg src={profileImage}></ProfileImg>
+            </ProfileImgBox>
+            <ProfileName
+              value={setName}
+              onChange={(e) => setSetName(e.target.value)}
+            />
+            <ProfileImgUpload>
+              사진올리기
+              <HiddenFileInput
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+            </ProfileImgUpload>
           </ProfileTop>
 
           <PopupLineBox>
@@ -367,15 +433,34 @@ function Popup({ onClose }) {
               onChange={(e) => setPhoneNumber(e.target.value)}
               placeholder="전화번호"
             />
-            {/* <PopupLineTitle>인증</PopupLineTitle> */}
-            <PopupLineBtnBox>
-              <PopupLineBtn onClick={(e) => sendPhone(e)}>인증</PopupLineBtn>
-            </PopupLineBtnBox>
+            <PopupLineBtn onClick={(e) => sendPhone(e)}>인증</PopupLineBtn>
           </PopupLineBox>
 
-          <PopupLine text="확인" placeholder="인증번호 입력" />
-          <PopupLine icon={MdEmail} title="아이디 변경" />
-          {/* <PopupLine text="확인" placeholder="현재 이메일 입력" /> */}
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInput
+              id="phoneCertification"
+              value={phoneCertification}
+              onChange={(e) => setPhoneCertification(e.target.value)}
+              placeholder="인증번호 입력"
+            />
+            <PopupLineBtn onClick={(e) => verifyPhoneCertification(e)}>
+              확인
+            </PopupLineBtn>
+          </PopupLineBox>
+
+          <MessageContainer>
+            {errorSnsMessage && <Message> {errorSnsMessage} </Message>}
+            {verifySnsMessage && <Message> {verifySnsMessage} </Message>}
+          </MessageContainer>
+
+          <PopupLineBox>
+            <PopupLineIcon>
+              <MdEmail size={28} />
+            </PopupLineIcon>
+            <PopupLineTitle>아이디 변경</PopupLineTitle>
+            <PopupLineBtnBox></PopupLineBtnBox>
+          </PopupLineBox>
 
           <PopupLineBox>
             <PopupLineIcon></PopupLineIcon>
@@ -384,13 +469,27 @@ function Popup({ onClose }) {
               onChange={(e) => setUserEmail(e.target.value)}
               placeholder="새로운 이메일 입력"
             />
-            {/* <PopupLineTitle>인증</PopupLineTitle> */}
-            <PopupLineBtnBox>
-              <PopupLineBtn onClick={(e) => sendEmail(e)}>인증</PopupLineBtn>
-            </PopupLineBtnBox>
+            <PopupLineBtn onClick={(e) => sendEmail(e)}>인증</PopupLineBtn>
           </PopupLineBox>
 
-          <PopupLine text="확인" placeholder="인증번호 입력" />
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInput
+              id="certification"
+              value={certification}
+              onChange={(e) => setCheckCertification(e.target.value)}
+              placeholder="인증번호 입력"
+            />
+            <PopupLineBtn onClick={(e) => verifyCertification(e)}>
+              확인
+            </PopupLineBtn>
+          </PopupLineBox>
+
+          <MessageContainer>
+            {errorMessage && <Message> {errorMessage} </Message>}
+            {verifyMessage && <Message> {verifyMessage} </Message>}
+          </MessageContainer>
+
           <PopupLine icon={RiLock2Fill} title="비밀번호 변경" />
           <PopupLine text="확인" placeholder="현재 비밀번호 입력" />
           <PopupLine placeholder="새로운 비밀번호 입력" />
