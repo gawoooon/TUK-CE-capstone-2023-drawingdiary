@@ -1,5 +1,6 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
 import PopupLine from "./PopupLine";
@@ -182,9 +183,73 @@ const HiddenFileInput = styled.input`
   border-radius: 50px;
 `;
 
+const paddingForTitle = css`
+  padding: 10px 10px 0 10px;
+`;
+
+const PopupLineBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px 10px 10px;
+  width: 100%;
+  height: 45px;
+  box-sizing: border-box;
+  ${(props) => props.hasTitle && paddingForTitle}
+`;
+
+const PopupLineIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 100%;
+`;
+
+const PopupLineInput = styled.input`
+  width: 250px;
+  height: 100%;
+  outline: none;
+  font-size: 13px;
+  border: none;
+  border-bottom: 1px solid rgba(56, 56, 56, 0.4);
+`;
+
+// const PopupLineTitle = styled.div`
+//   display: flex;
+//   align-items: center;
+//   width: 250px;
+//   height: 100%;
+//   font-size: 15px;
+//   font-weight: bold;
+// `;
+
+const PopupLineBtnBox = styled.div`
+  width: 70px;
+  height: 100%;
+`;
+
+const PopupLineBtn = styled.button`
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border: 2px solid rgba(106, 156, 253, 0.4);
+  border-radius: 10px;
+  cursor: pointer;
+  color: black;
+  font-size: 13px;
+  text-align: center;
+  outline: none;
+`;
+
 function Popup({ onClose }) {
+  const accessToken = localStorage.getItem("accessToken");
   const [setName, setSetName] = useState("");
   const [profileImage, setProfileImage] = useState(null); // 업로드한 이미지 상태 추가
+
+  // 문자 인증
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   // 파일 선택 시 이벤트 처리 함수
   const handleFileChange = (e) => {
@@ -212,6 +277,54 @@ function Popup({ onClose }) {
       setSetName(storedName);
     }
   }, []);
+
+  // 문자 인증
+  const sendPhone = async (event) => {
+    event.preventDefault();
+    console.log("phoneNumber: ", phoneNumber);
+    if (phoneNumber !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/sms/codesending",
+          { phoneNumber: phoneNumber },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        console.log("response", response);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    } else {
+      alert("핸드폰 번호를 입력해주세요!");
+    }
+  };
+
+  const sendEmail = async (event) => {
+    event.preventDefault();
+    console.log("userEmail: ", userEmail);
+    if (userEmail !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/email/codesending",
+          { email: userEmail },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        console.log("response", response);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    } else {
+      alert("이메일을 입력해주세요!");
+    }
+  };
+
   return (
     <>
       <BackgroundOverlay />
@@ -244,16 +357,40 @@ function Popup({ onClose }) {
               </ProfileImgUploadBox>
             </ProfileTopBody>
           </ProfileTop>
-          <PopupLine
-            icon={MdOutlinePhoneIphone}
-            text="인증"
-            placeholder="전화번호"
-          />
-          <PopupLine placeholder="인증번호 입력" />
-          <PopupLine icon={MdEmail} title="이메일 변경" />
-          <PopupLine text="확인" placeholder="현재 이메일 입력" />
-          <PopupLine text="인증" placeholder="새로운 이메일 입력" />
-          <PopupLine placeholder="인증번호 입력" />
+
+          <PopupLineBox>
+            <PopupLineIcon>
+              <MdOutlinePhoneIphone size={28} />
+            </PopupLineIcon>
+            <PopupLineInput
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder="전화번호"
+            />
+            {/* <PopupLineTitle>인증</PopupLineTitle> */}
+            <PopupLineBtnBox>
+              <PopupLineBtn onClick={(e) => sendPhone(e)}>인증</PopupLineBtn>
+            </PopupLineBtnBox>
+          </PopupLineBox>
+
+          <PopupLine text="확인" placeholder="인증번호 입력" />
+          <PopupLine icon={MdEmail} title="아이디 변경" />
+          {/* <PopupLine text="확인" placeholder="현재 이메일 입력" /> */}
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInput
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              placeholder="새로운 이메일 입력"
+            />
+            {/* <PopupLineTitle>인증</PopupLineTitle> */}
+            <PopupLineBtnBox>
+              <PopupLineBtn onClick={(e) => sendEmail(e)}>인증</PopupLineBtn>
+            </PopupLineBtnBox>
+          </PopupLineBox>
+
+          <PopupLine text="확인" placeholder="인증번호 입력" />
           <PopupLine icon={RiLock2Fill} title="비밀번호 변경" />
           <PopupLine text="확인" placeholder="현재 비밀번호 입력" />
           <PopupLine placeholder="새로운 비밀번호 입력" />

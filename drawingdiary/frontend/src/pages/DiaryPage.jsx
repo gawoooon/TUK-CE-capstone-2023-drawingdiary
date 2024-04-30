@@ -409,7 +409,7 @@ function DiaryPage() {
         }
       );
       if (responseDiary.status === 200) {
-        console.log("일기가 백엔드로 전송되었습니다.");
+        console.log("일기가 백엔드로 전송되었습니다.", responseDiary.data);
         alert("일기가 생성되었어요!");
         navigate("/calendar");
       } else {
