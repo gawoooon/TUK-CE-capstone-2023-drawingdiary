@@ -1,11 +1,10 @@
-import styled from "styled-components";
-import Background from "../components/Background";
-import SideBar from "../components/sidebar/SideBar";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
-import GrassGraph from "../components/grid/DaySquare";
-import { useEffect } from "react";
 import axios from "axios";
+import { useEffect } from "react";
+import styled from "styled-components";
 import { useAuth } from "../auth/context/AuthContext";
+import Background from "../components/Background";
+import GrassGraph from "../components/grid/DaySquare";
+import ShortSidebar from "../components/sidebar/ShortSidebar";
 
 const Container = styled.div`
   width: 100vw;
@@ -58,23 +57,24 @@ function StatsPage() {
   const { memberID } = useAuth();
   const accessToken = localStorage.getItem("accessToken");
 
-  // const fetchSentimentData = async () => {
-  //   try {
-  //     const response = await axios.post('http://localhost:8080/api/statistic', 
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       }
-  //     });
-  //     console.log("감정분석 : ", response);
-  //   } catch(error) {
-  //     console.log(error);
-  //   }
-  // };
+  const fetchSentimentData = async () => {
+    console.log(accessToken)
+    try {
+      const response = await axios.get('http://localhost:8080/api/statistic', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      });
+      console.log("감정분석 : ", response);
+    } catch(error) {
+      console.log(error);
+    }
+  };
   
-  // useEffect(() => {
-  //   fetchSentimentData();
-  // }, []);
+  useEffect(() => {
+    fetchSentimentData();
+  }, []);
+  
 
   return (
     <div>
