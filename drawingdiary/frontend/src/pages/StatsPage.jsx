@@ -3,6 +3,9 @@ import Background from "../components/Background";
 import SideBar from "../components/sidebar/SideBar";
 import ShortSidebar from "../components/sidebar/ShortSidebar";
 import GrassGraph from "../components/grid/DaySquare";
+import { useEffect } from "react";
+import axios from "axios";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.div`
   width: 100vw;
@@ -31,7 +34,7 @@ const HistoryContainer = styled.div`
 
 const StatsContainer = styled.div`
   width: 1190px;
-  height: 240px;
+  height: 190px;
   margin: 0 0 30px 120px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -41,7 +44,7 @@ const StatsContainer = styled.div`
 
 const SentimentContainer = styled.div`
   width: 1190px;
-  height: 200px;
+  height: 250px;
   margin: 0 0 30px 120px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -49,7 +52,30 @@ const SentimentContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
+
 function StatsPage() {
+
+  const { memberID } = useAuth();
+  const accessToken = localStorage.getItem("accessToken");
+
+  // const fetchSentimentData = async () => {
+  //   try {
+  //     const response = await axios.post('http://localhost:8080/api/statistic', 
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       }
+  //     });
+  //     console.log("감정분석 : ", response);
+  //   } catch(error) {
+  //     console.log(error);
+  //   }
+  // };
+  
+  // useEffect(() => {
+  //   fetchSentimentData();
+  // }, []);
+
   return (
     <div>
       <Background>
