@@ -3,8 +3,6 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
-import { useEffect } from "react";
-import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
 import Background2 from "../components/Background/index2";
 
