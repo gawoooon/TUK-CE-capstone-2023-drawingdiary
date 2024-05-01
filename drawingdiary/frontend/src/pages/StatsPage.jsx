@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect } from "react";
 import styled from "styled-components";
 import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
