@@ -224,6 +224,10 @@ function CalendarPage() {
         localStorage.setItem("setEmail", response.data.email);
         localStorage.setItem("setBirth", response.data.birth);
         localStorage.setItem("selectedColor", response.data.theme);
+        localStorage.setItem("setProfileImage", response.data.profileImage);
+
+        console.log(localStorage.getItem("setProfileImage"));
+        console.log(localStorage.getItem("setEmail"));
       } catch (error) {
         console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
       }

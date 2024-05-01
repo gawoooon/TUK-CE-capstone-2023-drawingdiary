@@ -10,11 +10,10 @@ const ProfileBox = styled.div`
   box-sizing: border-box;
 `;
 
-const ProfileImg = styled.div`
+const ProfileImg = styled.img`
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background-color: pink;
   margin-bottom: 20px;
 `;
 
@@ -35,9 +34,14 @@ const ProfileEmail = styled.div`
 function Profile() {
   const setEmail = localStorage.getItem("setEmail");
   const setName = localStorage.getItem("setName");
+  const setProfileImage = localStorage.getItem("setProfileImage");
   return (
     <ProfileBox>
-      <ProfileImg />
+      {setProfileImage !== "null" && setProfileImage !== null ? (
+        <ProfileImg src={setProfileImage} alt="프로필 이미지" />
+      ) : (
+        <ProfileImg src="/user.png" alt="기본 이미지" />
+      )}
       <ProfileName>{setName}</ProfileName>
       <ProfileEmail>{setEmail}</ProfileEmail>
     </ProfileBox>

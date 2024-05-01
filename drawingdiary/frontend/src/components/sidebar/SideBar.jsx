@@ -91,6 +91,7 @@ const SideBar = ({ isOpen, userName, userEmail }) => {
     localStorage.removeItem("setName");
     localStorage.removeItem("setEmail");
     localStorage.removeItem("setBirth");
+    localStorage.removeItem("setProfileImage");
 
     // 로그아웃 기능 추가
   };
