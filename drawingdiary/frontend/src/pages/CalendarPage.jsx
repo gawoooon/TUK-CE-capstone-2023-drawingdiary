@@ -201,8 +201,7 @@ function CalendarPage() {
 
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [userBirth, setUserBirth] = useState("");
-  const [checkCalendar, setCheckCalendar] = useState(false);
+  const userBirth = "";
 
   const fetchUserName = useCallback(async () => {
     if (memberID) {
@@ -401,7 +400,7 @@ function CalendarPage() {
     };
 
     fetchDataAndUpdateState();
-  }, [selectedDate, checkCalendar, year, month, handleRemove]);
+  }, [selectedDate]);
 
   return (
     <Background>
