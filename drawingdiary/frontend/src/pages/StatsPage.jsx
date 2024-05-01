@@ -7,34 +7,34 @@ import { useAuth } from "../auth/context/AuthContext";
 import Background2 from "../components/Background/index2";
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  text {
-    margin: 0 0 10px 130px;
+  span {
+    margin: 10px;
     font-size: 15px;
     font-weight: bold;
   }
 `;
 
-const WriteHistory = styled.div`
-  margin-left: 5px;
+const TotalHistory = styled.div`
+  margin-top: 50px;
   font-size: 18px;
   font-weight: bold;
 `;
 
 const HistoryContainer = styled.div`
-  width: 1190px;
+  width: 100%;
   height: 290px;
-  margin: 100px 0 -100px 110px;
+  margin: 10px;
   padding: 10px;
 `;
 
 const StatsContainer = styled.div`
-  width: 1190px;
+  width: 100%;
   height: 190px;
-  margin: 0 0 30px 120px;
+  margin: 10px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 20px;
@@ -42,9 +42,9 @@ const StatsContainer = styled.div`
 `;
 
 const SentimentContainer = styled.div`
-  width: 1190px;
+  width: 100%;
   height: 250px;
-  margin: 0 0 30px 120px;
+  margin: 10px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 20px;
@@ -59,7 +59,7 @@ function StatsPage() {
 
   const fetchSentimentData = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/statistic', {},
+      const response = await axios.get('http://localhost:8080/api/statistic', {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -81,16 +81,16 @@ function StatsPage() {
         <Container>
           <NavBar />
           <HistoryContainer>
-            <WriteHistory>2024년에는 일기를 50편 썼어요!</WriteHistory>
+            <TotalHistory>2024년에는 일기를 50편 썼어요!</TotalHistory>
             <GrassGraph/>
           </HistoryContainer>
 
-          <text>수치</text>
+          <span>수치</span>
           <StatsContainer>
 
           </StatsContainer>
 
-          <text>1월 1주차 감정분석</text>
+          <span>1월 1주차 감정분석</span>
           <SentimentContainer>
 
           </SentimentContainer>
