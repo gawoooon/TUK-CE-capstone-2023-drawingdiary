@@ -64,7 +64,6 @@ const MenuItemText = styled.span`
 
 const ProfileSection = styled.div`
   padding: 25px 0 25px 25px;
-  border-top: 1px solid #ddd; // 상단에 경계선 추가
   min-height: 100px;
 `;
 
@@ -98,7 +97,6 @@ const SideBar = ({ isOpen, userName, userEmail }) => {
   return (
     <SideBarStyle>
       <SideBarHeader>
-        <SideBarLogo src="logo.png" alt="Logo" />
         <MenuItemText isOpen={isOpen}>감성 일기</MenuItemText>
       </SideBarHeader>
       <SideBarMenu>

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled, { keyframes, css } from "styled-components";
-import Background from "../components/Background";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
+import NavBar from "../components/sidebar/NavBar";
 import AlbumCategory from "../components/album/AlbumCategory";
 import Sentiment from "../components/sentiment/Sentiment";
 import ShowWeather from "../components/show/ShowWeather";
@@ -17,31 +16,30 @@ const FlexContainer = styled.div`
   width: 100vw;
   height: 100%;
   display: flex;
-  flex-direction: row;
-`;
-
-const RightContainer = styled.div`
-  margin-left: 100px;
-  padding-top: 50px;
-  flex: 1;
+  flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  max-height: calc(100vh - 80px);
-  box-sizing: border-box;
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #ccc;
+    background-color: #d3d3d3;
     border-radius: 4px;
   }
 `;
 
+const RightContainer = styled.div`
+  margin-left: 100px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 80px);
+  box-sizing: border-box;
+`;
+
 const TopContent = styled.div`
   height: 50px;
-  margin-top: 20px;
+  margin-top: 30px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -425,7 +423,7 @@ function ShowDiaryPage() {
     <div>
       <Background2>
         <FlexContainer>
-          <ShortSidebar />
+          <NavBar />
           <RightContainer>
             <TopContent>
               <ShowWeather date={date} weatherIcon={weatherState} />

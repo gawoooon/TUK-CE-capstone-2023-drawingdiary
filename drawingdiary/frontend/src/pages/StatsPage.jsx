@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import Background from "../components/Background";
-import SideBar from "../components/sidebar/SideBar";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
+import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
 import { useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
+import Background2 from "../components/Background/index2";
 
 const Container = styled.div`
   width: 100vw;
@@ -58,29 +57,29 @@ function StatsPage() {
   const { memberID } = useAuth();
   const accessToken = localStorage.getItem("accessToken");
 
-  // const fetchSentimentData = async () => {
-  //   try {
-  //     const response = await axios.post('http://localhost:8080/api/statistic', 
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       }
-  //     });
-  //     console.log("감정분석 : ", response);
-  //   } catch(error) {
-  //     console.log(error);
-  //   }
-  // };
+  const fetchSentimentData = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/api/statistic', {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      });
+      console.log("감정분석 : ", response);
+    } catch(error) {
+      console.log(error);
+    }
+  };
   
-  // useEffect(() => {
-  //   fetchSentimentData();
-  // }, []);
+  useEffect(() => {
+    fetchSentimentData();
+  }, []);
 
   return (
     <div>
-      <Background>
+      <Background2>
         <Container>
-          <ShortSidebar />
+          <NavBar />
           <HistoryContainer>
             <WriteHistory>2024년에는 일기를 50편 썼어요!</WriteHistory>
             <GrassGraph/>
@@ -96,7 +95,7 @@ function StatsPage() {
 
           </SentimentContainer>
         </Container>
-      </Background>
+      </Background2>
     </div>
   );
 }
