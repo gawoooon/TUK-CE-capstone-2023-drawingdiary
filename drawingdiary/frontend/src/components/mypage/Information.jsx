@@ -83,7 +83,7 @@ const InfoProfileEmail = styled.div`
   font-weight: bold;
 `;
 
-function Information({ onPopupToggle }) {
+function Information({ onPopupPassword }) {
   const setEmail = localStorage.getItem("setEmail");
   const setName = localStorage.getItem("setName");
   const setBirth = localStorage.getItem("setBirth");
@@ -93,7 +93,7 @@ function Information({ onPopupToggle }) {
     <InfoBox>
       <InfoTop>
         기본정보
-        <InfoBtn onClick={onPopupToggle}>수정</InfoBtn>
+        <InfoBtn onClick={onPopupPassword}>수정</InfoBtn>
       </InfoTop>
       <InfoBottom>
         <Line icon={IoMdPerson} text={setName} hasBorder={true} />

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { RiLock2Fill } from "react-icons/ri";
 import {
   MdOutlinePhoneIphone,
@@ -202,6 +203,7 @@ const PopupLineInputBox = styled.div`
 `;
 
 const PopupLineInput = styled.input`
+  flex: 1;
   width: 220px;
   height: 90%;
   outline: none;
@@ -254,26 +256,30 @@ const LineBox = styled.div`
 
 function Popup({ onClose }) {
   const accessToken = localStorage.getItem("accessToken");
-  const [setName, setSetName] = useState("");
+  const navigate = useNavigate();
+
+  // 프로필
+  const [newName, setNewName] = useState("");
   const [newProfileImage, setNewProfileImage] = useState(null); // 업로드한 이미지 상태 추가
   const setProfileImage = localStorage.getItem("setProfileImage");
 
   // 문자 인증
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneCertification, setPhoneCertification] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState(null);
   const [verifySnsMessage, setVerifySnsMessage] = useState(null);
   const [errorSnsMessage, setErrorSnsMessage] = useState(null);
 
   // 이메일 인증
-  const [newEmail, setNewEmail] = useState("");
+  const [newEmail, setNewEmail] = useState(null);
   const [certification, setCheckCertification] = useState("");
   const [verifyMessage, setVerifyMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   // 비밀번호
-  const [oldPassword, setOldPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState(null);
   const [passwordMatch, setPasswordMatch] = useState(null);
-  const [newPassword, setNewPassword] = useState("");
+  const [newPassword, setNewPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // 파일 선택 시 이벤트 처리 함수
@@ -299,7 +305,7 @@ function Popup({ onClose }) {
   useEffect(() => {
     const storedName = localStorage.getItem("setName");
     if (storedName) {
-      setSetName(storedName);
+      setNewName(storedName);
     }
   }, []);
 
@@ -383,7 +389,11 @@ function Popup({ onClose }) {
           }
         );
         console.log("response: ", response);
-        setVerifyMessage(true);
+        if (response.data === true) {
+          setVerifyMessage(true);
+        } else {
+          setVerifyMessage(false);
+        }
       } catch (error) {
         console.log("error: ", error);
         setVerifyMessage(false);
@@ -427,21 +437,59 @@ function Popup({ onClose }) {
     );
   }
 
-  // 수정 버튼 클릭
   // 비밀번호 일치하는지 확인
   const isPasswordValid = () => {
     return newPassword === confirmPassword;
   };
 
-  // 수정 버튼
-  const handleEditClick = () => {
-    if (isPasswordValid()) {
-      // 비밀번호가 일치하면 수정 로직 실행
-      // 여기에 수정 로직을 추가하세요
-      console.log("비밀번호가 일치합니다!");
-    } else {
-      // 비밀번호가 일치하지 않으면 오류 처리
-      console.log("비밀번호가 일치하지 않습니다!");
+  // 마이페이지 수정
+  const handleEditClick = async () => {
+    console.log(newName, newPhoneNumber);
+
+    // 변경사항이 없을 경우
+    if (
+      !passwordMatch &&
+      !verifyMessage &&
+      !verifySnsMessage &&
+      newName === localStorage.getItem("setName") &&
+      newProfileImage === setProfileImage
+    ) {
+      console.log(passwordMatch);
+      alert("수정사항이 없습니다.");
+      return;
+    }
+    // 비밀번호 일치 여부 확인
+    if (passwordMatch === true) {
+      if (!isPasswordValid()) {
+        alert("비밀번호가 일치하지 않습니다!");
+        return; // 실행 중단
+      }
+    }
+
+    console.log("dd");
+    try {
+      const response = await axios.patch(
+        "http://localhost:8080/api/mypage",
+        {
+          newName: newName,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+          newEmail: newEmail,
+          newPhoneNumber: newPhoneNumber,
+          newProfileImage: newProfileImage,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log("response: ", response);
+      alert("수정되었습니다!");
+      navigate("/calendar");
+    } catch (error) {
+      console.log("error: ", error);
+      setPasswordMatch(false);
     }
   };
 
@@ -457,21 +505,21 @@ function Popup({ onClose }) {
         <PopupBody>
           <ProfileTop>
             <ProfileImgBox>
-            {newProfileImage ? (
-    <ProfileImg src={newProfileImage} alt="프로필 이미지" />
-  ) : (
-    <>
-      {setProfileImage !== "null" && setProfileImage !== null ? (
-        <ProfileImg src={setProfileImage} alt="프로필 이미지" />
-      ) : (
-        <ProfileImg src="/user.png" alt="기본 이미지" />
-      )}
-    </>
-  )}
+              {newProfileImage ? (
+                <ProfileImg src={newProfileImage} alt="프로필 이미지" />
+              ) : (
+                <>
+                  {setProfileImage !== "null" && setProfileImage !== null ? (
+                    <ProfileImg src={setProfileImage} alt="프로필 이미지" />
+                  ) : (
+                    <ProfileImg src="/user.png" alt="기본 이미지" />
+                  )}
+                </>
+              )}
             </ProfileImgBox>
             <ProfileName
-              value={setName}
-              onChange={(e) => setSetName(e.target.value)}
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
             />
             <ProfileImgUpload>
               사진올리기
@@ -514,6 +562,19 @@ function Popup({ onClose }) {
               확인
             </PopupLineBtn>
           </PopupLineBox>
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                value={newPhoneNumber}
+                onChange={(e) => setNewPhoneNumber(e.target.value)}
+                placeholder="새로운 전화번호 입력 (11자리)"
+              />
+            </PopupLineInputBox>
+            <PopupLineBtnBox></PopupLineBtnBox>
+          </PopupLineBox>
+
           <LineBox />
 
           <PopupLineBox>
