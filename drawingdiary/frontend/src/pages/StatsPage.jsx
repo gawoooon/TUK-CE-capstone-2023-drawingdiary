@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
@@ -57,22 +57,33 @@ function StatsPage() {
   const { memberID } = useAuth();
   const accessToken = localStorage.getItem("accessToken");
 
-  const fetchSentimentData = async () => {
+  const [totalDairy, setTotalDiary] = useState("");
+  const [year, setYear] = useState('');
+  const [month, setMonth] = useState('');
+  const [week, setWeek] = useState('');
+
+  const [sentiRecord, setSentiRecord] = useState([]);
+
+  const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/statistic', {},
+      const response = await axios.get('http://localhost:8080/api/statistic',
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         }
       });
+      
+      setTotalDiary(response.data.lawn.total);
+      
       console.log("감정분석 : ", response);
+      setSentiRecord()
     } catch(error) {
       console.log(error);
     }
   };
   
   useEffect(() => {
-    fetchSentimentData();
+    fetchData();
   }, []);
 
   return (
@@ -81,7 +92,7 @@ function StatsPage() {
         <Container>
           <NavBar />
           <HistoryContainer>
-            <TotalHistory>2024년에는 일기를 50편 썼어요!</TotalHistory>
+            <TotalHistory>{year}년에는 일기를 {totalDairy}편 썼어요!</TotalHistory>
             <GrassGraph/>
           </HistoryContainer>
 
@@ -90,7 +101,7 @@ function StatsPage() {
 
           </StatsContainer>
 
-          <span>1월 1주차 감정분석</span>
+          <span>{month}월 {week}주차 감정분석</span>
           <SentimentContainer>
 
           </SentimentContainer>
