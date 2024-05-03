@@ -120,7 +120,7 @@ const PopupInput = styled.input`
 const PopupInputBox = styled.div`
   width: 300px;
   height: 50px;
-  padding-top: 40px;
+  padding-top: 60px;
 `;
 
 function PopupPassword({ onClose, onPopup }) {

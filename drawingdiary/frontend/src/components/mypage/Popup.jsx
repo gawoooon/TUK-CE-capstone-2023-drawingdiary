@@ -537,7 +537,10 @@ function Popup({ onClose }) {
           <ProfileTop>
             <ProfileImgBox>
               {newProfileImage !== "__NULL__" ? (
-                <ProfileImg src={newProfileImage} alt="프로필 이미지" />
+                <ProfileImg
+                  src={`data:image/png;base64, ${newProfileImage}`}
+                  alt="새 프로필 이미지"
+                />
               ) : (
                 <>
                   {setProfileImage !== "null" && setProfileImage !== null ? (
