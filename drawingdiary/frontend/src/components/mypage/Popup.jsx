@@ -260,7 +260,7 @@ function Popup({ onClose }) {
 
   // 프로필
   const [newName, setNewName] = useState("");
-  const [newProfileImage, setNewProfileImage] = useState(null); // 업로드한 이미지 상태 추가
+  const [newProfileImage, setNewProfileImage] = useState("__NULL__"); // 업로드한 이미지 상태 추가
   const setProfileImage = localStorage.getItem("setProfileImage");
 
   // 문자 인증
@@ -282,23 +282,48 @@ function Popup({ onClose }) {
   const [newPassword, setNewPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // 파일을 base64로 변환하는 함수
+  const convertToBase64 = (file, callback) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onload = () => {
+      const base64Image = arrayBufferToBase64(reader.result);
+      callback(base64Image);
+    };
+    reader.onerror = (error) => {
+      console.error("파일을 base64로 변환하는 중 오류가 발생했습니다.", error);
+      callback(null);
+    };
+  };
+
+  const arrayBufferToBase64 = (buffer) => {
+    let binary = "";
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  };
+
   // 파일 선택 시 이벤트 처리 함수
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
+      if (selectedFile.size > 1024 * 1024) {
+        // 파일이 너무 큰 경우
+        alert("이미지 파일의 크기는 1MB 이하여야 합니다.");
+        return;
+      }
       convertToBase64(selectedFile, (base64Image) => {
-        console.log(base64Image); // base64 문자열 출력
-        setNewProfileImage(base64Image);
+        if (base64Image) {
+          console.log(base64Image); // base64 문자열 출력
+          setNewProfileImage(base64Image);
+        } else {
+          console.error("파일을 base64로 변환할 수 없습니다.");
+        }
       });
     }
-  };
-
-  // 파일을 base64로 변환하는 함수
-  const convertToBase64 = (file, callback) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => callback(reader.result);
-    reader.onerror = (error) => console.error("Error: ", error);
   };
 
   // setName을 placeholder로 보내기
@@ -466,7 +491,14 @@ function Popup({ onClose }) {
       }
     }
 
-    console.log("dd");
+    console.log(
+      newName,
+      oldPassword,
+      newEmail,
+      newPassword,
+      newPhoneNumber,
+      newProfileImage
+    );
     try {
       const response = await axios.patch(
         "http://localhost:8080/api/mypage",
@@ -489,7 +521,6 @@ function Popup({ onClose }) {
       navigate("/calendar");
     } catch (error) {
       console.log("error: ", error);
-      setPasswordMatch(false);
     }
   };
 
@@ -505,7 +536,7 @@ function Popup({ onClose }) {
         <PopupBody>
           <ProfileTop>
             <ProfileImgBox>
-              {newProfileImage ? (
+              {newProfileImage !== "__NULL__" ? (
                 <ProfileImg src={newProfileImage} alt="프로필 이미지" />
               ) : (
                 <>

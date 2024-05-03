@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
@@ -15,6 +16,7 @@ public class MemberDTO {
     @Getter
     @ToString
     @AllArgsConstructor
+    @NoArgsConstructor // 기본 생성자 추가
     @Builder
     public static class MemberUpdate{
 
