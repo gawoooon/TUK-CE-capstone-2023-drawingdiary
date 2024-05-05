@@ -6,6 +6,7 @@ import Information from "../components/mypage/Information";
 import Profile from "../components/mypage/Profile";
 import Theme from "../components/mypage/Theme";
 import Popup from "../components/mypage/Popup";
+import PopupPassword from "../components/mypage/PopupPassword";
 
 const MyPageBackground = styled.div`
   width: 100%;
@@ -49,10 +50,17 @@ const MyPageBottomBox = styled.div`
 function MyPage() {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [isPopupVisible, setPopupVisible] = useState(false); // 팝업 창의 가시성을 관리하는 상태
+  const [isPopupPassword, setPopupPassword] = useState(false);
 
   // 팝업 창을 토글하는 함수
-  const togglePopup = () => {
+  const passwordPopup = () => {
+    setPopupPassword(!isPopupPassword);
+    setPopupVisible(false);
+  };
+
+  const PopupToggle = () => {
     setPopupVisible(!isPopupVisible);
+    setPopupPassword(false);
   };
 
   return (
@@ -66,12 +74,16 @@ function MyPage() {
               <Theme onColorChange={setBackgroundColor} />
             </MyPageTopBox>
             <MyPageBottomBox>
-              <Information onPopupToggle={togglePopup} />
+              <Information onPopupPassword={passwordPopup} />
+              {/* <Information onPopupToggle={togglePopup} /> */}
             </MyPageBottomBox>
           </MyPageBox>
         </MyPageBody>
       </Background>
-      {isPopupVisible && <Popup onClose={togglePopup} />}
+      {isPopupPassword && (
+        <PopupPassword onClose={passwordPopup} onPopup={PopupToggle} />
+      )}
+      {isPopupVisible && <Popup onClose={PopupToggle} />}
     </MyPageBackground>
   );
 }
