@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Background from "../components/Background";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
+import NavBar from "../components/sidebar/NavBar";
 import Information from "../components/mypage/Information";
 import Profile from "../components/mypage/Profile";
 import Theme from "../components/mypage/Theme";
@@ -66,7 +66,7 @@ function MyPage() {
   return (
     <MyPageBackground>
       <Background backgroundColor={backgroundColor}>
-        <ShortSidebar />
+        <NavBar />
         <MyPageBody>
           <MyPageBox>
             <MyPageTopBox>

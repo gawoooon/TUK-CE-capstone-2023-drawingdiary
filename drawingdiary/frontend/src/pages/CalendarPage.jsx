@@ -60,7 +60,7 @@ const RightBox = styled.div`
   flex-direction: column;
   height: 100%;
   padding: 40px 0;
-  transition: opacity 1s ease-out, width 200ms ease-out;
+  transition: opacity 200ms ease-out, width 200ms ease-out;
   box-sizing: border-box;
   overflow: hidden; // 내용이 max-height를 넘어가지 않도록 설정
   max-height: ${({ showRightBox }) =>
@@ -78,7 +78,7 @@ const PrevBtn = styled.button`
   outline: none;
   cursor: pointer;
   background: transparent;
-  transition: opacity 1s ease-out, width 200ms ease-out;
+  transition: opacity 200ms ease-out, width 200ms ease-out;
 `;
 
 const ResultBox = styled.div`
@@ -201,8 +201,7 @@ function CalendarPage() {
 
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [userBirth, setUserBirth] = useState("");
-  const [checkCalendar, setCheckCalendar] = useState(false);
+  const userBirth = "";
 
   const fetchUserName = useCallback(async () => {
     if (memberID) {
@@ -250,9 +249,9 @@ function CalendarPage() {
       setIsOpen(true);
     } else {
       setShowRightBox(true);
-      setLeftBoxWidth("7%");
-      setMiddleBoxWidth("66%");
-      setRightBoxWidth("34%");
+      setLeftBoxWidth("0%");
+      setMiddleBoxWidth("84%");
+      setRightBoxWidth("33%");
       setSelectedDate(day); // selectedDate 상태 업데이트
       setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
       setPrevBtnBox(true);
@@ -405,7 +404,7 @@ function CalendarPage() {
     };
 
     fetchDataAndUpdateState();
-  }, [selectedDate, checkCalendar, year, month, handleRemove]);
+  }, [selectedDate]);
 
   return (
     <Background>

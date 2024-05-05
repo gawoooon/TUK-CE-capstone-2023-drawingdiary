@@ -182,7 +182,7 @@ public class MemberController {
      *  @param : Static static
      */
     @Operation(summary = "통계페이지", description = "통계페이지")
-    @PostMapping("/statistic")
+    @GetMapping("/statistic")
     public ResponseEntity<?> statisticPage(@AuthenticationPrincipal PrincipalDetails principalDetails){
         return staticsService.makeStatics(principalDetails.getMemberID());
     }

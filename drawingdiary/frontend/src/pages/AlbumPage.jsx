@@ -1,20 +1,19 @@
 import styled from "styled-components";
-import Background from "../components/Background";
 import AlbumBox from "../components/album/AlbumBox";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
+import NavBar from "../components/sidebar/NavBar";
 import Button from "../components/button/Button";
 import { useState } from "react";
 import AddCategory from "../components/album/AddCategory";
 import { CategoryProvider } from "../components/album/CategoryList";
+import Background2 from "../components/Background/index2";
 
 const Container = styled.div`
-  width: 95%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
-  max-height: calc(100vh - 70px);
   box-sizing: border-box;
   &::-webkit-scrollbar {
     width: 8px;
@@ -26,7 +25,7 @@ const Container = styled.div`
 `;
 
 const AddAlbumContainer = styled.div`
-  position: relative;
+  position: sticky;
   margin-top: 20px;
   margin-right: 30px;
   display: flex;
@@ -62,21 +61,21 @@ const AlbumPage = () => {
 
   return (
     <CategoryProvider>
-      <Background>
+      <Background2>
         <Container>
-          <ShortSidebar/>
-          <AddAlbumContainer>
-            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-            <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
-            {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
-            <AddCategory
-              isOpen={isAddCategoryVisible}
-              onclose={handleClose}
-            />
-          </AddAlbumContainer>
+          <NavBar/>
           <AlbumBox  onErrorMessage={handleErrorMessage}/>
         </Container>
-      </Background>
+        <AddAlbumContainer>
+          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
+          {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
+          <AddCategory
+            isOpen={isAddCategoryVisible}
+            onclose={handleClose}
+          />
+        </AddAlbumContainer>
+      </Background2>
     </CategoryProvider>
   );
 }

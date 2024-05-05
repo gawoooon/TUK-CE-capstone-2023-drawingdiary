@@ -351,7 +351,6 @@ const CreateAccount = () => {
                     </InputFieldStyle>
                   </div>
 
-
                   <InputFieldStyle>
 
                   <LongInputField
@@ -387,106 +386,113 @@ const CreateAccount = () => {
 
                 </section>
               ) : (
-                <div>
-                  <InputFieldStyle>
-                    <LongInputField
-                      id="name"
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="이름"
-                    />
+                <section>
 
-                  </InputFieldStyle>
+                  <div style={{
+                    marginBottom: '100px'
+                  }}>
+                    <InputFieldStyle>
+                      <LongInputField
+                        id="name"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="이름"
+                      />
 
-                  <BirthDayContainer>
+                    </InputFieldStyle>
 
-                    <ShortInputField
-                      id="year"
-                      type="text"
-                      value={year}
-                      onChange={(e) => setYear(e.target.value)}
-                      placeholder="연"
-                    />
+                    <BirthDayContainer>
 
-                    <SelectMonthContainer 
-                      name='month'
-                      id='month'
-                      value={month}
-                      onChange={ (e) => setMonth(e.target.value)}
-                      style={{ color: month === "" ? '#808080' : 'initial', paddingTop: '2px' }}>
-                      <option value="" disabled style={{ color: 'grey'}}>월</option>
-                      <option value="1">1월</option>
-                      <option value="2">2월</option>
-                      <option value="3">3월</option>
-                      <option value="4">4월</option>
-                      <option value="5">5월</option>
-                      <option value="6">6월</option>
-                      <option value="7">7월</option>
-                      <option value="8">8월</option>
-                      <option value="9">9월</option>
-                      <option value="10">10월</option>
-                      <option value="11">11월</option>
-                      <option value="12">12월</option>
+                      <ShortInputField
+                        id="year"
+                        type="text"
+                        value={year}
+                        onChange={(e) => setYear(e.target.value)}
+                        placeholder="연"
+                      />
 
-                    </SelectMonthContainer>
+                      <SelectMonthContainer 
+                        name='month'
+                        id='month'
+                        value={month}
+                        onChange={ (e) => setMonth(e.target.value)}
+                        style={{ color: month === "" ? '#808080' : 'initial', paddingTop: '2px' }}>
+                        <option value="" disabled style={{ color: 'grey'}}>월</option>
+                        <option value="1">1월</option>
+                        <option value="2">2월</option>
+                        <option value="3">3월</option>
+                        <option value="4">4월</option>
+                        <option value="5">5월</option>
+                        <option value="6">6월</option>
+                        <option value="7">7월</option>
+                        <option value="8">8월</option>
+                        <option value="9">9월</option>
+                        <option value="10">10월</option>
+                        <option value="11">11월</option>
+                        <option value="12">12월</option>
 
-                    <ShortInputField
-                      id="day"
-                      type="text"
-                      value={day}
-                      onChange={(e) => setDay(e.target.value)}
-                      placeholder="일"
-                    />
+                      </SelectMonthContainer>
 
-                  </BirthDayContainer>
+                      <ShortInputField
+                        id="day"
+                        type="text"
+                        value={day}
+                        onChange={(e) => setDay(e.target.value)}
+                        placeholder="일"
+                      />
 
-                  <SelectGenderContainer
-                    name='gender'
-                    id='gender'
-                    value={gender}
-                    onChange={ (e) => setGender(e.target.value)}
-                    style={{ color: month === "" ? '#808080' : 'initial' }}>
-                    <option value="" disabled style={{ color: 'grey'}}>성별</option>
-                    <option value="female">여자</option>
-                    <option value="male">남자</option>
-                    <option value="secret">공개안함</option>
-                  </SelectGenderContainer>
+                    </BirthDayContainer>
 
-                  {/* -- 전화번호 입력 부분 -- */}
+                    <SelectGenderContainer
+                      name='gender'
+                      id='gender'
+                      value={gender}
+                      onChange={ (e) => setGender(e.target.value)}
+                      style={{ color: month === "" ? '#808080' : 'initial' }}>
+                      <option value="" disabled style={{ color: 'grey'}}>성별</option>
+                      <option value="female">여자</option>
+                      <option value="male">남자</option>
+                      <option value="secret">공개안함</option>
+                    </SelectGenderContainer>
+                  </div>
 
-                  {/* <InputFieldStyle>
-                  
-                    <PhoneInputStyle 
-                      id='phoneNumber'
-                      type='phone'
-                      value={userPhone}
-                      onChange={ (e) => setUserPhone(e.target.value)}
-                      placeholder='전화번호 입력'
-                    />
+                    {/* -- 전화번호 입력 부분 -- */}
 
-                    <VerifyButton onClick={(e) => sendEmail(e)}>인증</VerifyButton>
+                    {/* <InputFieldStyle>
+                    
+                      <PhoneInputStyle 
+                        id='phoneNumber'
+                        type='phone'
+                        value={userPhone}
+                        onChange={ (e) => setUserPhone(e.target.value)}
+                        placeholder='전화번호 입력'
+                      />
 
-                  </InputFieldStyle> */}
+                      <VerifyButton onClick={(e) => sendEmail(e)}>인증</VerifyButton>
 
-                  <InputFieldStyle>
+                    </InputFieldStyle> */}
 
-                  <InputStyle
-                    id="certification"
-                    value={certificateEmail}
-                    onChange={(e) => checkCertificateEmail(e.target.value)}
-                    placeholder="인증번호 입력"/>
+                    {/* <InputFieldStyle>
 
-                    <VerifyButton onClick={(e) => verifyCertification(e)}>확인</VerifyButton>
+                    <InputStyle
+                      id="certification"
+                      value={certificateEmail}
+                      onChange={(e) => checkCertificateEmail(e.target.value)}
+                      placeholder="인증번호 입력"/>
 
-                  </InputFieldStyle>
+                      <VerifyButton onClick={(e) => verifyCertification(e)}>확인</VerifyButton>
 
-                  <ButtonContainer>
-                    <ButtonStyle animate={animateNextBtn} onClick={handleNextForm} herf="/choosePersonality">
-                      다음
-                    </ButtonStyle>
-                  </ButtonContainer>
-                </div>
+                    </InputFieldStyle> */} 
+
+                  <div>
+                    <ButtonContainer>
+                      <ButtonStyle animate={animateNextBtn} onClick={handleNextForm} herf="/choosePersonality">
+                        다음
+                      </ButtonStyle>
+                    </ButtonContainer>
+                  </div>
+                </section>
               )}
             </form>
 
