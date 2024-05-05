@@ -122,26 +122,23 @@ public class MemberServiceImpl implements MemberService{
     public void updateProfileImage(Member targetMember, String profileimage) {
 
         // 0. profileimage = '__NULL__' 이라면 프로필 이미지를 삭제하고 null 값이 된다.
-        String null_check = "__NULL__";
-        if(profileimage.equals(null_check)){
+        if(profileimage == "__NULL__"){
             String imageState = s3Uploader.deleteImage(targetMember.getProfileImage());
             targetMember.updateProfileImage(null);
             return;
         }
 
-        else{
-            // 1. 오늘 날짜 가져오기
-            LocalDate today = LocalDate.now();
+        // 1. 오늘 날짜 가져오기
+        LocalDate today = LocalDate.now();
 
-            // 2. s3 업로드
-            try {
-                String imageUrl = s3Uploader.uploadImage(profileimage, today, "p");
-                // 3. update
-                targetMember.updateProfileImage(imageUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new MemberResponseException(MemberExceptionType.ERROR_UPDATE_PROFILEIMAGE);
-            }
+        // 2. s3 업로드
+        try {
+            String imageUrl = s3Uploader.uploadImage(profileimage, today, "p");
+            // 3. update
+            targetMember.updateProfileImage(imageUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new MemberResponseException(MemberExceptionType.ERROR_UPDATE_PROFILEIMAGE);
         }
     }
 
@@ -212,10 +209,4 @@ public class MemberServiceImpl implements MemberService{
     }
 
 
-
-
-    
-
-
-    
 }

@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MultiLabelBinarizer
@@ -10,7 +9,7 @@ import logging
 
 def predict_user_style(age, gender):
     # 데이터 불러오기
-    file_path = '/app/data/data_set2.csv'
+    file_path = '/app/data/init_set.csv'
     data = pd.read_csv(file_path)
 
     # 나이 범위 초기화, 필요한 스타일 수 초기화

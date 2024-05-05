@@ -1,5 +1,8 @@
 package com.diary.drawing.domain.user.dto;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -7,7 +10,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
@@ -16,7 +18,6 @@ public class MemberDTO {
     @Getter
     @ToString
     @AllArgsConstructor
-    @NoArgsConstructor // 기본 생성자 추가
     @Builder
     public static class MemberUpdate{
 
@@ -47,5 +48,55 @@ public class MemberDTO {
     public static class passwordCheck{
         private String oldPassword;
     }
+
+    
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @Builder
+    public static class Statistic{
+        private Lawn lawn;
+        private Value value;
+        private List<Emotion> emotions;
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @Builder
+    public static class Lawn{
+        private int total;
+        private List<Data> data;
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @Builder
+    public static class Data{
+        private LocalDate date;
+        private boolean iswritten;
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @Builder
+    public static class Value{
+        private int month;
+        private double average;
+        private String style;
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @Builder
+    public static class Emotion{
+        private int positive;
+        private int netural;
+        private int negative;
+    }
+
 
 }

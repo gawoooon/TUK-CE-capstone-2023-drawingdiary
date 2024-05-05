@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Background from "../components/Background";
-import ShortSidebar from "../components/sidebar/ShortSidebar";
+import NavBar from "../components/sidebar/NavBar";
 import Information from "../components/mypage/Information";
 import Profile from "../components/mypage/Profile";
 import Theme from "../components/mypage/Theme";
 import Popup from "../components/mypage/Popup";
-import PopupPassword from "../components/mypage/PopupPassword";
 
 const MyPageBackground = styled.div`
   width: 100%;
@@ -50,23 +49,16 @@ const MyPageBottomBox = styled.div`
 function MyPage() {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [isPopupVisible, setPopupVisible] = useState(false); // 팝업 창의 가시성을 관리하는 상태
-  const [isPopupPassword, setPopupPassword] = useState(false);
 
   // 팝업 창을 토글하는 함수
-  const passwordPopup = () => {
-    setPopupPassword(!isPopupPassword);
-    setPopupVisible(false);
-  };
-
-  const PopupToggle = () => {
+  const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
-    setPopupPassword(false);
   };
 
   return (
     <MyPageBackground>
       <Background backgroundColor={backgroundColor}>
-        <ShortSidebar />
+        <NavBar />
         <MyPageBody>
           <MyPageBox>
             <MyPageTopBox>
@@ -74,16 +66,12 @@ function MyPage() {
               <Theme onColorChange={setBackgroundColor} />
             </MyPageTopBox>
             <MyPageBottomBox>
-              <Information onPopupPassword={passwordPopup} />
-              {/* <Information onPopupToggle={togglePopup} /> */}
+              <Information onPopupToggle={togglePopup} />
             </MyPageBottomBox>
           </MyPageBox>
         </MyPageBody>
       </Background>
-      {isPopupPassword && (
-        <PopupPassword onClose={passwordPopup} onPopup={PopupToggle} />
-      )}
-      {isPopupVisible && <Popup onClose={PopupToggle} />}
+      {isPopupVisible && <Popup onClose={togglePopup} />}
     </MyPageBackground>
   );
 }
