@@ -20,14 +20,13 @@ import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
 import com.diary.drawing.domain.user.dto.PersonalityUpdateDTO;
-import com.diary.drawing.domain.user.dto.PhoneRequestDTO;
 import com.diary.drawing.domain.user.dto.ThemeUpdateDTO;
+import com.diary.drawing.domain.user.dto.PhoneRequestDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
 import com.diary.drawing.domain.user.service.MemberService;
 import com.diary.drawing.domain.user.service.SmsVerificationService;
-import com.diary.drawing.domain.user.service.StatisticsService;
 import com.diary.drawing.global.jwt.domain.PrincipalDetails;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +46,6 @@ public class MemberController {
     private final AlbumService albumService;
     private final MemberRepository memberRepository;
     private final SmsVerificationService smsVerificationService;
-    private final StatisticsService staticsService;
 
 
     // 로그인은 jwt AuthController 에 구현되어있음
@@ -176,15 +174,6 @@ public class MemberController {
     @PostMapping("/sms/verify")
     public ResponseEntity<?> verify(@RequestBody PhoneRequestDTO.verifyDTO verifyDTO){
         return memberService.findEmailByPhoneNumber(verifyDTO.getPhoneNumber(), verifyDTO.getCode());
-    }
-
-    /*  통계 화면 api
-     *  @param : Static static
-     */
-    @Operation(summary = "통계페이지", description = "통계페이지")
-    @GetMapping("/statistic")
-    public ResponseEntity<?> statisticPage(@AuthenticationPrincipal PrincipalDetails principalDetails){
-        return staticsService.makeStatics(principalDetails.getMemberID());
     }
     
 

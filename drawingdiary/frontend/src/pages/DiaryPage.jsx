@@ -8,7 +8,7 @@ import EditDiary from "../components/edit diary/EditDiary";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
 import ImageOption from "../components/edit diary/ImageOption";
 import Sentiment from "../components/sentiment/Sentiment";
-import ShortSidebar from "../components/sidebar/NavBar";
+import ShortSidebar from "../components/sidebar/ShortSidebar";
 import Weather from "../components/weather/Weather";
 import Background2 from "../components/Background/index2";
 
@@ -16,30 +16,31 @@ const FlexContainer = styled.div`
   width: 100vw;
   height: 100%;
   display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #d3d3d3;
-    border-radius: 4px;
-  }
+  flex-direction: row;
 `;
 
 const RightContainer = styled.div`
   margin-left: 100px;
+  padding-top: 50px;
   flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 80px);
   box-sizing: border-box;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
 `;
 
 const TopContent = styled.div`
   height: 50px;
-  margin-top: 30px;
+  margin-top: 20px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -261,6 +262,8 @@ function DiaryPage() {
     }
   };
 
+  // 저장 버튼 활성화 조건
+  // const isSaveButtonEnabled = isTextValid && isOptionSelected;
   // 일단 임시로 이걸로 하자
   const isSaveButtonEnabled = isTextValid;
 
@@ -406,7 +409,7 @@ function DiaryPage() {
         }
       );
       if (responseDiary.status === 200) {
-        console.log("일기가 백엔드로 전송되었습니다.");
+        console.log("일기가 백엔드로 전송되었습니다.", responseDiary.data);
         alert("일기가 생성되었어요!");
         navigate("/calendar");
       } else {

@@ -17,6 +17,9 @@ const AlbumContainer = styled.div`
     height: 260px;
     margin: 10px 0 30px 120px;
     padding: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 const ScrollSection = styled.div`
@@ -45,7 +48,7 @@ const PictureContainer = styled.div`
     align-items: center;
     background-color: transparent;
     
-    &:hover {
+    :hover {
         img {
             transform: scale(1.05);
         }

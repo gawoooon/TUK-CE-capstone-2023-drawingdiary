@@ -1,40 +1,38 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-import NavBar from "../components/sidebar/NavBar";
+import Background from "../components/Background";
+import SideBar from "../components/sidebar/SideBar";
+import ShortSidebar from "../components/sidebar/ShortSidebar";
 import GrassGraph from "../components/grid/DaySquare";
-import { useAuth } from "../auth/context/AuthContext";
-import Background2 from "../components/Background/index2";
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  span {
-    margin: 10px;
+  text {
+    margin: 0 0 10px 130px;
     font-size: 15px;
     font-weight: bold;
   }
 `;
 
-const TotalHistory = styled.div`
-  margin-top: 50px;
+const WriteHistory = styled.div`
+  margin-left: 5px;
   font-size: 18px;
   font-weight: bold;
 `;
 
 const HistoryContainer = styled.div`
-  width: 100%;
+  width: 1190px;
   height: 290px;
-  margin: 10px;
+  margin: 100px 0 -100px 110px;
   padding: 10px;
 `;
 
 const StatsContainer = styled.div`
-  width: 100%;
-  height: 190px;
-  margin: 10px;
+  width: 1190px;
+  height: 240px;
+  margin: 0 0 30px 120px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 20px;
@@ -42,71 +40,37 @@ const StatsContainer = styled.div`
 `;
 
 const SentimentContainer = styled.div`
-  width: 100%;
-  height: 250px;
-  margin: 10px;
+  width: 1190px;
+  height: 200px;
+  margin: 0 0 30px 120px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
-
 function StatsPage() {
-
-  const { memberID } = useAuth();
-  const accessToken = localStorage.getItem("accessToken");
-
-  const [totalDairy, setTotalDiary] = useState("");
-  const [year, setYear] = useState('');
-  const [month, setMonth] = useState('');
-  const [week, setWeek] = useState('');
-
-  const [sentiRecord, setSentiRecord] = useState([]);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/statistic',
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        }
-      });
-      
-      setTotalDiary(response.data.lawn.total);
-      
-      console.log("감정분석 : ", response);
-      setSentiRecord()
-    } catch(error) {
-      console.log(error);
-    }
-  };
-  
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
     <div>
-      <Background2>
+      <Background>
         <Container>
-          <NavBar />
+          <ShortSidebar />
           <HistoryContainer>
-            <TotalHistory>{year}년에는 일기를 {totalDairy}편 썼어요!</TotalHistory>
+            <WriteHistory>2024년에는 일기를 50편 썼어요!</WriteHistory>
             <GrassGraph/>
           </HistoryContainer>
 
-          <span>수치</span>
+          <text>수치</text>
           <StatsContainer>
 
           </StatsContainer>
 
-          <span>{month}월 {week}주차 감정분석</span>
+          <text>1월 1주차 감정분석</text>
           <SentimentContainer>
 
           </SentimentContainer>
         </Container>
-      </Background2>
+      </Background>
     </div>
   );
 }

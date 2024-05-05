@@ -25,30 +25,30 @@ public class StyleSelectHistory {
     @JoinColumn(name = "memberID") // 외부키 references from memberID
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)  // 여러 선택 이력과 한개의 이미지 스타일
+    @JoinColumn(name = "styleID") // 외부키 references from styleID
+    private ImageStyle imageStyle;
+
     /* 다이어리에서 select style */
-    private String selectStyle;
+    private Long selectStyleID;
 
     /* predictedStyleID */
-    private String predictedStyle1;
+    private Long predictedStyle1;
 
-    private String predictedStyle2;
+    private Long predictedStyle2;
 
-    private String predictedStyle3;
+    private Long predictedStyle3;
 
-    private String predictedStyle4;
-
-    private String predictedStyle5;
+    private Long predictedStyle4;
 
     @Builder
-    public StyleSelectHistory(Member member, String selectStyle, String predictedStyle1, String predictedStyle2,
-    String predictedStyle3, String predictedStyle4, String predictedStyle5){
+    public StyleSelectHistory(Member member, Long selectStyleID, Long predictedStyle1, Long predictedStyle2, Long predictedStyle3, Long predictedStyle4){
         this.member=member;
-        this.selectStyle=selectStyle;
+        this.selectStyleID=selectStyleID;
         this.predictedStyle1=predictedStyle1;
         this.predictedStyle2=predictedStyle2;
         this.predictedStyle3=predictedStyle3;
         this.predictedStyle4=predictedStyle4;
-        this.predictedStyle5=predictedStyle5;
     }
 
 

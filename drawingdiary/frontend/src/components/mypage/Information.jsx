@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
 import { FaBirthdayCake } from "react-icons/fa";
+import { IoMdPerson } from "react-icons/io";
 import Line from "./Line";
 
 const InfoBox = styled.div`
@@ -40,29 +41,35 @@ const InfoBtn = styled.button`
 const InfoBottom = styled.div`
   width: 100%;
   height: 85%;
-  padding: 15px 20px;
+  padding: 30px 20px 15px 20px;
   box-sizing: border-box;
 `;
 
 const InfoProfileBox = styled.div`
   display: flex;
   border-bottom: 1px solid rgba(163, 163, 163, 0.3);
-  padding: 10px 0;
+  padding: 20px 0;
   box-sizing: border-box;
 `;
 
-const InfoProfileImg = styled.div`
+const InfoProfileImgBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 80px;
-  height: 80px;
-  border-radius: 50px;
-  background-color: pink;
+  height: 50px;
+`;
+
+const InfoProfileImg = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; // 이미지를 원형으로 만듭니다.
 `;
 
 const InfoProfileNameEmailBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  padding: 10px 30px;
   box-sizing: border-box;
 `;
 
@@ -76,24 +83,20 @@ const InfoProfileEmail = styled.div`
   font-weight: bold;
 `;
 
-function Information({ onPopupToggle }) {
+function Information({ onPopupPassword }) {
   const setEmail = localStorage.getItem("setEmail");
   const setName = localStorage.getItem("setName");
   const setBirth = localStorage.getItem("setBirth");
+  const setProfileImage = localStorage.getItem("setProfileImage");
+
   return (
     <InfoBox>
       <InfoTop>
         기본정보
-        <InfoBtn onClick={onPopupToggle}>수정</InfoBtn>
+        <InfoBtn onClick={onPopupPassword}>수정</InfoBtn>
       </InfoTop>
       <InfoBottom>
-        <InfoProfileBox>
-          <InfoProfileImg></InfoProfileImg>
-          <InfoProfileNameEmailBox>
-            <InfoProfileName>{setName}</InfoProfileName>
-            <InfoProfileEmail>{setEmail}</InfoProfileEmail>
-          </InfoProfileNameEmailBox>
-        </InfoProfileBox>
+        <Line icon={IoMdPerson} text={setName} hasBorder={true} />
         <Line
           icon={MdOutlinePhoneIphone}
           text="010-0000-0000"

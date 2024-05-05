@@ -1,10 +1,16 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { MdOutlinePhoneIphone } from "react-icons/md";
-import { MdEmail } from "react-icons/md";
-import PopupLine from "./PopupLine";
+import { useNavigate } from "react-router-dom";
 import { RiLock2Fill } from "react-icons/ri";
+import {
+  MdOutlinePhoneIphone,
+  MdEmail,
+  MdCheckCircle,
+  MdClear,
+} from "react-icons/md";
 
+// 팝업창
 const BackgroundOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -35,6 +41,7 @@ const PopupBox = styled.div`
   box-sizing: border-box;
 `;
 
+// 팝업창 상단
 const PopupTop = styled.div`
   display: flex;
   align-items: center;
@@ -54,6 +61,7 @@ const PopupTopCloseBtn = styled.button`
   background-color: white;
 `;
 
+// 팝업창 하단 - 수정 버튼
 const PopupBottom = styled.div`
   width: 100%;
   height: 7%;
@@ -84,6 +92,7 @@ const PopupBottomEditBtn = styled.button`
   }
 `;
 
+// 팝업창 중단
 const PopupBody = styled.div`
   display: flex;
   flex-direction: column;
@@ -94,29 +103,25 @@ const PopupBody = styled.div`
   padding: 10px 0;
 `;
 
+// 프로필
 const ProfileTop = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  align-items: end;
   width: 100%;
   height: 17%;
   background-color: white;
-  border-bottom: 2px solid rgba(106, 156, 253, 0.4);
+  border-bottom: 3px solid rgba(106, 156, 253, 0.2);
   margin-bottom: 20px;
-`;
-
-const ProfileTopBody = styled.div`
-  display: flex;
-  width: 100%;
-  height: 90%;
-  background-color: white;
-  padding: 10px 0px;
+  padding: 0 20px 20px 20px;
   box-sizing: border-box;
 `;
 
-const ProfileImgNameBox = styled.div`
+// 프로필 이미지
+const ProfileImgBox = styled.div`
   display: flex;
-  width: 65%;
-  height: 100%;
+  width: 80px;
+  height: 80px;
   align-items: end;
 `;
 
@@ -124,25 +129,17 @@ const ProfileImg = styled.img`
   height: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 50px;
-  object-fit: contain;
-`;
-const ProfileNameBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 20px;
-  box-sizing: border-box;
-  color: rgb(144, 144, 144);
-  border-bottom: 2px solid rgb(144, 144, 144);
-  width: 150px;
-  height: 45px;
-\
+  object-fit: cover;
 `;
 
+// 프로필 이름
 const ProfileName = styled.input`
+  display: flex;
+  align-items: end;
   width: 140px;
+  height: 40px;
   font-size: 20px;
-  padding: 5px;
+  margin: 0px 10px;
   box-sizing: border-box;
   outline: none;
   border: none;
@@ -150,25 +147,20 @@ const ProfileName = styled.input`
   ::placeholder {
     color: #a3a3a3;
   }
+  border-bottom: 2px solid rgb(144, 144, 144);
 `;
 
-const ProfileImgUploadBox = styled.div`
-  width: 35%;
-  height: 100%;
-  display: flex;
-  align-items: end;
-  justify-content: end;
-`;
-
+// 프로필 이미지 업로드
 const ProfileImgUpload = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 40px;
+  width: 100px;
+  height: 35px;
   background-color: white;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 13px;
+  font-weight: bold;
   color: rgb(144, 144, 144);
   border: 2px solid rgb(144, 144, 144);
   cursor: pointer;
@@ -182,36 +174,356 @@ const HiddenFileInput = styled.input`
   border-radius: 50px;
 `;
 
+// 팝업창
+const PopupLineBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px 10px 10px;
+  width: 100%;
+  height: 45px;
+  box-sizing: border-box;
+`;
+
+const PopupLineIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 100%;
+`;
+
+const PopupLineInputBox = styled.div`
+  display: flex;
+  width: 250px;
+  height: 100%;
+  font-size: 13px;
+  border: none;
+  border-bottom: 1px solid rgba(56, 56, 56, 0.4);
+`;
+
+const PopupLineInput = styled.input`
+  flex: 1;
+  width: 220px;
+  height: 90%;
+  outline: none;
+  font-size: 13px;
+  border: none;
+`;
+
+const PopupLineTitle = styled.div`
+  display: flex;
+  align-items: center;
+  width: 250px;
+  height: 100%;
+  font-size: 15px;
+  font-weight: bold;
+`;
+
+const PopupLineBtn = styled.button`
+  width: 50px;
+  height: 30px;
+  background-color: white;
+  border: 2px solid rgba(106, 156, 253, 0.4);
+  border-radius: 10px;
+  cursor: pointer;
+  color: black;
+  font-size: 13px;
+  text-align: center;
+  outline: none;
+  font-weight: bold;
+`;
+
+const PopupLineBtnBox = styled.div`
+  width: 50px;
+  height: 100%;
+  background-color: white;
+`;
+
+// 인증 문구
+const CheckIconBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 90%;
+  color: green;
+`;
+const LineBox = styled.div`
+  width: 100%;
+  height: 15px;
+`;
+
 function Popup({ onClose }) {
-  const [setName, setSetName] = useState("");
-  const [profileImage, setProfileImage] = useState(null); // 업로드한 이미지 상태 추가
+  const accessToken = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
+
+  // 프로필
+  const [newName, setNewName] = useState("");
+  const [newProfileImage, setNewProfileImage] = useState("__NULL__"); // 업로드한 이미지 상태 추가
+  const setProfileImage = localStorage.getItem("setProfileImage");
+
+  // 문자 인증
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneCertification, setPhoneCertification] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState(null);
+  const [verifySnsMessage, setVerifySnsMessage] = useState(null);
+  const [errorSnsMessage, setErrorSnsMessage] = useState(null);
+
+  // 이메일 인증
+  const [newEmail, setNewEmail] = useState(null);
+  const [certification, setCheckCertification] = useState("");
+  const [verifyMessage, setVerifyMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  // 비밀번호
+  const [oldPassword, setOldPassword] = useState(null);
+  const [passwordMatch, setPasswordMatch] = useState(null);
+  const [newPassword, setNewPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // 파일을 base64로 변환하는 함수
+  const convertToBase64 = (file, callback) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onload = () => {
+      const base64Image = arrayBufferToBase64(reader.result);
+      callback(base64Image);
+    };
+    reader.onerror = (error) => {
+      console.error("파일을 base64로 변환하는 중 오류가 발생했습니다.", error);
+      callback(null);
+    };
+  };
+
+  const arrayBufferToBase64 = (buffer) => {
+    let binary = "";
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  };
 
   // 파일 선택 시 이벤트 처리 함수
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
+      if (selectedFile.size > 1024 * 1024) {
+        // 파일이 너무 큰 경우
+        alert("이미지 파일의 크기는 1MB 이하여야 합니다.");
+        return;
+      }
       convertToBase64(selectedFile, (base64Image) => {
-        console.log(base64Image); // base64 문자열 출력
-        setProfileImage(base64Image);
+        if (base64Image) {
+          console.log(base64Image); // base64 문자열 출력
+          setNewProfileImage(base64Image);
+        } else {
+          console.error("파일을 base64로 변환할 수 없습니다.");
+        }
       });
     }
-  };
-
-  // 파일을 base64로 변환하는 함수
-  const convertToBase64 = (file, callback) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => callback(reader.result);
-    reader.onerror = (error) => console.error("Error: ", error);
   };
 
   // setName을 placeholder로 보내기
   useEffect(() => {
     const storedName = localStorage.getItem("setName");
     if (storedName) {
-      setSetName(storedName);
+      setNewName(storedName);
     }
   }, []);
+
+  // 문자 인증
+  const sendPhone = async (event) => {
+    event.preventDefault();
+    console.log("phoneNumber: ", phoneNumber);
+    if (phoneNumber !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/sms/codesending",
+          { phoneNumber: phoneNumber },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        console.log("response", response);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    } else {
+      alert("핸드폰 번호를 입력해주세요!");
+    }
+  };
+
+  const verifyPhoneCertification = async (event) => {
+    event.preventDefault();
+    if (phoneCertification !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/sms/verify",
+          {
+            phoneNumber: phoneNumber,
+            code: phoneCertification,
+          }
+        );
+        console.log("response: ", response);
+        setVerifySnsMessage(true);
+      } catch (error) {
+        setVerifySnsMessage(false);
+        console.log("error: ", error);
+      }
+    }
+  };
+
+  // 이메일 인증
+  const sendEmail = async (event) => {
+    event.preventDefault();
+    console.log("newEmail: ", newEmail);
+    if (newEmail !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/email/codesending",
+          { email: newEmail },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        console.log("response", response);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    } else {
+      alert("이메일을 입력해주세요!");
+    }
+  };
+
+  const verifyCertification = async (event) => {
+    event.preventDefault();
+    if (certification !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/email/verify",
+          {
+            email: newEmail,
+            verificationCode: certification,
+          }
+        );
+        console.log("response: ", response);
+        if (response.data === true) {
+          setVerifyMessage(true);
+        } else {
+          setVerifyMessage(false);
+        }
+      } catch (error) {
+        console.log("error: ", error);
+        setVerifyMessage(false);
+      }
+    }
+  };
+
+  // 비밀번호 인증
+  const handleChangePassword = async () => {
+    console.log(oldPassword);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/password",
+        {
+          oldPassword: oldPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log("response: ", response);
+      setPasswordMatch(true);
+    } catch (error) {
+      console.log("error: ", error);
+      setPasswordMatch(false);
+    }
+  };
+
+  // 이모티콘
+  function VerificationIcon({ isValid }) {
+    return (
+      <CheckIconBox>
+        {isValid === null ? null : isValid ? (
+          <MdCheckCircle size={16} color="green" />
+        ) : (
+          <MdClear size={16} color="red" />
+        )}
+      </CheckIconBox>
+    );
+  }
+
+  // 비밀번호 일치하는지 확인
+  const isPasswordValid = () => {
+    return newPassword === confirmPassword;
+  };
+
+  // 마이페이지 수정
+  const handleEditClick = async () => {
+    console.log(newName, newPhoneNumber);
+
+    // 변경사항이 없을 경우
+    if (
+      !passwordMatch &&
+      !verifyMessage &&
+      !verifySnsMessage &&
+      newName === localStorage.getItem("setName") &&
+      newProfileImage === setProfileImage
+    ) {
+      console.log(passwordMatch);
+      alert("수정사항이 없습니다.");
+      return;
+    }
+    // 비밀번호 일치 여부 확인
+    if (passwordMatch === true) {
+      if (!isPasswordValid()) {
+        alert("비밀번호가 일치하지 않습니다!");
+        return; // 실행 중단
+      }
+    }
+
+    console.log(
+      newName,
+      oldPassword,
+      newEmail,
+      newPassword,
+      newPhoneNumber,
+      newProfileImage
+    );
+    try {
+      const response = await axios.patch(
+        "http://localhost:8080/api/mypage",
+        {
+          newName: newName,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+          newEmail: newEmail,
+          newPhoneNumber: newPhoneNumber,
+          newProfileImage: newProfileImage,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log("response: ", response);
+      alert("수정되었습니다!");
+      navigate("/calendar");
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   return (
     <>
       <BackgroundOverlay />
@@ -220,47 +532,184 @@ function Popup({ onClose }) {
           <PopupTopText>기본정보</PopupTopText>
           <PopupTopCloseBtn onClick={onClose}>X</PopupTopCloseBtn>
         </PopupTop>
+
         <PopupBody>
           <ProfileTop>
-            <ProfileTopBody>
-              <ProfileImgNameBox>
-                <ProfileImg src={profileImage}></ProfileImg>
-                <ProfileNameBox>
-                  <ProfileName
-                    value={setName}
-                    onChange={(e) => setSetName(e.target.value)}
-                  />
-                </ProfileNameBox>
-              </ProfileImgNameBox>
-              <ProfileImgUploadBox>
-                <ProfileImgUpload>
-                  사진올리기
-                  <HiddenFileInput
-                    type="file"
-                    onChange={handleFileChange}
-                    accept="image/*"
-                  />
-                </ProfileImgUpload>
-              </ProfileImgUploadBox>
-            </ProfileTopBody>
+            <ProfileImgBox>
+              {newProfileImage !== "__NULL__" ? (
+                <ProfileImg
+                  src={`data:image/png;base64, ${newProfileImage}`}
+                  alt="새 프로필 이미지"
+                />
+              ) : (
+                <>
+                  {setProfileImage !== "null" && setProfileImage !== null ? (
+                    <ProfileImg src={setProfileImage} alt="프로필 이미지" />
+                  ) : (
+                    <ProfileImg src="/user.png" alt="기본 이미지" />
+                  )}
+                </>
+              )}
+            </ProfileImgBox>
+            <ProfileName
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+            />
+            <ProfileImgUpload>
+              사진올리기
+              <HiddenFileInput
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+            </ProfileImgUpload>
           </ProfileTop>
-          <PopupLine
-            icon={MdOutlinePhoneIphone}
-            text="인증"
-            placeholder="전화번호"
-          />
-          <PopupLine placeholder="인증번호 입력" />
-          <PopupLine icon={MdEmail} title="이메일 변경" />
-          <PopupLine text="확인" placeholder="현재 이메일 입력" />
-          <PopupLine text="인증" placeholder="새로운 이메일 입력" />
-          <PopupLine placeholder="인증번호 입력" />
-          <PopupLine icon={RiLock2Fill} title="비밀번호 변경" />
-          <PopupLine text="확인" placeholder="현재 비밀번호 입력" />
-          <PopupLine placeholder="새로운 비밀번호 입력" />
-          <PopupLine placeholder="비밀번호 확인" />
+
+          <PopupLineBox>
+            <PopupLineIcon>
+              <MdOutlinePhoneIphone size={28} />
+            </PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="전화번호"
+              />
+            </PopupLineInputBox>
+            <PopupLineBtn onClick={(e) => sendPhone(e)}>인증</PopupLineBtn>
+          </PopupLineBox>
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                id="phoneCertification"
+                value={phoneCertification}
+                onChange={(e) => setPhoneCertification(e.target.value)}
+                placeholder="인증번호 입력"
+              />
+              <VerificationIcon
+                isValid={phoneCertification !== "" ? verifySnsMessage : null}
+              />
+            </PopupLineInputBox>
+            <PopupLineBtn onClick={(e) => verifyPhoneCertification(e)}>
+              확인
+            </PopupLineBtn>
+          </PopupLineBox>
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                value={newPhoneNumber}
+                onChange={(e) => setNewPhoneNumber(e.target.value)}
+                placeholder="새로운 전화번호 입력 (11자리)"
+              />
+            </PopupLineInputBox>
+            <PopupLineBtnBox></PopupLineBtnBox>
+          </PopupLineBox>
+
+          <LineBox />
+
+          <PopupLineBox>
+            <PopupLineIcon>
+              <MdEmail size={28} />
+            </PopupLineIcon>
+            <PopupLineTitle>아이디 변경</PopupLineTitle>
+            <PopupLineBtnBox></PopupLineBtnBox>
+          </PopupLineBox>
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder="새로운 이메일 입력"
+              />
+            </PopupLineInputBox>
+            <PopupLineBtn onClick={(e) => sendEmail(e)}>인증</PopupLineBtn>
+          </PopupLineBox>
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                id="certification"
+                value={certification}
+                onChange={(e) => setCheckCertification(e.target.value)}
+                placeholder="인증번호 입력"
+              />
+              <VerificationIcon
+                isValid={certification !== "" ? verifyMessage : null}
+              />
+            </PopupLineInputBox>
+            <PopupLineBtn onClick={(e) => verifyCertification(e)}>
+              확인
+            </PopupLineBtn>
+          </PopupLineBox>
+          <LineBox />
+
+          <PopupLineBox>
+            <PopupLineIcon>
+              <RiLock2Fill size={28} />
+            </PopupLineIcon>
+            <PopupLineTitle>비밀번호 변경</PopupLineTitle>
+            <PopupLineBtnBox></PopupLineBtnBox>
+          </PopupLineBox>
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                type="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                placeholder="현재 비밀번호 입력"
+              />
+              <VerificationIcon
+                isValid={oldPassword !== "" ? passwordMatch : null}
+              />
+            </PopupLineInputBox>
+            <PopupLineBtn
+              onClick={() => {
+                handleChangePassword();
+              }}
+            >
+              확인
+            </PopupLineBtn>
+          </PopupLineBox>
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="새로운 비밀번호 입력"
+              />
+            </PopupLineInputBox>
+            <PopupLineBtnBox></PopupLineBtnBox>
+          </PopupLineBox>
+
+          <PopupLineBox>
+            <PopupLineIcon></PopupLineIcon>
+            <PopupLineInputBox>
+              <PopupLineInput
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="비밀번호 확인"
+              />
+            </PopupLineInputBox>
+            <PopupLineBtnBox></PopupLineBtnBox>
+          </PopupLineBox>
         </PopupBody>
         <PopupBottom>
-          <PopupBottomEditBtn>수정</PopupBottomEditBtn>
+          <PopupBottomEditBtn onClick={handleEditClick}>
+            수정
+          </PopupBottomEditBtn>
         </PopupBottom>
       </PopupBox>
     </>

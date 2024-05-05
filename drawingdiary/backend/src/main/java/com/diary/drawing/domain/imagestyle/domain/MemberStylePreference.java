@@ -10,15 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "MemberStylePreference")
 public class MemberStylePreference {
     @Id
@@ -37,13 +34,8 @@ public class MemberStylePreference {
 
     @Builder
     public MemberStylePreference(int frequency, Member member, ImageStyle imageStyle){
-        this.frequency = frequency;
+        this.frequency = 0;
         this.member = member;
         this.imageStyle = imageStyle;
-    }
-
-    // 업데이트
-    public void updateFrequency(){
-        this.frequency++;
     }
 }

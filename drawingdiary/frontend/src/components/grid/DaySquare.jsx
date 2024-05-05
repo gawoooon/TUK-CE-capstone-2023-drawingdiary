@@ -1,14 +1,12 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { GiEntryDoor } from 'react-icons/gi';
+import React from 'react';
 import styled from 'styled-components';
 
 const GridContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 100%; 
-  height: 150px;
-  padding-top: 20px;
+  width: 1190px; 
+  border: 1px solid #ddd;
+  padding: 10px;
 `;
 
 const GridItem = styled.div`
@@ -19,54 +17,32 @@ const GridItem = styled.div`
   border-radius: 5px;
 `;
 
-const DaySquare = ({ item }) => {
 
+const DaySquare = ({ level }) => {
 
-  // data를 불러와 isWrittem이 false이면 흰색, 아니면 다른 색으로 설정해줘야 함.
-  const getColor = (item) => {
-    switch(item) {
+  const getColor = (level) => {
+    switch(level) {
       case 0: return '#ebedf0'; 
-      case 1: return '#f89de4';
+      case 1: return '#9be9a8'; 
+      case 2: return '#40c463'; 
+      case 3: return '#30a14e'; 
+      case 4: return '#216e39'; 
       default: return '#ebedf0';
     }
   };
 
-  
-  return <GridItem color={getColor(item)} />;
+  return <GridItem color={getColor(level)} />;
 };
 
 
 const GrassGraph = () => {
-  
-  const accessToken = localStorage.getItem('accessToken');
-  const [grid, setGrid] = useState([]);
-  
-  const fetchGrid = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/statistic', 
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      const isWrittenData = response.data.lawn.data.map(item => item.iswritten ? 1 : 0);
-      setGrid(isWrittenData);
-      console.log("response: ", isWrittenData);
-    } catch(error) {
-      console.log("error: ", error);
-    }
-  };
 
-  useEffect(() => {
-    fetchGrid();
-  }, []);
-
-  const activityData = new Array(365).fill(0);
+  const activityData = new Array(365).fill(0).map(() => Math.floor(Math.random() * 5));
 
   return (
     <GridContainer>
-      {grid.map((item, index) => (
-        <DaySquare key={index} item={item} />
+      {activityData.map((level, index) => (
+        <DaySquare key={index} level={level} />
       ))}
     </GridContainer>
   );
