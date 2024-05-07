@@ -133,9 +133,9 @@ function StatsPage() {
 
     return (
       <LineChart width={1300} height={180} data={data}>
-        <Line type="monotone" dataKey="positive" stroke="#84d8b5" strokeWidth={2} />
-        <Line type="monotone" dataKey="neutral" stroke="#d8aa84" strokeWidth={2} />
-        <Line type="monotone" dataKey="negative" stroke="#8884d8" strokeWidth={2} />
+        <Line type="monotone" dataKey="positive" stroke="#FF76CE" strokeWidth={2} />
+        <Line type="monotone" dataKey="neutral" stroke="#b87ffa" strokeWidth={2} />
+        <Line type="monotone" dataKey="negative" stroke="#A3D8FF" strokeWidth={2} />
         {/* <CartesianGrid stroke="#ccc" />
           <XAxis dataKey="name" />
           <YAxis /> */}
@@ -147,9 +147,9 @@ function StatsPage() {
   const GraphValue = () => {
     const getColor = (emotion) => {
       switch(emotion) {
-        case 'positive' : return "#84d8b5";
-        case 'neutral' : return "#d8aa84";
-        case 'negative' : return "#8884d8";
+        case 'positive' : return "#FF76CE";
+        case 'neutral' : return "#b87ffa";
+        case 'negative' : return "#A3D8FF";
         default: return '#ffffff';
       }
     };
