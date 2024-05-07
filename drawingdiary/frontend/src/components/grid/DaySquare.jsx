@@ -17,14 +17,31 @@ const GridItem = styled.div`
   margin: 2px;
   background-color: ${props => props.color};
   border-radius: 5px;
+  position: relative;
+  &:hover div {
+    visibility: visible;
+  }
+`;
+
+const HoverStyle = styled.div`
+  visibility: hidden;
+  font-size: 10px;
+  color: #da0000;
+  background-color: white;
+  border-radius: 3px;
+  position: absolute;
+  top: -20px;
+  left: -30px;
+  padding: 2px 5px;
+  white-space: nowrap;
+  z-index: 1;
 `;
 
 const DaySquare = ({ item }) => {
 
-
   // data를 불러와 isWrittem이 false이면 흰색, 아니면 다른 색으로 설정해줘야 함.
   const getColor = (item) => {
-    switch(item) {
+    switch(item.iswritten) {
       case 0: return '#ebedf0'; 
       case 1: return '#f89de4';
       default: return '#ebedf0';
@@ -32,9 +49,16 @@ const DaySquare = ({ item }) => {
   };
 
   
-  return <GridItem color={getColor(item)} />;
+  return (
+    <GridItem color={getColor(item)}>
+      {item.iswritten === 1 && (
+        <HoverStyle>
+          {item.writtenDate}
+        </HoverStyle>
+      )}
+    </GridItem>
+  );
 };
-
 
 const GrassGraph = () => {
   
@@ -49,7 +73,10 @@ const GrassGraph = () => {
           Authorization: `Bearer ${accessToken}`
         }
       });
-      const isWrittenData = response.data.lawn.data.map(item => item.iswritten ? 1 : 0);
+      const isWrittenData = response.data.lawn.data.map(item => ({
+        writtenDate : item.date,
+        iswritten : item.iswritten ? 1 : 0,
+      }));
       setGrid(isWrittenData);
       console.log("response: ", isWrittenData);
     } catch(error) {
@@ -60,8 +87,6 @@ const GrassGraph = () => {
   useEffect(() => {
     fetchGrid();
   }, []);
-
-  const activityData = new Array(365).fill(0);
 
   return (
     <GridContainer>

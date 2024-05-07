@@ -5,10 +5,12 @@ import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
 import { useAuth } from "../auth/context/AuthContext";
 import Background2 from "../components/Background/index2";
+import { format } from 'date-fns';
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
+  padding: 10px 0 30px 0;
   display: flex;
   flex-direction: column;
   span {
@@ -19,21 +21,21 @@ const Container = styled.div`
 `;
 
 const TotalHistory = styled.div`
-  margin-top: 50px;
+  margin-top: 20px;
   font-size: 18px;
   font-weight: bold;
 `;
 
 const HistoryContainer = styled.div`
   width: 100%;
-  height: 290px;
+  height: 25%;
   margin: 10px;
   padding: 10px;
 `;
 
 const StatsContainer = styled.div`
   width: 100%;
-  height: 190px;
+  height: 20%;
   margin: 10px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -43,7 +45,7 @@ const StatsContainer = styled.div`
 
 const SentimentContainer = styled.div`
   width: 100%;
-  height: 250px;
+  height: 20%;
   margin: 10px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -58,7 +60,10 @@ function StatsPage() {
   const accessToken = localStorage.getItem("accessToken");
 
   const [totalDairy, setTotalDiary] = useState("");
-  const [year, setYear] = useState('');
+  const date = new Date();
+  console.log(date);
+  const year = format(date, "yyyy");
+
   const [month, setMonth] = useState('');
   const [week, setWeek] = useState('');
 
