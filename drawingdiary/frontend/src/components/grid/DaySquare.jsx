@@ -78,7 +78,6 @@ const GrassGraph = () => {
         iswritten : item.iswritten ? 1 : 0,
       }));
       setGrid(isWrittenData);
-      console.log("response: ", isWrittenData);
     } catch(error) {
       console.log("error: ", error);
     }
