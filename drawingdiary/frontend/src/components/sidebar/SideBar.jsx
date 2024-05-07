@@ -78,10 +78,13 @@ const ProfileImg = styled.img`
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
+  transition: opacity 50ms ease-out;
 `;
 
 const ProfileName = styled.div`
-  margin-left: 70px;
+  margin-left: 20px;
 `;
 
 const SideBar = ({ isOpen}) => {
@@ -115,9 +118,9 @@ const SideBar = ({ isOpen}) => {
 
       <ProfileSection to="/my">
         {setProfileImg !== "null" && setProfileImg !== null ? (
-          <ProfileImg src={setProfileImg} alt="profile" />
+          <ProfileImg src={setProfileImg} alt="profile" isOpen={isOpen} />
         ) : (
-          <ProfileImg src="/user.png" alt="profile" />
+          <ProfileImg src="/user.png" alt="profile" isOpen={isOpen} />
         )}
         <ProfileName>{setName}</ProfileName>
       </ProfileSection>

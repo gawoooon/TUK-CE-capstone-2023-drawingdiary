@@ -8,33 +8,28 @@ import { format } from 'date-fns';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 
 const Container = styled.section`
-  width: 100%;
+  width: 98%;
   height: 100%;
-  padding: 10px 0 30px 0;
+  margin: auto;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  span {
-    margin: 10px;
-    font-size: 15px;
-    font-weight: bold;
-  }
 `;
 
-const TotalHistory = styled.div`
-  margin-top: 20px;
-  font-size: 18px;
+const Text = styled.span`
+  margin: 10px;
+  font-size: 15px;
   font-weight: bold;
 `;
 
 const HistoryContainer = styled.section`
-  width: 100%;
-  height: 22%;
+  width: 96%;
+  height: 18%;
   margin: 10px;
-  padding: 10px;
 `;
 
 const StatsContainer = styled.section`
-  width: 100%;
+  width: 95%;
   height: 20%;
   margin: 10px;
   padding: 10px;
@@ -44,7 +39,7 @@ const StatsContainer = styled.section`
 `;
 
 const SentimentContainer = styled.section`
-  width: 95%;
+  width: 90%;
   height: 20%;
   margin: 10px;
   padding: 10px 40px 10px 60px;
@@ -92,7 +87,7 @@ function StatsPage() {
   const startDay = format(date, "d")
   const endDay = parseInt(startDay) + 7;
 
-  const [sentiRecord, setSentiRecord] = useState([]);
+  const [sentiData, setSentiData] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -117,12 +112,13 @@ function StatsPage() {
           return {
             name : ++index,
             positive : item.positive,
-            neutral : item.netural,
+            neutral : item.neutral,
             negative : item.negative,
           };
         }
       });
-      setSentiRecord(sentimentData);
+      setSentiData(sentimentData);
+      console.log(sentiData);
 
     } catch(error) {
       console.log(error);
@@ -132,13 +128,10 @@ function StatsPage() {
   const RenderLineChat = ({ data }) => {
 
     return (
-      <LineChart width={1300} height={180} data={data}>
+      <LineChart width={1200} height={180} data={data}>
         <Line type="monotone" dataKey="positive" stroke="#FF76CE" strokeWidth={2} />
         <Line type="monotone" dataKey="neutral" stroke="#b87ffa" strokeWidth={2} />
         <Line type="monotone" dataKey="negative" stroke="#A3D8FF" strokeWidth={2} />
-        {/* <CartesianGrid stroke="#ccc" />
-          <XAxis dataKey="name" />
-          <YAxis /> */}
         <Tooltip />
       </LineChart>
     );
@@ -177,19 +170,20 @@ function StatsPage() {
       <Background2>
         <Container>
           <NavBar />
+          <div style={{marginTop: '40px'}}></div>
+          <Text>{year}년에는 일기를 {totalDairy}편 썼어요!</Text>
           <HistoryContainer>
-            <TotalHistory>{year}년에는 일기를 {totalDairy}편 썼어요!</TotalHistory>
             <GrassGraph/>
           </HistoryContainer>
 
-          <span>수치</span>
+          <Text>수치</Text>
           <StatsContainer>
 
           </StatsContainer>
 
-          <span>{month}월 {startDay} ~ {endDay}일 감정분석 기록</span>
+          <Text>{month}월 {startDay} ~ {endDay}일 감정분석 기록</Text>
           <SentimentContainer>
-            <RenderLineChat data={sentiRecord} />
+            <RenderLineChat data={sentiData} />
             <GraphValue />
           </SentimentContainer>
         </Container>

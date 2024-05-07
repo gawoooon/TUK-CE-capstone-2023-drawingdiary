@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { GiEntryDoor } from 'react-icons/gi';
 import styled from 'styled-components';
 
 const GridContainer = styled.div`
@@ -8,7 +7,6 @@ const GridContainer = styled.div`
   flex-wrap: wrap;
   width: 100%; 
   height: 150px;
-  padding-top: 20px;
 `;
 
 const GridItem = styled.div`
@@ -27,11 +25,12 @@ const HoverStyle = styled.div`
   visibility: hidden;
   font-size: 10px;
   color: #da0000;
+  font-size: 16px;
   background-color: white;
   border-radius: 3px;
   position: absolute;
-  top: -20px;
-  left: -30px;
+  top: -30px;
+  left: -42px;
   padding: 2px 5px;
   white-space: nowrap;
   z-index: 1;

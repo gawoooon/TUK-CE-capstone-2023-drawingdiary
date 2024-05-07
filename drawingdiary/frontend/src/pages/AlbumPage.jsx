@@ -13,7 +13,7 @@ const Container = styled.section`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  `;
+`;
 
 const AlbumContainer = styled.section`
   width: 100%;
@@ -37,8 +37,6 @@ const AddAlbum = styled.div`
   display: flex;
   justify-content: end;
   margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
 `;
 
 const ErrorMessage = styled.div`

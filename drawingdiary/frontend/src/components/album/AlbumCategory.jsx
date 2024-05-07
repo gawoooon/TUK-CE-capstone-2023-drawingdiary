@@ -4,14 +4,14 @@ import { useCategory } from "./CategoryList";
 import axios from "axios";
 
 const CategoryStyle = styled.select`
-  width: 220px;
-  height: 50px;
-  margin: 10px 50px 10px 20px;
-  padding-left: 20px;
+  width: 100px;
+  height: 36px;
+  margin: 10px 10px 10px 20px;
+  padding-left: 28px;
   font-size: 18px;
   border: none;
+  outline: none;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   align-items: center;
 `;
 
@@ -52,7 +52,7 @@ const AlbumCategory = ({ onSelectAlbum }) => {
 
   return (
     <div>
-      <text style={{ fontSize: "18px" }}>앨범에 추가</text>
+      <text style={{ fontSize: "15px" }}>앨범에 추가</text>
       <CategoryStyle onChange={handleAlbumChange} value={selectedAlbumID}>
         {categoryList.map((keyword) => (
           <option key={keyword.memberID} value={keyword.albumID}>

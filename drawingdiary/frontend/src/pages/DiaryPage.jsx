@@ -11,130 +11,98 @@ import Sentiment from "../components/sentiment/Sentiment";
 import Weather from "../components/weather/Weather";
 import Background2 from "../components/Background/index2";
 import NavBar from "../components/sidebar/NavBar";
+import { IoIosSend } from "react-icons/io";
+import { FaRegCheckCircle } from "react-icons/fa";
 
-const FlexContainer = styled.div`
-  width: 100vw;
+const Container = styled.body`
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #d3d3d3;
-    border-radius: 4px;
-  }
 `;
 
-const RightContainer = styled.div`
-  margin-left: 100px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  max-height: calc(100vh - 80px);
-  box-sizing: border-box;
-`;
-
-const TopContent = styled.div`
-  height: 50px;
-  margin-top: 30px;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  & > * {
-    margin-bottom: 30px;
-  }
-`;
-
-const EditDiaryArea = styled.div`
+const DiaryContainer = styled.section`
   width: 100%;
-  height: 500px;
-  margin: 50px 20px 0px 10px;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
   flex-direction: row;
+  margin: auto;
 `;
 
-const ManageAIArea = styled.div`
-  width: 100%;
-  height: 811px;
-  margin: 30px 20px 0px 10px;
+const RightContainer = styled.section`
+  width: 50%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 `;
 
-const RightComponentsContainer = styled.div`
+const RightTopContent = styled.div`
+  height: 50px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const RightMidContent = styled.div`
+  height: 80%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  margin-right: 30px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
+  justify-content: start;
   align-items: center;
+  padding-bottom: 10px;
+`;
+
+const RightBottomContent = styled.div`
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  padding: 0 10px;
+  margin: 0 10px;
+`;
+
+const LeftContainer = styled.section`
+  width: 50%;
+`;
+
+const LeftTopContent = styled.div`
+  height: 50px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+`;
+
+const LeftMidContent = styled.div`
+  height: 75%;
+  display: flex;
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
+  padding-bottom: 50px;
 `;
 
-const jumpAnimation = keyframes`
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0); }
+const LeftBottomContent = styled.div`
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 0 10px;
+  margin: 0 10px;
 `;
 
-const CreateButtonStyle = styled.button`
-  height: 50px;
-  width: 250px;
-  margin-bottom: 30px;
-  background-color: rgba(255, 184, 208, 0.5);
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+const SaveBtn = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
   border: none;
-  cursor: pointer;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
-  animation: ${(props) =>
-    props.animate
-      ? css`
-          ${jumpAnimation} 0.5s ease
-        `
-      : "none"};
-`;
-
-const SaveButtonStyle = styled.button`
-  height: 50px;
-  width: 250px;
-  margin: 0 30px 30px 0;
-  background-color: rgba(106, 156, 253, 0.3);
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border: none;
-  cursor: pointer;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
-  animation: ${(props) =>
-    props.animate
-      ? css`
-          ${jumpAnimation} 0.5s ease
-        `
-      : "none"};
-`;
-
-const MessageContainer = styled.div`
-  margin: 30px 0 -30px 25px;
-  min-height: 20px;
-`;
-
-const MessageText = styled.div`
+  border-radius: 5px;
   font-size: 15px;
-  color: ${(props) => props.color || "#000"};
-  transition: opacity 0.5s ease-in-out;
-  opacity: ${(props) => (props.show ? 1 : 0)};
-  font-weight: bold;
 `;
 
 function DiaryPage() {
@@ -162,14 +130,6 @@ function DiaryPage() {
   const [isTextValid, setIsTextValid] = useState(false);
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
-  // message 부분
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showCreate, setShowCreate] = useState(false);
-  const [showInitialMessage, setShowInitialMessage] = useState(true);
-
-  const [animateSaveBtn, setAnimateSaveBtn] = useState(false);
-  const [animateCreateBtn, setAnimateCreateBtn] = useState(false);
-
   const [positiveValue, setPositiveValue] = useState(0);
   const [negativeValue, setNegativeValue] = useState(0);
   const [neutralValue, setNeutralValue] = useState(0);
@@ -187,17 +147,6 @@ function DiaryPage() {
   const handleSelectedAlbumChange = (onSelectAlbum) => {
     setSelectedAlbumID(onSelectAlbum);
   };
-
-  // 페이지 로딩 시 초기 메시지를 5초간 표시
-  useEffect(() => {
-    setIsRecommenderLoading(true);
-    const timer = setTimeout(() => {
-      if (!isTextValid) {
-        setShowInitialMessage(false);
-      }
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [isTextValid]);
 
   // 감정 분석 함수
   const analyzeSentiment = async () => {
@@ -256,13 +205,7 @@ function DiaryPage() {
   const handleDiaryTextChange = (newText) => {
     setIsTextValid(newText.length >= 30);
     setDiaryText(newText);
-    if (newText.length > 0) {
-      setShowInitialMessage(false);
-    }
   };
-
-  // 일단 임시로 이걸로 하자
-  const isSaveButtonEnabled = isTextValid;
 
   useEffect(() => {
     if (createBtn) {
@@ -272,22 +215,6 @@ function DiaryPage() {
 
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
-    if (diaryText.length < 30) {
-      setShowInitialMessage(true);
-      setTimeout(() => {
-        setShowInitialMessage(false);
-      }, 5000);
-      return;
-    }
-    setAnimateCreateBtn(true);
-    setTimeout(() => {
-      setAnimateCreateBtn(false);
-    }, 500);
-
-    setShowCreate(true);
-    setTimeout(() => {
-      setShowCreate(false);
-    }, 5000);
 
     if (parentSelectedButtonStyle) {
       setCreateBtn(true);
@@ -357,18 +284,6 @@ function DiaryPage() {
   const handleSave = async () => {
     const accessToken = localStorage.getItem("accessToken");
 
-    if (isSaveButtonEnabled) {
-      setAnimateSaveBtn(true);
-      setTimeout(() => {
-        setAnimateSaveBtn(false);
-      }, 5000);
-
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 5000);
-    }
-
     // 날짜 데이터
     const formattedDate = new Date(date.currentYear, date.month - 1, date.day);
 
@@ -420,91 +335,54 @@ function DiaryPage() {
   return (
     <div>
       <Background2>
-        <FlexContainer>
-          <NavBar />
-          <RightContainer>
-            <TopContent>
-              <Weather
-                date={date}
-                onWeatherStateChange={handleWeatherStateChange}
-              />
-              <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
-            </TopContent>
-
-            <MessageContainer>
-              {showInitialMessage && (
-                <MessageText color="#707070" show={!isTextValid}>
-                  30자 이상 작성하세요!
-                </MessageText>
-              )}
-
-              {showSuccess && (
-                <MessageText color="#008000" show={isTextValid}>
-                  일기가 성공적으로 생성되었습니다!
-                </MessageText>
-              )}
-
-              {showCreate && (
-                <MessageText color="#ff0000">
-                  일기가 삭제되었습니다.
-                </MessageText>
-              )}
-            </MessageContainer>
-
-            <EditDiaryArea>
-              <EditDiary onDiaryTextChange={handleDiaryTextChange} />
-              <ImageOption
-                onOptionSelect={handleOptionSelect}
-                isRecommenderLoading={isRecommenderLoading}
-              />
-            </EditDiaryArea>
-
-            <div
-              style={{
-                marginLeft: "10px",
-                marginRight: "20px",
-                marginTop: "15px",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <ButtonContainer>
-                <CreateButtonStyle
-                  onClick={handleCreate}
-                  animate={animateCreateBtn}
-                >
-                  생성
-                </CreateButtonStyle>
-              </ButtonContainer>
-
-              <ButtonContainer>
-                <SaveButtonStyle
-                  method="post"
-                  type="button"
-                  onClick={handleSave}
-                  animate={animateSaveBtn}
-                >
-                  저장
-                </SaveButtonStyle>
-              </ButtonContainer>
-            </div>
-
-            <ManageAIArea>
-              <GeneratedImage
-                isLoading={isImageLoading}
-                newImageUrl={newImageUrl}
-              />
-              <RightComponentsContainer>
-                <AIComment text={commentText} isLoading={isCommentLoading} />
-                <Sentiment
-                  positiveValue={positiveValue}
-                  negativeValue={negativeValue}
-                  neutralValue={neutralValue}
+        <Container>
+          
+          <DiaryContainer>
+            <RightContainer>
+              <RightTopContent>
+                <Weather
+                  date={date}
+                  onWeatherStateChange={handleWeatherStateChange}
                 />
-              </RightComponentsContainer>
-            </ManageAIArea>
-          </RightContainer>
-        </FlexContainer>
+                <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
+              </RightTopContent>
+              <RightMidContent>
+                <ImageOption
+                  onOptionSelect={handleOptionSelect}
+                  isRecommenderLoading={isRecommenderLoading}
+                />
+                <LeftBottomContent>
+                  <AIComment text={commentText} isLoading={isCommentLoading} />
+                  <Sentiment
+                      positiveValue={positiveValue}
+                      negativeValue={negativeValue}
+                      neutralValue={neutralValue}
+                  />
+              </LeftBottomContent>
+              </RightMidContent>
+              <RightBottomContent>
+                <EditDiary onDiaryTextChange={handleDiaryTextChange} />
+                <IoIosSend size={30} color="rgba(106, 156, 253, 0.5)" onClick={handleCreate} style={{cursor: 'pointer'}} />
+              </RightBottomContent>
+            </RightContainer>
+            <LeftContainer>
+              <NavBar />
+              <LeftTopContent>
+                <SaveBtn onClick={handleSave}>
+                  저장하기
+                  <FaRegCheckCircle size={18} color="#3d3d3d" style={{marginLeft: '10px'}} />
+                </SaveBtn>
+              </LeftTopContent>
+              <LeftMidContent>
+                <GeneratedImage
+                  isLoading={isImageLoading}
+                  newImageUrl={newImageUrl}
+                />
+              </LeftMidContent>
+              
+            </LeftContainer>
+          </DiaryContainer>
+        </Container>
       </Background2>
     </div>
   );

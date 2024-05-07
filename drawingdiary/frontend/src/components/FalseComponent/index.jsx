@@ -41,7 +41,6 @@ const AddBtn = styled.button`
   font-weight: 400;
   color: white;
   cursor: pointer;
-  box-shadow: 0 5px 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 15px;
   margin-top: 20px;
 `;
@@ -61,7 +60,7 @@ function FalseComponent({ currentYear, month, day, selectedDate }) {
   return (
     <ResultBox>
       <TopBox>
-        {month}월{day}일
+        {month}월 {day}일
       </TopBox>
       <MiddleBox>일기를 작성하세요.</MiddleBox>
 
