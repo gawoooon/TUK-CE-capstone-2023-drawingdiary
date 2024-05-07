@@ -4,7 +4,7 @@ import { isSameDay } from "date-fns";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
-import Background from "../components/Background";
+import Background2 from "../components/Background/index2";
 import Calendar2 from "../components/Calendar2";
 import SideBar from "../components/sidebar/SideBar";
 import FalseComponent from "../components/FalseComponent";
@@ -407,7 +407,7 @@ function CalendarPage() {
   }, [selectedDate]);
 
   return (
-    <Background>
+    <Background2>
       <Body>
         <LeftBox leftBoxWidth={leftBoxWidth}>
           <SideBar
@@ -461,7 +461,7 @@ function CalendarPage() {
           </RightBox>
         </CalendarBox>
       </Body>
-    </Background>
+    </Background2>
   );
 }
 
