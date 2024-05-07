@@ -11,7 +11,7 @@ const ResultBox = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  transition: opacity 800ms ease-out;
+  transition: opacity 200ms ease-out;
 `;
 
 const TopBox = styled.div`
@@ -19,6 +19,7 @@ const TopBox = styled.div`
   font-weight: 800;
   color: #090071;
   display: flex;
+  transition: opacity 200ms ease-out;
 `;
 
 const MiddleBox = styled.div`
@@ -27,6 +28,7 @@ const MiddleBox = styled.div`
   color: #090071;
   padding: 10px 0px;
   box-sizing: border-box;
+  transition: opacity 200ms ease-out;
 `;
 
 const AddBtn = styled.button`

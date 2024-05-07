@@ -19,11 +19,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/loginlost" element={<LoginLostPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route 
-          path="/calendar" 
+          path="/" 
           element={
             <CalendarProvider>
               <CalendarPage />

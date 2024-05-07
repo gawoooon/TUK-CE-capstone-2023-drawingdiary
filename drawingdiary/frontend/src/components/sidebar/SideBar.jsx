@@ -1,5 +1,9 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { IoMdLogIn  } from "react-icons/io";
+import { LuCalendarDays } from "react-icons/lu";
+import { BiSolidPhotoAlbum } from "react-icons/bi";
+import { SlGraph } from "react-icons/sl";
 
 const SideBarStyle = styled.div`
   display: flex;
@@ -8,8 +12,11 @@ const SideBarStyle = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 30px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.6);
   box-sizing: border-box;
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
+  transition: opacity 500ms ease-out;
 `;
 
 const SideBarHeader = styled.div`
@@ -19,20 +26,16 @@ const SideBarHeader = styled.div`
   align-items: center;
 `;
 
-const SideBarLogo = styled.img`
-  height: 40px; // 로고 이미지 높이 설정
-  padding-right: 15px;
-`;
-
 const SideBarMenu = styled.nav`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-left: 20px;
+  padding: 0 10px;
   margin-bottom: 250px;
 `;
 
 const MenuItem = styled(Link)`
+  width: 82%;
   display: flex;
   align-items: center;
   padding: 9px;
@@ -40,99 +43,83 @@ const MenuItem = styled(Link)`
   text-decoration: none;
   font-size: 15px;
 
-  img {
-    width: 20px;
-    height: 20px;
-    margin-right: 15px;
-    transition: background 0.3s, box-shadow 0.3s;
-  }
-
   &:hover {
-    border-left: 5px solid #d9d9d9;
+    border-radius: 10px;
+    background-color: rgba(227, 227, 227, 0.7);
   }
 `;
 
 const MenuItemText = styled.span`
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
-  transition: opacity 700ms ease-out;
-  margin-left: 16px;
+  margin-left: 30px;
   padding-top: 6px;
   white-space: nowrap;
   min-height: 20px;
 `;
 
-const ProfileSection = styled.div`
-  padding: 25px 0 25px 25px;
-  min-height: 100px;
+const ProfileSection = styled(Link)`
+  width: 82%;
+  padding: 9px;
+  margin: 0 0 25px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 15px;
+  text-decoration: none;
+  color: #333;
+
+  &:hover {
+    border-radius: 10px;
+    background-color: rgba(227, 227, 227, 0.7);
+  }
 `;
 
-const ProfileImage = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%; // 이미지를 원형으로 만듭니다.
-  margin-bottom: 20px; // 프로필 이름과의 간격 설정
+const ProfileImg = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const ProfileName = styled.div`
-  color: #333;
-  font-size: 16px; // 프로필 이름의 폰트 크기 설정
+  margin-left: 70px;
 `;
 
-const ProfileEmail = styled.div`
-  color: #333;
-  font-size: 13px; // 프로필 이름의 폰트 크기 설정
-`;
+const SideBar = ({ isOpen}) => {
 
-const SideBar = ({ isOpen, userName, userEmail }) => {
-  const handleLogout = () => {
-    localStorage.removeItem("selectedColor");
-    localStorage.removeItem("setName");
-    localStorage.removeItem("setEmail");
-    localStorage.removeItem("setBirth");
-    localStorage.removeItem("setProfileImage");
-
-    // 로그아웃 기능 추가
-  };
+  const setName = localStorage.getItem("setName");
+  const setProfileImg = localStorage.getItem("setProfileImage");
 
   return (
-    <SideBarStyle>
+    <SideBarStyle isOpen={isOpen}>
       <SideBarHeader>
-        <MenuItemText isOpen={isOpen}>감성 일기</MenuItemText>
+        <MenuItemText>감성 일기</MenuItemText>
       </SideBarHeader>
       <SideBarMenu>
-        <MenuItem to="/calendar" isOpen={isOpen}>
-          <img src="schedule.png" alt="Home" />
-          <MenuItemText isOpen={isOpen}>캘린더</MenuItemText>
+        <MenuItem to="/">
+          <LuCalendarDays size={20} color="#3d3d3d" alt="Home" />
+          <MenuItemText>캘린더</MenuItemText>
         </MenuItem>
-        <MenuItem to="/album" isOpen={isOpen}>
-          <img src="photo-album.png" alt="Album" />
-          <MenuItemText isOpen={isOpen}>앨범</MenuItemText>
+        <MenuItem to="/album">
+          <BiSolidPhotoAlbum size={20} color="#3d3d3d" alt="Album" />
+          <MenuItemText>앨범</MenuItemText>
         </MenuItem>
-        <MenuItem to="/stats" isOpen={isOpen}>
-          <img src="graph.png" alt="Statics" />
-          <MenuItemText isOpen={isOpen}>분석</MenuItemText>
+        <MenuItem to="/stats">
+          <SlGraph size={20} color="#3d3d3d" alt="Statics" />
+          <MenuItemText>분석</MenuItemText>
         </MenuItem>
-        <MenuItem to="/my" isOpen={isOpen}>
-          <img src="my-page.png" alt="MyPage" />
-          <MenuItemText isOpen={isOpen}>마이페이지</MenuItemText>
-        </MenuItem>
-        <MenuItem to="/" isOpen={isOpen}>
-          <img src="sign-out.png" alt="Log out" />
-          <MenuItemText isOpen={isOpen} onClick={handleLogout}>
-            로그아웃
-          </MenuItemText>
+        <MenuItem to="/login">
+          <IoMdLogIn size={20} color="#3d3d3d" alt="Login" />
+          <MenuItemText>로그인</MenuItemText>
         </MenuItem>
       </SideBarMenu>
 
-      <ProfileSection>
-        <ProfileImage src="user.png" alt="User" />
-        <MenuItemText isOpen={isOpen}>
-          <ProfileName>{userName}</ProfileName>
-        </MenuItemText>
-        <MenuItemText isOpen={isOpen}>
-          <ProfileEmail>{userEmail}</ProfileEmail>
-        </MenuItemText>
+      <ProfileSection to="/my">
+        {setProfileImg !== "null" && setProfileImg !== null ? (
+          <ProfileImg src={setProfileImg} alt="profile" />
+        ) : (
+          <ProfileImg src="/user.png" alt="profile" />
+        )}
+        <ProfileName>{setName}</ProfileName>
       </ProfileSection>
     </SideBarStyle>
   );

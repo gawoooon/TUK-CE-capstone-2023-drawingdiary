@@ -7,16 +7,18 @@ import axios from "axios";
 import { useAuth } from "../../auth/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
+const Container = styled.section`
+    width: 95%;
+    height: 90%;
+    margin: auto;
 `;
 
 const AlbumContainer = styled.div`
-    width: 1130px;
-    height: 260px;
-    margin: 10px 0 30px 120px;
+    width: 100%;
+    height: 250px;
     padding: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
 `;
 
 const ScrollSection = styled.div`
@@ -27,7 +29,7 @@ const ScrollSection = styled.div`
     overflow-x: hidden;
     overflow-y: auto;
     &::-webkit-scrollbar {
-        height: 8px;
+        height: 2px;
     }
     &::-webkit-scrollbar-thumb {
         background-color: #ccc;
@@ -74,31 +76,17 @@ const DateText = styled.div`
 const AlbumHeaders = styled.div`
     width: 100%;
     height: 30px;
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: ${(props) => (props.isOpen ? "0" : "20px")};
-`;
-
-const CategoryHeader = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
 `;
 
 const CategoryName = styled.div`
-    font-size: 23px;
+    font-size: 20px;
     font-weight: bold;
-    margin-left: 130px;
 `;
-
-const OpenBtn = styled.img`
-    width: 15px;
-    height: 15px;
-    margin-left: 10px;
-`;
-
 
 function AlbumBox({ onErrorMessage }) {
     const {  removeCategory } = useCategory();
@@ -111,8 +99,6 @@ function AlbumBox({ onErrorMessage }) {
 
     const { memberID } = useAuth();
     const accessToken = localStorage.getItem('accessToken');
-
-    const [categoryOpenStates, setCategoryOpenStates] = useState([]);
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchAlbum = async () => {
@@ -161,8 +147,6 @@ function AlbumBox({ onErrorMessage }) {
             navigate(`/showDiary/${memberID}/${currentYear}${month}${day}`, {
                 state: { date: { currentYear, month, day }, diaryData: { weather, albumName, diaryText, style, image, comment, sentiment } },
             });
-            
-
         } catch(error) {
             console.log("error: ", error);
         }
@@ -187,13 +171,6 @@ function AlbumBox({ onErrorMessage }) {
         removeCategory(currentCategory, onErrorMessage);
     };
 
-    const toggleCategory = (categoryId) => {
-        setCategoryOpenStates(prev => ({
-            ...prev,
-            [categoryId]: !prev[categoryId] // 해당 카테고리의 상태 토글
-        }))
-    }
-
     useEffect(() => {
         if(!checkList) {
             fetchAlbum();
@@ -210,17 +187,9 @@ function AlbumBox({ onErrorMessage }) {
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'baseline',
-                            marginRight: '80px',
                         }}>
-                        <AlbumHeaders isOpen={categoryOpenStates[categoryEntry.albumID]}>
-                            <CategoryHeader>
-                                <CategoryName>{categoryEntry.name}</CategoryName>
-                                {categoryOpenStates[categoryEntry.albumID] ? (
-                                    <OpenBtn src="/minus-solid.svg" alt="close" onClick={() => toggleCategory(categoryEntry.albumID)} />
-                                ) : (
-                                    <OpenBtn src="/plus-solid.svg" alt="open" onClick={() => toggleCategory(categoryEntry.albumID)} />
-                                )}
-                            </CategoryHeader>
+                        <AlbumHeaders isOpen={categoryEntry.albumID}>
+                            <CategoryName>{categoryEntry.name}</CategoryName>
                             <TrashButton onClick={() => handleDeleteClick(categoryEntry.albumID)}/>
                         </AlbumHeaders>
                     </div>
@@ -230,7 +199,7 @@ function AlbumBox({ onErrorMessage }) {
                         onClose={handleCloseModal}
                         onConfirm={handleConfirmDelete}
                     />
-                    {categoryOpenStates[categoryEntry.albumID] && (
+                    {categoryEntry.albumID && (
                         <AlbumContainer>
                             {categoryEntry.images.length > 0 ? (
                                 <ScrollSection>

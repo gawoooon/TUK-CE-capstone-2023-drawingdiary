@@ -8,9 +8,9 @@ import EditDiary from "../components/edit diary/EditDiary";
 import GeneratedImage from "../components/edit diary/GeneratedImage";
 import ImageOption from "../components/edit diary/ImageOption";
 import Sentiment from "../components/sentiment/Sentiment";
-import ShortSidebar from "../components/sidebar/NavBar";
 import Weather from "../components/weather/Weather";
 import Background2 from "../components/Background/index2";
+import NavBar from "../components/sidebar/NavBar";
 
 const FlexContainer = styled.div`
   width: 100vw;
@@ -421,7 +421,7 @@ function DiaryPage() {
     <div>
       <Background2>
         <FlexContainer>
-          <ShortSidebar />
+          <NavBar />
           <RightContainer>
             <TopContent>
               <Weather

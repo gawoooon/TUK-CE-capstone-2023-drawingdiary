@@ -23,10 +23,10 @@ const TextStyle = styled.text`
     font-size: 15px;
 `;
 
-const ShortSidebar = () => {
+const NavBar = () => {
     return (
         <NavStyle>
-            <LinkStyle href="/calendar">
+            <LinkStyle href="/">
                 <TextStyle>캘린더</TextStyle>
             </LinkStyle>
 
@@ -45,5 +45,5 @@ const ShortSidebar = () => {
     );
 };
 
-export default ShortSidebar;
+export default NavBar;
 

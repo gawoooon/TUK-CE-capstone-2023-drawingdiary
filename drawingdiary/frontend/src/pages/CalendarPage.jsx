@@ -32,6 +32,7 @@ const CalendarBox = styled.div`
   border-radius: 30px;
   background-color: white;
   padding-left: 20px;
+  transition: opacity 200ms ease-out;
 `;
 
 const LeftBox = styled.div`
@@ -39,8 +40,8 @@ const LeftBox = styled.div`
   flex-direction: column;
   width: ${({ leftBoxWidth }) => leftBoxWidth};
   height: 100%;
-  transition: opacity 200ms ease-out, width 200ms ease-out;
   margin-right: 20px;
+  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const MiddleBox = styled.div`
@@ -50,21 +51,18 @@ const MiddleBox = styled.div`
   border-radius: 30px;
   padding: 40px 10px;
   box-sizing: border-box;
-  transition: opacity 200ms ease-out, width 200ms ease-out;
+  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const RightBox = styled.div`
   display: flex;
-  opacity: ${({ showRightBox }) => (showRightBox ? 1 : 0)};
   width: ${({ rightBoxWidth }) => rightBoxWidth};
   flex-direction: column;
   height: 100%;
   padding: 40px 0;
-  transition: opacity 200ms ease-out, width 200ms ease-out;
   box-sizing: border-box;
   overflow: hidden; // 내용이 max-height를 넘어가지 않도록 설정
-  max-height: ${({ showRightBox }) =>
-    showRightBox ? "1000px" : "0"}; // 점차적으로 높이가 늘어나게 설정
+  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const PrevBtn = styled.button`
@@ -78,12 +76,13 @@ const PrevBtn = styled.button`
   outline: none;
   cursor: pointer;
   background: transparent;
-  transition: opacity 200ms ease-out, width 200ms ease-out;
+  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const ResultBox = styled.div`
   width: 100%;
   height: 95%;
+  transition: opacity 200ms ease-out;
 `;
 
 const TrueComponentBox = styled.div`
@@ -95,7 +94,7 @@ const TrueComponentBox = styled.div`
   margin-left: 15px;
   padding: 30px 50px 10px 0;
   box-sizing: border-box;
-  transition: width 0.5s linear;
+  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const TopBox = styled.div`
@@ -147,6 +146,7 @@ const TrueComponentMidBox = styled.div`
   height: 50%;
   border: none;
   border-radius: 30px;
+  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const ImageBox = styled.img`
@@ -155,6 +155,7 @@ const ImageBox = styled.img`
   object-fit: cover;
   border-radius: 30px;
   margin-top: 20px;
+  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const BottomBox = styled.div`
@@ -165,14 +166,7 @@ const BottomBox = styled.div`
   padding: 8px;
   line-height: 1.3;
   margin-top: 40px;
-`;
-
-const Divider = styled.hr`
-  width: 100%;
-  border: none;
-  height: 1px;
-  background-color: lightgray;
-  margin-top: 10px;
+  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 function CalendarPage() {
@@ -199,10 +193,6 @@ function CalendarPage() {
   const [isSelectedMonth, setIsSelectedMonth] = useState("");
   const [isSelectedDay, setIsSelectedDay] = useState("");
 
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const userBirth = "";
-
   const fetchUserName = useCallback(async () => {
     if (memberID) {
       try {
@@ -215,9 +205,6 @@ function CalendarPage() {
             },
           }
         );
-
-        setUserName(response.data.name);
-        setUserEmail(response.data.email);
 
         localStorage.setItem("setName", response.data.name);
         localStorage.setItem("setEmail", response.data.email);
@@ -250,8 +237,8 @@ function CalendarPage() {
     } else {
       setShowRightBox(true);
       setLeftBoxWidth("0%");
-      setMiddleBoxWidth("84%");
-      setRightBoxWidth("33%");
+      setMiddleBoxWidth("87%");
+      setRightBoxWidth("30%");
       setSelectedDate(day); // selectedDate 상태 업데이트
       setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
       setPrevBtnBox(true);
@@ -262,7 +249,6 @@ function CalendarPage() {
   // PrevBtn 클릭 시
   const handlePrevBtnClick = () => {
     if (selectedDate) {
-      console.log("PrevBtn clicked. Selected Date:", selectedDate);
       handleDateClick(selectedDate);
     }
   };
@@ -412,9 +398,6 @@ function CalendarPage() {
         <LeftBox leftBoxWidth={leftBoxWidth}>
           <SideBar
             isOpen={isOpen}
-            userBirth={userBirth}
-            userName={userName}
-            userEmail={userEmail}
           />
         </LeftBox>
         <CalendarBox>
@@ -446,7 +429,7 @@ function CalendarPage() {
                     <TrueComponentMidBox>
                       <ImageBox src={imageUrl} />
                     </TrueComponentMidBox>
-                    <Divider />
+
                     <BottomBox>{text}</BottomBox>
                   </TrueComponentBox>
                 ) : (
