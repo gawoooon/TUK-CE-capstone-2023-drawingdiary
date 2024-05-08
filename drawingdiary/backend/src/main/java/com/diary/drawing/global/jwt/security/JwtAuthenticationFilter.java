@@ -31,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             throws ServletException, IOException {
 
         extractTokenFromRequest(request)
+                .filter(token -> !jwtDecoder.isTokenExpired(token))  // 토큰 만료 확인
                 .map(jwtDecoder::decode)
                 .map(jwtToPrincipalConverter::convert)
                 .map(PrincipalDetailsAuthenticationToken::new)  //새로운 토큰 만듬

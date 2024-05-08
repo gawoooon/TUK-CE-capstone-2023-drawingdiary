@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.global.jwt.domain.PrincipalDetails;
-import com.diary.drawing.global.jwt.dto.LoginRequestDTO;
-import com.diary.drawing.global.jwt.dto.LoginResponseDTO;
+import com.diary.drawing.global.jwt.dto.JwtRequestDTO;
+import com.diary.drawing.global.jwt.dto.JwtResponseDTO;
 import com.diary.drawing.global.jwt.exception.authExceptionType;
 import com.diary.drawing.global.jwt.exception.authResponseException;
 import com.diary.drawing.global.jwt.security.JwtAuthenticationFilter;
@@ -40,7 +40,7 @@ public class AuthController {
 
     /* 로그인 */
     @PostMapping("/login")
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO request){
+    public JwtResponseDTO login(@RequestBody JwtRequestDTO.loginRequestDTO request){
         // 1. 사용자 인증 (로그인 요청할때 security를 통함)
         // token 객체를 인자로 받음
         var authentication = authenticationManager.authenticate(
@@ -62,7 +62,7 @@ public class AuthController {
         // 5. 발급받은 refreshToken은 redis에 저장
         authService.saveToken(principalDetails.getMemberID(), refreshToken);
 
-        return LoginResponseDTO.builder()
+        return JwtResponseDTO.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
             .memberID(principalDetails.getMemberID())
@@ -72,14 +72,14 @@ public class AuthController {
     /* refreshToken으로 accessToken 재발급 */
     // 원래 만료된 accesstoken으로 사용자 확인 해야해서 같이 보내줘야함
     @GetMapping("/refresh")
-    public ResponseEntity<LoginResponseDTO> refresh(HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<JwtResponseDTO> refresh(HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
   
         var refreshToken = request.getHeader("Authorization").substring(7);
         
         if (principalDetails != null){
                 String accessToken = authService.reissueAccessToken(refreshToken, principalDetails.getMemberID());
                 // 응답 생성
-                LoginResponseDTO response = LoginResponseDTO.builder()
+                JwtResponseDTO response = JwtResponseDTO.builder()
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
                     .memberID(principalDetails.getMemberID())
@@ -89,6 +89,14 @@ public class AuthController {
         
         // 유효하지 않은 refreshToken에 대한 처리
         throw new authResponseException(authExceptionType.WRONG_REFRESHTOKEN);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        var accessToken = request.getHeader("Authorization").substring(7);
+        JwtRequestDTO.logoutRequestDTO requestDTO = new JwtRequestDTO.logoutRequestDTO(accessToken, principalDetails.getMemberID());
+        authService.logout(requestDTO);
+        return ResponseEntity.ok("logout");
     }
 
     
