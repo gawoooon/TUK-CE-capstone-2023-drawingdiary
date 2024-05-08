@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Background from "../components/Background";
+import Background from "../components/Background/index2";
 import NavBar from "../components/sidebar/NavBar";
 import Information from "../components/mypage/Information";
 import Profile from "../components/mypage/Profile";
@@ -46,6 +46,20 @@ const MyPageBottomBox = styled.div`
   align-items: center;
   justify-content: center;
 `;
+const MyPageBodyBox = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+// const NavBarBox = styled.div`
+//   width: 100%;
+//   display: flex;
+//   justify-content: end;
+// `;
 
 function MyPage() {
   const [backgroundColor, setBackgroundColor] = useState("");
@@ -66,19 +80,22 @@ function MyPage() {
   return (
     <MyPageBackground>
       <Background backgroundColor={backgroundColor}>
-        <NavBar />
-        <MyPageBody>
-          <MyPageBox>
-            <MyPageTopBox>
-              <Profile />
-              <Theme onColorChange={setBackgroundColor} />
-            </MyPageTopBox>
-            <MyPageBottomBox>
-              <Information onPopupPassword={passwordPopup} />
-              {/* <Information onPopupToggle={togglePopup} /> */}
-            </MyPageBottomBox>
-          </MyPageBox>
-        </MyPageBody>
+        <MyPageBodyBox>
+          <NavBar />
+
+          <MyPageBody>
+            <MyPageBox>
+              <MyPageTopBox>
+                <Profile />
+                <Theme onColorChange={setBackgroundColor} />
+              </MyPageTopBox>
+              <MyPageBottomBox>
+                <Information onPopupPassword={passwordPopup} />
+                {/* <Information onPopupToggle={togglePopup} /> */}
+              </MyPageBottomBox>
+            </MyPageBox>
+          </MyPageBody>
+        </MyPageBodyBox>
       </Background>
       {isPopupPassword && (
         <PopupPassword onClose={passwordPopup} onPopup={PopupToggle} />
