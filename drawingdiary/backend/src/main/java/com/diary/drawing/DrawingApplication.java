@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.diary.drawing.global.jwt.repository.RefreshTokenRepository;
 
-
-
 @EnableJpaAuditing
 @EnableJpaRepositories(
         basePackages = "com.diary.drawing",

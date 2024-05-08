@@ -5,7 +5,7 @@ import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
 import Background2 from "../components/Background/index2";
 import { format } from 'date-fns';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, AreaChart, ReferenceLine, Area } from "recharts";
 
 const Container = styled.section`
   width: 98%;
@@ -19,6 +19,11 @@ const Container = styled.section`
 const Text = styled.span`
   margin: 10px;
   font-size: 15px;
+`;
+
+const BigText = styled.span`
+  margin: 60px;
+  font-size: 25px;
   font-weight: bold;
 `;
 
@@ -30,9 +35,24 @@ const HistoryContainer = styled.section`
 
 const StatsContainer = styled.section`
   width: 95%;
-  height: 20%;
+  height: 28%;
   margin: 10px;
   padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  `;
+
+const StatsContent = styled.div`
+  width: 300px;
+  height: 180px;
+  margin: 0 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -54,7 +74,6 @@ const SentimentContainer = styled.section`
 const ValueContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-left: 100px;
 `;
 
 const Value = styled.div`
@@ -80,6 +99,7 @@ function StatsPage() {
   const accessToken = localStorage.getItem("accessToken");
 
   const [totalDairy, setTotalDiary] = useState("");
+  const [sentiData, setSentiData] = useState([]);
 
   const date = new Date();
   const year = format(date, "yyyy");
@@ -87,7 +107,20 @@ function StatsPage() {
   const startDay = format(date, "d")
   const endDay = parseInt(startDay) + 7;
 
-  const [sentiData, setSentiData] = useState([]);
+  const [average, setAverage] = useState(0);
+  const [monthData, setMonthData] = useState(0);
+  const [style, setStyle] = useState("");
+
+  const RenderLineChat = () => {
+    return (
+      <LineChart width={1300} height={180} data={sentiData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <Tooltip />
+        <Line type="monotone" dataKey="positive" stroke="#FF76CE" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
+        <Line type="monotone" dataKey="neutral" stroke="#b87ffa" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
+        <Line type="monotone" dataKey="negative" stroke="#A3D8FF" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
+      </LineChart>
+    );
+  };
 
   const fetchData = async () => {
     try {
@@ -100,17 +133,18 @@ function StatsPage() {
       setTotalDiary(response.data.lawn.total);
       
       let index = 0;
+      const dayOfWeek = ['월', '화', '수', '목' ,'금', '토', '일'];
       const sentimentData = response.data.emotions.map(item => {
-        if(item === null) {
+        if(item === null || item === 'undefined') {
           return {
-            name : ++index,
+            name : dayOfWeek[index++],
             positive : 0,
             neutral : 0,
             negative : 0,
           };
         } else {
           return {
-            name : ++index,
+            name : dayOfWeek[index++],
             positive : item.positive,
             neutral : item.neutral,
             negative : item.negative,
@@ -118,25 +152,17 @@ function StatsPage() {
         }
       });
       setSentiData(sentimentData);
-      console.log(sentiData);
 
+      setAverage(response.data.value.average);
+      setMonthData(response.data.value.month);
+      setStyle(response.data.value.style);
+
+      console.log(response);
     } catch(error) {
       console.log(error);
     }
   };
-
-  const RenderLineChat = ({ data }) => {
-
-    return (
-      <LineChart width={1200} height={180} data={data}>
-        <Line type="monotone" dataKey="positive" stroke="#FF76CE" strokeWidth={2} />
-        <Line type="monotone" dataKey="neutral" stroke="#b87ffa" strokeWidth={2} />
-        <Line type="monotone" dataKey="negative" stroke="#A3D8FF" strokeWidth={2} />
-        <Tooltip />
-      </LineChart>
-    );
-  }
-
+  
   const GraphValue = () => {
     const getColor = (emotion) => {
       switch(emotion) {
@@ -175,15 +201,27 @@ function StatsPage() {
           <HistoryContainer>
             <GrassGraph/>
           </HistoryContainer>
-
-          <Text>수치</Text>
           <StatsContainer>
 
+            <StatsContent>
+              <Text>{month}월 총 작성</Text>
+              <BigText>{average} 편</BigText>
+            </StatsContent>
+
+            <StatsContent>
+              <Text>월 평균 작성</Text>
+              <BigText>{monthData} 편</BigText>
+            </StatsContent>
+
+            <StatsContent>
+              <Text>선호 스타일</Text>
+              <BigText>{style} 스타일</BigText>
+            </StatsContent>
           </StatsContainer>
 
           <Text>{month}월 {startDay} ~ {endDay}일 감정분석 기록</Text>
           <SentimentContainer>
-            <RenderLineChat data={sentiData} />
+            <RenderLineChat />
             <GraphValue />
           </SentimentContainer>
         </Container>
