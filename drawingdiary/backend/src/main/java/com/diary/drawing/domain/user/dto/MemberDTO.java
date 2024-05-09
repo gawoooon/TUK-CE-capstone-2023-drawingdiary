@@ -96,7 +96,7 @@ public class MemberDTO {
     @Builder
     public static class Emotion{
         private int positive;
-        private int netural;
+        private int neutral;
         private int negative;
     }
 

@@ -41,7 +41,7 @@ public class FinalDiaryRequestDTO {
     @NotNull(message = "이미지 파일이 전송되지 않았습니다.")
     private String imageFile;
 
-    @NotNull(message = "positive/netural/negative 요소가 전송되지 않았습니다.")
+    @NotNull(message = "positive/neutral/negative 요소가 전송되지 않았습니다.")
     private Confidence confidence;
 
     @NotNull(message = "코멘트가 전송되지 않았습니다.")

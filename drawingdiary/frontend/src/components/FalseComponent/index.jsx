@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/context/AuthContext";
 import { format } from "date-fns";
 
@@ -11,7 +11,7 @@ const ResultBox = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  transition: opacity 800ms ease-out;
+  transition: opacity 200ms ease-out;
 `;
 
 const TopBox = styled.div`
@@ -19,6 +19,7 @@ const TopBox = styled.div`
   font-weight: 800;
   color: #090071;
   display: flex;
+  transition: opacity 200ms ease-out;
 `;
 
 const MiddleBox = styled.div`
@@ -27,6 +28,7 @@ const MiddleBox = styled.div`
   color: #090071;
   padding: 10px 0px;
   box-sizing: border-box;
+  transition: opacity 200ms ease-out;
 `;
 
 const AddBtn = styled.button`
@@ -39,7 +41,6 @@ const AddBtn = styled.button`
   font-weight: 400;
   color: white;
   cursor: pointer;
-  box-shadow: 0 5px 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 15px;
   margin-top: 20px;
 `;
@@ -59,7 +60,7 @@ function FalseComponent({ currentYear, month, day, selectedDate }) {
   return (
     <ResultBox>
       <TopBox>
-        {month}월{day}일
+        {month}월 {day}일
       </TopBox>
       <MiddleBox>일기를 작성하세요.</MiddleBox>
 

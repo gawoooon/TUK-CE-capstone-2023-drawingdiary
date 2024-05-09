@@ -3,66 +3,124 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
-import { useAuth } from "../auth/context/AuthContext";
 import Background2 from "../components/Background/index2";
+import { format } from 'date-fns';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, AreaChart, ReferenceLine, Area } from "recharts";
 
-const Container = styled.div`
-  width: 100%;
+const Container = styled.section`
+  width: 98%;
   height: 100%;
+  margin: auto;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  span {
-    margin: 10px;
-    font-size: 15px;
-    font-weight: bold;
-  }
 `;
 
-const TotalHistory = styled.div`
-  margin-top: 50px;
-  font-size: 18px;
+const Text = styled.span`
+  margin: 10px;
+  font-size: 15px;
+`;
+
+const BigText = styled.span`
+  margin: 60px;
+  font-size: 25px;
   font-weight: bold;
 `;
 
-const HistoryContainer = styled.div`
-  width: 100%;
-  height: 290px;
+const HistoryContainer = styled.section`
+  width: 96%;
+  height: 18%;
   margin: 10px;
-  padding: 10px;
 `;
 
-const StatsContainer = styled.div`
-  width: 100%;
-  height: 190px;
+const StatsContainer = styled.section`
+  width: 95%;
+  height: 28%;
   margin: 10px;
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  `;
+
+const StatsContent = styled.div`
+  width: 300px;
+  height: 180px;
+  margin: 0 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
-const SentimentContainer = styled.div`
-  width: 100%;
-  height: 250px;
+const SentimentContainer = styled.section`
+  width: 90%;
+  height: 20%;
   margin: 10px;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px 40px 10px 60px;
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
+const ValueContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Value = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 3px 0;
+`;
+
+const Circle = styled.div`
+  width: 20px;
+  height: 20px;
+  margin: 10px 0 10px 10px;
+  border-radius: 50%;
+  background-color: ${props => props.color};
+`;
+
+const TextValue = styled.div`
+  margin: 10px 20px;
+`;
 
 function StatsPage() {
 
-  const { memberID } = useAuth();
   const accessToken = localStorage.getItem("accessToken");
 
   const [totalDairy, setTotalDiary] = useState("");
-  const [year, setYear] = useState('');
-  const [month, setMonth] = useState('');
-  const [week, setWeek] = useState('');
+  const [sentiData, setSentiData] = useState([]);
 
-  const [sentiRecord, setSentiRecord] = useState([]);
+  const date = new Date();
+  const year = format(date, "yyyy");
+  const month = format(date, "M");
+  const startDay = format(date, "d")
+  const endDay = parseInt(startDay) + 7;
+
+  const [average, setAverage] = useState(0);
+  const [monthData, setMonthData] = useState(0);
+  const [style, setStyle] = useState("");
+
+  const RenderLineChat = () => {
+    return (
+      <LineChart width={1300} height={180} data={sentiData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <Tooltip />
+        <Line type="monotone" dataKey="positive" stroke="#FF76CE" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
+        <Line type="monotone" dataKey="neutral" stroke="#b87ffa" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
+        <Line type="monotone" dataKey="negative" stroke="#A3D8FF" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
+      </LineChart>
+    );
+  };
 
   const fetchData = async () => {
     try {
@@ -72,14 +130,61 @@ function StatsPage() {
           Authorization: `Bearer ${accessToken}`,
         }
       });
-      
       setTotalDiary(response.data.lawn.total);
       
-      console.log("감정분석 : ", response);
-      setSentiRecord()
+      let index = 0;
+      const dayOfWeek = ['월', '화', '수', '목' ,'금', '토', '일'];
+      const sentimentData = response.data.emotions.map(item => {
+        if(item === null || item === 'undefined') {
+          return {
+            name : dayOfWeek[index++],
+            positive : 0,
+            neutral : 0,
+            negative : 0,
+          };
+        } else {
+          return {
+            name : dayOfWeek[index++],
+            positive : item.positive,
+            neutral : item.neutral,
+            negative : item.negative,
+          };
+        }
+      });
+      setSentiData(sentimentData);
+
+      setAverage(response.data.value.average);
+      setMonthData(response.data.value.month);
+      setStyle(response.data.value.style);
+
+      console.log(response);
     } catch(error) {
       console.log(error);
     }
+  };
+  
+  const GraphValue = () => {
+    const getColor = (emotion) => {
+      switch(emotion) {
+        case 'positive' : return "#FF76CE";
+        case 'neutral' : return "#b87ffa";
+        case 'negative' : return "#A3D8FF";
+        default: return '#ffffff';
+      }
+    };
+
+    const emotions = ['positive', 'neutral', 'negative'];
+
+    return (
+      <ValueContainer>
+        {emotions.map((emotion, index) => (
+          <Value key={index}>
+            <Circle color={getColor(emotion)} />
+            <TextValue>{emotion}</TextValue>
+          </Value>
+        ))}
+      </ValueContainer>
+    );
   };
   
   useEffect(() => {
@@ -91,19 +196,33 @@ function StatsPage() {
       <Background2>
         <Container>
           <NavBar />
+          <div style={{marginTop: '40px'}}></div>
+          <Text>{year}년에는 일기를 {totalDairy}편 썼어요!</Text>
           <HistoryContainer>
-            <TotalHistory>{year}년에는 일기를 {totalDairy}편 썼어요!</TotalHistory>
             <GrassGraph/>
           </HistoryContainer>
-
-          <span>수치</span>
           <StatsContainer>
 
+            <StatsContent>
+              <Text>{month}월 총 작성</Text>
+              <BigText>{average} 편</BigText>
+            </StatsContent>
+
+            <StatsContent>
+              <Text>월 평균 작성</Text>
+              <BigText>{monthData} 편</BigText>
+            </StatsContent>
+
+            <StatsContent>
+              <Text>선호 스타일</Text>
+              <BigText>{style} 스타일</BigText>
+            </StatsContent>
           </StatsContainer>
 
-          <span>{month}월 {week}주차 감정분석</span>
+          <Text>{month}월 {startDay} ~ {endDay}일 감정분석 기록</Text>
           <SentimentContainer>
-
+            <RenderLineChat />
+            <GraphValue />
           </SentimentContainer>
         </Container>
       </Background2>

@@ -8,7 +8,6 @@ import LoginBtn from "../components/LoginBtn";
 
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
-import axiosInstance from "../axios/axisoInstance";
 import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
 
@@ -103,7 +102,7 @@ function LoginPage() {
       })
       .then((response) => {
         login(response.data.accessToken, response.data.memberID);
-        navigate("/calendar");
+        navigate("/");
       })
       .catch((error) => {
         console.log("에러 status: ", error.code);
@@ -132,7 +131,7 @@ function LoginPage() {
             <LoginBar
               icon={<FaLock />}
               text="비밀번호"
-              type="password"
+              type="Password"
               onChange={(e) => setPassword(e.target.value)}
             ></LoginBar>
             <ErrorMessageContainer>

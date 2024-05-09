@@ -7,16 +7,24 @@ import AddCategory from "../components/album/AddCategory";
 import { CategoryProvider } from "../components/album/CategoryList";
 import Background2 from "../components/Background/index2";
 
-const Container = styled.div`
+const Container = styled.section`
   width: 100%;
   height: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const AlbumContainer = styled.section`
+  width: 100%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
   }
   &::-webkit-scrollbar-thumb {
     background-color: #ccc;
@@ -24,12 +32,11 @@ const Container = styled.div`
   }
 `;
 
-const AddAlbumContainer = styled.div`
+const AddAlbum = styled.div`
   position: sticky;
-  margin-top: 20px;
-  margin-right: 30px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: end;
+  margin-top: 20px;
 `;
 
 const ErrorMessage = styled.div`
@@ -64,17 +71,19 @@ const AlbumPage = () => {
       <Background2>
         <Container>
           <NavBar/>
-          <AlbumBox  onErrorMessage={handleErrorMessage}/>
+          <AlbumContainer>
+            <AlbumBox  onErrorMessage={handleErrorMessage}/>
+          </AlbumContainer>
+          <AddAlbum>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+            <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
+            {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
+            <AddCategory
+              isOpen={isAddCategoryVisible}
+              onclose={handleClose}
+              />
+          </AddAlbum>
         </Container>
-        <AddAlbumContainer>
-          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-          <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
-          {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
-          <AddCategory
-            isOpen={isAddCategoryVisible}
-            onclose={handleClose}
-          />
-        </AddAlbumContainer>
       </Background2>
     </CategoryProvider>
   );

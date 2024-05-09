@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-const ShortSideBarStyle = styled.div`
+const NavStyle = styled.div`
     width: 100%;
     height: 30px;
-    margin-top: 5px;
+    padding: 10px 0 10px 0;
     position: sticky;
     display: flex;
     flex-direction: row;
@@ -23,10 +23,10 @@ const TextStyle = styled.text`
     font-size: 15px;
 `;
 
-const ShortSidebar = () => {
+const NavBar = () => {
     return (
-        <ShortSideBarStyle>
-            <LinkStyle href="/calendar">
+        <NavStyle>
+            <LinkStyle href="/">
                 <TextStyle>캘린더</TextStyle>
             </LinkStyle>
 
@@ -41,9 +41,9 @@ const ShortSidebar = () => {
             <LinkStyle href="/my">
                 <TextStyle>마이페이지</TextStyle>
             </LinkStyle>
-        </ShortSideBarStyle>
+        </NavStyle>
     );
 };
 
-export default ShortSidebar;
+export default NavBar;
 

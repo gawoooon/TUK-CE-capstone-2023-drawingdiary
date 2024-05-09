@@ -14,16 +14,17 @@ import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
 import { CalendarProvider } from "./components/Calendar2/CalendarProvider.jsx";
 import ShowDiaryPage from "./pages/ShowDiaryPage.jsx";
+import ErrorBoundary from "./error/ErrorBoundary.jsx";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/loginlost" element={<LoginLostPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route 
-          path="/calendar" 
+          path="/" 
           element={
             <CalendarProvider>
               <CalendarPage />
@@ -56,7 +57,14 @@ function App() {
             </CategoryProvider>
           }
         />
-        <Route path="/stats" element={<StatsPage />} />
+        <Route
+          path="/stats" 
+          element={
+            <ErrorBoundary>
+              <StatsPage />
+            </ErrorBoundary>
+          } 
+        />
         <Route path="/my" element={<MyPage />} />
         <Route path="/choosePersonality" element={<ChoosePersonalityPage />} />
         <Route path="/FinishPage" element={<FinishPage />} />

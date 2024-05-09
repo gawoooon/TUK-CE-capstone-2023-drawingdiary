@@ -34,11 +34,11 @@ const TextBox = styled.input`
   opacity: 0.5;
 `;
 
-function LoginBar({ icon, text, onChange, type="text" }) {
+function LoginBar({ icon, text, onChange, type }) {
   return (
     <Bar>
       <IconBox>{icon}</IconBox>
-      <TextBox type={text} placeholder={text} onChange={onChange} />
+      <TextBox type={type} placeholder={text} onChange={onChange} />
     </Bar>
   );
 }
