@@ -3,12 +3,8 @@ import styled from "styled-components";
 import WeatherTypes from "../weather/WeatherTypes";
 
 const WeatherContainer = styled.div`
-  width: 287px;
-  height: 60px;
-  border: none;
-  border-radius: 40px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,7 +23,7 @@ const WeatherImage = styled.img`
 `;
 
 const DateText = styled.text`
-  font-size: 23px;
+  font-size: 20px;
   font-weight: bold;
 `;
 

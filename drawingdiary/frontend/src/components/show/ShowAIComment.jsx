@@ -4,30 +4,29 @@ import styled from "styled-components";
 import imageLodding from "../../animation/imageLodding.json";
 
 const Container = styled.div`
-    width: 600px;
-    height: 300px;
-    margin: 10px 30px 10px 0;
+    width: 370px;
+    height: 200px;
+    margin: 10px 0 5px 0;
     background-color: rgba(106, 156, 253, 0.3);
-    border-radius: 30px;
+    border-radius: 10px;
     border: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     overflow: hidden;
 `;
 
 const Comment = styled.div`
-    width: 550px;
-    height: 280px;
+    width: 350px;
+    height: 160px;
     display: flex;
     justify-content: center;
     overflow-y: auto;
-    padding: 30px 10px 10px 10px;
-    line-height: 1.7;
+    padding: 10px;
     &::-webkit-scrollbar {
         width: 8px;
     }

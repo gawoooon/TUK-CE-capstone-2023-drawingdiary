@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled, { css, keyframes } from "styled-components";
+import styled from "styled-components";
 import AlbumCategory from "../components/album/AlbumCategory";
 import AIComment from "../components/edit diary/AIComment";
 import EditDiary from "../components/edit diary/EditDiary";
@@ -39,14 +39,14 @@ const RightContainer = styled.section`
 
 const RightTopContent = styled.div`
   height: 50px;
-  margin-top: 20px;
+  margin-top: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
 const RightMidContent = styled.div`
-  height: 80%;
+  height: 81%;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -58,27 +58,27 @@ const RightBottomContent = styled.div`
   height: 50px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   background-color: white;
   border-radius: 10px;
-  padding: 0 10px;
-  margin: 0 10px;
+  padding: 5px;
 `;
 
 const LeftContainer = styled.section`
   width: 50%;
+  height: 100%;
 `;
 
 const LeftTopContent = styled.div`
-  height: 50px;
+  height: 30px;
   display: flex;
   justify-content: end;
   align-items: center;
 `;
 
 const LeftMidContent = styled.div`
-  height: 75%;
+  height: 82%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -99,10 +99,11 @@ const SaveBtn = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 5px 10px;
+  padding: 10px 10px;
   border: none;
   border-radius: 5px;
   font-size: 15px;
+  background-color: white;
 `;
 
 function DiaryPage() {
@@ -336,7 +337,6 @@ function DiaryPage() {
     <div>
       <Background2>
         <Container>
-          
           <DiaryContainer>
             <RightContainer>
               <RightTopContent>
@@ -358,11 +358,11 @@ function DiaryPage() {
                       negativeValue={negativeValue}
                       neutralValue={neutralValue}
                   />
-              </LeftBottomContent>
+                </LeftBottomContent>
               </RightMidContent>
               <RightBottomContent>
                 <EditDiary onDiaryTextChange={handleDiaryTextChange} />
-                <IoIosSend size={30} color="rgba(106, 156, 253, 0.5)" onClick={handleCreate} style={{cursor: 'pointer'}} />
+                <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '20px'}} />
               </RightBottomContent>
             </RightContainer>
             <LeftContainer>

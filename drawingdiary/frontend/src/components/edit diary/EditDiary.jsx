@@ -1,25 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-
-// const WriteContatiner = styled.div`
-//     width: 760px;
-//     height: 50px;
-//     z-index: 1;
-//     margin-top: 10px;
-//     margin-bottom: 10px;
-//     padding: 5px 10px 10px 10px;
-//     background-color: rgba(255, 255, 255, 0.3);
-//     border-radius: 30px;
-//     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-//     display: flex;
-//     justify-content: center;
-//     flex-direction: column;
-//     h3 {
-//         margin-top: 5px;
-//         margin-left: 30px;
-//         margin-bottom: 10px;
-//     }
-// `;
 
 const WriteArea = styled.textarea`
     width: 680px;

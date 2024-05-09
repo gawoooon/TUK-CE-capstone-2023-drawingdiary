@@ -4,11 +4,11 @@ import { useCategory } from "./CategoryList";
 import axios from "axios";
 
 const CategoryStyle = styled.select`
-  width: 100px;
+  width: 95px;
   height: 36px;
   margin: 10px 10px 10px 20px;
-  padding-left: 28px;
-  font-size: 18px;
+  padding-left: 25px;
+  font-size: 15px;
   border: none;
   outline: none;
   border-radius: 10px;
