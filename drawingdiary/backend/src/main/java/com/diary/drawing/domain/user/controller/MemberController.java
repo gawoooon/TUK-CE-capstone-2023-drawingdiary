@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.diary.drawing.domain.album.dto.AlbumRequestDTO;
 import com.diary.drawing.domain.album.service.AlbumService;
+import com.diary.drawing.domain.email.EmailVerificationService;
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberDTO;
@@ -48,6 +49,7 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final SmsVerificationService smsVerificationService;
     private final StatisticsService staticsService;
+    private final EmailVerificationService emailVerificationService;
 
 
     // 로그인은 jwt AuthController 에 구현되어있음
@@ -185,6 +187,14 @@ public class MemberController {
     @GetMapping("/statistic")
     public ResponseEntity<?> statisticPage(@AuthenticationPrincipal PrincipalDetails principalDetails){
         return staticsService.makeStatics(principalDetails.getMemberID());
+    }
+
+    /* 이메일 인증으로 패스워드 리셋하는 api
+     * 
+     */
+    @PostMapping("/member/resetpassword")
+    public ResponseEntity<?> verifyAndResetPassword(@RequestBody MemberDTO.resetPassword dto) throws Exception {
+        return memberService.setTempPassword(dto.getEmail());
     }
     
 

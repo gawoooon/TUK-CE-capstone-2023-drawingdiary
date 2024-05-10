@@ -51,6 +51,15 @@ public class MemberDTO {
         private String oldPassword;
     }
 
+    @Jacksonized
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @Builder
+    public static class resetPassword{
+        private String email;
+    }
+
     
     @Getter
     @ToString
