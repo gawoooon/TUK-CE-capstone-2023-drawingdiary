@@ -124,7 +124,7 @@ public class MemberController {
     /* 테마 업데이트 api
      * @param int theme
      */
-    @Operation(summary = "회원가입")
+    @Operation(summary = "테마 업데이트")
     @PutMapping("/theme")
     public ResponseEntity<?> updateTheme (@RequestBody ThemeUpdateDTO themeUpdateDTO,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -192,6 +192,7 @@ public class MemberController {
     /* 이메일 인증으로 패스워드 리셋하는 api
      * 
      */
+    @Operation(summary = "이메일 인증으로 패스워드 리셋")
     @PostMapping("/member/resetpassword")
     public ResponseEntity<?> verifyAndResetPassword(@RequestBody MemberDTO.resetPassword dto) throws Exception {
         return memberService.setTempPassword(dto.getEmail());
