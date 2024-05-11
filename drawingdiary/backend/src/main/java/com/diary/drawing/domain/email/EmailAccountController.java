@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 public class EmailAccountController {
 
     private final EmailService emailService;
-    private final EmailVerificationService verificationService;
 
 
     // 인증번호 전송, 잘 보내지면 알아서 상태코드 200
@@ -22,7 +21,7 @@ public class EmailAccountController {
     public ResponseEntity<String> mailConfirm(@RequestBody EmailRequestDTO emailRequestDTO) throws Exception{
         try{
             String code = emailService.sendSimpleMessage(emailRequestDTO.getEmail());
-            verificationService.saveVerificationCode(emailRequestDTO.getEmail(), code);
+            emailService.saveVerificationCode(emailRequestDTO.getEmail(), code);
             return new ResponseEntity<String>(HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
@@ -36,13 +35,14 @@ public class EmailAccountController {
     // TODO: 에러코드 표현 따로 만들고 노션에 업로드, request VerificationRequest request로 수정
     @PostMapping("/api/email/verify")
     public ResponseEntity<Boolean> verify(@RequestBody EmailVerificationDTO requesDto){
-        if(verificationService.verifyEmail(requesDto.getEmail(), requesDto.getVerificationCode())){
+        if(emailService.verifyEmail(requesDto.getEmail(), requesDto.getVerificationCode())){
             return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 
         } else{
             return new ResponseEntity<Boolean>(false, HttpStatus.OK);
         }
     }
+    
     
 
 

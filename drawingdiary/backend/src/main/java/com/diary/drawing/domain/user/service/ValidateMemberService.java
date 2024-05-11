@@ -22,5 +22,11 @@ public class ValidateMemberService {
         if(member.isPresent()) return member.get();
         else{ throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);}
     }
+
+    public Member findMemberByEmail(String email){
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if(member.isPresent()) return member.get();
+        else{ throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);}
+    }
     
 }
