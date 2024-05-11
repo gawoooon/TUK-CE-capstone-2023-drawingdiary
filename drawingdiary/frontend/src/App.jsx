@@ -9,6 +9,8 @@ import CalendarPage from "./pages/CalendarPage.jsx";
 import DiaryPage from "./pages/DiaryPage.jsx";
 import AlbumPage from "./pages/AlbumPage.jsx";
 import StatsPage from "./pages/StatsPage.jsx";
+import PasswordLostPage from "./pages/PasswordLostPage.jsx";
+import EmailLostPage from "./pages/EmailLostPage.jsx";
 import MyPage from "./pages/MyPage.jsx";
 import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
@@ -23,13 +25,13 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/loginlost" element={<LoginLostPage />} />
         <Route path="/join" element={<JoinPage />} />
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
             <CalendarProvider>
               <CalendarPage />
             </CalendarProvider>
-          } 
+          }
         />
         <Route
           path="/diary/:memberId/:dateId"
@@ -58,16 +60,18 @@ function App() {
           }
         />
         <Route
-          path="/stats" 
+          path="/stats"
           element={
             <ErrorBoundary>
               <StatsPage />
             </ErrorBoundary>
-          } 
+          }
         />
         <Route path="/my" element={<MyPage />} />
         <Route path="/choosePersonality" element={<ChoosePersonalityPage />} />
         <Route path="/FinishPage" element={<FinishPage />} />
+        <Route path="/password" element={<PasswordLostPage />} />
+        <Route path="/email" element={<EmailLostPage />} />
       </Routes>
     </Router>
   );
