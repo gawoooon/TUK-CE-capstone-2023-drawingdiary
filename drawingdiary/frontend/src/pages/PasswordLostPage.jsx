@@ -1,6 +1,7 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Background from "../components/Background";
 import LoginBar from "../components/LoginBar";
@@ -74,13 +75,55 @@ const LoginBtn2 = styled(Link)`
   text-decoration: none;
 `;
 
-function PasswordLostPage() {
-  const navigate = useNavigate();
+const MessageContainer = styled.div`
+  width: 100%;
+  margin: 0 0 3px 20px;
+  min-height: 20px;
+  padding: 10px 0px 0px 250px;
+`;
 
-  const handleLogin = () => {
-    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    navigate("/calendar");
+const Message = styled.p`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 12px;
+  font-weight: bold;
+  color: ${(props) => props.color};
+`;
+
+function PasswordLostPage() {
+  const accessToken = localStorage.getItem("accessToken");
+  const [email, setEmail] = useState("");
+  const [verifyMessage, setVerifyMessage] = useState(null);
+
+  const handlePost = async (event) => {
+    event.preventDefault();
+    console.log(email);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/member/resetpassword",
+        { email: email },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log("response", response);
+      setVerifyMessage(true);
+    } catch (error) {
+      console.log("error: ", error);
+      setVerifyMessage(false);
+    }
   };
+
+  if (verifyMessage) {
+    setTimeout(() => {
+      setVerifyMessage("");
+    }, 2000);
+  }
 
   return (
     <Background>
@@ -98,13 +141,24 @@ function PasswordLostPage() {
               <LoginBar
                 icon={<MdEmail />}
                 text="이메일"
+                onChange={(e) => setEmail(e.target.value)}
               ></LoginBar>
             </LeftBox>
             <RightBox>
-              <LoginBtn text="전송" onClick={handleLogin} />
+              <LoginBtn text="전송" onClick={handlePost} />
             </RightBox>
           </PasswdBox>
-          <LoginBtn2 to="/calendar">로그인</LoginBtn2>
+
+          <MessageContainer>
+            {verifyMessage === true && (
+              <Message color="green">이메일 인증되었습니다</Message>
+            )}
+            {verifyMessage === false && (
+              <Message color="red">인증되지 않았습니다</Message>
+            )}
+          </MessageContainer>
+
+          <LoginBtn2 to="/login">로그인</LoginBtn2>
         </LoginBox>
       </Body>
     </Background>

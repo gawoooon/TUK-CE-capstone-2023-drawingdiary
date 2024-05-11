@@ -3,9 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import Background from "../components/Background";
-import EmailLost from "../components/lost/EmailLost";
 
-import { IoPersonSharp } from "react-icons/io5";
 import { IoIosLock } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 
