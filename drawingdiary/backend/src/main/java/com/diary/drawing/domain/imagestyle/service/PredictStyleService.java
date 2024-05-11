@@ -24,7 +24,7 @@ import com.diary.drawing.domain.user.service.ValidateMemberService;
 import lombok.RequiredArgsConstructor;
 
 
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class PredictStyleService{
@@ -40,7 +40,7 @@ public class PredictStyleService{
         // 답변 null이면 오류 반환
         if(response == null){return ResponseEntity.ofNullable("예측 생성에 실패했습니다.");}
 
-        List<String> getResponse = response.getPredicted_styles();
+        List<String> getResponse = response.getTop_styles();
         modelPrediction.update(getResponse);
         modelPredictionRepository.save(modelPrediction);
         return ResponseEntity.ok(response);
@@ -61,6 +61,7 @@ public class PredictStyleService{
     }
 
     /* python 예측 모델에서 prediction_styles라는 string 리스트 반환 */
+    @Transactional
     public PredictResponseDTO getStyles(PredictRequestDTO predictRequestDTO) {
     String url = "http://localhost:5001/api/get-styles";
 

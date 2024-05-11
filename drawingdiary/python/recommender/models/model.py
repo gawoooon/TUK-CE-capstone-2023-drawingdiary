@@ -18,9 +18,9 @@ def get_top_styles(age, gender):
 
     # 스타일 빈도 계산
     style_counts = filtered_data['styles'].str.split(',').explode().value_counts()
-    top_styles = style_counts.head(5)  # 상위 5개 스타일 추출
+    top_styles = style_counts.head(5).index.tolist()  # 상위 5개 스타일 추출
 
-    return top_styles.to_dict()
+    return top_styles
 
 app = Flask(__name__)
 CORS(app)
