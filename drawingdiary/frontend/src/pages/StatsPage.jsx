@@ -98,7 +98,7 @@ function StatsPage() {
 
   const accessToken = localStorage.getItem("accessToken");
 
-  const [totalDairy, setTotalDiary] = useState("");
+  const [totalDairy, setTotalDiary] = useState(0);
   const [sentiData, setSentiData] = useState([]);
 
   const date = new Date();

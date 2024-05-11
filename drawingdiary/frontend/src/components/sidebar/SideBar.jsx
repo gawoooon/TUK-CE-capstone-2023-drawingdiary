@@ -4,6 +4,7 @@ import { IoMdLogIn  } from "react-icons/io";
 import { LuCalendarDays } from "react-icons/lu";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
 import { SlGraph } from "react-icons/sl";
+import { TbUserEdit } from "react-icons/tb";
 
 const SideBarStyle = styled.div`
   display: flex;
@@ -120,7 +121,10 @@ const SideBar = ({ isOpen}) => {
         {setProfileImg !== "null" && setProfileImg !== null ? (
           <ProfileImg src={setProfileImg} alt="profile" isOpen={isOpen} />
         ) : (
-          <ProfileImg src="/user.png" alt="profile" isOpen={isOpen} />
+          <TbUserEdit 
+            size={30} 
+            color='#3d3d3d' 
+            alt='edit' />
         )}
         <ProfileName>{setName}</ProfileName>
       </ProfileSection>

@@ -13,7 +13,6 @@ const Container = styled.div`
     transform: translate(-50%, -50%);
     border: 2px solid #8C8C8C;
     border-radius: 30px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     display: flex;
     flex-direction: column;
@@ -53,7 +52,7 @@ const FinishPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate('/');
+        navigate('/login');
     };
 
     const confettiRef = useRef(new JSConfetti());
