@@ -14,7 +14,6 @@ import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
 import { CalendarProvider } from "./components/Calendar2/CalendarProvider.jsx";
 import ShowDiaryPage from "./pages/ShowDiaryPage.jsx";
-import ErrorBoundary from "./error/ErrorBoundary.jsx";
 
 function App() {
   return (
@@ -60,9 +59,7 @@ function App() {
         <Route
           path="/stats" 
           element={
-            <ErrorBoundary>
-              <StatsPage />
-            </ErrorBoundary>
+            <StatsPage />
           } 
         />
         <Route path="/my" element={<MyPage />} />
