@@ -253,12 +253,11 @@ const CreateAccount = () => {
       console.log("userEmail: ", userEmail);
       if(userEmail !== '') {
         try {
-          const response = await axios.post('http://localhost:8080/api/email/codesending', `${userEmail}`, {
+          await axios.post('http://localhost:8080/api/email/codesending', `${userEmail}`, {
             headers: {
               'Content-Type': 'application/json'
             }
           });
-          console.log("response", response);
           setSendMessage("이메일이 전송되었습니다.");
         } catch (error) {
           console.log("error: ", error);
@@ -272,11 +271,10 @@ const CreateAccount = () => {
       event.preventDefault();
       if(certificateEmail !== ''){
         try {
-          const response = await axios.post('http://localhost:8080/api/email/verify', {
+          await axios.post('http://localhost:8080/api/email/verify', {
             email: userEmail,
             verificationCode: certificateEmail
           });
-          console.log("response: ", response);
           setIsEmailVerified(true);
           setVerifyMessage('이메일이 인증되었습니다.')
         } catch (error) {

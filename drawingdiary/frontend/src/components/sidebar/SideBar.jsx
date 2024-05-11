@@ -5,6 +5,9 @@ import { LuCalendarDays } from "react-icons/lu";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
 import { SlGraph } from "react-icons/sl";
 import { TbUserEdit } from "react-icons/tb";
+import { React, useEffect, useState } from "react";
+import { useAuth } from "../../auth/context/AuthContext";
+import axios from "axios";
 
 const SideBarStyle = styled.div`
   display: flex;
@@ -90,8 +93,37 @@ const ProfileName = styled.div`
 
 const SideBar = ({ isOpen}) => {
 
+  const [loginState, setLoginState] = useState(false);
+  const [username, setUserName] = useState("로그인을 해주세요.");
+
+  const { memberID, logout } = useAuth();
+  const accessToken = localStorage.getItem("accessToken");
   const setName = localStorage.getItem("setName");
   const setProfileImg = localStorage.getItem("setProfileImage");
+  
+  const handleLogout = () => {
+    axios.post('http://localhost:8080/api/logout',{
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    }).then(() => {
+      logout();
+      setLoginState(false);
+      setUserName("로그인을 해주세요.");
+    }).catch((error) => {
+      console.log(error)
+    })   
+  };
+
+  useEffect(() => {
+    if(memberID !== null) {
+      setUserName(setName);
+      setLoginState(true);
+    } else {
+      setUserName("로그인을 해주세요.")
+      setLoginState(false);
+    }
+  }, [handleLogout]);
 
   return (
     <SideBarStyle isOpen={isOpen}>
@@ -111,10 +143,17 @@ const SideBar = ({ isOpen}) => {
           <SlGraph size={20} color="#3d3d3d" alt="Statics" />
           <MenuItemText>분석</MenuItemText>
         </MenuItem>
-        <MenuItem to="/login">
-          <IoMdLogIn size={20} color="#3d3d3d" alt="Login" />
-          <MenuItemText>로그인</MenuItemText>
-        </MenuItem>
+        {loginState ? (
+          <MenuItem to="/" onClick={handleLogout}>
+            <IoMdLogIn size={20} color="#3d3d3d" alt="Login" />
+            <MenuItemText>로그아웃</MenuItemText>
+          </MenuItem>
+        ) : (
+          <MenuItem to="/login">
+            <IoMdLogIn size={20} color="#3d3d3d" alt="Login" />
+            <MenuItemText>로그인</MenuItemText>
+          </MenuItem>
+        )}
       </SideBarMenu>
 
       <ProfileSection to="/my">
@@ -126,7 +165,11 @@ const SideBar = ({ isOpen}) => {
             color='#3d3d3d' 
             alt='edit' />
         )}
-        <ProfileName>{setName}</ProfileName>
+        {loginState ? (
+          <ProfileName style={{fontSize:'15px'}}>{username}</ProfileName>
+        ) : (
+          <ProfileName style={{fontSize:'12px'}}>{username}</ProfileName>
+        )}
       </ProfileSection>
     </SideBarStyle>
   );

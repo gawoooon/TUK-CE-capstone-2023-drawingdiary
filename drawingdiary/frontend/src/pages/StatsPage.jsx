@@ -124,8 +124,7 @@ function StatsPage() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/statistic',
-      {
+      const response = await axios.get('http://localhost:8080/api/statistic', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         }
