@@ -176,7 +176,7 @@ public class MemberController {
      */
     @Operation(summary = "문자 인증 코드 확인")
     @PostMapping("/sms/verify")
-    public ResponseEntity<?> verify(@RequestBody PhoneRequestDTO.verifyDTO verifyDTO){
+    public ResponseEntity<?> phoneNumberVerify(@RequestBody PhoneRequestDTO.verifyDTO verifyDTO){
         return memberService.findEmailByPhoneNumber(verifyDTO.getPhoneNumber(), verifyDTO.getCode());
     }
 
