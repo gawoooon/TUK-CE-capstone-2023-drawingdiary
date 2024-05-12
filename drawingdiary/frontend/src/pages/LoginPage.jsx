@@ -28,13 +28,15 @@ const Title = styled.p`
 
 const LoginBox = styled.form`
   display: flex;
-  width: 800px;
-  height: 400px;
-  background-color: rgba(255, 255, 255, 0.2);
+  width: 700px;
+  height: 350px;
+  background-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   padding: 70px 80px 40px 80px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
 `;
 
 const LeftBox = styled.div`
@@ -46,10 +48,10 @@ const LeftBox = styled.div`
 `;
 
 const JoinBtn = styled(Link)`
-  padding-left: 30px;
-  color: #989898;
+  padding-left: 10px;
+  color: #090071;
   opacity: 0.8;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 16px;
   text-decoration: none;
 `;
@@ -57,7 +59,7 @@ const JoinBtn = styled(Link)`
 const RightBox = styled.div`
   width: 30%;
   height: 100%;
-  padding: 30px 10px 110px 55px;
+  padding: 18px 0 88px 55px;
   box-sizing: border-box;
 `;
 
@@ -69,6 +71,7 @@ const LoginLostBtn = styled(Link)`
   text-align: right;
   text-decoration: none;
   padding-top: 18px;
+  margin-right: 100px;
   font-size: 18px;
 `;
 
@@ -125,12 +128,12 @@ function LoginPage() {
         <LoginBox>
           <LeftBox>
             <LoginBar
-              icon={<IoMdPerson />}
+              icon={<IoMdPerson size={20} />}
               text="아이디"
               onChange={(e) => setEmail(e.target.value)}
             ></LoginBar>
             <LoginBar
-              icon={<FaLock />}
+              icon={<FaLock size={20} />}
               text="비밀번호"
               type="Password"
               onChange={(e) => setPassword(e.target.value)}

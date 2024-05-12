@@ -45,10 +45,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.clear();
     setAuth({ accessToken: null, refreshToken: null, memberID: null });
   };
-
+  
   useEffect(() => {
     const interval = setInterval(() => {
       if(auth.accessToken && auth.refreshToken) {
+        localStorage.clear();
         refreshToken();
       }
     }, 1000 * 60 * 28);

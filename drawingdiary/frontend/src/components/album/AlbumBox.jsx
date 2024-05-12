@@ -58,14 +58,13 @@ const DateText = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
-    padding-top: 5px;
     border-radius: 10px;
 
     img {
-        width: 180px;
-        height: 180px;
+        width: 200px;
+        height: 200px;
         border-radius: 10px;
         margin: 5px;
         transition: transform 0.2s ease;
@@ -205,8 +204,8 @@ function AlbumBox({ onErrorMessage }) {
                                     {categoryEntry.images.map((item, index) => (
                                         <PictureContainer key={index} onClick={() => handleShowDetails(item.date)}>
                                             <DateText>
-                                                {item.date}
                                                 <img src={item.imageFile} alt="Album" />
+                                                {item.date}
                                             </DateText>
                                         </PictureContainer>
                                     ))}

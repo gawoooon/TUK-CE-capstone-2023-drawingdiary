@@ -2,11 +2,11 @@ import styled from "styled-components";
 
 const Bar = styled.div`
   display: flex;
-  width: 100%;
-  height: 70px;
+  width: 420px;
+  height: 60px;
   background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 50px;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
 `;
 
 const IconBox = styled.div`

@@ -16,7 +16,8 @@ const Btn = styled.button`
   font-size: 20px;
   font-weight: 800;
   cursor: pointer;
-  background-color: #acc5ff;
+  background-color: #7fa5ffc5;
+  box-shadow: 0 1px 1px 0 rgba(255, 255, 255, 0.1);
   color: black;
   &:hover {
     animation: ${(props) =>

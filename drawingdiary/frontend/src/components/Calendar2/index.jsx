@@ -32,17 +32,19 @@ const HeaderMiddleBox = styled.div`
   justify-content: center;
   width: 33%;
   height: 100%;
-  color: #090071;
+  color: 090071;
   font-size: 20px;
   font-weight: 900;
 `;
 
 const HeaderMonth = styled.p`
   padding-right: 5px;
-`;
+  color: #090071;
+  `;
 
 const HeaderYear = styled.p`
   padding-right: 5px;
+  color: #090071;
 `;
 
 const HeaderEndBox = styled.div`
@@ -72,7 +74,7 @@ const DayColumn = styled.div`
   justify-content: center;
   width: 14%;
   height: 100%;
-  color: #b7b7b7;
+  color: #090071;
   border: 1px solid rgba(224, 224, 224, 0.5);
   padding: 5px 0px;
   box-sizing: border-box;
@@ -99,7 +101,7 @@ const BodyMonth = styled.div`
   padding: 6px;
   width: 100%;
   height: 13%;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
   color: #090071;
 
@@ -110,10 +112,10 @@ const BodyMonth = styled.div`
   }
 
   &.today {
-    color: white;
-    background-color: #4f8cff;
-    width: 50%;
-    border-radius: 50%;
+    background-color: #d3d3d36c;
+    margin-top: 2px;
+    width: 15%;
+    border-radius: 2px;
   }
 `;
 
@@ -129,19 +131,19 @@ const BodyDayOneBox = styled.div`
   &:hover {
     cursor: pointer;
     ${BodyMonth}:not(.not-valid) {
-      color: white;
-      background-color: #88b0fd;
-      width: 50%;
-      border-radius: 50%;
+      background-color: #d3d3d36c;
+      margin-top: 2px;
+      width: 15%;
+      border-radius: 2px;
     }
   }
 
   &.selected {
     ${BodyMonth}:not(.today, .not-valid) {
-      color: white;
-      background-color: #88b0fd;
-      width: 50%;
-      border-radius: 50%;
+      background-color: #d3d3d36c;
+      margin-top: 2px;
+      width: 15%;
+      border-radius: 2px;
     }
   }
 `;
