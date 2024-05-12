@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import { React, useEffect, useState } from "react";
-import { useAuth } from "../../auth/context/AuthContext";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { IoMdLogIn  } from "react-icons/io";
-import { LuCalendarDays } from "react-icons/lu";
+import { React, useEffect, useState } from "react";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
+import { IoMdLogIn } from "react-icons/io";
+import { LuCalendarDays } from "react-icons/lu";
 import { SlGraph } from "react-icons/sl";
 import { TbUserEdit } from "react-icons/tb";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const SideBarStyle = styled.div`
   display: flex;
@@ -103,7 +103,7 @@ const SideBar = ({ isOpen}) => {
   const setProfileImg = localStorage.getItem("setProfileImage");
   
   const handleLogout = () => {
-    axios.post('http://localhost:8080/api/logout',{
+    axios.post('http://localhost:8080/api/logout', null, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       }
