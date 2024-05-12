@@ -96,8 +96,8 @@ function AlbumBox({ onErrorMessage }) {
     const navigate = useNavigate();
     const [checkList, setCheckList] = useState(false);
 
-    const { memberID } = useAuth();
-    const accessToken = localStorage.getItem('accessToken');
+    const { memberID, getToken } = useAuth();
+    const accessToken = getToken();
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchAlbum = async () => {

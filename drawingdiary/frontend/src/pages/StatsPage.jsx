@@ -5,7 +5,8 @@ import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
 import Background2 from "../components/Background/index2";
 import { format } from 'date-fns';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, AreaChart, ReferenceLine, Area } from "recharts";
+import { LineChart, Line, Tooltip } from "recharts";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.section`
   width: 98%;
@@ -95,8 +96,8 @@ const TextValue = styled.div`
 `;
 
 function StatsPage() {
-
-  const accessToken = localStorage.getItem("accessToken");
+  const { getToken } = useAuth();
+  const accessToken = getToken();
 
   const [totalDairy, setTotalDiary] = useState(0);
   const [sentiData, setSentiData] = useState([]);

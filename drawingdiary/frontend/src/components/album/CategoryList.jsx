@@ -1,16 +1,13 @@
 import axios from 'axios';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useAuth } from '../../auth/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 
 export const CategoryContext = React.createContext();
 
 function useCategoryList (){
     const [categoryList, setCategoryList] = useState([]);
-    const { memberID } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
-    const accessToken = localStorage.getItem('accessToken');
-
-    const navigate = useNavigate();
+    const { memberID, getToken } = useAuth(); // 로그인한 상태에서 사용자의 memberID를 불러옴
+    const accessToken = getToken();
 
     const fetchCategoryList = useCallback(async () => {
         if(memberID) {// 로그인 상태 확인

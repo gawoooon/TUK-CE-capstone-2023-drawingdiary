@@ -13,6 +13,7 @@ import ShowGeneratedImage from "../components/show/ShowGeneratedImage";
 import Background2 from "../components/Background/index2";
 import { IoIosSend } from "react-icons/io";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.body`
   width: 100%;
@@ -107,6 +108,9 @@ const SaveBtn = styled.button`
 `;
 
 function ShowDiaryPage() {
+  const { getToken } = useAuth();
+  const accessToken = getToken();
+
   const navigate = useNavigate();
   const location = useLocation();
   const { diaryData } = location.state || {};
@@ -276,7 +280,6 @@ function ShowDiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-    const accessToken = localStorage.getItem("accessToken");
 
     // 날짜 데이터
     const formattedDate = new Date(date.currentYear, date.month - 1, date.day);
