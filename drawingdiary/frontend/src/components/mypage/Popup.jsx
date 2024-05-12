@@ -254,27 +254,23 @@ const LineBox = styled.div`
   height: 15px;
 `;
 
-function Popup({ onClose }) {
+function Popup({ onClose, profileImage }) {
   const accessToken = localStorage.getItem("accessToken");
-  const navigate = useNavigate();
 
   // 프로필
   const [newName, setNewName] = useState("");
   const [newProfileImage, setNewProfileImage] = useState("__NULL__"); // 업로드한 이미지 상태 추가
-  const setProfileImage = localStorage.getItem("setProfileImage");
 
   // 문자 인증
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneCertification, setPhoneCertification] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState(null);
   const [verifySnsMessage, setVerifySnsMessage] = useState(null);
-  const [errorSnsMessage, setErrorSnsMessage] = useState(null);
 
   // 이메일 인증
   const [newEmail, setNewEmail] = useState(null);
   const [certification, setCheckCertification] = useState("");
   const [verifyMessage, setVerifyMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   // 비밀번호
   const [oldPassword, setOldPassword] = useState(null);
@@ -416,8 +412,10 @@ function Popup({ onClose }) {
         console.log("response: ", response);
         if (response.data === true) {
           setVerifyMessage(true);
+          console.log("true");
         } else {
           setVerifyMessage(false);
+          console.log("false");
         }
       } catch (error) {
         console.log("error: ", error);
@@ -477,7 +475,7 @@ function Popup({ onClose }) {
       !verifyMessage &&
       !verifySnsMessage &&
       newName === localStorage.getItem("setName") &&
-      newProfileImage === setProfileImage
+      newProfileImage === profileImage
     ) {
       console.log(passwordMatch);
       alert("수정사항이 없습니다.");
@@ -518,7 +516,7 @@ function Popup({ onClose }) {
       );
       console.log("response: ", response);
       alert("수정되었습니다!");
-      navigate("/calendar");
+      window.location.reload();
     } catch (error) {
       console.log("error: ", error);
     }
@@ -543,10 +541,10 @@ function Popup({ onClose }) {
                 />
               ) : (
                 <>
-                  {setProfileImage !== "null" && setProfileImage !== null ? (
-                    <ProfileImg src={setProfileImage} alt="프로필 이미지" />
+                  {profileImage !== "null" && profileImage !== null ? (
+                    <ProfileImg src={profileImage} alt="프로필 이미지" />
                   ) : (
-                    <ProfileImg src="/user.png" alt="기본 이미지" />
+                    <ProfileImg src="/user2.png" alt="기본 이미지" />
                   )}
                 </>
               )}
