@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import styled, { keyframes, css } from "styled-components";
+import styled from "styled-components";
 import axios from 'axios';
 import Background from "../components/Background";
 import { useNavigate } from "react-router-dom";
@@ -123,17 +123,11 @@ const ButtonContainer = styled.div `
     justify-content: center;
 `;
 
-const jumpAnimation = keyframes`
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-`;
-
 const ButtonStyle = styled.button`
     height: 45px;
     width: 400px;
     margin-bottom: 30px;
-    background-color: rgb(106, 156, 253, 0.3);
+    background-color: rgba(106, 156, 253, 0.3);
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -141,9 +135,6 @@ const ButtonStyle = styled.button`
     font-size: 18px;
     font-weight: bold;
     outline: none;
-    &:hover {
-      animation: ${jumpAnimation} 0.5s ease;
-    }
 `;
 
 const MessageContainer = styled.div`
@@ -175,8 +166,6 @@ const CreateAccount = () => {
     const [isEmailVerified, setIsEmailVerified] = useState(false);
 
     const [nextButton, setNextButton] = useState(false);
-
-    const [animateNextBtn, setAnimateNextBtn] = useState(false);
 
     const navigate = useNavigate();
 
@@ -211,7 +200,7 @@ const CreateAccount = () => {
           confirmPasswordRef.current.focus();
           return;
         }
-  
+
 
         // 생일 형식 설정 부분
         const birth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
@@ -376,7 +365,7 @@ const CreateAccount = () => {
 
                   <div style={{marginTop:'50px'}}>
                     <ButtonContainer>
-                    <ButtonStyle animate={animateNextBtn} onClick={handleSubmit} herf="/choosePersonality">
+                    <ButtonStyle onClick={handleSubmit} herf="/choosePersonality">
                       완료
                     </ButtonStyle>
                     </ButtonContainer>
@@ -485,7 +474,7 @@ const CreateAccount = () => {
 
                   <div>
                     <ButtonContainer>
-                      <ButtonStyle animate={animateNextBtn} onClick={handleNextForm} herf="/choosePersonality">
+                      <ButtonStyle onClick={handleNextForm} herf="/choosePersonality">
                         다음
                       </ButtonStyle>
                     </ButtonContainer>

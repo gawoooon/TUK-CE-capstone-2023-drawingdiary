@@ -108,7 +108,7 @@ const SideBar = ({ isOpen}) => {
     if(accessToken !== null) {
       axios.post('http://localhost:8080/api/logout',{
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${accessToken}`
         }
       }).then(() => {
         logout();
