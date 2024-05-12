@@ -183,14 +183,14 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     try {
       const styleResponse = await axios.get("http://localhost:8080/api/test/style", {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          'Authorization': `Bearer ${accessToken}`
         },
       })
       setIsLoading(!isRecommenderLoading);
-      console.log(styleResponse);
+      console.log("styleResponse", styleResponse);
 
-      const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.name === styleName);
+      const updateRecommendedStyles = styleResponse.data.top_styles.map((styleName) => {
+        return ImageStyleLists.find(style => style === styleName);
       });
       setRecommendedStyles(updateRecommendedStyles);
     } catch (error) {
@@ -200,12 +200,13 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
           gender: userGender,
         }, {
           headers: {
-            Authorization: `Bearer ${accessToken}`
+            'Authorization': `Bearer ${accessToken}`
           },
         });
         setIsLoading(!isRecommenderLoading);
-        const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
-          return ImageStyleLists.find(style => style.name === styleName);
+        console.log("fallback", fallbackResponse);
+        const updateRecommendedStyles = fallbackResponse.data.top_styles.map((styleName) => {
+          return ImageStyleLists.find(style => style === styleName);
         });
         setRecommendedStyles(updateRecommendedStyles);
       }
@@ -224,7 +225,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     onOptionSelect(isSelected);
 
     const filterNonDuplicateStyles = ImageStyleLists.filter(
-      style => !recommendedStyles.map(rStyle => rStyle.name).includes(style.name)
+      style => !recommendedStyles.map(rStyle => rStyle).includes(style)
     );
     setOtherStyles(filterNonDuplicateStyles);
   }, [isSelected, onOptionSelect, recommendedStyles]);
@@ -258,9 +259,9 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
             recommendedStyles.map((style, index) => (
               <OptionBtnStyle
                 key={index}
-                isSelected={selectedButtonStyle === style.name}
-                onClick={() => handleButtonStyleSelect(style.name)}>
-                {`${style.name}`}
+                isSelected={selectedButtonStyle === style}
+                onClick={() => handleButtonStyleSelect(style)}>
+                {`${style}`}
               </OptionBtnStyle>
             ))
           )}
@@ -269,9 +270,9 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
           {otherStyles.map((style, index) => (
             <OptionBtnStyle
               key={index}
-              isSelected={selectedButtonStyle === style.name}
-              onClick={() => handleButtonStyleSelect(style.name)}>
-                {`${style.name}`}
+              isSelected={selectedButtonStyle === style}
+              onClick={() => handleButtonStyleSelect(style)}>
+                {`${style}`}
             </OptionBtnStyle>
           ))}
         </RightContainer>
