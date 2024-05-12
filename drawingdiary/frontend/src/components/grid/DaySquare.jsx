@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useAuth } from '../../auth/context/AuthContext';
 
 const GridContainer = styled.div`
   display: flex;
@@ -60,8 +61,8 @@ const DaySquare = ({ item }) => {
 };
 
 const GrassGraph = () => {
-  
-  const accessToken = localStorage.getItem('accessToken');
+  const { getToken } = useAuth();
+  const accessToken = getToken();
   const [grid, setGrid] = useState([]);
   
   const fetchGrid = async () => {

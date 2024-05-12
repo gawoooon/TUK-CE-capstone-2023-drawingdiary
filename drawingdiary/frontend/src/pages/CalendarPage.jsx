@@ -181,8 +181,8 @@ function CalendarPage() {
   const [prevBtnBox, setPrevBtnBox] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
-  const { memberID } = useAuth();
-  const accessToken = localStorage.getItem("accessToken");
+  const { memberID, getToken } = useAuth();
+  const accessToken = getToken();
 
   const { year, setYear, month, setMonth } = useCalendar();
   const [data, setData] = useState([]);
@@ -196,7 +196,6 @@ function CalendarPage() {
   const fetchUserName = useCallback(async () => {
     if (memberID) {
       try {
-        const accessToken = localStorage.getItem("accessToken");
         const response = await axios.get("http://localhost:8080/api/get-member", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -208,6 +207,7 @@ function CalendarPage() {
         localStorage.setItem("setBirth", response.data.birth);
         localStorage.setItem("selectedColor", response.data.theme);
         localStorage.setItem("setProfileImage", response.data.profileImage);
+        
       } catch (error) {
         console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
       }
@@ -321,7 +321,7 @@ function CalendarPage() {
         `http://localhost:8080/api/calender/${year}-${month}`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            'Authorization': `Bearer ${accessToken}`,
           },
         }
       );

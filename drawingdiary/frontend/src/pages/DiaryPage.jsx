@@ -3,16 +3,17 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AlbumCategory from "../components/album/AlbumCategory";
-import AIComment from "../components/edit diary/AIComment";
-import EditDiary from "../components/edit diary/EditDiary";
-import GeneratedImage from "../components/edit diary/GeneratedImage";
-import ImageOption from "../components/edit diary/ImageOption";
+import AIComment from "../components/diary/AIComment";
+import EditDiary from "../components/diary/EditDiary";
+import GeneratedImage from "../components/diary/GeneratedImage";
+import ImageOption from "../components/diary/ImageOption";
 import Sentiment from "../components/sentiment/Sentiment";
 import Weather from "../components/weather/Weather";
 import Background2 from "../components/Background/index2";
 import NavBar from "../components/sidebar/NavBar";
 import { IoIosSend } from "react-icons/io";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.body`
   width: 100%;
@@ -109,6 +110,9 @@ const SaveBtn = styled.button`
 function DiaryPage() {
   const navigate = useNavigate();
 
+  const { getToken } = useAuth();
+  const accessToken = getToken();
+
   // loading
   const [isRecommenderLoading, setIsRecommenderLoading] = useState(true);
   const [isImageLoading, setIsImageLoading] = useState(false);
@@ -117,8 +121,7 @@ function DiaryPage() {
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
-    useState(false);
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] = useState(false);
 
   // 날짜, 날씨
   const location = useLocation();
@@ -271,7 +274,6 @@ function DiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-    const accessToken = localStorage.getItem("accessToken");
 
     // 날짜 데이터
     const formattedDate = new Date(date.currentYear, date.month - 1, date.day);

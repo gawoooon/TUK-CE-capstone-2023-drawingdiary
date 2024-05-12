@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import { useAuth } from "../../auth/context/AuthContext";
 
 // 팝업창
 const BackgroundOverlay = styled.div`
@@ -124,7 +125,8 @@ const PopupInputBox = styled.div`
 `;
 
 function PopupPassword({ onClose, onPopup }) {
-  const accessToken = localStorage.getItem("accessToken");
+  const { getToken } = useAuth();
+  const accessToken = getToken();
   const setName = localStorage.getItem("setName");
   const [oldPassword, setOldPassword] = useState("");
 

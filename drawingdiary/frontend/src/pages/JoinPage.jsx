@@ -3,8 +3,8 @@ import styled from "styled-components";
 import axios from 'axios';
 import Background from "../components/Background";
 import { useNavigate } from "react-router-dom";
-import LongInputField from '../components/input field/LongInputField';
-import ShortInputField from '../components/input field/ShortInputField';
+import LongInputField from '../components/inputField/LongInputField';
+import ShortInputField from '../components/inputField/ShortInputField';
 
 const ContainerStyle = styled.div`
   height: 500px;

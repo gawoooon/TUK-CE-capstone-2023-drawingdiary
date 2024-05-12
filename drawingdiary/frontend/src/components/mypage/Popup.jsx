@@ -9,6 +9,7 @@ import {
   MdCheckCircle,
   MdClear,
 } from "react-icons/md";
+import { useAuth } from "../../auth/context/AuthContext";
 
 // 팝업창
 const BackgroundOverlay = styled.div`
@@ -255,7 +256,8 @@ const LineBox = styled.div`
 `;
 
 function Popup({ onClose }) {
-  const accessToken = localStorage.getItem("accessToken");
+  const { getToken } = useAuth();
+  const accessToken = getToken();
   const navigate = useNavigate();
 
   // 프로필

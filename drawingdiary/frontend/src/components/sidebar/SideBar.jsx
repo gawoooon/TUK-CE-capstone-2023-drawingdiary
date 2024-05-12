@@ -1,7 +1,7 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
-import { IoMdLogIn } from "react-icons/io";
+import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { LuCalendarDays } from "react-icons/lu";
 import { SlGraph } from "react-icons/sl";
 import { TbUserEdit } from "react-icons/tb";
@@ -97,13 +97,25 @@ const SideBar = ({ isOpen}) => {
   const [loginState, setLoginState] = useState(false);
   const [username, setUserName] = useState("로그인을 해주세요.");
 
-  const { logout } = useAuth();
-  const accessToken = localStorage.getItem("accessToken");
+  const { logout, getToken } = useAuth();
+  const accessToken = getToken();
+
   const setName = localStorage.getItem("setName");
   const setProfileImg = localStorage.getItem("setProfileImage");
+
+  useEffect(() => {
+    const currentAccessToken = getToken();
+    if (currentAccessToken) {
+      setUserName(setName);
+      setLoginState(true);
+    } else {
+      setUserName("로그인을 해주세요.");
+      setLoginState(false);
+    }
+  }, [accessToken]);
   
   const handleLogout = () => {
-    if(accessToken !== null) {
+    if(accessToken !== null || accessToken !== 'undefined' || accessToken !== '') {
       axios.post('http://localhost:8080/api/logout', null, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
@@ -112,21 +124,13 @@ const SideBar = ({ isOpen}) => {
         logout();
         setLoginState(false);
         setUserName("로그인을 해주세요.");
+        alert("로그아웃 되었습니다!")
       }).catch((error) => {
         console.log(error)
       });   
     }
   };
 
-  useEffect(() => {
-    if(accessToken !== null) {
-      setUserName(setName);
-      setLoginState(true);
-    } else {
-      setUserName("로그인을 해주세요.")
-      setLoginState(false);
-    }
-  }, [handleLogout, loginState]);
 
   return (
     <SideBarStyle isOpen={isOpen}>
@@ -146,7 +150,7 @@ const SideBar = ({ isOpen}) => {
         </MenuItem>
         {loginState ? (
           <MenuItem to="/" onClick={handleLogout}>
-            <IoMdLogIn size={20} color="#3d3d3d" alt="Logout" />
+            <IoMdLogOut size={20} color="#3d3d3d" alt="Logout" />
             <MenuItemText>로그아웃</MenuItemText>
           </MenuItem>
         ) : (
