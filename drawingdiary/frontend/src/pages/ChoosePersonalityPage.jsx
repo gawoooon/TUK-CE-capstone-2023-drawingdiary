@@ -69,9 +69,6 @@ const ChoosePersonality = () => {
     const location = useLocation();
     const userEmail = location.state?.email; // 이메일 값을 불러옴
     const userName = location.state?.name; // 이름 값을 불러옴
-    
-
-    console.log(userEmail);
 
     const mbtiKeywords = [
         "INTJ", "INTP", "ENTJ", "ENTP", 
@@ -100,7 +97,6 @@ const ChoosePersonality = () => {
                 personality,
             })
             .then(response => {
-                console.log('Success: ', response);
                 navigate('/FinishPage')
             })
             .catch(error => {

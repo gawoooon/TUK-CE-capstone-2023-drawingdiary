@@ -271,7 +271,6 @@ function CalendarPage() {
         }
       );
       const dataArray = response.data;
-      console.log(dataArray);
 
       const diaryText = dataArray.text;
       const weather = dataArray.weather;

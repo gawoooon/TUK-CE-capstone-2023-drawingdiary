@@ -156,7 +156,6 @@ function StatsPage() {
       setMonthData(response.data.value.month);
       setStyle(response.data.value.style);
 
-      console.log(response);
     } catch(error) {
       console.log(error);
     }

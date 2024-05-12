@@ -101,8 +101,6 @@ const SideBar = ({ isOpen}) => {
   const accessToken = localStorage.getItem("accessToken");
   const setName = localStorage.getItem("setName");
   const setProfileImg = localStorage.getItem("setProfileImage");
-
-  console.log(accessToken);
   
   const handleLogout = () => {
     if(accessToken !== null) {
@@ -114,7 +112,6 @@ const SideBar = ({ isOpen}) => {
         logout();
         setLoginState(false);
         setUserName("로그인을 해주세요.");
-        window.location.replace('/');
       }).catch((error) => {
         console.log(error)
       });   

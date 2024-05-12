@@ -157,9 +157,6 @@ function DiaryPage() {
         content: diaryText,
       });
 
-      // 응답에서 감정분석 결과 추출
-      console.log(response.data.document.confidence);
-
       const { positive, negative, neutral } = response.data.document.confidence;
 
       // 소수점 두 자리까지 반올림하여 상태 업데이트 -- 어떤 값이 가장 큰지 비교해야 함
@@ -170,8 +167,6 @@ function DiaryPage() {
       // 감정 분석 결과를 일기 내용에 반영시키는 부분
 
       const maxSentimentValue = response.data.document.sentiment;
-
-      console.log(maxSentimentValue);
 
       if (maxSentimentValue === "positive") {
         return "따듯한 색감";
@@ -194,12 +189,6 @@ function DiaryPage() {
   };
 
   useEffect(() => {
-    if (parentSelectedButtonStyle) {
-      console.log(
-        "다이어리 페이지에서 선택한 스타일:",
-        parentSelectedButtonStyle
-      );
-    }
   }, [parentSelectedButtonStyle]);
 
   // Sentiment에 텍스트 전달
@@ -227,7 +216,6 @@ function DiaryPage() {
         const newDiaryTextResult = await analyzeSentiment();
 
         const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryTextResult}`;
-        console.log(resultDiaryText);
 
         if (diaryText !== "") {
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
@@ -296,7 +284,6 @@ function DiaryPage() {
       formattedDate.getMonth() + 1
     )}-${pad(formattedDate.getDate())}`;
 
-    console.log("선택 날짜:", dateString);
     //image post
     if (newImageUrl) {
       const responseDiary = await axios.post(
@@ -322,7 +309,6 @@ function DiaryPage() {
         }
       );
       if (responseDiary.status === 200) {
-        console.log("일기가 백엔드로 전송되었습니다.", responseDiary.data);
         alert("일기가 생성되었어요!");
         navigate("/calendar");
       } else {

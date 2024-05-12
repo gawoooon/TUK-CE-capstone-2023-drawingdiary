@@ -224,7 +224,6 @@ const CreateAccount = () => {
           gender: genderForm,
         })
         .then(response => {
-          console.log('Success: ', response);
           navigate('/choosePersonality', { state: { email: userEmail, name }});
         })
         .catch(error => {
@@ -239,7 +238,6 @@ const CreateAccount = () => {
 
     const sendEmail = async (event) => {
       event.preventDefault();
-      console.log("userEmail: ", userEmail);
       if(userEmail !== '') {
         try {
           await axios.post('http://localhost:8080/api/email/codesending', `${userEmail}`, {

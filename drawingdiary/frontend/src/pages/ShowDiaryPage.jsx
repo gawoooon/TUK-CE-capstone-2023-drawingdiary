@@ -175,8 +175,6 @@ function ShowDiaryPage() {
 
       const maxSentimentValue = response.data.document.sentiment;
 
-      console.log(maxSentimentValue);
-
       if (maxSentimentValue === "positive") {
         return "따듯한 색감";
       } else if (maxSentimentValue === "negative") {
@@ -195,12 +193,6 @@ function ShowDiaryPage() {
     } else {
       setParentSelectedButtonStyle(selectedButtonStyle);
     }
-
-    console.log(
-      "다이어리 페이지에서 선택한 스타일:",
-      parentSelectedButtonStyle,
-      isSelected
-    );
   };
 
   // Sentiment에 텍스트 전달

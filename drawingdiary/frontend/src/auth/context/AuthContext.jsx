@@ -29,9 +29,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("memberID");
     localStorage.removeItem("setName");
     localStorage.removeItem("setProfileImage");
-    localStorage.setItem("setEmail");
-    localStorage.setItem("setBirth");
-    localStorage.setItem("selectedColor");
+    localStorage.removeItem("setEmail");
+    localStorage.removeItem("setBirth");
+    localStorage.removeItem("selectedColor");
     
     setAuth({ token: null, memberID: null });
   };

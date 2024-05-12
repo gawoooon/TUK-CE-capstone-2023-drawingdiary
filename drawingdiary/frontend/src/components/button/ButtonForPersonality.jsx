@@ -19,7 +19,6 @@ const ButtonForPersonality = ( {keyword, onSelect, selected, children} ) => {
     const [isSelected, setIsSelected] = useState(false);
 
     useEffect(() => {
-        console.log(isSelected); // 상태 변화 시 콘솔에 로그 출력
     }, [isSelected]); // isSelected 값이 변할 때마다 useEffect 실행
 
     const handleClick = () => {
