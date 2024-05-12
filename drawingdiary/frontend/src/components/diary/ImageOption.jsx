@@ -7,7 +7,7 @@ import ImageStyleLists from "./ImageStyleLists";
 import { useAuth } from "../../auth/context/AuthContext";
 
 const Container = styled.div`
-  width: 600px;
+  width: 400px;
   height: 415px;
   margin: 10px 60px 10px 0;
   background-color: rgba(255, 255, 255, 0.3);
@@ -23,6 +23,7 @@ const Container = styled.div`
 
 const TopContainer = styled.div`
   width: 95%;
+  height: 100px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -35,22 +36,23 @@ const Description = styled.div`
 
 const OptionContainer = styled.div`
   width: 95%;
-  height: 75%;
+  height: 260px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const LeftContainer = styled.div`
-  height: 300px;
+  height: 250px;
+  margin-top: 10px;
   display: ${({ display }) => display};
   flex-direction: column;
   transition: opacity 0.5s ease-in-out;
 `;
 
 const RightContainer = styled.div`
-  height: 300px;
-  margin: 20px 0;
+  height: 260px;
+  margin: 0 auto;
   display: ${({ display }) => display};
   flex-direction: column;
   overflow-x: hidden;
@@ -62,30 +64,17 @@ const RightContainer = styled.div`
   &::-webkit-scrollbar-thumb {
     background-color: #ccc;
     border-radius: 4px;
-    margin-left: 5px;
   }
 `;
 
 const SelectedStyle = styled.div`
   font-size: 15px;
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
-const LeftBtnStyle = styled.button`
-  width: 500px;
-  min-height: 40px;
-  margin-top: 15px;
-  background-color: ${(props) =>
-    props.isSelected ? "#ddd" : "rgba(255, 255, 255, 0.3)"};
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-`;
-
-const RightBtnStyle = styled.button`
-  width: 500px;
-  min-height: 40px;
+const OptionBtnStyle = styled.button`
+  width: 300px;
+  min-height: 36px;
   margin: 5px 0;
   background-color: ${(props) =>
     props.isSelected ? "#ddd" : "rgba(255, 255, 255, 0.3)"};
@@ -196,13 +185,14 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     try {
       const styleResponse = await axios.get("http://localhost:8080/api/test/style", {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          'Authorization': `Bearer ${accessToken}`
         },
       })
       setIsLoading(!isRecommenderLoading);
+      console.log("styleResponse", styleResponse);
 
-      const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.name === styleName);
+      const updateRecommendedStyles = styleResponse.data.top_styles.map((styleName) => {
+        return ImageStyleLists.find(style => style === styleName);
       });
       setRecommendedStyles(updateRecommendedStyles);
     } catch (error) {
@@ -212,12 +202,13 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
           gender: userGender,
         }, {
           headers: {
-            Authorization: `Bearer ${accessToken}`
+            'Authorization': `Bearer ${accessToken}`
           },
         });
         setIsLoading(!isRecommenderLoading);
-        const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
-          return ImageStyleLists.find(style => style.name === styleName);
+        console.log("fallback", fallbackResponse);
+        const updateRecommendedStyles = fallbackResponse.data.top_styles.map((styleName) => {
+          return ImageStyleLists.find(style => style === styleName);
         });
         setRecommendedStyles(updateRecommendedStyles);
       }
@@ -236,7 +227,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     onOptionSelect(isSelected);
 
     const filterNonDuplicateStyles = ImageStyleLists.filter(
-      style => !recommendedStyles.map(rStyle => rStyle.name).includes(style.name)
+      style => !recommendedStyles.map(rStyle => rStyle).includes(style)
     );
     setOtherStyles(filterNonDuplicateStyles);
   }, [isSelected, onOptionSelect, recommendedStyles]);
@@ -244,7 +235,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   return (
     <Container>
       <TopContainer>
-        <h3>추천하는 이미지 스타일</h3>
+        <h4>추천하는 이미지 스타일</h4>
         <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
       </TopContainer>
       <Description>
@@ -268,23 +259,23 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
             />
           ) : (
             recommendedStyles.map((style, index) => (
-              <LeftBtnStyle
+              <OptionBtnStyle
                 key={index}
-                isSelected={selectedButtonStyle === style.name}
-                onClick={() => handleButtonStyleSelect(style.name)}>
-                {`${style.name}: ${style.description}`}
-              </LeftBtnStyle>
+                isSelected={selectedButtonStyle === style}
+                onClick={() => handleButtonStyleSelect(style)}>
+                {`${style}`}
+              </OptionBtnStyle>
             ))
           )}
         </LeftContainer>
         <RightContainer display={displayRight}>
           {otherStyles.map((style, index) => (
-            <RightBtnStyle
+            <OptionBtnStyle
               key={index}
-              isSelected={selectedButtonStyle === style.name}
-              onClick={() => handleButtonStyleSelect(style.name)}>
-                {`${style.name}: ${style.description}`}
-            </RightBtnStyle>
+              isSelected={selectedButtonStyle === style}
+              onClick={() => handleButtonStyleSelect(style)}>
+                {`${style}`}
+            </OptionBtnStyle>
           ))}
         </RightContainer>
       </OptionContainer>

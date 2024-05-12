@@ -15,5 +15,5 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class PredictResponseDTO {
-    private List<String> predicted_styles;
+    private List<String> top_styles;
 }

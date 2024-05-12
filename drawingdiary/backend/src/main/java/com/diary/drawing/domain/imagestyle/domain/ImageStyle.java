@@ -21,14 +21,11 @@ public class ImageStyle {
     @Column(length = 30)
     private String styleName;
 
-    @Column(length = 150)
-    private String description;
 
     public ImageStyle(){}
 
     @Builder
-    public ImageStyle(String styleName, String desperation){
+    public ImageStyle(String styleName){
         this.styleName = styleName;
-        this.description = desperation;
     }
 }
