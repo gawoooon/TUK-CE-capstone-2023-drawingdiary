@@ -97,27 +97,32 @@ const SideBar = ({ isOpen}) => {
   const [loginState, setLoginState] = useState(false);
   const [username, setUserName] = useState("로그인을 해주세요.");
 
-  const { memberID, logout } = useAuth();
+  const { logout } = useAuth();
   const accessToken = localStorage.getItem("accessToken");
   const setName = localStorage.getItem("setName");
   const setProfileImg = localStorage.getItem("setProfileImage");
+
+  console.log(accessToken);
   
   const handleLogout = () => {
-    axios.post('http://localhost:8080/api/logout', null, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      }
-    }).then(() => {
-      logout();
-      setLoginState(false);
-      setUserName("로그인을 해주세요.");
-    }).catch((error) => {
-      console.log(error)
-    })   
+    if(accessToken !== null) {
+      axios.post('http://localhost:8080/api/logout', null, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }).then(() => {
+        logout();
+        setLoginState(false);
+        setUserName("로그인을 해주세요.");
+        window.location.replace('/');
+      }).catch((error) => {
+        console.log(error)
+      });   
+    }
   };
 
   useEffect(() => {
-    if(memberID !== null) {
+    if(accessToken !== null) {
       setUserName(setName);
       setLoginState(true);
     } else {
