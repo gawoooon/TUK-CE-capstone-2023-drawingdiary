@@ -36,12 +36,13 @@ const AddAlbum = styled.div`
   position: sticky;
   display: flex;
   justify-content: end;
+  align-items: center;
   margin-top: 20px;
 `;
 
 const ErrorMessage = styled.div`
-  margin-right: 250px;
-  color: red;
+  margin: 0 30px 30px 0;
+  color: #af0000;
 `;
 
 const AlbumPage = () => {

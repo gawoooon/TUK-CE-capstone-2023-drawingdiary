@@ -1,13 +1,13 @@
 import styled from "styled-components";
+import { React, useEffect, useState } from "react";
+import { useAuth } from "../../auth/context/AuthContext";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { IoMdLogIn  } from "react-icons/io";
 import { LuCalendarDays } from "react-icons/lu";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
 import { SlGraph } from "react-icons/sl";
 import { TbUserEdit } from "react-icons/tb";
-import { React, useEffect, useState } from "react";
-import { useAuth } from "../../auth/context/AuthContext";
-import axios from "axios";
 
 const SideBarStyle = styled.div`
   display: flex;
@@ -24,10 +24,11 @@ const SideBarStyle = styled.div`
 `;
 
 const SideBarHeader = styled.div`
-  padding: 50px 40px 25px 20px;
-  margin-bottom: 40px; // 하단 여백 추가
+  margin: 50px 0 0 12px;
+  padding: 0 10px;
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  font-size: 17px;
 `;
 
 const SideBarMenu = styled.nav`
@@ -123,13 +124,11 @@ const SideBar = ({ isOpen}) => {
       setUserName("로그인을 해주세요.")
       setLoginState(false);
     }
-  }, [handleLogout]);
+  }, [handleLogout, loginState]);
 
   return (
     <SideBarStyle isOpen={isOpen}>
-      <SideBarHeader>
-        <MenuItemText>감성 일기</MenuItemText>
-      </SideBarHeader>
+      <SideBarHeader>감성 일기</SideBarHeader>
       <SideBarMenu>
         <MenuItem to="/">
           <LuCalendarDays size={20} color="#3d3d3d" alt="Home" />
@@ -145,7 +144,7 @@ const SideBar = ({ isOpen}) => {
         </MenuItem>
         {loginState ? (
           <MenuItem to="/" onClick={handleLogout}>
-            <IoMdLogIn size={20} color="#3d3d3d" alt="Login" />
+            <IoMdLogIn size={20} color="#3d3d3d" alt="Logout" />
             <MenuItemText>로그아웃</MenuItemText>
           </MenuItem>
         ) : (
