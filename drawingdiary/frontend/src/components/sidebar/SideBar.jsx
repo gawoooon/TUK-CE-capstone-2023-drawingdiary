@@ -1,10 +1,13 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { IoMdLogIn  } from "react-icons/io";
-import { LuCalendarDays } from "react-icons/lu";
+import axios from "axios";
+import { React, useEffect, useState } from "react";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
+import { IoMdLogIn } from "react-icons/io";
+import { LuCalendarDays } from "react-icons/lu";
 import { SlGraph } from "react-icons/sl";
 import { TbUserEdit } from "react-icons/tb";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const SideBarStyle = styled.div`
   display: flex;
@@ -21,10 +24,11 @@ const SideBarStyle = styled.div`
 `;
 
 const SideBarHeader = styled.div`
-  padding: 50px 40px 25px 20px;
-  margin-bottom: 40px; // 하단 여백 추가
+  margin: 50px 0 0 12px;
+  padding: 0 10px;
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  font-size: 17px;
 `;
 
 const SideBarMenu = styled.nav`
@@ -90,14 +94,43 @@ const ProfileName = styled.div`
 
 const SideBar = ({ isOpen}) => {
 
+  const [loginState, setLoginState] = useState(false);
+  const [username, setUserName] = useState("로그인을 해주세요.");
+
+  const { logout } = useAuth();
+  const accessToken = localStorage.getItem("accessToken");
   const setName = localStorage.getItem("setName");
   const setProfileImg = localStorage.getItem("setProfileImage");
+  
+  const handleLogout = () => {
+    if(accessToken !== null) {
+      axios.post('http://localhost:8080/api/logout', null, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }).then(() => {
+        logout();
+        setLoginState(false);
+        setUserName("로그인을 해주세요.");
+      }).catch((error) => {
+        console.log(error)
+      });   
+    }
+  };
+
+  useEffect(() => {
+    if(accessToken !== null) {
+      setUserName(setName);
+      setLoginState(true);
+    } else {
+      setUserName("로그인을 해주세요.")
+      setLoginState(false);
+    }
+  }, [handleLogout, loginState]);
 
   return (
     <SideBarStyle isOpen={isOpen}>
-      <SideBarHeader>
-        <MenuItemText>감성 일기</MenuItemText>
-      </SideBarHeader>
+      <SideBarHeader>감성 일기</SideBarHeader>
       <SideBarMenu>
         <MenuItem to="/">
           <LuCalendarDays size={20} color="#3d3d3d" alt="Home" />
@@ -111,10 +144,17 @@ const SideBar = ({ isOpen}) => {
           <SlGraph size={20} color="#3d3d3d" alt="Statics" />
           <MenuItemText>분석</MenuItemText>
         </MenuItem>
-        <MenuItem to="/login">
-          <IoMdLogIn size={20} color="#3d3d3d" alt="Login" />
-          <MenuItemText>로그인</MenuItemText>
-        </MenuItem>
+        {loginState ? (
+          <MenuItem to="/" onClick={handleLogout}>
+            <IoMdLogIn size={20} color="#3d3d3d" alt="Logout" />
+            <MenuItemText>로그아웃</MenuItemText>
+          </MenuItem>
+        ) : (
+          <MenuItem to="/login">
+            <IoMdLogIn size={20} color="#3d3d3d" alt="Login" />
+            <MenuItemText>로그인</MenuItemText>
+          </MenuItem>
+        )}
       </SideBarMenu>
 
       <ProfileSection to="/my">
@@ -126,7 +166,11 @@ const SideBar = ({ isOpen}) => {
             color='#3d3d3d' 
             alt='edit' />
         )}
-        <ProfileName>{setName}</ProfileName>
+        {loginState ? (
+          <ProfileName style={{fontSize:'15px'}}>{username}</ProfileName>
+        ) : (
+          <ProfileName style={{fontSize:'12px'}}>{username}</ProfileName>
+        )}
       </ProfileSection>
     </SideBarStyle>
   );

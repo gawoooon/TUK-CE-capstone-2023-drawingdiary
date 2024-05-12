@@ -197,23 +197,17 @@ function CalendarPage() {
     if (memberID) {
       try {
         const accessToken = localStorage.getItem("accessToken");
-        const response = await axios.get(
-          "http://localhost:8080/api/get-member",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const response = await axios.get("http://localhost:8080/api/get-member", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
         localStorage.setItem("setName", response.data.name);
         localStorage.setItem("setEmail", response.data.email);
         localStorage.setItem("setBirth", response.data.birth);
         localStorage.setItem("selectedColor", response.data.theme);
         localStorage.setItem("setProfileImage", response.data.profileImage);
-
-        console.log(localStorage.getItem("setProfileImage"));
-        console.log(localStorage.getItem("setEmail"));
       } catch (error) {
         console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
       }
@@ -277,7 +271,6 @@ function CalendarPage() {
         }
       );
       const dataArray = response.data;
-      console.log(dataArray);
 
       const diaryText = dataArray.text;
       const weather = dataArray.weather;

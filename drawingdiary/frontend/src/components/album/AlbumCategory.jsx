@@ -47,7 +47,6 @@ const AlbumCategory = ({ onSelectAlbum }) => {
   const handleAlbumChange = (event) => {
     // 선택한 앨범의 ID를 상태에 저장
     setSelectedAlbumID(event.target.value);
-    console.log("target", event.target.value);
   };
 
   return (

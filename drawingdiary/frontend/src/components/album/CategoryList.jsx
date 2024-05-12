@@ -56,7 +56,6 @@ function useCategoryList (){
     const removeCategory = async (categoryToRemove, onError) => {
 
         if(categoryToRemove) {
-            console.log("categoryToRemove: ", categoryToRemove);
             try {
                 await axios.delete(`http://localhost:8080/api/album/${categoryToRemove}`, {
                     headers : {

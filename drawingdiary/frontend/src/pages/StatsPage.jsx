@@ -124,8 +124,7 @@ function StatsPage() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/statistic',
-      {
+      const response = await axios.get('http://localhost:8080/api/statistic', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         }
@@ -157,7 +156,6 @@ function StatsPage() {
       setMonthData(response.data.value.month);
       setStyle(response.data.value.style);
 
-      console.log(response);
     } catch(error) {
       console.log(error);
     }

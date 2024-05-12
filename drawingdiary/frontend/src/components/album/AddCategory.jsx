@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import SmallButton from "../button/SmallButton";
 import { useCategory } from "./CategoryList";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 
 const ContainerBackground = styled.div`
     position: fixed;
@@ -21,11 +22,6 @@ const TopContent = styled.div`
     height: 80px;
     display: flex;
     justify-content: center;
-`;
-
-const AlbumImg = styled.img`
-    width: 30px;
-    height: 30px;
 `;
 
 const ContainerStyle = styled.div`
@@ -67,9 +63,9 @@ const AddCategoryContainer = styled.div`
 `;
 
 const MessageContainer = styled.text`
-  font-size: 12px;
-  color: #8c8c8c;
-  position: absolute;
+    font-size: 12px;
+    color: #8c8c8c;
+    position: absolute;
 `;
 
 const ExitBtn = styled.button`
@@ -118,7 +114,7 @@ const AddCategory = ({ categoryList, isOpen, onclose }) => {
 
                     <ContainerStyle>
                     <TopContent>
-                        <AlbumImg src="photo-album.png" />
+                        <MdOutlineAddPhotoAlternate size={30} color="3d3d3d" />
 
                         <ExitBtn onClick={onclose} style={{ position: 'absolute', top: '10px', right: '10px' }}>
                             닫기

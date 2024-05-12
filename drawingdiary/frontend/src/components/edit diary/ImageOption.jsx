@@ -188,7 +188,6 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     } catch(error) {
       console.log("error: ", error);
     }
-    console.log('info 완료')
   };
   
   const fetchOptionStyle = async () => {

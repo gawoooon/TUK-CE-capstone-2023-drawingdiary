@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { CgTrash } from "react-icons/cg";
 
 const ModalBackground = styled.div`
     position: fixed;
@@ -31,10 +32,6 @@ const ModalStyle = styled.div`
     align-items: center;
     font-size: 20px;
     font-weight: bold;
-
-    img {
-        margin-bottom: 30px;
-    }
 `;
 
 const ButtonContainer = styled.div`
@@ -70,7 +67,7 @@ const Modal = ({ isOpen, onClose, onConfirm }) => {
     return (
         <ModalBackground>
             <ModalStyle>
-                <img src="trash.png" />
+                <CgTrash size={30} color="3d3d3d" style={{marginBottom:'30px'}} />
                 <p>앨범을 삭제하시겠습니까?</p>
                 <ButtonContainer>
                     <YesStyle onClick={onConfirm}>예</YesStyle>
