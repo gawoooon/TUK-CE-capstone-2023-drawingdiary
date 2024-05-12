@@ -10,7 +10,7 @@ import PopupPassword from "../components/mypage/PopupPassword";
 
 const MyPageBackground = styled.div`
   width: 100%;
-  height: 100hv;
+  height: 100vh;
 `;
 
 const MyPageBody = styled.div`

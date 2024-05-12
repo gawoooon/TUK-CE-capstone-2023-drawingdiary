@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Lottie from "react-lottie";
 import imageLoading from "../../animation/imageLodding.json";
-import ImageStyleLists from "../edit diary/ImageStyleLists";
+import ImageStyleLists from "../diary/ImageStyleLists";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const Container = styled.div`
   width: 600px;
@@ -139,7 +140,8 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
   const [recommendedStyles, setRecommendedStyles] = useState([]);
   const [otherStyles, setOtherStyles] = useState([]);
 
-  const accessToken = localStorage.getItem("accessToken");
+  const { getToken } = useAuth();
+  const accessToken = getToken();
 
   // '더보기'/'닫기' 버튼 클릭 핸들러
   const handleOpen = () => {

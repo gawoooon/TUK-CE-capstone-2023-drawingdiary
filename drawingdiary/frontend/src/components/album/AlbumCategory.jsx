@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
 import axios from "axios";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const CategoryStyle = styled.select`
   width: 95px;
@@ -17,7 +18,8 @@ const CategoryStyle = styled.select`
 
 const AlbumCategory = ({ onSelectAlbum }) => {
   const { categoryList } = useCategory();
-  const accessToken = localStorage.getItem('accessToken');
+  const { getToken } = useAuth();
+  const accessToken = getToken();
   const [selectedAlbumID, setSelectedAlbumID] = useState(0);
 
   const fetchBaseCategory = async () => {
@@ -47,7 +49,6 @@ const AlbumCategory = ({ onSelectAlbum }) => {
   const handleAlbumChange = (event) => {
     // 선택한 앨범의 ID를 상태에 저장
     setSelectedAlbumID(event.target.value);
-    console.log("target", event.target.value);
   };
 
   return (

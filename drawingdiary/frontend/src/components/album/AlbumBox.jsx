@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
-import { TrashButton } from "../button/DeleteButton";
 import Modal from "./Modal";
 import axios from "axios";
 import { useAuth } from "../../auth/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { CgTrash } from "react-icons/cg";
 
 const Container = styled.section`
     width: 95%;
@@ -96,8 +96,8 @@ function AlbumBox({ onErrorMessage }) {
     const navigate = useNavigate();
     const [checkList, setCheckList] = useState(false);
 
-    const { memberID } = useAuth();
-    const accessToken = localStorage.getItem('accessToken');
+    const { memberID, getToken } = useAuth();
+    const accessToken = getToken();
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchAlbum = async () => {
@@ -189,7 +189,7 @@ function AlbumBox({ onErrorMessage }) {
                         }}>
                         <AlbumHeaders isOpen={categoryEntry.albumID}>
                             <CategoryName>{categoryEntry.name}</CategoryName>
-                            <TrashButton onClick={() => handleDeleteClick(categoryEntry.albumID)}/>
+                            <CgTrash size={22} color="3d3d3d" onClick={() => handleDeleteClick(categoryEntry.albumID)} />
                         </AlbumHeaders>
                     </div>
 

@@ -181,8 +181,8 @@ function CalendarPage() {
   const [prevBtnBox, setPrevBtnBox] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
-  const { memberID } = useAuth();
-  const accessToken = localStorage.getItem("accessToken");
+  const { memberID, getToken } = useAuth();
+  const accessToken = getToken();
 
   const { year, setYear, month, setMonth } = useCalendar();
   const [data, setData] = useState([]);
@@ -196,15 +196,11 @@ function CalendarPage() {
   const fetchUserName = useCallback(async () => {
     if (memberID) {
       try {
-        const accessToken = localStorage.getItem("accessToken");
-        const response = await axios.get(
-          "http://localhost:8080/api/get-member",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const response = await axios.get("http://localhost:8080/api/get-member", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
         localStorage.setItem("setName", response.data.name);
         localStorage.setItem("setEmail", response.data.email);
@@ -275,7 +271,6 @@ function CalendarPage() {
         }
       );
       const dataArray = response.data;
-      console.log(dataArray);
 
       const diaryText = dataArray.text;
       const weather = dataArray.weather;
@@ -326,7 +321,7 @@ function CalendarPage() {
         `http://localhost:8080/api/calender/${year}-${month}`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            'Authorization': `Bearer ${accessToken}`,
           },
         }
       );

@@ -13,6 +13,7 @@ import ShowGeneratedImage from "../components/show/ShowGeneratedImage";
 import Background2 from "../components/Background/index2";
 import { IoIosSend } from "react-icons/io";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.body`
   width: 100%;
@@ -107,6 +108,9 @@ const SaveBtn = styled.button`
 `;
 
 function ShowDiaryPage() {
+  const { getToken } = useAuth();
+  const accessToken = getToken();
+
   const navigate = useNavigate();
   const location = useLocation();
   const { diaryData } = location.state || {};
@@ -175,8 +179,6 @@ function ShowDiaryPage() {
 
       const maxSentimentValue = response.data.document.sentiment;
 
-      console.log(maxSentimentValue);
-
       if (maxSentimentValue === "positive") {
         return "따듯한 색감";
       } else if (maxSentimentValue === "negative") {
@@ -195,12 +197,6 @@ function ShowDiaryPage() {
     } else {
       setParentSelectedButtonStyle(selectedButtonStyle);
     }
-
-    console.log(
-      "다이어리 페이지에서 선택한 스타일:",
-      parentSelectedButtonStyle,
-      isSelected
-    );
   };
 
   // Sentiment에 텍스트 전달
@@ -284,7 +280,6 @@ function ShowDiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-    const accessToken = localStorage.getItem("accessToken");
 
     // 날짜 데이터
     const formattedDate = new Date(date.currentYear, date.month - 1, date.day);

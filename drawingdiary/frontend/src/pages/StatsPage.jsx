@@ -5,7 +5,8 @@ import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
 import Background2 from "../components/Background/index2";
 import { format } from 'date-fns';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, AreaChart, ReferenceLine, Area } from "recharts";
+import { LineChart, Line, Tooltip } from "recharts";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.section`
   width: 98%;
@@ -95,10 +96,10 @@ const TextValue = styled.div`
 `;
 
 function StatsPage() {
+  const { getToken } = useAuth();
+  const accessToken = getToken();
 
-  const accessToken = localStorage.getItem("accessToken");
-
-  const [totalDairy, setTotalDiary] = useState("");
+  const [totalDairy, setTotalDiary] = useState(0);
   const [sentiData, setSentiData] = useState([]);
 
   const date = new Date();
@@ -124,8 +125,7 @@ function StatsPage() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/statistic',
-      {
+      const response = await axios.get('http://localhost:8080/api/statistic', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         }
@@ -157,7 +157,6 @@ function StatsPage() {
       setMonthData(response.data.value.month);
       setStyle(response.data.value.style);
 
-      console.log(response);
     } catch(error) {
       console.log(error);
     }

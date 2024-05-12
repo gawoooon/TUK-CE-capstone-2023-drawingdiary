@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 
-import Background from "../components/Background";
+import Background2 from "../components/Background/index2";
 import LoginBar from "../components/LoginBar";
 import LoginBtn from "../components/LoginBtn";
 
@@ -101,7 +101,8 @@ function LoginPage() {
         password,
       })
       .then((response) => {
-        login(response.data.accessToken, response.data.memberID);
+        console.log("refresh token: ", response.data.refreshToken);
+        login(response.data.accessToken, response.data.refreshToken, response.data.memberID);
         navigate("/");
       })
       .catch((error) => {
@@ -118,7 +119,7 @@ function LoginPage() {
   };
 
   return (
-    <Background>
+    <Background2>
       <Body>
         <Title>감성 일기</Title>
         <LoginBox>
@@ -147,7 +148,7 @@ function LoginPage() {
           아이디·비밀번호를 잃어버리셨나요?{" "}
         </LoginLostBtn>
       </Body>
-    </Background>
+    </Background2>
   );
 }
 

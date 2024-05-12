@@ -29,4 +29,6 @@ public interface MemberService {
     public ResponseEntity<?> patchMypage(Long memberID, MemberDTO.MemberUpdate memberDTO);
 
     public String sendSms(String phoneNumber);
+    public ResponseEntity<?> setTempPassword(String email) throws Exception;
+
 }

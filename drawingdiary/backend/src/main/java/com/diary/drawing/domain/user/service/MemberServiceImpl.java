@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.diary.drawing.domain.email.EmailService;
+import com.diary.drawing.domain.email.EmailVerificationService;
 import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberDTO;
@@ -37,6 +39,8 @@ public class MemberServiceImpl implements MemberService{
     private final SmsUtil smsUtil;
     private final SmsVerificationService smsVerificationService;
     private final S3Uploader s3Uploader;
+    private final EmailService emailService;
+    private final EmailVerificationService emailVerificationService;
 
     // 회원 가입 (예외처리 나중에)
     @Override
@@ -188,7 +192,7 @@ public class MemberServiceImpl implements MemberService{
         return verificationCode;
     }
 
-        // 인증번호 만드는 메소드
+    // 인증번호 만드는 메소드
     public static String createKey(){
         StringBuffer key = new StringBuffer();
         Random random = new Random();
@@ -199,7 +203,42 @@ public class MemberServiceImpl implements MemberService{
         return key.toString();
     }
 
+    // 임시비밀번호 생성하는 메소드
+    public static String tempPassword(){
+        StringBuffer key = new StringBuffer();
+        Random random = new Random();
+
+        for (int i=0; i<8; i++){    // 8자리
+            if (random.nextBoolean()){
+                key.append((char) ((int)(random.nextInt(26))+97));
+            } else{
+                key.append(random.nextInt(10)); //0~9까지 랜덤 생성
+            }
+        }
+        return key.toString();
+    }
+
+    // 임시 비밀번호로 사용자의 계정 강제 설정하기
+    @Override
+    @Transactional
+    public ResponseEntity<?> setTempPassword(String email) throws Exception{
+        // 1. 사용자 존재 확인
+        // 2. 이메일로 Member 객체
+        Member targetMember = validateMemberService.findMemberByEmail(email);
+        // 3. 임시 번호 생성
+        String tempPassword = tempPassword();
+        // 4. 무작위로 설정한 password 이메일로 전송
+        emailService.sendTempPassword(email, tempPassword);
+        // 5. 임시 번호 저장
+        String encPassword = bCryptPasswordEncoder.encode(tempPassword);
+        targetMember.updatePassword(encPassword);
+        memberRepository.save(targetMember);
+
+        return ResponseEntity.ok("temp password set done");
+    }
+
         // 이메일 찾아서 반환
+    @Override
     public ResponseEntity<?> findEmailByPhoneNumber(String phoneNumber, String code){
 
         if(smsVerificationService.verifyNumber(phoneNumber, code)){
@@ -210,6 +249,7 @@ public class MemberServiceImpl implements MemberService{
             throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);
         }
     }
+
 
 
 }

@@ -17,14 +17,11 @@ const WriteArea = styled.textarea`
 const ShowDiary = ( { onDiaryTextChange, showText }) => {
     
     const [diaryText, setDiaryText] = useState(showText);
-    console.log("showText: ", showText);
 
     const handleDiaryTextChange = (e) => {
-        console.log("여기는 show diary");
         const newText = e.target.value;
         setDiaryText(newText);
         onDiaryTextChange(newText);
-        console.log("바뀐 텍스트: ", newText)
     }
     
     return (
