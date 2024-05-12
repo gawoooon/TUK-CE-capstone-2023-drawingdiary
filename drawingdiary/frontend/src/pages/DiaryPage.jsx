@@ -17,77 +17,76 @@ import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.body`
   width: 100%;
-  height: 100%;
+  height: 900px;
   display: flex;
   flex-direction: column;
 `;
 
 const DiaryContainer = styled.section`
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: row;
   margin: auto;
 `;
 
-const RightContainer = styled.section`
+const LeftContainer = styled.section`
   width: 50%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
-const RightTopContent = styled.div`
-  height: 50px;
+const LeftTopContent = styled.div`
+  height: 40px;
   margin-top: 60px;
+  padding-bottom: 10px;
+  padding-right: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const RightMidContent = styled.div`
-  height: 81%;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  padding-bottom: 10px;
-`;
-
-const RightBottomContent = styled.div`
-  height: 50px;
+const LeftMidContent = styled.div`
+  height: 450px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: white;
-  border-radius: 10px;
+  padding: 0 10px;
+  margin: 0 10px;
+`;
+
+const LeftBottomContent = styled.div`
+  height: 300px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   padding: 5px;
 `;
 
-const LeftContainer = styled.section`
+const RightContainer = styled.section`
   width: 50%;
-  height: 100%;
 `;
 
-const LeftTopContent = styled.div`
+const RightTopContent = styled.div`
   height: 30px;
+  margin-top: 20px;
+  padding-right: 44px;
   display: flex;
   justify-content: end;
   align-items: center;
 `;
 
-const LeftMidContent = styled.div`
-  height: 82%;
+const RightMidContent = styled.div`
+  height: 700px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding-bottom: 50px;
+  padding-top: 6px;
 `;
 
-const LeftBottomContent = styled.div`
+const RightBottomContent = styled.div`
   display: flex;
   justify-content: end;
   align-items: center;
@@ -105,6 +104,17 @@ const SaveBtn = styled.button`
   border-radius: 5px;
   font-size: 15px;
   background-color: white;
+`;
+
+const Area = styled.div`
+    width: 405px;
+    height: 400px;
+    padding: 0 auto;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
 `;
 
 function DiaryPage() {
@@ -312,7 +322,7 @@ function DiaryPage() {
       );
       if (responseDiary.status === 200) {
         alert("일기가 생성되었어요!");
-        navigate("/calendar");
+        navigate("/");
       } else {
         console.error("일기 전송 실패:", responseDiary.status);
       }
@@ -326,49 +336,51 @@ function DiaryPage() {
       <Background2>
         <Container>
           <DiaryContainer>
-            <RightContainer>
-              <RightTopContent>
+            <LeftContainer>
+              <LeftTopContent>
                 <Weather
                   date={date}
                   onWeatherStateChange={handleWeatherStateChange}
                 />
                 <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
-              </RightTopContent>
-              <RightMidContent>
+              </LeftTopContent>
+              <LeftMidContent>
                 <ImageOption
                   onOptionSelect={handleOptionSelect}
                   isRecommenderLoading={isRecommenderLoading}
                 />
-                <LeftBottomContent>
+                <Area>
+                  <EditDiary onDiaryTextChange={handleDiaryTextChange} />
+                  <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '10px', marginTop: '16px'}} />
+                </Area>
+              </LeftMidContent>
+              <LeftBottomContent>
+                <RightBottomContent>
                   <AIComment text={commentText} isLoading={isCommentLoading} />
                   <Sentiment
                       positiveValue={positiveValue}
                       negativeValue={negativeValue}
                       neutralValue={neutralValue}
                   />
-                </LeftBottomContent>
-              </RightMidContent>
-              <RightBottomContent>
-                <EditDiary onDiaryTextChange={handleDiaryTextChange} />
-                <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '20px'}} />
-              </RightBottomContent>
-            </RightContainer>
-            <LeftContainer>
+                </RightBottomContent>
+              </LeftBottomContent>
+            </LeftContainer>
+
+            <RightContainer>
               <NavBar />
-              <LeftTopContent>
+              <RightTopContent>
                 <SaveBtn onClick={handleSave}>
                   저장하기
                   <FaRegCheckCircle size={18} color="#3d3d3d" style={{marginLeft: '10px'}} />
                 </SaveBtn>
-              </LeftTopContent>
-              <LeftMidContent>
+              </RightTopContent>
+              <RightMidContent>
                 <GeneratedImage
                   isLoading={isImageLoading}
                   newImageUrl={newImageUrl}
                 />
-              </LeftMidContent>
-              
-            </LeftContainer>
+              </RightMidContent>
+            </RightContainer>
           </DiaryContainer>
         </Container>
       </Background2>

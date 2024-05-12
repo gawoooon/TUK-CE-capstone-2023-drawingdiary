@@ -9,10 +9,10 @@ const ImageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 700px;
-  height: 700px;
+  width: 681px;
+  height: 681px;
   background-color: #fff;
-  border-radius: 30px;
+  border-radius: 10px;
   border: none;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 10px;
@@ -22,7 +22,7 @@ const ImageBox = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 30px;
+  border-radius: 10px;
 `;
 
 const GeneratedImage = ({ isLoading, newImageUrl }) => {

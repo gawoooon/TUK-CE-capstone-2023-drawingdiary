@@ -22,13 +22,6 @@ const WeatherContent = styled.div`
   align-items: center;
 `;
 
-const WeatherImage = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-right: 20px;
-  margin-top: 3px;
-`;
-
 const DateText = styled.text`
   font-size: 20px;
   font-weight: bold;

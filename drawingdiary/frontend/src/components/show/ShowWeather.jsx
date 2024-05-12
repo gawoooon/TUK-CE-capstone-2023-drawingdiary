@@ -1,6 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
-import WeatherTypes from "../weather/WeatherTypes";
+import { MdOutlineThunderstorm } from "react-icons/md";
+import { BsCloudDrizzle, BsClouds } from "react-icons/bs";
+import { IoRainyOutline, IoSunnyOutline } from "react-icons/io5";
+import { FaSnowman } from "react-icons/fa";
+import { RiMistLine } from "react-icons/ri";
+import { TiWeatherPartlySunny } from "react-icons/ti";
 
 const WeatherContainer = styled.div`
   width: 200px;
@@ -15,20 +20,13 @@ const WeatherContent = styled.div`
   align-items: center;
 `;
 
-const WeatherImage = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-right: 20px;
-  margin-top: 3px;
-`;
-
 const DateText = styled.text`
   font-size: 20px;
   font-weight: bold;
 `;
 
 
-const ShowWeather = ({ date, weatherIcon }) => {
+const ShowWeather = ({ date, weatherState }) => {
 
   const formatDate = (date) => {
     const newDate = new Date(date.currentYear, date.month - 1, date.day);
@@ -62,7 +60,16 @@ const ShowWeather = ({ date, weatherIcon }) => {
   return (
     <WeatherContainer>
       <WeatherContent>
-          <WeatherImage src={`/weather/${weatherIcon}.png`} alt="Weather Icon" />
+          <>
+            {weatherState === 'thunderstorm' && <MdOutlineThunderstorm size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weatherState === 'drizzle' && <BsCloudDrizzle size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weatherState === 'showerrain' && <IoRainyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weatherState === 'snow' && <FaSnowman size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weatherState === 'mist' && <RiMistLine size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weatherState === 'clearsky' && <IoSunnyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weatherState === 'fewclouds' && <TiWeatherPartlySunny size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weatherState === 'clouds' && <BsClouds size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+          </>
       </WeatherContent>
       <DateText>{date ? formatDate(date) : "날짜 정보 없음"}</DateText>
     </WeatherContainer>

@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const WriteArea = styled.textarea`
-    width: 680px;
-    height: 20px;
+    width: 278px;
+    height: 350px;
     padding: 10px;
-    margin-top: 2px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin-top: 14px;
+    border: none;
     border-radius: 10px;
     font-size: 15px;
     font-weight: bold;
@@ -15,7 +15,6 @@ const WriteArea = styled.textarea`
 `;
 
 const EditDiary = ( { onDiaryTextChange }) => {
-    // const [text, setText] = useState('');
     const [diaryText, setDiaryText] = useState('');
 
     const handleDiaryTextChange = (e) => {

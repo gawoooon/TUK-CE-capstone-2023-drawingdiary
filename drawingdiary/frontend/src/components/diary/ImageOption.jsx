@@ -7,11 +7,10 @@ import ImageStyleLists from "./ImageStyleLists";
 import { useAuth } from "../../auth/context/AuthContext";
 
 const Container = styled.div`
-  width: 400px;
-  height: 415px;
-  margin: 10px 60px 10px 0;
+  width: 405px;
+  height: 400px;
   background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 30px;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -23,20 +22,21 @@ const Container = styled.div`
 
 const TopContainer = styled.div`
   width: 95%;
-  height: 100px;
+  height: 50px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-left: 16px;
 `;
 
 const Description = styled.div`
   width: 90%;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 `;
 
 const OptionContainer = styled.div`
   width: 95%;
-  height: 260px;
+  height: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -235,7 +235,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   return (
     <Container>
       <TopContainer>
-        <h4>추천하는 이미지 스타일</h4>
+        <h4>스타일 옵션 선택</h4>
         <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
       </TopContainer>
       <Description>
