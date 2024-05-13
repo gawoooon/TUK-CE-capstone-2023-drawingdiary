@@ -83,12 +83,12 @@ const InfoProfileEmail = styled.div`
   font-weight: bold;
 `;
 
-function Information({ onPopupPassword }) {
-  const setEmail = localStorage.getItem("setEmail");
-  const setName = localStorage.getItem("setName");
-  const setBirth = localStorage.getItem("setBirth");
-  const setProfileImage = localStorage.getItem("setProfileImage");
-
+function Information({
+  onPopupPassword,
+  profileEmail,
+  profileName,
+  profileBirth,
+}) {
   return (
     <InfoBox>
       <InfoTop>
@@ -96,14 +96,14 @@ function Information({ onPopupPassword }) {
         <InfoBtn onClick={onPopupPassword}>수정</InfoBtn>
       </InfoTop>
       <InfoBottom>
-        <Line icon={IoMdPerson} text={setName} hasBorder={true} />
+        <Line icon={IoMdPerson} text={profileName} hasBorder={true} />
         <Line
           icon={MdOutlinePhoneIphone}
           text="010-0000-0000"
           hasBorder={true}
         />
-        <Line icon={MdEmail} text={setEmail} hasBorder={true} />
-        <Line icon={FaBirthdayCake} text={setBirth} hasBorder={false} />
+        <Line icon={MdEmail} text={profileEmail} hasBorder={true} />
+        <Line icon={FaBirthdayCake} text={profileBirth} hasBorder={false} />
       </InfoBottom>
     </InfoBox>
   );

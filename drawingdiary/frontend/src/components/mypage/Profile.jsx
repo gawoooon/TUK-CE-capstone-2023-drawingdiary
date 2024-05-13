@@ -33,10 +33,8 @@ const ProfileEmail = styled.div`
   font-size: 15px;
 `;
 
-function Profile({ profileImage }) {
-  const setEmail = localStorage.getItem("setEmail");
-  const setName = localStorage.getItem("setName");
-  console.log(profileImage);
+function Profile({ profileImage, profileEmail, profileName }) {
+  console.log(profileEmail);
 
   return (
     <ProfileBox>
@@ -53,8 +51,8 @@ function Profile({ profileImage }) {
           }}
         />
       )}
-      <ProfileName>{setName}</ProfileName>
-      <ProfileEmail>{setEmail}</ProfileEmail>
+      <ProfileName>{profileName}</ProfileName>
+      <ProfileEmail>{profileEmail}</ProfileEmail>
     </ProfileBox>
   );
 }

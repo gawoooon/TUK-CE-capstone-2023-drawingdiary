@@ -254,12 +254,12 @@ const LineBox = styled.div`
   height: 15px;
 `;
 
-function Popup({ onClose, profileImage }) {
+function Popup({ onClose, profileImage, profileName }) {
   const accessToken = localStorage.getItem("accessToken");
 
   // 프로필
   const [newName, setNewName] = useState("");
-  const [newProfileImage, setNewProfileImage] = useState("__NULL__"); // 업로드한 이미지 상태 추가
+  const [newProfileImage, setNewProfileImage] = useState(null); // 업로드한 이미지 상태 추가
 
   // 문자 인증
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -324,9 +324,8 @@ function Popup({ onClose, profileImage }) {
 
   // setName을 placeholder로 보내기
   useEffect(() => {
-    const storedName = localStorage.getItem("setName");
-    if (storedName) {
-      setNewName(storedName);
+    if (profileName) {
+      setNewName(profileName);
     }
   }, []);
 
@@ -474,7 +473,7 @@ function Popup({ onClose, profileImage }) {
       !passwordMatch &&
       !verifyMessage &&
       !verifySnsMessage &&
-      newName === localStorage.getItem("setName") &&
+      newName === profileName &&
       newProfileImage === profileImage
     ) {
       console.log(passwordMatch);
@@ -534,7 +533,7 @@ function Popup({ onClose, profileImage }) {
         <PopupBody>
           <ProfileTop>
             <ProfileImgBox>
-              {newProfileImage !== "__NULL__" ? (
+              {newProfileImage !== null ? (
                 <ProfileImg
                   src={`data:image/png;base64, ${newProfileImage}`}
                   alt="새 프로필 이미지"

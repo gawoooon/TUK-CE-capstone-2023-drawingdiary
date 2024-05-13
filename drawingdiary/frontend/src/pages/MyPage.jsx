@@ -70,6 +70,9 @@ function MyPage() {
 
   const { memberID } = useAuth();
   const [profileImage, setProfileImage] = useState(null);
+  const [profileEmail, setProfileEmail] = useState(null);
+  const [profileName, setProfileName] = useState(null);
+  const [profileBirth, setProfileBirth] = useState(null);
 
   // 팝업 창을 토글하는 함수
   const passwordPopup = () => {
@@ -94,6 +97,11 @@ function MyPage() {
             },
           }
         );
+
+        setProfileName(response.data.name);
+        setProfileEmail(response.data.email);
+        setProfileBirth(response.data.birth);
+
         // 프로필 이미지가 있는 경우에만 설정
         if (response.data.profileImage) {
           setProfileImage(response.data.profileImage);
@@ -119,11 +127,20 @@ function MyPage() {
           <MyPageBody>
             <MyPageBox>
               <MyPageTopBox>
-                <Profile profileImage={profileImage} />
+                <Profile
+                  profileImage={profileImage}
+                  profileEmail={profileEmail}
+                  profileName={profileName}
+                />
                 <Theme onColorChange={setBackgroundColor} />
               </MyPageTopBox>
               <MyPageBottomBox>
-                <Information onPopupPassword={passwordPopup} />
+                <Information
+                  onPopupPassword={passwordPopup}
+                  profileBirth={profileBirth}
+                  profileEmail={profileEmail}
+                  profileName={profileName}
+                />
                 {/* <Information onPopupToggle={togglePopup} /> */}
               </MyPageBottomBox>
             </MyPageBox>
@@ -134,7 +151,11 @@ function MyPage() {
         <PopupPassword onClose={passwordPopup} onPopup={PopupToggle} />
       )}
       {isPopupVisible && (
-        <Popup onClose={PopupToggle} profileImage={profileImage} />
+        <Popup
+          onClose={PopupToggle}
+          profileImage={profileImage}
+          profileName={profileName}
+        />
       )}
     </MyPageBackground>
   );
