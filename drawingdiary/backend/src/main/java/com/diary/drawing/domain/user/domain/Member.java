@@ -76,7 +76,7 @@ public class Member {
         this.theme = 1; // 기본값 설정
         this.phoneNumber = null;  // 임시 설정
     }
-
+ 
     // 문자열로 role 주기
     public String getRole() {
         return this.role.name();
