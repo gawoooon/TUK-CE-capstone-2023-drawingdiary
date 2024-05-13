@@ -3,11 +3,14 @@ package com.diary.drawing.global.jwt.security;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.diary.drawing.global.jwt.exception.authExceptionType;
+import com.diary.drawing.global.jwt.exception.authResponseException;
 import com.diary.drawing.global.jwt.service.PrincipalDetailsAuthenticationToken;
 
 import jakarta.servlet.FilterChain;
@@ -28,17 +31,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
-        extractTokenFromRequest(request)
-                .filter(token -> !jwtDecoder.isTokenExpired(token))  // 토큰 만료 확인
-                .map(jwtDecoder::decode)
+        try {
+            Optional<String> token = extractTokenFromRequest(request);
+            if (token.isPresent() && jwtDecoder.isTokenExpired(token.get())) {
+                throw new authResponseException(authExceptionType.EXPIRED_TOKEN);
+            }
+        
+            token.map(jwtDecoder::decode)
                 .map(jwtToPrincipalConverter::convert)
-                .map(PrincipalDetailsAuthenticationToken::new)  //새로운 토큰 만듬
-                .ifPresent(authentication -> SecurityContextHolder.getContext().setAuthentication(authentication)); //security와 연결
-
-        filterChain.doFilter(request, response);
+                .map(PrincipalDetailsAuthenticationToken::new)
+                .ifPresent(authentication -> SecurityContextHolder.getContext().setAuthentication(authentication));
+        
+            filterChain.doFilter(request, response);
+        } catch (authResponseException e) {
+            handleAuthException(e, response);
+        }
     }
+
+    /* 바로 exception을 리턴하는 함수를 임시로 생성함 */
+    private void handleAuthException(authResponseException e, HttpServletResponse response) throws IOException {
+        HttpStatus status = e.getExceptionType().getHttpStatus();
+        String message = e.getExceptionType().getErrorMessage();
+        
+        response.setStatus(status.value());
+        response.setContentType("application/json; charset=UTF-8");
+        response.getWriter().write("{\"status\":" + status.value() +
+            ", \"error\": \"" + status.getReasonPhrase() +
+            "\", \"message\": \"" + message + "\"}");
+    }
+
+
 
     // null이면 false 나옴... 본래 private이나 바꿨음
     // 보통 Authorization: Bearear <7글자기 때문에 7개 제외
