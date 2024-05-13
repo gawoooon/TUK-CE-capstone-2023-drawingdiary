@@ -257,7 +257,7 @@ const LineBox = styled.div`
 function Popup({ onClose, profileImage, profileName }) {
   const { getToken } = useAuth();
   const accessToken = getToken();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // 프로필
   const [newName, setNewName] = useState("");
