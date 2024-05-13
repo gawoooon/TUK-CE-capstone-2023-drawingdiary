@@ -105,8 +105,8 @@ public class EmailServiceImpl implements EmailService{
         return emailVerificationService.verifyEmail(email, verifiCode);
     }
 
-    public boolean saveVerificationCode(String email, String originVerificationCode){
-        return emailVerificationService.verifyEmail(email, originVerificationCode);
+    public void saveVerificationCode(String email, String originVerificationCode){
+        emailVerificationService.saveVerificationCode(email, originVerificationCode);
     }
 
 }
