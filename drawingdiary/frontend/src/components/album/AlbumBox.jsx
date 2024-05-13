@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useCategory } from "./CategoryList";
-import { TrashButton } from "../button/DeleteButton";
 import Modal from "./Modal";
 import axios from "axios";
 import { useAuth } from "../../auth/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { CgTrash } from "react-icons/cg";
 
 const Container = styled.section`
     width: 95%;
@@ -58,14 +58,13 @@ const DateText = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
-    padding-top: 5px;
     border-radius: 10px;
 
     img {
-        width: 180px;
-        height: 180px;
+        width: 200px;
+        height: 200px;
         border-radius: 10px;
         margin: 5px;
         transition: transform 0.2s ease;
@@ -96,8 +95,8 @@ function AlbumBox({ onErrorMessage }) {
     const navigate = useNavigate();
     const [checkList, setCheckList] = useState(false);
 
-    const { memberID } = useAuth();
-    const accessToken = localStorage.getItem('accessToken');
+    const { memberID, getToken } = useAuth();
+    const accessToken = getToken();
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchAlbum = async () => {
@@ -189,7 +188,7 @@ function AlbumBox({ onErrorMessage }) {
                         }}>
                         <AlbumHeaders isOpen={categoryEntry.albumID}>
                             <CategoryName>{categoryEntry.name}</CategoryName>
-                            <TrashButton onClick={() => handleDeleteClick(categoryEntry.albumID)}/>
+                            <CgTrash size={22} color="3d3d3d" onClick={() => handleDeleteClick(categoryEntry.albumID)} />
                         </AlbumHeaders>
                     </div>
 
@@ -205,8 +204,8 @@ function AlbumBox({ onErrorMessage }) {
                                     {categoryEntry.images.map((item, index) => (
                                         <PictureContainer key={index} onClick={() => handleShowDetails(item.date)}>
                                             <DateText>
-                                                {item.date}
                                                 <img src={item.imageFile} alt="Album" />
+                                                {item.date}
                                             </DateText>
                                         </PictureContainer>
                                     ))}

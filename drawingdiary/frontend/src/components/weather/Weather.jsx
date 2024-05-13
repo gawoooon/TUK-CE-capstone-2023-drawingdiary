@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import WeatherTypes from "./WeatherTypes";
+import { MdOutlineThunderstorm } from "react-icons/md";
+import { BsCloudDrizzle, BsClouds } from "react-icons/bs";
+import { IoRainyOutline, IoSunnyOutline } from "react-icons/io5";
+import { FaSnowman } from "react-icons/fa";
+import { RiMistLine } from "react-icons/ri";
+import { TiWeatherPartlySunny } from "react-icons/ti";
+
 
 const WeatherContainer = styled.div`
   width: 200px;
@@ -13,13 +20,6 @@ const WeatherContainer = styled.div`
 const WeatherContent = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const WeatherImage = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-right: 20px;
-  margin-top: 3px;
 `;
 
 const DateText = styled.text`
@@ -35,7 +35,7 @@ const LoadingImage = styled.img`
 `;
 
 const Weather = ({ date, onWeatherStateChange }) => {
-  const [weather, setWeather] = useState({ icon: "" });
+  const [weather, setWeather] = useState({ state: "" });
   const [loading, setLoading] = useState(true);
 
   const formatDate = (date) => {
@@ -80,7 +80,6 @@ const Weather = ({ date, onWeatherStateChange }) => {
   const getWeather = useCallback(
     async (lat, lon) => {
       const apiKey = process.env.REACT_APP_WEATHER_KEY;
-      let weatherIconSrc = "";
       try {
         const response = await fetch(
           `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
@@ -108,9 +107,8 @@ const Weather = ({ date, onWeatherStateChange }) => {
 
           // weatherType 객체와 매핑
           const weatherState = getWeatherState(weatherID);
-          weatherIconSrc = `/weather/${weatherState}.png`;
 
-          setWeather({ icon: weatherIconSrc });
+          setWeather({ state: weatherState });
           // onWeatherStateChange 함수를 통해 상위 컴포넌트로 날씨 상태 전달
           onWeatherStateChange(weatherState);
         } else {
@@ -145,7 +143,16 @@ const Weather = ({ date, onWeatherStateChange }) => {
         {loading ? (
           <LoadingImage src="/Spinner.gif" alt="loading" />
         ) : (
-          <WeatherImage src={weather.icon} alt="Weather Icon" />
+          <>
+            {weather.state === 'thunderstorm' && <MdOutlineThunderstorm size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weather.state === 'drizzle' && <BsCloudDrizzle size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weather.state === 'showerrain' && <IoRainyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weather.state === 'snow' && <FaSnowman size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weather.state === 'mist' && <RiMistLine size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weather.state === 'clearsky' && <IoSunnyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weather.state === 'fewclouds' && <TiWeatherPartlySunny size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weather.state === 'clouds' && <BsClouds size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+          </>
         )}
       </WeatherContent>
       <DateText>{date ? formatDate(date) : "날짜 정보 없음"}</DateText>

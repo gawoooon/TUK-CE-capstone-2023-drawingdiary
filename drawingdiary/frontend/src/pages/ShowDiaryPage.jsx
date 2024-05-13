@@ -13,80 +13,80 @@ import ShowGeneratedImage from "../components/show/ShowGeneratedImage";
 import Background2 from "../components/Background/index2";
 import { IoIosSend } from "react-icons/io";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.body`
   width: 100%;
-  height: 100%;
+  height: 900px;
   display: flex;
   flex-direction: column;
 `;
 
 const DiaryContainer = styled.section`
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: row;
   margin: auto;
 `;
 
-const RightContainer = styled.section`
+const LeftContainer = styled.section`
   width: 50%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
-const RightTopContent = styled.div`
-  height: 50px;
+const LeftTopContent = styled.div`
+  height: 40px;
   margin-top: 60px;
+  padding-bottom: 10px;
+  padding-right: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const RightMidContent = styled.div`
-  height: 81%;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  padding-bottom: 10px;
-`;
-
-const RightBottomContent = styled.div`
-  height: 50px;
+const LeftMidContent = styled.div`
+  height: 450px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: white;
-  border-radius: 10px;
+  padding: 0 10px;
+  margin: 0 10px;
+`;
+
+const LeftBottomContent = styled.div`
+  height: 300px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   padding: 5px;
 `;
 
-const LeftContainer = styled.section`
+const RightContainer = styled.section`
   width: 50%;
-  height: 100%;
 `;
 
-const LeftTopContent = styled.div`
+const RightTopContent = styled.div`
   height: 30px;
+  margin-top: 20px;
+  padding-right: 44px;
   display: flex;
   justify-content: end;
   align-items: center;
 `;
 
-const LeftMidContent = styled.div`
-  height: 82%;
+const RightMidContent = styled.div`
+  height: 700px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding-bottom: 50px;
+  padding-top: 6px;
 `;
 
-const LeftBottomContent = styled.div`
+const RightBottomContent = styled.div`
   display: flex;
   justify-content: end;
   align-items: center;
@@ -106,7 +106,21 @@ const SaveBtn = styled.button`
   background-color: white;
 `;
 
+const Area = styled.div`
+    width: 405px;
+    height: 400px;
+    padding: 0 auto;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+`;
+
 function ShowDiaryPage() {
+  const { getToken } = useAuth();
+  const accessToken = getToken();
+
   const navigate = useNavigate();
   const location = useLocation();
   const { diaryData } = location.state || {};
@@ -175,8 +189,6 @@ function ShowDiaryPage() {
 
       const maxSentimentValue = response.data.document.sentiment;
 
-      console.log(maxSentimentValue);
-
       if (maxSentimentValue === "positive") {
         return "따듯한 색감";
       } else if (maxSentimentValue === "negative") {
@@ -195,12 +207,6 @@ function ShowDiaryPage() {
     } else {
       setParentSelectedButtonStyle(selectedButtonStyle);
     }
-
-    console.log(
-      "다이어리 페이지에서 선택한 스타일:",
-      parentSelectedButtonStyle,
-      isSelected
-    );
   };
 
   // Sentiment에 텍스트 전달
@@ -284,7 +290,6 @@ function ShowDiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-    const accessToken = localStorage.getItem("accessToken");
 
     // 날짜 데이터
     const formattedDate = new Date(date.currentYear, date.month - 1, date.day);
@@ -324,7 +329,7 @@ function ShowDiaryPage() {
       );
       if (responseDiary.status === 200) {
         alert("일기가 생성되었어요!");
-        navigate("/calendar");
+        navigate("/");
       } else {
         console.error("일기 전송 실패:", responseDiary.status);
       }
@@ -338,18 +343,27 @@ function ShowDiaryPage() {
       <Background2>
         <Container>
           <DiaryContainer>
-            <RightContainer>
-              <RightTopContent>
-                <ShowWeather date={date} weatherIcon={weatherState} />
+            <LeftContainer>
+              <LeftTopContent>
+                <ShowWeather date={date} weatherState={weatherState} />
                 <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
-              </RightTopContent>
-              <RightMidContent>
+              </LeftTopContent>
+              <LeftMidContent>
                 <ShowImageOption
                   onOptionSelect={handleOptionSelect}
                   isRecommenderLoading={isRecommenderLoading}
                   selectedOption={style}
                 />
-                <LeftBottomContent>
+                <Area>
+                  <ShowDiary
+                    onDiaryTextChange={handleDiaryTextChange}
+                    showText={diaryText}
+                  />
+                  <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '20px', marginTop: '16px'}} />
+                </Area>
+              </LeftMidContent>
+              <LeftBottomContent>
+                <RightBottomContent>
                   <ShowAIComment
                     text={commentText}
                     isLoading={isCommentLoading}
@@ -359,31 +373,25 @@ function ShowDiaryPage() {
                     negativeValue={negativeValue}
                     neutralValue={neutralValue}
                   />
-                </LeftBottomContent>
-              </RightMidContent>
-              <RightBottomContent>
-                <ShowDiary
-                  onDiaryTextChange={handleDiaryTextChange}
-                  showText={diaryText}
-                />
-                <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '20px'}} />
-              </RightBottomContent>
-            </RightContainer>
-            <LeftContainer>
+                </RightBottomContent>
+              </LeftBottomContent>
+            </LeftContainer>
+
+            <RightContainer>
               <NavBar />
-              <LeftTopContent>
+              <RightTopContent>
                 <SaveBtn onClick={handleSave}>
                   저장하기
                   <FaRegCheckCircle size={18} color="#3d3d3d" style={{marginLeft: '10px'}} />
                 </SaveBtn>
-              </LeftTopContent>
-              <LeftMidContent>
+              </RightTopContent>
+              <RightMidContent>
                 <ShowGeneratedImage
                   isLoading={isImageLoading}
                   newImageUrl={newImageUrl}
                 />
-              </LeftMidContent>
-            </LeftContainer>
+              </RightMidContent>
+            </RightContainer>
           </DiaryContainer>
         </Container>
       </Background2>

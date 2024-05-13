@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Lottie from "react-lottie";
 import imageLoading from "../../animation/imageLodding.json";
-import ImageStyleLists from "../edit diary/ImageStyleLists";
+import ImageStyleLists from "../diary/ImageStyleLists";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const Container = styled.div`
-  width: 600px;
-  height: 415px;
-  margin: 10px 60px 10px 0;
+  width: 405px;
+  height: 400px;
   background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 30px;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -22,34 +22,37 @@ const Container = styled.div`
 
 const TopContainer = styled.div`
   width: 95%;
+  height: 50px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-left: 16px;
 `;
 
 const Description = styled.div`
   width: 90%;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 `;
 
 const OptionContainer = styled.div`
   width: 95%;
-  height: 75%;
+  height: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const LeftContainer = styled.div`
-  height: 300px;
+  height: 250px;
+  margin-top: 10px;
   display: ${({ display }) => display};
   flex-direction: column;
   transition: opacity 0.5s ease-in-out;
 `;
 
 const RightContainer = styled.div`
-  height: 300px;
-  margin: 20px 0;
+  height: 260px;
+  margin: 0 auto;
   display: ${({ display }) => display};
   flex-direction: column;
   overflow-x: hidden;
@@ -61,30 +64,17 @@ const RightContainer = styled.div`
   &::-webkit-scrollbar-thumb {
     background-color: #ccc;
     border-radius: 4px;
-    margin-left: 5px;
   }
 `;
 
 const SelectedStyle = styled.div`
   font-size: 15px;
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
-const LeftBtnStyle = styled.button`
-  width: 500px;
-  min-height: 40px;
-  margin-top: 15px;
-  background-color: ${(props) =>
-    props.isSelected ? "#ddd" : "rgba(255, 255, 255, 0.3)"};
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-`;
-
-const RightBtnStyle = styled.button`
-  width: 500px;
-  min-height: 40px;
+const OptionBtnStyle = styled.button`
+  width: 300px;
+  min-height: 36px;
   margin: 5px 0;
   background-color: ${(props) =>
     props.isSelected ? "#ddd" : "rgba(255, 255, 255, 0.3)"};
@@ -95,7 +85,7 @@ const RightBtnStyle = styled.button`
 `;
 
 const TextStyle = styled.div`
-  margin-top: 3px;
+  padding-top: 10px;
   font-size: 13px;
   color: #787878;
 `;
@@ -139,7 +129,8 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
   const [recommendedStyles, setRecommendedStyles] = useState([]);
   const [otherStyles, setOtherStyles] = useState([]);
 
-  const accessToken = localStorage.getItem("accessToken");
+  const { getToken } = useAuth();
+  const accessToken = getToken();
 
   // '더보기'/'닫기' 버튼 클릭 핸들러
   const handleOpen = () => {
@@ -182,21 +173,20 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
     } catch(error) {
       console.log("error: ", error);
     }
-    console.log('info 완료')
   };
 
   const fetchOptionStyle = async () => {
     try {
       const styleResponse = await axios.get("http://localhost:8080/api/test/style", {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          'Authorization': `Bearer ${accessToken}`
         },
       });
       
       setIsLoading(!isRecommenderLoading);
 
-      const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.name === styleName);
+      const updateRecommendedStyles = styleResponse.data.top_styles.map((styleName) => {
+        return ImageStyleLists.find(style => style === styleName);
       });
       setRecommendedStyles(updateRecommendedStyles);
     } catch (error) {
@@ -206,12 +196,12 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
           gender: userGender,
         }, {
           headers: {
-            Authorization: `Bearer ${accessToken}`
+            'Authorization': `Bearer ${accessToken}`
           },
         });
         setIsLoading(!isRecommenderLoading);
-        const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
-          return ImageStyleLists.find(style => style.name === styleName);
+        const updateRecommendedStyles = fallbackResponse.data.top_styles.map((styleName) => {
+          return ImageStyleLists.find(style => style === styleName);
         });
         setRecommendedStyles(updateRecommendedStyles);
       }
@@ -230,7 +220,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
     onOptionSelect(isSelected);
 
     const filterNonDuplicateStyles = ImageStyleLists.filter(
-      style => !recommendedStyles.map(rStyle => rStyle.name).includes(style.name)
+      style => !recommendedStyles.map(rStyle => rStyle).includes(style)
     );
     setOtherStyles(filterNonDuplicateStyles);
   }, [isSelected, onOptionSelect, recommendedStyles]);
@@ -238,7 +228,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
   return (
       <Container>
         <TopContainer>
-          <h3>추천하는 이미지 스타일</h3>
+          <h4>스타일 옵션 선택</h4>
           <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
         </TopContainer> 
         <Description>
@@ -256,23 +246,23 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
               <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={280} width={280} />
               ) : (
                 recommendedStyles.map((style, index) => (
-                  <LeftBtnStyle 
+                  <OptionBtnStyle 
                     key={index} 
-                    isSelected={selectedButtonStyle === style.name} 
-                    onClick={() => handleButtonStyleSelect(style.name)}>
-                    {`${style.name}: ${style.description}`}
-                  </LeftBtnStyle>
+                    isSelected={selectedButtonStyle === style} 
+                    onClick={() => handleButtonStyleSelect(style)}>
+                    {`${style}`}
+                  </OptionBtnStyle>
               ))
             )}
           </LeftContainer>
           <RightContainer display={displayRight}>
             {otherStyles.map((style, index) => (
-              <RightBtnStyle
+              <OptionBtnStyle
                 key={index}
-                isSelected={selectedButtonStyle === style.name}
-                onClick={() => handleButtonStyleSelect(style.name)}>
-                  {`${style.name}: ${style.description}`}
-              </RightBtnStyle>
+                isSelected={selectedButtonStyle === style}
+                onClick={() => handleButtonStyleSelect(style)}>
+                  {`${style}`}
+              </OptionBtnStyle>
             ))}
         </RightContainer>
       </OptionContainer>

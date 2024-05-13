@@ -16,7 +16,9 @@ import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
-import com.diary.drawing.domain.user.dto.PhoneResponseDTO;
+import com.diary.drawing.domain.user.dto.PhoneDTO;
+import com.diary.drawing.domain.user.dto.PhoneDTO.responseExistedDTO;
+import com.diary.drawing.domain.user.dto.PhoneDTO.responseNewDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
@@ -179,12 +181,26 @@ public class MemberServiceImpl implements MemberService{
         return ResponseEntity.ok("마이페이지 변경이 완료되었습니다");
     }
 
+    /* 새로운 전화번호 인증
+     * 이미 존재하면 602 에러
+     */
+    public String sendSmsNew(String phoneNumber){
+        // 1. 전화번호로 member 객체 찾고 나오면 오류
+        Optional<Member> targetMember = memberRepository.findByPhoneNumber(phoneNumber);
+        if(targetMember.isPresent()) throw new MemberResponseException(MemberExceptionType.ALREADY_EXIST_PHONENUMBER);
+        
+        String verificationCode = createKey();
+        smsUtil.sendOne(phoneNumber, verificationCode);
 
-    // 전화번호 인증
-    public String sendSms(String phoneNumber){
+        return verificationCode;
+    }
+
+
+
+    // 전화번호 인증 (이메일 찾기 등 이미 존재하는 객체)
+    public String sendSmsExisted(String phoneNumber){
         // 1. 전화번호로 member 객체 찾고 나오지 않으면 오류
-        Member targetMember = memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(()->
-                new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER));
+        Member targetMember = memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(()-> new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER));
         
         String verificationCode = createKey();
         smsUtil.sendOne(phoneNumber, verificationCode);
@@ -237,16 +253,24 @@ public class MemberServiceImpl implements MemberService{
         return ResponseEntity.ok("temp password set done");
     }
 
-        // 이메일 찾아서 반환
+    // 그냥 인증 됐는지만 반환
     @Override
-    public ResponseEntity<?> findEmailByPhoneNumber(String phoneNumber, String code){
+    public ResponseEntity<responseNewDTO> verifyNewPhoneNumber(String phoneNumber, String code){
+        Boolean isVerified =  smsVerificationService.verifyNumber(phoneNumber, code);
+        PhoneDTO.responseNewDTO response = new PhoneDTO.responseNewDTO(isVerified);
+        return ResponseEntity.ok(response);
+    }
+
+    // 이미 있는 번호 인증하고 이메일 찾아서 반환
+    @Override
+    public ResponseEntity<?> verifyExistedPhoneNumber(String phoneNumber, String code){
 
         if(smsVerificationService.verifyNumber(phoneNumber, code)){
             Member targetMember = memberRepository.findByPhoneNumber(phoneNumber).orElseThrow(()-> new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER));
-            PhoneResponseDTO responseDTO = new PhoneResponseDTO(targetMember.getEmail());
-            return ResponseEntity.ok(responseDTO);
+            responseExistedDTO response = new responseExistedDTO(true, targetMember.getEmail());
+            return ResponseEntity.ok(response);
         } else{
-            throw new MemberResponseException(MemberExceptionType.NOT_FOUND_MEMBER);
+            throw new MemberResponseException(MemberExceptionType.FAIL_PHONE_VERIFIED); //700
         }
     }
 

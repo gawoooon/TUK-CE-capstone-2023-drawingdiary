@@ -74,9 +74,9 @@ public class Member {
         this.password = password;
         this.role = MemberRole.ROLE_USER;   //기본값 설정
         this.theme = 1; // 기본값 설정
-        this.phoneNumber = "000-0000-000";  // 임시 설정
+        this.phoneNumber = null;  // 임시 설정
     }
-
+ 
     // 문자열로 role 주기
     public String getRole() {
         return this.role.name();

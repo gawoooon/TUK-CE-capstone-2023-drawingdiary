@@ -1,33 +1,40 @@
-@font-face {
-    font-family: 감탄로그바탕체 Regular;
-    src: url("./fonts/감탄로드바탕체 Regular.ttf");
-}
 
 @font-face {
-    font-family: 감탄로그바탕체 Thin;
-    src: url("./fonts/감탄로드바탕체 Thin.ttf");
+    font-family: 'MICEGothic Bold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-01@1.0/MICEGothic Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
 }
+
 body {
-    font-family: 감탄로그바탕체 Regular;
+    font-family: MICEGothic;
+    font-weight: 400;
 }
 text {
-    font-family: 감탄로그바탕체 Regular;
+    font-family: MICEGothic;
+    font-weight: 100;
 }
 button {
-    font-family: 감탄로그바탕체 Regular;
+    font-family: MICEGothic;
+    font-weight: 400;
 }
 option {
-    font-family: 감탄로그바탕체 Regular;
+    font-family: MICEGothic;
+    font-weight: 400;
 }
 select {
-    font-family: 감탄로그바탕체 Regular;
+    font-family: MICEGothic;
+    font-weight: 400;
 }
 textarea {
-    font-family: 감탄로그바탕체 Regular;
+    font-family: MICEGothic;
+    font-weight: 100;
 }
 input {
-    font-family: 감탄로그바탕체 Regular;
+    font-family: MICEGothic;
+    font-weight: 100;
 }
 ::placeholder {
-    font-family: 감탄로그바탕체 Thin;
+    font-family: MICEGothic;
+    font-weight: 100;
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const ThemeBox = styled.div`
   width: 60%;
@@ -55,6 +56,8 @@ function Theme({ onColorChange }) {
   const [selectedNumber, setSelectedNumber] = useState(
     localStorage.getItem("selectedColor")
   );
+  const { getToken } = useAuth();
+  const accessToken = getToken();
 
   // body 배경색 변경 함수
   const handleColorChange = (color) => {
@@ -65,7 +68,6 @@ function Theme({ onColorChange }) {
 
   // 저장 버튼 클릭 시
   const handleSaveButtonClick = async () => {
-    const accessToken = localStorage.getItem("accessToken");
 
     if (selectedNumber !== null) {
       try {
@@ -76,7 +78,7 @@ function Theme({ onColorChange }) {
           },
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              'Authorization': `Bearer ${accessToken}`,
             },
           }
         );

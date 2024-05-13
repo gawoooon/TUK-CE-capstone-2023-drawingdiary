@@ -93,7 +93,19 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        var accessToken = request.getHeader("Authorization").substring(7);
+
+        // 1. accessToken 존재 확인
+        String accessTokenHeader = request.getHeader("Authorization");
+        if (accessTokenHeader == null || !accessTokenHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body("Invalid access token");
+        }
+                
+        // 2. accesstoken 내용물 확인
+        if (principalDetails == null) {
+            return ResponseEntity.badRequest().body("illegal access token");
+        }
+
+        var accessToken = accessTokenHeader.substring(7);
         JwtRequestDTO.logoutRequestDTO requestDTO = new JwtRequestDTO.logoutRequestDTO(accessToken, principalDetails.getMemberID());
         authService.logout(requestDTO);
         return ResponseEntity.ok("logout");

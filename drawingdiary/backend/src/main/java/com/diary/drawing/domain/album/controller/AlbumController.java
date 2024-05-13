@@ -38,9 +38,10 @@ public class AlbumController {
      */
     @Operation(summary = "앨범 추가")
     @PostMapping("/api/album")
-    public void addAlbum(@Valid @RequestBody AlbumRequestDTO albumDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
+    public ResponseEntity<?> addAlbum(@Valid @RequestBody AlbumRequestDTO albumDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception{
 
         albumService.addAlbum(albumDTO, principalDetails.getMemberID());
+        return ResponseEntity.ok("앨범 추가 완료");
     }
 
     /* 토큰으로 앨범 삭제 api
@@ -61,9 +62,10 @@ public class AlbumController {
     */
     @Operation(summary = "멤버별 앨범 리스트")
     @GetMapping("/api/album/list")
-    public List<AlbumListDTO> getAlbumList(@AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> getAlbumList(@AuthenticationPrincipal PrincipalDetails principalDetails){
         // member 존재한다면
-        return albumService.getAlbumsByMember(principalDetails.getMemberID());
+        List<AlbumListDTO> response =  albumService.getAlbumsByMember(principalDetails.getMemberID());
+        return ResponseEntity.ok(response);
     }
 
     /* 토큰으로 앨범 페이지 앨범 + 이미지 넘겨주는 api
