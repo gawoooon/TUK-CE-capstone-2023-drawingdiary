@@ -194,7 +194,7 @@ function CalendarPage() {
   const [isSelectedDay, setIsSelectedDay] = useState("");
 
   const fetchUserName = useCallback(async () => {
-    if (memberID) {
+    if (accessToken !== null) {
       try {
         const response = await axios.get("http://localhost:8080/api/get-member", {
           headers: {
@@ -205,6 +205,7 @@ function CalendarPage() {
         localStorage.setItem("setName", response.data.name);
         localStorage.setItem("setEmail", response.data.email);
         localStorage.setItem("setBirth", response.data.birth);
+        localStorage.setItem("setGender", response.data.gender);
         localStorage.setItem("selectedColor", response.data.theme);
         localStorage.setItem("setProfileImage", response.data.profileImage);
         
@@ -309,7 +310,8 @@ function CalendarPage() {
           },
         }
       );
-      fetchCalendar();
+      alert("일기가 정상적으로 삭제되었습니다!");
+      window.location.replace('/');
     } catch (error) {
       console.log("error: ", error);
     }

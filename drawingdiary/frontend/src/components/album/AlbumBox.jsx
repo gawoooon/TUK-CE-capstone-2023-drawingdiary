@@ -15,7 +15,7 @@ const Container = styled.section`
 
 const AlbumContainer = styled.div`
     width: 100%;
-    height: 230px;
+    height: 246px;
     padding: 10px;
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 10px;
@@ -25,10 +25,10 @@ const ScrollSection = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     &::-webkit-scrollbar {
-        height: 2px;
+        height: 3px;
     }
     &::-webkit-scrollbar-thumb {
         background-color: #ccc;

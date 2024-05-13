@@ -95,6 +95,7 @@ const RightBottomContent = styled.div`
 `;
 
 const SaveBtn = styled.button`
+  z-index: 9999;
   display: flex;
   flex-direction: row;
   justify-content: center;

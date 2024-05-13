@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   
   useEffect(() => {
     const interval = setInterval(() => {
-      if(auth.accessToken && auth.refreshToken) {
+      if(auth.accessToken) {
         localStorage.clear();
         refreshToken();
       }

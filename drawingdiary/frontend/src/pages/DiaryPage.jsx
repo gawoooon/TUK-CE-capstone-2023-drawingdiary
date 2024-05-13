@@ -95,6 +95,7 @@ const RightBottomContent = styled.div`
 `;
 
 const SaveBtn = styled.button`
+  z-index: 9999;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -104,6 +105,7 @@ const SaveBtn = styled.button`
   border-radius: 5px;
   font-size: 15px;
   background-color: white;
+  cursor: pointer;
 `;
 
 const Area = styled.div`
@@ -172,12 +174,9 @@ function DiaryPage() {
 
       const { positive, negative, neutral } = response.data.document.confidence;
 
-      // 소수점 두 자리까지 반올림하여 상태 업데이트 -- 어떤 값이 가장 큰지 비교해야 함
       setPositiveValue(Math.round(positive * 100) / 100);
       setNegativeValue(Math.round(negative * 100) / 100);
       setNeutralValue(Math.round(neutral * 100) / 100);
-
-      // 감정 분석 결과를 일기 내용에 반영시키는 부분
 
       const maxSentimentValue = response.data.document.sentiment;
 
@@ -226,9 +225,22 @@ function DiaryPage() {
 
       try {
         // 감정 분석 결과를 받아오기
-        const newDiaryTextResult = await analyzeSentiment();
+        const SentimentResult = await analyzeSentiment();
 
-        const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryTextResult}`;
+        const gender = localStorage.getItem('setGender');
+        let userGender = '';
+
+        if(gender === 'M') {
+          userGender = 'Male'
+        } else if(gender === 'F'){
+          userGender = 'Female'
+        } else {
+          userGender = 'none'
+        };
+
+        const resultDiaryText = `"${diaryText}", 이미지 스타일: ${parentSelectedButtonStyle}, ${SentimentResult}, 주인공: ${userGender}`;
+
+        console.log(resultDiaryText);
 
         if (diaryText !== "") {
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
