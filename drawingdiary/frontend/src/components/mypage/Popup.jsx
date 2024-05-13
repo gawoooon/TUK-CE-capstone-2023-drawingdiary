@@ -264,7 +264,7 @@ function Popup({ onClose, profileImage, profileName }) {
   const [newProfileImage, setNewProfileImage] = useState(null); // 업로드한 이미지 상태 추가
 
   // 문자 인증
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(null);
   const [phoneCertification, setPhoneCertification] = useState("");
   // const [newPhoneNumber, setNewPhoneNumber] = useState(null);
   const [verifySnsMessage, setVerifySnsMessage] = useState(null);
@@ -489,11 +489,17 @@ function Popup({ onClose, profileImage, profileName }) {
     }
 
     console.log(
+      "이름:",
       newName,
+      "비1",
       oldPassword,
+      "비2",
       newPassword,
+      "이메일",
       newEmail,
+      "폰",
       phoneNumber,
+      "이미지",
       newProfileImage
     );
     try {
