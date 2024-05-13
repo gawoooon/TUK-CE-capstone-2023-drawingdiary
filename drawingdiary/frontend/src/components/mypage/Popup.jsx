@@ -266,7 +266,7 @@ function Popup({ onClose, profileImage, profileName }) {
   // 문자 인증
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneCertification, setPhoneCertification] = useState("");
-  const [newPhoneNumber, setNewPhoneNumber] = useState(null);
+  // const [newPhoneNumber, setNewPhoneNumber] = useState(null);
   const [verifySnsMessage, setVerifySnsMessage] = useState(null);
 
   // 이메일 인증
@@ -338,7 +338,7 @@ function Popup({ onClose, profileImage, profileName }) {
     if (phoneNumber !== "") {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/sms/codesending",
+          "http://localhost:8080/api/sms/codesending-new",
           { phoneNumber: phoneNumber },
           {
             headers: {
@@ -360,7 +360,7 @@ function Popup({ onClose, profileImage, profileName }) {
     if (phoneCertification !== "") {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/sms/verify",
+          "http://localhost:8080/api/sms/verify-new",
           {
             phoneNumber: phoneNumber,
             code: phoneCertification,
@@ -468,8 +468,6 @@ function Popup({ onClose, profileImage, profileName }) {
 
   // 마이페이지 수정
   const handleEditClick = async () => {
-    console.log(newName, newPhoneNumber);
-
     // 변경사항이 없을 경우
     if (
       !passwordMatch &&
@@ -493,9 +491,9 @@ function Popup({ onClose, profileImage, profileName }) {
     console.log(
       newName,
       oldPassword,
-      newEmail,
       newPassword,
-      newPhoneNumber,
+      newEmail,
+      phoneNumber,
       newProfileImage
     );
     try {
@@ -506,7 +504,7 @@ function Popup({ onClose, profileImage, profileName }) {
           oldPassword: oldPassword,
           newPassword: newPassword,
           newEmail: newEmail,
-          newPhoneNumber: newPhoneNumber,
+          newPhoneNumber: phoneNumber,
           newProfileImage: newProfileImage,
         },
         {
@@ -572,7 +570,7 @@ function Popup({ onClose, profileImage, profileName }) {
               <PopupLineInput
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="전화번호"
+                placeholder="새로운 전화번호 입력(11자리)"
               />
             </PopupLineInputBox>
             <PopupLineBtn onClick={(e) => sendPhone(e)}>인증</PopupLineBtn>
@@ -596,7 +594,7 @@ function Popup({ onClose, profileImage, profileName }) {
             </PopupLineBtn>
           </PopupLineBox>
 
-          <PopupLineBox>
+          {/* <PopupLineBox>
             <PopupLineIcon></PopupLineIcon>
             <PopupLineInputBox>
               <PopupLineInput
@@ -606,7 +604,7 @@ function Popup({ onClose, profileImage, profileName }) {
               />
             </PopupLineInputBox>
             <PopupLineBtnBox></PopupLineBtnBox>
-          </PopupLineBox>
+          </PopupLineBox> */}
 
           <LineBox />
 

@@ -62,7 +62,8 @@ function MyPage() {
   const [isPopupVisible, setPopupVisible] = useState(false); // 팝업 창의 가시성을 관리하는 상태
   const [isPopupPassword, setPopupPassword] = useState(false);
 
-  const { memberID } = useAuth();
+  const { memberID, getToken } = useAuth();
+  const accessToken = getToken();
   const [profileImage, setProfileImage] = useState(null);
   const [profileEmail, setProfileEmail] = useState(null);
   const [profileName, setProfileName] = useState(null);
@@ -82,7 +83,6 @@ function MyPage() {
   const fetchUserName = useCallback(async () => {
     if (memberID) {
       try {
-        const accessToken = localStorage.getItem("accessToken");
         const response = await axios.get(
           "http://localhost:8080/api/get-member",
           {

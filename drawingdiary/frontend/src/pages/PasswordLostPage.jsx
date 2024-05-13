@@ -173,7 +173,7 @@ function PasswordLostPage() {
 
             <MessageContainer>
               {verifyMessage === true && (
-                <Message color="green">인증번호를 전송하였습니다.</Message>
+                <Message color="green">임시 비밀번호를 전송하였습니다.</Message>
               )}
               {verifyMessage === false && (
                 <Message color="red">이메일이 일치하지 않습니다.</Message>
