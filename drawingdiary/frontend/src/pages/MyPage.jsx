@@ -57,12 +57,6 @@ const MyPageBodyBox = styled.div`
   justify-content: center;
 `;
 
-// const NavBarBox = styled.div`
-//   width: 100%;
-//   display: flex;
-//   justify-content: end;
-// `;
-
 function MyPage() {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [isPopupVisible, setPopupVisible] = useState(false); // 팝업 창의 가시성을 관리하는 상태
@@ -141,7 +135,6 @@ function MyPage() {
                   profileEmail={profileEmail}
                   profileName={profileName}
                 />
-                {/* <Information onPopupToggle={togglePopup} /> */}
               </MyPageBottomBox>
             </MyPageBox>
           </MyPageBody>

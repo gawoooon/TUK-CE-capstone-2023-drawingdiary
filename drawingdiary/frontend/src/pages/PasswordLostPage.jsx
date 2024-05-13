@@ -151,10 +151,10 @@ function PasswordLostPage() {
 
           <MessageContainer>
             {verifyMessage === true && (
-              <Message color="green">이메일 인증되었습니다</Message>
+              <Message color="green">인증번호를 전송하였습니다.</Message>
             )}
             {verifyMessage === false && (
-              <Message color="red">인증되지 않았습니다</Message>
+              <Message color="red">이메일이 일치하지 않습니다.</Message>
             )}
           </MessageContainer>
 

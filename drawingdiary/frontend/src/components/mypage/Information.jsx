@@ -45,44 +45,6 @@ const InfoBottom = styled.div`
   box-sizing: border-box;
 `;
 
-const InfoProfileBox = styled.div`
-  display: flex;
-  border-bottom: 1px solid rgba(163, 163, 163, 0.3);
-  padding: 20px 0;
-  box-sizing: border-box;
-`;
-
-const InfoProfileImgBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 50px;
-`;
-
-const InfoProfileImg = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%; // 이미지를 원형으로 만듭니다.
-`;
-
-const InfoProfileNameEmailBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  box-sizing: border-box;
-`;
-
-const InfoProfileName = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const InfoProfileEmail = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-`;
-
 function Information({
   onPopupPassword,
   profileEmail,

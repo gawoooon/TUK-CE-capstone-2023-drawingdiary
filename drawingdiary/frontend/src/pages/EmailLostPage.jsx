@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 import Background from "../components/Background";
 import LoginBar from "../components/LoginBar";
 import LoginBtn from "../components/LoginBtn";
 
-import { IoMdPerson } from "react-icons/io";
 import { MdPhoneAndroid } from "react-icons/md";
 
 const Body = styled.body`
@@ -29,7 +29,7 @@ const LoginBox = styled.div`
   box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
   box-shadow: 3px 5px 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 30px;
-  padding: 100px 80px;
+  padding: 50px 80px 30px 80px;
   box-sizing: border-box;
 `;
 
@@ -76,12 +76,58 @@ const LoginBtn2 = styled(Link)`
   text-decoration: none;
 `;
 
+const MessageContainer = styled.div`
+  width: 100%;
+  margin: 0 0 3px 20px;
+  min-height: 20px;
+  padding: 10px 0px 0px 250px;
+`;
+
+const Message = styled.p`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 12px;
+  font-weight: bold;
+  color: ${(props) => props.color};
+`;
+
 function EmailLostPage() {
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    navigate("/calendar");
+  // const handleLogin = () => {
+  //   // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
+  //   navigate("/login");
+  // };
+
+  const accessToken = localStorage.getItem("accessToken");
+  const [verifyMessage, setVerifyMessage] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const handlePhonePost = async (event) => {
+    event.preventDefault();
+    console.log("phoneNumber: ", phoneNumber);
+    if (phoneNumber !== "") {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/sms/codesending",
+          { phoneNumber: phoneNumber },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        console.log("response", response);
+        setVerifyMessage(true);
+      } catch (error) {
+        console.log("error: ", error);
+        setVerifyMessage(false);
+      }
+    } else {
+      alert("핸드폰 번호를 입력해주세요!");
+    }
   };
 
   return (
@@ -95,29 +141,34 @@ function EmailLostPage() {
           </Content>
           <PasswdBox>
             <LeftBox>
-              <LoginBar icon={<MdPhoneAndroid />} text="전화번호"></LoginBar>
+              <LoginBar
+                icon={<MdPhoneAndroid />}
+                text="전화번호"
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              ></LoginBar>
             </LeftBox>
             <RightBox>
-              <LoginBtn text="전송" onClick={handleLogin} />
+              <LoginBtn text="전송" onClick={handlePhonePost} />
             </RightBox>
           </PasswdBox>
+          <MessageContainer>
+            {verifyMessage === true && (
+              <Message color="green">인증번호를 전송하였습니다.</Message>
+            )}
+            {verifyMessage === false && (
+              <Message color="red">이메일이 일치하지 않습니다.</Message>
+            )}
+          </MessageContainer>
           <PasswdBox>
             <LeftBox>
               <LoginBar text="인증번호 입력"></LoginBar>
             </LeftBox>
             <RightBox>
-              <LoginBtn text="확인" onClick={handleLogin} />
+              <LoginBtn text="확인" />
             </RightBox>
           </PasswdBox>
-          <PasswdBox>
-            <LeftBox>
-              <LoginBar icon={<IoMdPerson />} text="전화번호"></LoginBar>
-            </LeftBox>
-            <RightBox>
-              <LoginBtn text="전송" onClick={handleLogin} />
-            </RightBox>
-          </PasswdBox>
-          <LoginBtn2 to="/calendar">로그인</LoginBtn2>
+
+          <LoginBtn2 to="/login">로그인</LoginBtn2>
         </LoginBox>
       </Body>
     </Background>

@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { RiLock2Fill } from "react-icons/ri";
 import {
   MdOutlinePhoneIphone,
