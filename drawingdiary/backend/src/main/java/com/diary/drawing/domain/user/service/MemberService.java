@@ -9,6 +9,7 @@ import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
+import com.diary.drawing.domain.user.dto.PhoneDTO.responseNewDTO;
 
 public interface MemberService {
     
@@ -16,7 +17,8 @@ public interface MemberService {
     public void joinMemberPersonality(Member member, String personality); //회원가입시 성격 선택
 
     public Optional<Member> findByEmail(String email); //이메일로 멤버 찾기
-    public ResponseEntity<?> findEmailByPhoneNumber(String phoneNumber, String code);
+    public ResponseEntity<?> verifyExistedPhoneNumber(String phoneNumber, String code);
+    public ResponseEntity<responseNewDTO> verifyNewPhoneNumber(String phoneNumber, String code);
 
     public  String getEmailByMemberID(Long memberID);
     public GetMemberDTO getMember(Long memberID);
@@ -28,7 +30,8 @@ public interface MemberService {
     public void updateProfileImage(Member targetMember, String profileimage) throws IOException;
     public ResponseEntity<?> patchMypage(Long memberID, MemberDTO.MemberUpdate memberDTO);
 
-    public String sendSms(String phoneNumber);
+    public String sendSmsNew(String phoneNumber);
+    public String sendSmsExisted(String phoneNumber);
     public ResponseEntity<?> setTempPassword(String email) throws Exception;
 
 }

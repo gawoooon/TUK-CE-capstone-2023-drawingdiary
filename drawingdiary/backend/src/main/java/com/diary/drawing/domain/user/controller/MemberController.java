@@ -2,7 +2,6 @@ package com.diary.drawing.domain.user.controller;
 
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,8 @@ import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
 import com.diary.drawing.domain.user.dto.PersonalityUpdateDTO;
-import com.diary.drawing.domain.user.dto.PhoneRequestDTO;
+import com.diary.drawing.domain.user.dto.PhoneDTO;
+import com.diary.drawing.domain.user.dto.PhoneDTO.responseNewDTO;
 import com.diary.drawing.domain.user.dto.ThemeUpdateDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
@@ -154,30 +154,53 @@ public class MemberController {
     }
 
 
-    /* 문자 인증 코드 보내는 api
+    /* 이미 존재하는 문자 인증 코드 보내는 api
      *  @param String phoneNumber
+     *  200 success
+     *  404 멤버 찾을 수 없음
      */
     @Operation(summary = "문자 인증 코드 생성/전달")
-    @PostMapping("/sms/codesending")
-    public ResponseEntity<String> phoneNumberConfirm(@RequestBody PhoneRequestDTO.codeSendingDTO codeSendingDTO) {
-        try{
-            String code = memberService.sendSms(codeSendingDTO.getPhoneNumber());
-            smsVerificationService.saveVerificationCode(codeSendingDTO.getPhoneNumber(), code);
-            return new ResponseEntity<String>(HttpStatus.OK);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping("/sms/codesending-existed")
+    public ResponseEntity<?> phoneNumberExistedConfirm(@RequestBody PhoneDTO.codeSendingDTO codeSendingDTO) {
+        String code = memberService.sendSmsExisted(codeSendingDTO.getPhoneNumber());
+        smsVerificationService.saveVerificationCode(codeSendingDTO.getPhoneNumber(), code);
+        return ResponseEntity.ok("전송 완료");
+    }
+
+    /* 새로운 문자 인증 코드 보내는 api
+     *  @param String phoneNumber
+     *  200 success
+     *  602 이미 존재하는 전화번호
+     */
+    @Operation(summary = "새로운 문자 인증 코드 생성/전달")
+    @PostMapping("/sms/codesending-new")
+    public ResponseEntity<?> phoneNumberNewConfirm(@RequestBody PhoneDTO.codeSendingDTO codeSendingDTO) {
+        String code = memberService.sendSmsNew(codeSendingDTO.getPhoneNumber());
+        smsVerificationService.saveVerificationCode(codeSendingDTO.getPhoneNumber(), code);
+        return ResponseEntity.ok("전송 완료");
     }
 
     /* 문자 인증 코드 확인하는 api
+     * @Param String phonenumber, String code
+     * return email or error
+     * 200 success
+     * 404 계정찾기 문제
+     * 700 실패
+     */
+    @Operation(summary = "존재하는 문자 인증 코드 확인")
+    @PostMapping("/sms/verify-existed")
+    public ResponseEntity<?> phoneNumberExistedVerify(@RequestBody PhoneDTO.verifyDTO verifyDTO){
+        return memberService.verifyExistedPhoneNumber(verifyDTO.getPhoneNumber(), verifyDTO.getCode());
+    }
+
+    /* 새로운 번호 인증 코드 확인하는 api
      * @Param String email, String code
      * return email or error
      */
-    @Operation(summary = "문자 인증 코드 확인")
-    @PostMapping("/sms/verify")
-    public ResponseEntity<?> phoneNumberVerify(@RequestBody PhoneRequestDTO.verifyDTO verifyDTO){
-        return memberService.findEmailByPhoneNumber(verifyDTO.getPhoneNumber(), verifyDTO.getCode());
+    @Operation(summary = "새로운 번호 문자 인증 코드 확인")
+    @PostMapping("/sms/verify-new")
+    public ResponseEntity<responseNewDTO> phoneNumberNewVerify(@RequestBody PhoneDTO.verifyDTO verifyDTO){
+        return memberService.verifyNewPhoneNumber(verifyDTO.getPhoneNumber(), verifyDTO.getCode());
     }
 
     /*  통계 화면 api

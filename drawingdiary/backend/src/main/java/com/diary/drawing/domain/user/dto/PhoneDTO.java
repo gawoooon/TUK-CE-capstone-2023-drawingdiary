@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
 
-public class PhoneRequestDTO {
+public class PhoneDTO {
 
     @Jacksonized
     @Getter
@@ -26,7 +26,26 @@ public class PhoneRequestDTO {
     public static class verifyDTO {
         private String phoneNumber;
         private String code;
-}
+    }
+
+    @Jacksonized
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class responseNewDTO {
+        private Boolean isVerified;
+    }
+
+    @Jacksonized
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class responseExistedDTO {
+        private Boolean isVerified;
+        private String email;
+    }
 
 }
 

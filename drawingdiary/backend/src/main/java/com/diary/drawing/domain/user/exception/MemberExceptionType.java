@@ -9,6 +9,8 @@ import com.diary.drawing.global.exception.BaseExceptionType;
 public enum MemberExceptionType implements BaseExceptionType {
     //== 회원가입, 로그인 시 ==// [지원 추가 수정]
     ALREADY_EXIST_EMAIL(600, HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."), // OK -> CONFLICT
+    FAIL_PHONE_VERIFIED(700, HttpStatus.NOT_FOUND, "핸드폰 인증에 실패했습니다."),
+    ALREADY_EXIST_PHONENUMBER(602, HttpStatus.CONFLICT, "이미 존재하는 핸드폰 번호입니다."), // OK -> CONFLICT
     WRONG_PASSWORD(601,HttpStatus.UNAUTHORIZED, "비밀번호가 잘못되었습니다."), // OK -> UNAUTHORIZED
     ERROR_GET_MEMBER(404, HttpStatus.NOT_FOUND, "회원 정보를 받아올 수 없습니다."),
     ERROR_UPDATE_PROFILEIMAGE(415, HttpStatus.NOT_FOUND, "프로필 이미지 업로드에 실패했습니다."),
