@@ -4,5 +4,5 @@ public interface EmailService {
     public String sendSimpleMessage(String to)throws Exception;
     public void sendTempPassword(String to, String tempPassword)throws Exception;
     public Boolean verifyEmail(String email, String verifiCode);
-    public boolean saveVerificationCode(String email, String originVerificationCode);
+    public void saveVerificationCode(String email, String originVerificationCode);
 }

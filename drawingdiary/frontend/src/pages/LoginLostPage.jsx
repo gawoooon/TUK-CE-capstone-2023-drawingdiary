@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Background from "../components/Background";
-import LoginBar from "../components/LoginBar";
-import LoginBtn from "../components/LoginBtn";
 
-import { IoMdPerson } from "react-icons/io";
+import { IoIosLock } from "react-icons/io";
+import { MdEmail } from "react-icons/md";
 
 const Body = styled.body`
   display: flex;
@@ -19,91 +18,87 @@ const Body = styled.body`
 
 const LoginBox = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   width: 1000px;
   height: 600px;
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
-  box-shadow: 3px 5px 2px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 30px;
-  padding: 100px 80px 40px 80px;
+  // background-color: rgba(255, 255, 255, 0.2);
+  // box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
+  // box-shadow: 3px 5px 2px 0 rgba(0, 0, 0, 0.2);
+  // border-radius: 30px;
+  padding: 100px 130px;
   box-sizing: border-box;
 `;
 
-const Title = styled.p`
-  font-size: 40px;
-  font-weight: 800;
-  padding-bottom: 10px;
-`;
-
-const Content = styled.p`
-  font-size: 20px;
-  font-weight: 800;
-  padding-top: 1px;
-  color: #989898;
-`;
-
-const PasswdBox = styled.div`
+const ClickButton = styled.button`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 80%;
-  height: 70px;
-  padding-top: 70px;
+  width: 300px;
+  height: 400px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 30px;
+  padding: 50px 80px;
+  box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
 `;
 
-const LeftBox = styled.div`
-  display: flex;
-  width: 80%;
-  height: 100%;
-  padding-right: 30px;
+const Icon = styled.div`
+  padding-bottom: 40px;
+  box-sizing: border-box;
 `;
 
-const RightBox = styled.div`
-  display: flex;
-  width: 20%;
-  height: 100%;
-`;
-
-const LoginBtn2 = styled(Link)`
-  font-size: 30px;
-  font-weight: 800;
-  padding-top: 100px;
-  color: #616161;
-  text-decoration: none;
+const Content = styled.div`
+  font-size: 24px;
+  color: #878787;
+  font-weight: bold;
+  padding-top: 10px;
+  ${ClickButton}:hover & {
+    color: white; /* 버튼에 hover 했을 때 텍스트 색상 변경 */
+  }
 `;
 
 function LoginLostPage() {
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handlePassword = () => {
     // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
-    navigate("/calendar");
+    navigate("/password");
+  };
+
+  const handleEmail = () => {
+    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
+    navigate("/email");
   };
 
   return (
     <Background>
       <Body>
         <LoginBox>
-          <Title>암호 재설정</Title>
-          <Content>
-            계속하려면 계정에서 사용하는 이메일주소 또는 전화번호를 입력하세요.
-          </Content>
-          <Content>
-            전송 버튼을 누르면 아이디/임시 비밀번호가 전송됩니다.
-          </Content>
-          <PasswdBox>
-            <LeftBox>
-              <LoginBar
-                icon={<IoMdPerson />}
-                text="이메일 또는 전화번호"
-              ></LoginBar>
-            </LeftBox>
-            <RightBox>
-              <LoginBtn text="전송" onClick={handleLogin} />
-            </RightBox>
-          </PasswdBox>
-          <LoginBtn2 to="/">로그인</LoginBtn2>
+          <ClickButton onClick={handleEmail}>
+            <Icon>
+              <MdEmail size={52} />
+            </Icon>
+            <Content>아이디</Content>
+            <Content>찾기</Content>
+          </ClickButton>
+          <ClickButton onClick={handlePassword}>
+            <Icon>
+              <IoIosLock size={52} />
+            </Icon>
+            <Content>비밀번호</Content>
+            <Content>찾기</Content>
+          </ClickButton>
         </LoginBox>
       </Body>
     </Background>

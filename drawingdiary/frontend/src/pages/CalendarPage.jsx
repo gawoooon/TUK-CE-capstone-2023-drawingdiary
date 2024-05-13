@@ -389,9 +389,7 @@ function CalendarPage() {
     <Background2>
       <Body>
         <LeftBox leftBoxWidth={leftBoxWidth}>
-          <SideBar
-            isOpen={isOpen}
-          />
+          <SideBar isOpen={isOpen} />
         </LeftBox>
         <CalendarBox>
           <MiddleBox middleBoxWidth={middleBoxWidth}>
