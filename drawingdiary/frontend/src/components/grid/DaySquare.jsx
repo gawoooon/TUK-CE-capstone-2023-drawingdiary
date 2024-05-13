@@ -3,19 +3,46 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../auth/context/AuthContext';
 
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 const GridContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 1400px; 
+  height: 202px;
+`;
+
+const MonthContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  width: 1352px;
+  height: 20px;
+`;
+
+const GridContent = styled.div`
+  display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
-  width: 100%; 
-  height: 150px;
+  width: 1352px;
+  height: 182px;
+`;
+
+const MonthText = styled.text`
+  position: absolute;
+  font-size: 8px;
+  margin-left: ${props => props.offset}px;
 `;
 
 const GridItem = styled.div`
-  width: 16px; 
-  height: 16px; 
-  margin: 2px;
+  width: 18px; 
+  height: 18px; 
+  margin: 4px;
   background-color: ${props => props.color};
-  border-radius: 5px;
+  border-radius: 3px;
   position: relative;
   &:hover div {
     visibility: visible;
@@ -39,7 +66,6 @@ const HoverStyle = styled.div`
 
 const DaySquare = ({ item }) => {
 
-  // data를 불러와 isWrittem이 false이면 흰색, 아니면 다른 색으로 설정해줘야 함.
   const getColor = (item) => {
     switch(item.iswritten) {
       case 0: return '#ebedf0'; 
@@ -48,7 +74,6 @@ const DaySquare = ({ item }) => {
     }
   };
 
-  
   return (
     <GridItem color={getColor(item)}>
       {item.iswritten === 1 && (
@@ -64,34 +89,54 @@ const GrassGraph = () => {
   const { getToken } = useAuth();
   const accessToken = getToken();
   const [grid, setGrid] = useState([]);
+  const [monthPositions, setMonthPositions] = useState([]);
   
-  const fetchGrid = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/statistic', 
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      const isWrittenData = response.data.lawn.data.map(item => ({
-        writtenDate : item.date,
-        iswritten : item.iswritten ? 1 : 0,
-      }));
-      setGrid(isWrittenData);
-    } catch(error) {
-      console.log("error: ", error);
-    }
-  };
 
   useEffect(() => {
+    const fetchGrid = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/statistic', 
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        const isWrittenData = response.data.lawn.data.map(item => ({
+          writtenDate : item.date,
+          iswritten : item.iswritten ? 1 : 0,
+        }));
+        setGrid(isWrittenData);
+
+        const positions = isWrittenData.reduce((acc, item, index) => {
+          const monthIndex = new Date(item.writtenDate).getMonth();
+          if(index === 0 || monthIndex !== new Date(isWrittenData[index - 1].writtenDate).getMonth()) {
+            acc.push({ month: monthNames[monthIndex], position: index, sortKey: monthIndex});
+          }
+          return acc;
+        }, []);
+
+        positions.sort((a, b) => a.sortKey - b.sortKey);
+        setMonthPositions(positions);
+      } catch(error) {
+        console.log("error: ", error);
+      }
+    };
     fetchGrid();
-  }, []);
+    
+  }, [getToken]);
 
   return (
     <GridContainer>
-      {grid.map((item, index) => (
-        <DaySquare key={index} item={item} />
-      ))}
+      <MonthContent>
+        {monthPositions.map((m, index) => (
+          <MonthText key={index} offset={m.position === 0 ? 0 : ((m.position / 7) * 26 - 8)}>{m.month}</MonthText>
+        ))}
+      </MonthContent>
+      <GridContent>
+        {grid.map((item, index) => (
+          <DaySquare key={index} item={item} />
+        ))}
+      </GridContent>
     </GridContainer>
   );
 };

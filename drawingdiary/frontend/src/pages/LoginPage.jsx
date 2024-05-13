@@ -4,7 +4,6 @@ import { useNavigate, Link } from "react-router-dom";
 
 import Background2 from "../components/Background/index2";
 import LoginBar from "../components/LoginBar";
-import LoginBtn from "../components/LoginBtn";
 
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
@@ -28,23 +27,33 @@ const Title = styled.p`
 
 const LoginBox = styled.form`
   display: flex;
-  width: 700px;
-  height: 350px;
+  width: 600px;
+  height: 300px;
   background-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   padding: 70px 80px 40px 80px;
   box-sizing: border-box;
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
-const LeftBox = styled.div`
+const InnerBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  width: 70%;
-  height: 100%;
+  width: 400px;
+  height: 250px
+`;
+
+const BtnBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  height: 50px;
+  width: 100%;
 `;
 
 const JoinBtn = styled(Link)`
@@ -56,23 +65,15 @@ const JoinBtn = styled(Link)`
   text-decoration: none;
 `;
 
-const RightBox = styled.div`
-  width: 30%;
-  height: 100%;
-  padding: 18px 0 88px 55px;
-  box-sizing: border-box;
-`;
-
 const LoginLostBtn = styled(Link)`
-  width: 800px;
-  font-size: 20px;
-  font-weight: 800;
+  width: 100%;
+  height: 30px;
+  font-size: 12px;
+  font-weight: 500;
   color: #090071;
-  text-align: right;
+  text-align: center;
   text-decoration: none;
   padding-top: 18px;
-  margin-right: 100px;
-  font-size: 18px;
 `;
 
 const ErrorMessageContainer = styled.div`
@@ -126,7 +127,7 @@ function LoginPage() {
       <Body>
         <Title>감성 일기</Title>
         <LoginBox>
-          <LeftBox>
+          <InnerBox>
             <LoginBar
               icon={<IoMdPerson size={20} />}
               text="아이디"
@@ -141,15 +142,15 @@ function LoginPage() {
             <ErrorMessageContainer>
               {errorMessage && <ErrorMessage> {errorMessage} </ErrorMessage>}
             </ErrorMessageContainer>
-            <JoinBtn to="/join">회원가입</JoinBtn>
-          </LeftBox>
-          <RightBox>
-            <LoginBtn text="로그인" onClick={handleLogin} />
-          </RightBox>
+            <BtnBox>
+              <JoinBtn to="/login" onClick={handleLogin}>로그인</JoinBtn>
+              <JoinBtn to="/join">회원가입</JoinBtn>
+            </BtnBox>
+            <LoginLostBtn to="/loginlost">
+              아이디·비밀번호를 잃어버리셨나요?{" "}
+            </LoginLostBtn>
+          </InnerBox>
         </LoginBox>
-        <LoginLostBtn to="/loginlost">
-          아이디·비밀번호를 잃어버리셨나요?{" "}
-        </LoginLostBtn>
       </Body>
     </Background2>
   );

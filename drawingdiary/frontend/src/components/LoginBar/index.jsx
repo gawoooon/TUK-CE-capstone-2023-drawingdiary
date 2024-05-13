@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 const Bar = styled.div`
   display: flex;
-  width: 420px;
-  height: 60px;
+  width: 400px;
+  height: 48px;
+  margin: 5px 0;
   background-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
+  border-radius: 10px;
 `;
 
 const IconBox = styled.div`
@@ -31,7 +32,7 @@ const TextBox = styled.input`
   background-color: transparent;
   font-size: 16px;
   font-weight: 800;
-  opacity: 0.5;
+  opacity: 0.7;
 `;
 
 function LoginBar({ icon, text, onChange, type }) {
