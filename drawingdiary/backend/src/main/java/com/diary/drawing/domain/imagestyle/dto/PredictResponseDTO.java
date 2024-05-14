@@ -45,7 +45,7 @@ public class PredictResponseDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @ToString
     public static class test{
-        private List<String> test_styles;
+        private List<String> predicted_styles;
     }
 
 }
