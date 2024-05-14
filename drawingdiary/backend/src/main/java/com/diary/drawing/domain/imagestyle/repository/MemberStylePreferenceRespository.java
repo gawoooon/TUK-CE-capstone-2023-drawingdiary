@@ -20,4 +20,5 @@ public interface MemberStylePreferenceRespository  extends JpaRepository<MemberS
     @Query("SELECT m FROM MemberStylePreference m WHERE m.member = :member AND m.frequency = (SELECT MAX(m2.frequency) FROM MemberStylePreference m2 WHERE m2.member = :member)")
     List<MemberStylePreference> findPreferenceWithMaxFrequency(@Param("member") Member member);
 
+    List<MemberStylePreference> findByMember(Member member);
 }

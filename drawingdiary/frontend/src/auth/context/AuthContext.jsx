@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.get('http://localhost:8080/api/refresh');
       const { accessToken } = res;
-      Cookies.set('accessToken', accessToken, { path: '/'});
+      Cookies.set('accessToken', accessToken, { path: '/' });
       setAuth(prev => ({ ...prev, accessToken }));
       return accessToken;
     } catch(error) {
@@ -45,19 +45,10 @@ export const AuthProvider = ({ children }) => {
   };
   
   useEffect(() => {
-    const interceptor = axios.interceptors.response.use(
-      response => response,
-      async (error) => {
-        if(error.response.status === 401) {
-          alert("로그인이 만료되었습니다.");
-          localStorage.clear();
-          const newAccessToken = await refreshToken();
-          console.log("newAccessToken: ", newAccessToken);
-          console.log("newToken : ");
-          error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-          return axios(error.config);
-        }
-        return Promise.reject(error);
+    const interval = setInterval(() => {
+      if(auth.accessToken) {
+        localStorage.clear();
+        refreshToken();
       }
     )
     return () => {
