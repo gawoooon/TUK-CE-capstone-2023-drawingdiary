@@ -211,7 +211,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       });
       setIsLoading(!isRecommenderLoading);
       const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.name === styleName.trim());
+        return ImageStyleLists.find(style => style.trim() === styleName.trim());
       });
       setRecommendedStyles(updateRecommendedStyles);
     } catch (error) {
@@ -222,7 +222,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       })
       setIsLoading(!isRecommenderLoading);
       const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.name === styleName.trim());
+        return ImageStyleLists.find(style => style.trim() === styleName.trim());
       });
       setRecommendedStyles(updateRecommendedStyles);
     }
@@ -284,7 +284,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
                 key={index}
                 isSelected={selectedButtonStyle === style}
                 onClick={() => handleButtonStyleSelect(style)}>
-                {`${style.name}`}
+                {`${style}`}
               </OptionBtnStyle>
             ))
           )}
@@ -295,7 +295,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
               key={index}
               isSelected={selectedButtonStyle === style}
               onClick={() => handleButtonStyleSelect(style)}>
-                {`${style.name}`}
+                {`${style}`}
             </OptionBtnStyle>
           ))}
         </RightContainer>
