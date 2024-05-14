@@ -42,9 +42,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
-    Cookies.remove('memberID');
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
+    Cookies.remove("memberID");
     localStorage.clear();
     setAuth({ accessToken: null, refreshToken: null, memberID: null });
   };
