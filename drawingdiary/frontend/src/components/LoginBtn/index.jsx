@@ -7,7 +7,10 @@ const jumpAnimation = keyframes`
     100% { transform: translateY(0); }
 `;
 
-const Btn = styled.link`
+const Btn = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
   border: none;
@@ -21,17 +24,21 @@ const Btn = styled.link`
   color: black;
   &:hover {
     animation: ${(props) =>
-    props.animate
-      ? css`
-          ${jumpAnimation} 0.5s ease
-        `
-      : "none"};
+      props.animate
+        ? css`
+            ${jumpAnimation} 0.5s ease
+          `
+        : "none"};
   }
 `;
 
 function LoginBtn({ text, onClick }) {
   const animateLogin = true;
-  return <Btn onClick={onClick} animate={animateLogin}>{text}</Btn>;
+  return (
+    <Btn onClick={onClick} animate={animateLogin}>
+      {text}
+    </Btn>
+  );
 }
 
 export default LoginBtn;
