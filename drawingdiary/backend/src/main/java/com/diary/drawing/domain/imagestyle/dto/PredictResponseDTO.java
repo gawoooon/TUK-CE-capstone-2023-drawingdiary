@@ -39,4 +39,13 @@ public class PredictResponseDTO {
         private List<String> predicted_styles;
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
+    public static class test{
+        private List<String> test_styles;
+    }
+
 }

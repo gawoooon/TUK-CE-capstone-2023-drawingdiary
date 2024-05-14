@@ -24,6 +24,7 @@ import com.diary.drawing.domain.imagestyle.dto.PredictResponseDTO;
 import com.diary.drawing.domain.imagestyle.dto.PredictResponseDTO.back;
 import com.diary.drawing.domain.imagestyle.dto.PredictResponseDTO.early;
 import com.diary.drawing.domain.imagestyle.dto.PredictResponseDTO.history;
+import com.diary.drawing.domain.imagestyle.dto.PredictResponseDTO.test;
 import com.diary.drawing.domain.imagestyle.repository.MemberStylePreferenceRespository;
 import com.diary.drawing.domain.imagestyle.repository.ModelPredictionRepository;
 import com.diary.drawing.domain.user.domain.Member;
@@ -134,11 +135,11 @@ public class PredictStyleService{
     }
 
     /* 그냥 현재 추천 스타일 조회만 */
-    public ResponseEntity<early> getExistPrediction(Long memberID){
+    public ResponseEntity<test> getExistPrediction(Long memberID){
         Member member = validateMemberService.validateMember(memberID);
         ModelPrediction prediction = validatePrediction(memberID);
         List<String> existPrediction = Arrays.asList(prediction.getStyle1(), prediction.getStyle2(), prediction.getStyle3(), prediction.getStyle4(), prediction.getStyle5());
-        return ResponseEntity.ok(new PredictResponseDTO.early(existPrediction));
+        return ResponseEntity.ok(new PredictResponseDTO.test(existPrediction));
     }
 
     /* 특정 사용자의 스타일 선택 현황이 5개 이하인지 확인한다 */
