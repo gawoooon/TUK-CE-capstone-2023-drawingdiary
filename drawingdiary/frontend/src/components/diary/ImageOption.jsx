@@ -183,6 +183,21 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   
   const fetchOptionStyle = async () => {
     try {
+      const fallbackResponse = await axios.post("http://localhost:8080/api/style", {
+        age: userAge,
+        gender: userGender,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+      });
+      setIsLoading(!isRecommenderLoading);
+      console.log("fallback", fallbackResponse);
+      const updateRecommendedStyles = fallbackResponse.data.top_styles.map((styleName) => {
+        return ImageStyleLists.find(style => style === styleName);
+      });
+      setRecommendedStyles(updateRecommendedStyles);
+    } catch (error) {
       const styleResponse = await axios.get("http://localhost:8080/api/test/style", {
         headers: {
           'Authorization': `Bearer ${accessToken}`
@@ -195,23 +210,6 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
         return ImageStyleLists.find(style => style === styleName);
       });
       setRecommendedStyles(updateRecommendedStyles);
-    } catch (error) {
-      if(error.response && error.response.status === 500) {
-        const fallbackResponse = await axios.post("http://localhost:8080/api/style", {
-          age: userAge,
-          gender: userGender,
-        }, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          },
-        });
-        setIsLoading(!isRecommenderLoading);
-        console.log("fallback", fallbackResponse);
-        const updateRecommendedStyles = fallbackResponse.data.top_styles.map((styleName) => {
-          return ImageStyleLists.find(style => style === styleName);
-        });
-        setRecommendedStyles(updateRecommendedStyles);
-      }
     }
   }
 

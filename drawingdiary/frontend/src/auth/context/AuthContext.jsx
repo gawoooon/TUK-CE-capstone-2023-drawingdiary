@@ -12,9 +12,9 @@ export const AuthProvider = ({ children }) => {
   });
 
   const login = (accessToken, refreshToken, memberID) => {
-    Cookies.set('accessToken', accessToken, { expires : 1/48, path: '/' });
-    Cookies.set('refreshToken', refreshToken, { expires : 2, path: '/' });
-    Cookies.set('memberID', memberID, { expires : 2, path: '/' });
+    Cookies.set('accessToken', accessToken, { path: '/' });
+    Cookies.set('refreshToken', refreshToken, { path: '/' });
+    Cookies.set('memberID', memberID, { path: '/' });
     setAuth({ accessToken: accessToken, refreshToken: refreshToken, memberID: memberID });
   };
 
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
         }
       });
       const { accessToken } = res;
-      Cookies.set('accessToken', accessToken, { expires: 1/48});
+      Cookies.set('accessToken', accessToken, { path: '/' });
       setAuth(prev => ({ ...prev, accessToken }));
     } catch(error) {
       console.log("Error refreshing token: ", error);
