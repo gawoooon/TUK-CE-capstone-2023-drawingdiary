@@ -187,7 +187,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
       });
       setIsLoading(!isRecommenderLoading);
       console.log("fallback", fallbackResponse);
-      const updateRecommendedStyles = fallbackResponse.data.top_styles.map((styleName) => {
+      const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
         return ImageStyleLists.find(style => style === styleName);
       });
       setRecommendedStyles(updateRecommendedStyles);
@@ -200,7 +200,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
       setIsLoading(!isRecommenderLoading);
       console.log("styleResponse", styleResponse);
 
-      const updateRecommendedStyles = styleResponse.data.top_styles.map((styleName) => {
+      const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
         return ImageStyleLists.find(style => style === styleName);
       });
       setRecommendedStyles(updateRecommendedStyles);
