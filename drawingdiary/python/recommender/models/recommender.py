@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sklearn.metrics.pairwise import cosine_similarity
 
+app = Flask(__name__)
+CORS(app)
 
 def get_top_styles(age, gender):
     # 데이터 불러오기
@@ -23,8 +25,6 @@ def get_top_styles(age, gender):
 
     return top_styles
 
-app = Flask(__name__)
-CORS(app)
 
 @app.route('/api/get-styles', methods=['POST'])
 def get_member_styles():
@@ -54,12 +54,6 @@ def get_member_styles():
     except Exception as e:
         return jsonify({'error': 'Internal server error'}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5001)
-    
-    
-    
-    
     
 # 이건 추천 시스템
 
@@ -154,8 +148,6 @@ def mapping_stylenames(recommended_styles):
 # print(f"Recommended Styles for member {member_id}: {recommended_styles}")
 # print(f"Recommended Styles for member {member_id}: {recommended_names}")
 
-app = Flask(__name__)
-CORS(app)
 
 @app.route('/api/get-styles-history', methods=['POST'])
 def get_styles_history():
