@@ -10,7 +10,7 @@ import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.section`
   width: 98%;
-  height: 100%;
+  height: 900px;
   margin: auto;
   padding: 10px;
   display: flex;
@@ -29,8 +29,8 @@ const BigText = styled.span`
 `;
 
 const HistoryContainer = styled.section`
-  width: 96%;
-  height: 18%;
+  width: 1500px;
+  height: 202px;
   margin: 10px;
 `;
 
@@ -204,12 +204,12 @@ function StatsPage() {
 
             <StatsContent>
               <Text>{month}월 총 작성</Text>
-              <BigText>{average} 편</BigText>
+              <BigText>{monthData} 편</BigText>
             </StatsContent>
 
             <StatsContent>
               <Text>월 평균 작성</Text>
-              <BigText>{monthData} 편</BigText>
+              <BigText>{average} 편</BigText>
             </StatsContent>
 
             <StatsContent>

@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { RiLock2Fill } from "react-icons/ri";
 import {
   MdOutlinePhoneIphone,
@@ -255,28 +254,25 @@ const LineBox = styled.div`
   height: 15px;
 `;
 
-function Popup({ onClose }) {
+function Popup({ onClose, profileImage, profileName }) {
   const { getToken } = useAuth();
   const accessToken = getToken();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // 프로필
   const [newName, setNewName] = useState("");
-  const [newProfileImage, setNewProfileImage] = useState("__NULL__"); // 업로드한 이미지 상태 추가
-  const setProfileImage = localStorage.getItem("setProfileImage");
+  const [newProfileImage, setNewProfileImage] = useState(null); // 업로드한 이미지 상태 추가
 
   // 문자 인증
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(null);
   const [phoneCertification, setPhoneCertification] = useState("");
-  const [newPhoneNumber, setNewPhoneNumber] = useState(null);
+  // const [newPhoneNumber, setNewPhoneNumber] = useState(null);
   const [verifySnsMessage, setVerifySnsMessage] = useState(null);
-  const [errorSnsMessage, setErrorSnsMessage] = useState(null);
 
   // 이메일 인증
   const [newEmail, setNewEmail] = useState(null);
   const [certification, setCheckCertification] = useState("");
   const [verifyMessage, setVerifyMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   // 비밀번호
   const [oldPassword, setOldPassword] = useState(null);
@@ -330,9 +326,8 @@ function Popup({ onClose }) {
 
   // setName을 placeholder로 보내기
   useEffect(() => {
-    const storedName = localStorage.getItem("setName");
-    if (storedName) {
-      setNewName(storedName);
+    if (profileName) {
+      setNewName(profileName);
     }
   }, []);
 
@@ -343,7 +338,7 @@ function Popup({ onClose }) {
     if (phoneNumber !== "") {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/sms/codesending",
+          "http://localhost:8080/api/sms/codesending-new",
           { phoneNumber: phoneNumber },
           {
             headers: {
@@ -365,7 +360,7 @@ function Popup({ onClose }) {
     if (phoneCertification !== "") {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/sms/verify",
+          "http://localhost:8080/api/sms/verify-new",
           {
             phoneNumber: phoneNumber,
             code: phoneCertification,
@@ -418,8 +413,10 @@ function Popup({ onClose }) {
         console.log("response: ", response);
         if (response.data === true) {
           setVerifyMessage(true);
+          console.log("true");
         } else {
           setVerifyMessage(false);
+          console.log("false");
         }
       } catch (error) {
         console.log("error: ", error);
@@ -471,15 +468,13 @@ function Popup({ onClose }) {
 
   // 마이페이지 수정
   const handleEditClick = async () => {
-    console.log(newName, newPhoneNumber);
-
     // 변경사항이 없을 경우
     if (
       !passwordMatch &&
       !verifyMessage &&
       !verifySnsMessage &&
-      newName === localStorage.getItem("setName") &&
-      newProfileImage === setProfileImage
+      newName === profileName &&
+      newProfileImage === profileImage
     ) {
       console.log(passwordMatch);
       alert("수정사항이 없습니다.");
@@ -494,11 +489,17 @@ function Popup({ onClose }) {
     }
 
     console.log(
+      "이름:",
       newName,
+      "비1",
       oldPassword,
-      newEmail,
+      "비2",
       newPassword,
-      newPhoneNumber,
+      "이메일",
+      newEmail,
+      "폰",
+      phoneNumber,
+      "이미지",
       newProfileImage
     );
     try {
@@ -509,7 +510,7 @@ function Popup({ onClose }) {
           oldPassword: oldPassword,
           newPassword: newPassword,
           newEmail: newEmail,
-          newPhoneNumber: newPhoneNumber,
+          newPhoneNumber: phoneNumber,
           newProfileImage: newProfileImage,
         },
         {
@@ -520,7 +521,7 @@ function Popup({ onClose }) {
       );
       console.log("response: ", response);
       alert("수정되었습니다!");
-      navigate("/calendar");
+      window.location.reload();
     } catch (error) {
       console.log("error: ", error);
     }
@@ -538,17 +539,17 @@ function Popup({ onClose }) {
         <PopupBody>
           <ProfileTop>
             <ProfileImgBox>
-              {newProfileImage !== "__NULL__" ? (
+              {newProfileImage !== null ? (
                 <ProfileImg
                   src={`data:image/png;base64, ${newProfileImage}`}
                   alt="새 프로필 이미지"
                 />
               ) : (
                 <>
-                  {setProfileImage !== "null" && setProfileImage !== null ? (
-                    <ProfileImg src={setProfileImage} alt="프로필 이미지" />
+                  {profileImage !== "null" && profileImage !== null ? (
+                    <ProfileImg src={profileImage} alt="프로필 이미지" />
                   ) : (
-                    <ProfileImg src="/user.png" alt="기본 이미지" />
+                    <ProfileImg src="/user2.png" alt="기본 이미지" />
                   )}
                 </>
               )}
@@ -575,7 +576,7 @@ function Popup({ onClose }) {
               <PopupLineInput
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="전화번호"
+                placeholder="새로운 전화번호 입력(11자리)"
               />
             </PopupLineInputBox>
             <PopupLineBtn onClick={(e) => sendPhone(e)}>인증</PopupLineBtn>
@@ -599,7 +600,7 @@ function Popup({ onClose }) {
             </PopupLineBtn>
           </PopupLineBox>
 
-          <PopupLineBox>
+          {/* <PopupLineBox>
             <PopupLineIcon></PopupLineIcon>
             <PopupLineInputBox>
               <PopupLineInput
@@ -609,7 +610,7 @@ function Popup({ onClose }) {
               />
             </PopupLineInputBox>
             <PopupLineBtnBox></PopupLineBtnBox>
-          </PopupLineBox>
+          </PopupLineBox> */}
 
           <LineBox />
 

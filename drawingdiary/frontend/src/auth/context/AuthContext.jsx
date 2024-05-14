@@ -20,22 +20,20 @@ export const AuthProvider = ({ children }) => {
 
   const refreshToken = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/refresh', {
-        headers: {
-          'Authorization' : `Bearer: ${auth.accessToken}`
-        }
-      });
+      const res = await axios.get('http://localhost:8080/api/refresh');
       const { accessToken } = res;
       Cookies.set('accessToken', accessToken, { path: '/' });
       setAuth(prev => ({ ...prev, accessToken }));
+      return accessToken;
     } catch(error) {
+      // refresh token도 만료되면 다시 로그인.
       console.log("Error refreshing token: ", error);
+      logout();
     }
   }
 
-  const getToken = () => {
-    const token = Cookies.get("accessToken");
-    return token;
+  const getToken = () => {;
+    return auth.accessToken;
   }
 
   const logout = () => {
@@ -52,8 +50,10 @@ export const AuthProvider = ({ children }) => {
         localStorage.clear();
         refreshToken();
       }
-    }, 1000 * 60 * 28);
-    return () => clearInterval(interval);
+    )
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
   }, [auth.accessToken, auth.refreshToken]);
 
   return (

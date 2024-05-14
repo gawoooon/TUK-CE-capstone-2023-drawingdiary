@@ -14,6 +14,7 @@ public enum authExceptionType implements BaseExceptionType {
     //== 토큰 ==//
     WRONG_REFRESHTOKEN(400, HttpStatus.BAD_REQUEST, "다시 로그인해주세요."),
     WRONG_VALIDATION(600, HttpStatus.BAD_REQUEST, "서비스 문제입니다."),
+    
     EXPIRED_TOKEN(401, HttpStatus.UNAUTHORIZED, "만료된 토큰입니다.");
 
 

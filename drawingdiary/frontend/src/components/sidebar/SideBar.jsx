@@ -95,21 +95,17 @@ const ProfileName = styled.div`
 const SideBar = ({ isOpen}) => {
 
   const [loginState, setLoginState] = useState(false);
-  const [username, setUserName] = useState("로그인을 해주세요.");
 
   const { logout, getToken } = useAuth();
   const accessToken = getToken();
 
-  const setName = localStorage.getItem("setName");
   const setProfileImg = localStorage.getItem("setProfileImage");
 
   useEffect(() => {
     const currentAccessToken = getToken();
     if (currentAccessToken) {
-      setUserName(setName);
       setLoginState(true);
     } else {
-      setUserName("로그인을 해주세요.");
       setLoginState(false);
     }
   }, [accessToken]);
@@ -123,7 +119,6 @@ const SideBar = ({ isOpen}) => {
       }).then(() => {
         logout();
         setLoginState(false);
-        setUserName("로그인을 해주세요.");
         alert("로그아웃 되었습니다!")
       }).catch((error) => {
         console.log(error)
@@ -149,7 +144,7 @@ const SideBar = ({ isOpen}) => {
           <MenuItemText>분석</MenuItemText>
         </MenuItem>
         {loginState ? (
-          <MenuItem to="/" onClick={handleLogout}>
+          <MenuItem to="/login" onClick={handleLogout}>
             <IoMdLogOut size={20} color="#3d3d3d" alt="Logout" />
             <MenuItemText>로그아웃</MenuItemText>
           </MenuItem>
@@ -171,9 +166,9 @@ const SideBar = ({ isOpen}) => {
             alt='edit' />
         )}
         {loginState ? (
-          <ProfileName style={{fontSize:'15px'}}>{username}</ProfileName>
+          <ProfileName style={{fontSize:'15px'}}>{localStorage.getItem('setName')}</ProfileName>
         ) : (
-          <ProfileName style={{fontSize:'12px'}}>{username}</ProfileName>
+          <ProfileName style={{fontSize:'12px'}}>{"로그인을 해주세요."}</ProfileName>
         )}
       </ProfileSection>
     </SideBarStyle>

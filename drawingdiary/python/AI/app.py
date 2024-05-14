@@ -19,10 +19,10 @@ def save_comment():
         diary_text = data.get("diaryText", '')
         print(diary_text)
 
-        prompt = diary_text + " 이 일기로 코멘트를 250자 이내로 작성해줘"
+        prompt = diary_text + " 이 일기로 코멘트를 230자 이내로 작성해줘"
 
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",
             messages=[
                 {"role": "user", "content": prompt}
             ]

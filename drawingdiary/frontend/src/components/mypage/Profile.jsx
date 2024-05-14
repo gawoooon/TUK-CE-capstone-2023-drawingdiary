@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useState } from "react";
 import styled from "styled-components";
 import { TbUserEdit } from "react-icons/tb";
-
-
 const ProfileBox = styled.div`
   width: 40%;
   display: flex;
@@ -35,26 +33,26 @@ const ProfileEmail = styled.div`
   font-size: 15px;
 `;
 
-function Profile() {
-  const setEmail = localStorage.getItem("setEmail");
-  const setName = localStorage.getItem("setName");
-  const setProfileImage = localStorage.getItem("setProfileImage");
+function Profile({ profileImage, profileEmail, profileName }) {
+  console.log(profileEmail);
+
   return (
     <ProfileBox>
-      {setProfileImage !== "null" && setProfileImage !== null ? (
-        <ProfileImg src={setProfileImage} alt="프로필 이미지" />
+      {profileImage !== "null" && profileImage !== null ? (
+        <ProfileImg src={profileImage} alt="프로필 이미지" />
       ) : (
-        <TbUserEdit 
-          size={120} 
-          color='#3d3d3d' 
-          alt='edit' 
+        <TbUserEdit
+          size={120}
+          color="#3d3d3d"
+          alt="edit"
           style={{
-            borderRadius:'50%',
-            marginBottom:'20px',
-          }} />
+            borderRadius: "50%",
+            marginBottom: "20px",
+          }}
+        />
       )}
-      <ProfileName>{setName}</ProfileName>
-      <ProfileEmail>{setEmail}</ProfileEmail>
+      <ProfileName>{profileName}</ProfileName>
+      <ProfileEmail>{profileEmail}</ProfileEmail>
     </ProfileBox>
   );
 }

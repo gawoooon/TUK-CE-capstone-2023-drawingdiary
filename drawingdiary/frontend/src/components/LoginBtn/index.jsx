@@ -7,7 +7,7 @@ const jumpAnimation = keyframes`
     100% { transform: translateY(0); }
 `;
 
-const Btn = styled.button`
+const Btn = styled.link`
   width: 100%;
   height: 100%;
   border: none;
