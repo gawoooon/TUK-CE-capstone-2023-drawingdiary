@@ -143,7 +143,7 @@ function LoginPage() {
               {errorMessage && <ErrorMessage> {errorMessage} </ErrorMessage>}
             </ErrorMessageContainer>
             <BtnBox>
-              <JoinBtn to="/login" onClick={handleLogin}>로그인</JoinBtn>
+              <JoinBtn to="/" onClick={handleLogin}>로그인</JoinBtn>
               <JoinBtn to="/join">회원가입</JoinBtn>
             </BtnBox>
             <LoginLostBtn to="/loginlost">

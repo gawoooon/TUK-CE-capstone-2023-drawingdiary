@@ -81,7 +81,7 @@ public class PredictStyleService{
         // 없으면 생성 및 초기화
         if(prediction == null){
             Member member = validateMemberService.validateMember(memberID);
-            return modelPredictionRepository.save(new ModelPrediction(member, "미니멀", "뮤지컬", "전쟁", "미스터리", "역사"));
+            return modelPredictionRepository.save(new ModelPrediction(member, "미니멀리즘", "복고풍", "펑크", "보헤미안", "고전주의"));
         }
 
         return prediction;

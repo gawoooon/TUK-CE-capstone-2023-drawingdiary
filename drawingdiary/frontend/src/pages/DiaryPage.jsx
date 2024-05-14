@@ -109,7 +109,7 @@ const SaveBtn = styled.button`
 `;
 
 const Area = styled.div`
-    width: 405px;
+    width: 505px;
     height: 400px;
     padding: 0 auto;
     background-color: rgba(255, 255, 255, 0.3);
@@ -180,13 +180,7 @@ function DiaryPage() {
 
       const maxSentimentValue = response.data.document.sentiment;
 
-      if (maxSentimentValue === "positive") {
-        return "따듯한 색감";
-      } else if (maxSentimentValue === "negative") {
-        return "차가운 색감";
-      } else if (maxSentimentValue === "neutral") {
-        return "베이지 색감";
-      }
+      return maxSentimentValue;
     } catch (error) {
       console.error("감정 분석 API 호출 중 오류 발생: ", error);
     }
@@ -238,9 +232,8 @@ function DiaryPage() {
           userGender = 'none'
         };
 
-        const resultDiaryText = `"${diaryText}", 이미지 스타일: ${parentSelectedButtonStyle}, ${SentimentResult}, 주인공: ${userGender}`;
+        const resultDiaryText = `"${diaryText}", 이미지 스타일: ${parentSelectedButtonStyle},감정 : ${SentimentResult}, 주인공: ${userGender}`;
 
-        console.log(resultDiaryText);
 
         if (diaryText !== "") {
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
@@ -308,12 +301,14 @@ function DiaryPage() {
       formattedDate.getMonth() + 1
     )}-${pad(formattedDate.getDate())}`;
 
+    const basicDiaryText = diaryText.split(", location:")[0];
+
     //image post
     if (newImageUrl) {
       const responseDiary = await axios.post(
         "http://localhost:8080/api/diary/add",
         {
-          text: diaryText,
+          text: basicDiaryText,
           weather: weatherState,
           date: dateString,
           albumID: selectedAlbumID,

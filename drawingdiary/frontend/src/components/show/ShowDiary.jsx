@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const WriteArea = styled.textarea`
-    width: 278px;
+    width: 378px;
     height: 350px;
     padding: 10px;
     margin-top: 14px;

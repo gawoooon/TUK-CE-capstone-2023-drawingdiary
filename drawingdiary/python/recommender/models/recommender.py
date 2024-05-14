@@ -79,6 +79,7 @@ def pivot():
     # 3-1. 각 memberID별 frequency 정규화
     history_data['normalized_frequency'] = history_data.apply(
         lambda row: row['frequency'] / total_frequency_by_member[row['memberID']], axis=1)
+    
     # 3-2 유효값 필터링 total_frequency_by_member 값이 5 이하인 member 제거
     valid_members = total_frequency_by_member[total_frequency_by_member > 5].index
     filtered_history_data = history_data[history_data['memberID'].isin(valid_members)]

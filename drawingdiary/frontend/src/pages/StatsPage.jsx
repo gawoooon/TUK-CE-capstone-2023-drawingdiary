@@ -127,7 +127,7 @@ function StatsPage() {
     try {
       const response = await axios.get('http://localhost:8080/api/statistic', {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${accessToken}`,
         }
       });
       setTotalDiary(response.data.lawn.total);

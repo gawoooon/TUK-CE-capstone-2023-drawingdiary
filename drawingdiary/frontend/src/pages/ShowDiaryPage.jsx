@@ -108,7 +108,7 @@ const SaveBtn = styled.button`
 `;
 
 const Area = styled.div`
-    width: 405px;
+    width: 505px;
     height: 400px;
     padding: 0 auto;
     background-color: rgba(255, 255, 255, 0.3);
@@ -190,13 +190,7 @@ function ShowDiaryPage() {
 
       const maxSentimentValue = response.data.document.sentiment;
 
-      if (maxSentimentValue === "positive") {
-        return "따듯한 색감";
-      } else if (maxSentimentValue === "negative") {
-        return "차가운 색감";
-      } else if (maxSentimentValue === "neutral") {
-        return "베이지 색감";
-      }
+      return maxSentimentValue;
     } catch (error) {
       console.error("감정 분석 API 호출 중 오류 발생: ", error);
     }
@@ -234,7 +228,20 @@ function ShowDiaryPage() {
       setIsCommentLoading(true);
       //이미지 api
       try {
-        const resultDiaryText = `${diaryText} ${parentSelectedButtonStyle} 그림체 ${newDiaryText}`;
+        const SentimentResult = await analyzeSentiment();
+
+        const gender = localStorage.getItem('setGender');
+        let userGender = '';
+
+        if(gender === 'M') {
+          userGender = 'Male'
+        } else if(gender === 'F'){
+          userGender = 'Female'
+        } else {
+          userGender = 'none'
+        };
+
+        const resultDiaryText = `"${diaryText}", 이미지 스타일: ${parentSelectedButtonStyle},감정 : ${SentimentResult}, 주인공: ${userGender}`;
 
         if (diaryText !== "") {
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
@@ -360,7 +367,7 @@ function ShowDiaryPage() {
                     onDiaryTextChange={handleDiaryTextChange}
                     showText={diaryText}
                   />
-                  <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '20px', marginTop: '16px'}} />
+                  <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '10px', marginTop: '16px'}} />
                 </Area>
               </LeftMidContent>
               <LeftBottomContent>

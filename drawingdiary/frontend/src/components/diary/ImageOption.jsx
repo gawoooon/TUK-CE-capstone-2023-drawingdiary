@@ -7,11 +7,8 @@ import ImageStyleLists from "./ImageStyleLists";
 import { useAuth } from "../../auth/context/AuthContext";
 
 const Container = styled.div`
-  width: 405px;
+  width: 305px;
   height: 400px;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,15 +28,19 @@ const TopContainer = styled.div`
 
 const Description = styled.div`
   width: 90%;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 `;
 
 const OptionContainer = styled.div`
   width: 95%;
-  height: 250px;
+  height: 300px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 const LeftContainer = styled.div`
@@ -51,15 +52,16 @@ const LeftContainer = styled.div`
 `;
 
 const RightContainer = styled.div`
-  height: 260px;
-  margin: 0 auto;
+  height: 250px;
+  margin-top: 10px;
+  margin-left: 6px;
   display: ${({ display }) => display};
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
   transition: opacity 0.5s ease-in-out;
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   &::-webkit-scrollbar-thumb {
     background-color: #ccc;
@@ -68,12 +70,12 @@ const RightContainer = styled.div`
 `;
 
 const SelectedStyle = styled.div`
-  font-size: 15px;
+  font-size: 12px;
   margin-top: 10px;
 `;
 
 const OptionBtnStyle = styled.button`
-  width: 300px;
+  width: 200px;
   min-height: 36px;
   margin: 5px 0;
   background-color: ${(props) =>
@@ -85,9 +87,9 @@ const OptionBtnStyle = styled.button`
 `;
 
 const TextStyle = styled.div`
-  padding-top: 10px;
-  font-size: 13px;
-  color: #787878;
+  padding-top: 2px;
+  font-size: 12px;
+  color: black;
 `;
 
 const OpenBtn = styled.button`
@@ -111,6 +113,9 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     autoplay: true,
     animationData: imageLoading,
   };
+
+  
+  const [countDiary, setCountDiary] = useState(0);
 
   const [displayLeft, setDisplayLeft] = useState("flex"); // 초기 상태는 'flex'
   const [displayRight, setDisplayRight] = useState("none"); // 초기 상태는 'none'
@@ -158,6 +163,19 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     }
   }, [selectedButtonStyle]);
 
+  const CountDiary = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/statistic', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      });
+      setCountDiary(response.data.lawn.total);
+    } catch(error) {
+      console.log("error");
+    }
+  }
+
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/get-member", {
@@ -193,7 +211,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       });
       setIsLoading(!isRecommenderLoading);
       const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style === styleName);
+        return ImageStyleLists.find(style => style.name === styleName.trim());
       });
       setRecommendedStyles(updateRecommendedStyles);
     } catch (error) {
@@ -204,19 +222,20 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       })
       setIsLoading(!isRecommenderLoading);
       const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style === styleName);
+        return ImageStyleLists.find(style => style.name === styleName.trim());
       });
       setRecommendedStyles(updateRecommendedStyles);
     }
   }
 
   useEffect(() => {
+    CountDiary()
     if(userAge !== 0 || userGender !== "") {
       fetchOptionStyle();
     } else {
       fetchUserInfo();
     }
-  }, [userAge, userGender]);
+  }, [userAge, userGender, countDiary]);
 
   useEffect(() => {
     onOptionSelect(isSelected);
@@ -234,16 +253,23 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
         <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
       </TopContainer>
       <Description>
+      {countDiary < 5 ? (
+        <TextStyle>
+          아래 스타일은 {userName}님과 나이와 성별이 같은 사용자들이 가장 많이 선택한 5가지의 스타일 입니다.
+          스타일을 추천받고 싶다면 일기를 5번 이상 작성하세요.
+        </TextStyle>
+      ) : (
         <TextStyle>
           {userName}님과 비슷한 사용자들이 선택한 스타일입니다. 마음에
-          드시는 옵션이 없으면 더보기를 눌러주세요.
+        드시는 옵션이 없으면 더보기를 눌러주세요.
         </TextStyle>
+      )}
       </Description>
-      <SelectedStyle>
-        선택한 스타일:
-        {storedSelectedStyle !== null ? storedSelectedStyle : "없음"}
-      </SelectedStyle>
       <OptionContainer>
+        <SelectedStyle>
+          선택한 스타일:
+          {storedSelectedStyle !== null ? storedSelectedStyle : "없음"}
+        </SelectedStyle>
         <LeftContainer display={displayLeft}>
           {isLoading ? (
             <Lottie
@@ -258,7 +284,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
                 key={index}
                 isSelected={selectedButtonStyle === style}
                 onClick={() => handleButtonStyleSelect(style)}>
-                {`${style}`}
+                {`${style.name}`}
               </OptionBtnStyle>
             ))
           )}
@@ -269,7 +295,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
               key={index}
               isSelected={selectedButtonStyle === style}
               onClick={() => handleButtonStyleSelect(style)}>
-                {`${style}`}
+                {`${style.name}`}
             </OptionBtnStyle>
           ))}
         </RightContainer>
