@@ -5,10 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.diary.drawing.domain.imagestyle.dto.PredictRequestDTO;
 import com.diary.drawing.domain.imagestyle.service.PredictStyleService;
 import com.diary.drawing.global.jwt.domain.PrincipalDetails;
 
@@ -28,8 +26,8 @@ public class ImageStyleController {
      */
     @Operation(summary = "스타일 추천 받아서 저장, 추천 리스트 반환까지")
     @PostMapping("/api/style")
-    public ResponseEntity<?> PredictStyle(@RequestBody PredictRequestDTO predictRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        return predictStyleService.saveStyles(predictRequestDTO, principalDetails.getMemberID());
+    public ResponseEntity<?> PredictStyle(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        return predictStyleService.saveStyles(principalDetails.getMemberID());
     }
 
     @Operation(summary = "스타일 이미 저장된 내용 조회만")
