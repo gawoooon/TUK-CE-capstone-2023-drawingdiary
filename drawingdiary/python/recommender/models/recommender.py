@@ -141,7 +141,7 @@ def mapping_stylenames(recommended_styles):
     recommended_names = [style_dict[style] for style in recommended_styles if style in style_dict]
     return recommended_names
 
-# 테스트 코드
+# # 테스트 코드
 # member_id = 1
 # recommended_styles = recommend_styles(member_id, pivot_table, similarity_df)  # id 리스트
 # recommended_names = mapping_stylenames(recommended_styles, styles_data) # 이름 리스트
@@ -174,6 +174,6 @@ def get_styles_history():
         app.logger.error(f"Error processing request: {str(e)}")  # 오류 로깅
         return jsonify({'error': 'Internal server error'}), 500
     
-    
+
 if __name__ == '__main__':
     app.run(debug=False, port=5001)

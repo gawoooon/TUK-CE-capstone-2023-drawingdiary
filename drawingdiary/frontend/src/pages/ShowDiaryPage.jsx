@@ -105,6 +105,7 @@ const SaveBtn = styled.button`
   border-radius: 5px;
   font-size: 15px;
   background-color: white;
+  cursor: pointer;
 `;
 
 const Area = styled.div`
@@ -223,7 +224,6 @@ function ShowDiaryPage() {
 
     if (parentSelectedButtonStyle) {
       setCreateBtn(true);
-
       setIsImageLoading(true);
       setIsCommentLoading(true);
       //이미지 api
@@ -312,34 +312,39 @@ function ShowDiaryPage() {
 
     //image post
     if (newImageUrl) {
+      console.log("parentSelectedButtonStyle: ", parentSelectedButtonStyle);
       // 일기 수정
-      const responseDiary = await axios.put(
-        `http://localhost:8080/api/diary/${dateString}`,
-        {
-          text: diaryText,
-          weather: weatherState,
-          date: dateString,
-          albumID: selectedAlbumID,
-          styleName: parentSelectedButtonStyle,
-          imageFile: newImageUrl,
-          confidence: {
-            positive: positiveValue,
-            negative: negativeValue,
-            neutral: neutralValue,
+      try {
+        const responseDiary = await axios.put(
+          `http://localhost:8080/api/diary/${dateString}`,
+          {
+            text: diaryText,
+            weather: weatherState,
+            date: dateString,
+            albumID: selectedAlbumID,
+            styleName: parentSelectedButtonStyle,
+            imageFile: newImageUrl,
+            confidence: {
+              positive: positiveValue,
+              negative: negativeValue,
+              neutral: neutralValue,
+            },
+            comment: commentText,
           },
-          comment: commentText,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        if (responseDiary.status === 200) {
+          alert("일기가 생성되었어요!");
+          navigate("/");
+        } else {
+          console.error("일기 전송 실패:", responseDiary.status);
         }
-      );
-      if (responseDiary.status === 200) {
-        alert("일기가 생성되었어요!");
-        navigate("/");
-      } else {
-        console.error("일기 전송 실패:", responseDiary.status);
+      } catch(error) {
+        console.log("error : ", error);
       }
     } else {
       alert("이미지를 먼저 생성해주세요!");

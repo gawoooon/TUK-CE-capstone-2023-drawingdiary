@@ -51,8 +51,8 @@ const ShowAIComment = ({ text, isLoading }) => {
                     <Lottie
                         isClickToPauseDisabled
                         options={LoadingOptions}
-                        height={300}
-                        width={300}
+                        height={100}
+                        width={100}
                     />
                 ) : text ? (
                     <Comment>{text}</Comment>

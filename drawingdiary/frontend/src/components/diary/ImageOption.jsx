@@ -267,16 +267,15 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       </Description>
       <OptionContainer>
         <SelectedStyle>
-          선택한 스타일:
-          {storedSelectedStyle !== null ? storedSelectedStyle : "없음"}
+          선택한 스타일: {storedSelectedStyle !== null ? storedSelectedStyle : "없음"}
         </SelectedStyle>
         <LeftContainer display={displayLeft}>
           {isLoading ? (
             <Lottie
               isClickToPauseDisabled={true}
               options={LoadingOptions}
-              height={280}
-              width={280}
+              height={150}
+              width={150}
             />
           ) : (
             recommendedStyles.map((style, index) => (

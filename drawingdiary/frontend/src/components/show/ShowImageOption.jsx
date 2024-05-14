@@ -135,7 +135,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
 
   const { getToken } = useAuth();
   const accessToken = getToken();
-
+  
   // '더보기'/'닫기' 버튼 클릭 핸들러
   const handleOpen = () => {
     if (displayLeft === "flex") {
@@ -150,11 +150,18 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
   };
 
   const handleButtonStyleSelect = (option) => {
+    console.log("option : " , option);
     setSelectedButtonStyle(option);
     setIsSelected(true);
     setStoredSelectedStyle(option);
     onOptionSelect(true, option);
   };
+
+  useEffect(() => {
+    if (selectedButtonStyle !== null) {
+      setStoredSelectedStyle(selectedButtonStyle);
+    }
+  }, [selectedButtonStyle]);
 
   const CountDiary = async () => {
     try {
@@ -204,7 +211,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
       });
       setIsLoading(!isRecommenderLoading);
       const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.name === styleName.trim());
+        return ImageStyleLists.find(style => style.trim() === styleName.trim());
       });
       setRecommendedStyles(updateRecommendedStyles);
     } catch (error) {
@@ -215,7 +222,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
       })
       setIsLoading(!isRecommenderLoading);
       const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.name === styleName.trim());
+        return ImageStyleLists.find(style => style.trim() === styleName.trim());
       });
       setRecommendedStyles(updateRecommendedStyles);
     }
@@ -264,14 +271,19 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
           </SelectedStyle>
           <LeftContainer display={displayLeft}>
             {isLoading ? (
-              <Lottie isClickToPauseDisabled={true} options={LoadingOptions} height={280} width={280} />
+              <Lottie 
+                isClickToPauseDisabled={true} 
+                options={LoadingOptions} 
+                height={150} 
+                width={150} 
+                />
               ) : (
                 recommendedStyles.map((style, index) => (
                   <OptionBtnStyle 
                     key={index} 
                     isSelected={selectedButtonStyle === style} 
                     onClick={() => handleButtonStyleSelect(style)}>
-                    {`${style.name}`}
+                    {`${style}`}
                   </OptionBtnStyle>
               ))
             )}
@@ -282,7 +294,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
                 key={index}
                 isSelected={selectedButtonStyle === style}
                 onClick={() => handleButtonStyleSelect(style)}>
-                  {`${style.name}`}
+                  {`${style}`}
               </OptionBtnStyle>
             ))}
         </RightContainer>

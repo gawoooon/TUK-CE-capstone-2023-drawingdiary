@@ -135,7 +135,7 @@ const Weather = ({ date, onWeatherStateChange }) => {
         setLoading(false);
       }
     );
-  }, [date, getWeather]);
+  }, [date]);
 
   return (
     <WeatherContainer>
@@ -151,7 +151,7 @@ const Weather = ({ date, onWeatherStateChange }) => {
             {weather.state === 'mist' && <RiMistLine size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
             {weather.state === 'clearsky' && <IoSunnyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
             {weather.state === 'fewclouds' && <TiWeatherPartlySunny size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weather.state === 'clouds' && <BsClouds size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {(weather.state === 'clouds' || weather.state === 'scatteredclouds') && <BsClouds size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
           </>
         )}
       </WeatherContent>

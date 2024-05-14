@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const WriteArea = styled.textarea`
@@ -65,6 +65,7 @@ const EditDiary = ({ onDiaryTextChange }) => {
     const [season, setSeason] = useState('');
     const [weather, setWeather] = useState('');
 
+    
     const updateDiaryText = () => {
         const details = [];
         if (location) details.push(`location: ${location}`);
@@ -75,14 +76,16 @@ const EditDiary = ({ onDiaryTextChange }) => {
         onDiaryTextChange(formattedText);
     };
 
+    useEffect(() => {
+        updateDiaryText();
+    }, [location, season, weather]);
+    
     const handleDiaryTextChange = (e) => {
         setBasicText(e.target.value);
-        updateDiaryText(); 
     };
 
     const handleChange = (setter) => (e) => {
         setter(e.target.value);
-        updateDiaryText(); 
     };
 
     return (
@@ -91,7 +94,7 @@ const EditDiary = ({ onDiaryTextChange }) => {
                 value={basicText}
                 placeholder="30자 이상 작성해주세요."
                 onChange={handleDiaryTextChange}
-                onBlur={updateDiaryText}  // Update when focus is lost
+                onBlur={updateDiaryText}
             />
 
             <DetailsContainer>

@@ -68,7 +68,7 @@ const ShowWeather = ({ date, weatherState }) => {
             {weatherState === 'mist' && <RiMistLine size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
             {weatherState === 'clearsky' && <IoSunnyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
             {weatherState === 'fewclouds' && <TiWeatherPartlySunny size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weatherState === 'clouds' && <BsClouds size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {(weatherState === 'clouds' || weatherState === 'scatteredclouds') && <BsClouds size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
           </>
       </WeatherContent>
       <DateText>{date ? formatDate(date) : "날짜 정보 없음"}</DateText>

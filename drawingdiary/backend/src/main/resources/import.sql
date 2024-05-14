@@ -29,7 +29,9 @@ INSERT INTO ImageStyle (styleName) VALUES
     ('팝아트'),
     ('젠더뉴트럴'),
     ('하이테크'),
-    ('노마드');
+    ('노마드'),
+    ('수채화'),
+    ('인상주의');
 
 
 
