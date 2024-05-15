@@ -249,7 +249,7 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   return (
     <Container>
       <TopContainer>
-        <h4>스타일 옵션 선택</h4>
+        <h4>스타일 선택</h4>
         <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
       </TopContainer>
       <Description>
