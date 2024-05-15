@@ -4,15 +4,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-app.logger.setLevel(logging.INFO)  # 로깅 레벨 설정
 
 # history 기반으로 사용자 추천
 # 예시값 memberID는 1부터 155까지 존재하며, 실제 실행시 MemberStylePreference를 일정 주기로 csv 형태로 넣어줘야함
 # pivot 테이블과 similarity_df 코사인 유사도 미리 저장해놓으면 효과적일듯
 
 # 파일 경로 설정
-styles_file_path = '/app/data/styles.csv'
-history_file_path = '/app/data/history_set.csv'
+styles_file_path = r'python\recommender\models\data\styles.csv'
+history_file_path = r'python\recommender\models\data\history_set.csv'
 
 def pivot():
     # 1. CSV 파일 읽기
@@ -32,28 +31,42 @@ def pivot():
     print(filtered_history_data.head()) # 체크
 
     # pivot_table 생성
-    pivot_table = filtered_history_data.pivot(index='memberID', columns='styleID', values='normalized_frequency').fillna(0)
-    print(pivot_table) # 체크
-    return pivot_table
+    rating_matrix = filtered_history_data.pivot_table(index='memberID', columns='styleID', values='normalized_frequency')
+    rating_matrix = rating_matrix.fillna(0)
+    print(rating_matrix) # 체크
+    return rating_matrix
 
-def similarity_df(pivot_table):
-# 모든 멤버 사이의 코사인 유사도를 계산한다
-    similarity_matrix = cosine_similarity(pivot_table)
-    similarity_df = pd.DataFrame(similarity_matrix, index=pivot_table.index, columns=pivot_table.index)
-    return similarity_df
+# 빠른 실행을 위해 모든 멤버 사이의 코사인 유사도를 계산해 저장하고자 했으나 반대로 느려짐.
+# 따라서 find_similar_members에 기능 추가
+# def similarity_df(matrix, k=5):
+#     similarity_matrix = cosine_similarity(matrix)
+#     similarity_df = pd.DataFrame(similarity_matrix, index=matrix.index, columns=matrix.index)
+#     return similarity_df
 
 # 가장 비슷한 member 5명 찾기
-def find_similar_members(member_id, matrix, top_n=5):
+def find_similar_members(member_id, matrix, k=5):
+    
     if member_id not in matrix.index:
         return []
-    sim_scores = matrix.loc[member_id]
-    sim_scores = sim_scores.sort_values(ascending=False)
-    top_members = sim_scores.iloc[1:top_n+1].index.tolist()
-    return top_members
+
+    # 현재 유저에 대한 정보를 추출
+    member_vector = matrix.loc[[member_id]]
+    
+    # 다른 모든 유저와의 유사도 계산
+    other_users = matrix.drop(member_id)
+    similarities = cosine_similarity(member_vector, other_users)[0]
+    
+    # 유사도를 데이터 프레임으로 변환하여 인덱스와 함께 저장
+    similarity_series = pd.Series(similarities, index=other_users.index)
+    
+    # 가장 유사한 사용자들의 인덱스를 내림차순으로 정렬하고 상위 k명 선택
+    top_users = similarity_series.sort_values(ascending=False).head(k).index.tolist()
+    
+    return top_users
 
 # 스타일 추천하기 5개
-def recommend_styles(member_id, pivot, matrix, top_n=5):
-    similar_members = find_similar_members(member_id, matrix)
+def recommend_styles(member_id, pivot, top_n=5):
+    similar_members = find_similar_members(member_id, pivot)
     # 비슷한 멤버에게서 스타일 리스트 뽑기
     recommended_styles = pivot.loc[similar_members].sum().sort_values(ascending=False)  #내림차순정렬
     # 멤버의 빈도수 높은 스타일 5개 뽑기
@@ -87,40 +100,40 @@ def mapping_stylenames(recommended_styles):
     return recommended_names
 
 # 테스트 코드
-# member_id = 1
-# recommended_styles = recommend_styles(member_id, pivot_table, similarity_df)  # id 리스트
-# recommended_names = mapping_stylenames(recommended_styles, styles_data) # 이름 리스트
+member_id = 200
+pivot_table = pivot()
+# similarity_df = similarity_df(pivot_table)
+recommended_styles = recommend_styles(member_id, pivot_table)
+recommended_names = mapping_stylenames(recommended_styles)
 
-# print(f"Recommended Styles for member {member_id}: {recommended_styles}")
-# print(f"Recommended Styles for member {member_id}: {recommended_names}")
+print(f"Recommended Styles for member {member_id}: {recommended_styles}")
+print(f"Recommended Styles for member {member_id}: {recommended_names}")
 
-app = Flask(__name__)
-CORS(app)
+# app = Flask(__name__)
+# CORS(app)
 
-@app.route('/api/get-styles-history', methods=['POST'])
-def get_styles_history():
-    try:
-        data = request.get_json()
-        member_id = int(data['member_id'])  # 데이터 타입 확인 및 변환
-        app.logger.info(f"Received member_id: {member_id}")  # 로그에 member_id 기록
+# @app.route('/api/get-styles-history', methods=['POST'])
+# def get_styles_history():
+#     try:
+#         data = request.get_json()
+#         member_id = int(data['member_id'])  # 데이터 타입 확인 및 변환
+#         app.logger.info(f"Received member_id: {member_id}")  # 로그에 member_id 기록
 
-        pivot_table = pivot()
+#         pivot_table = pivot()
         
-        # 오류처리
-        if member_id not in pivot_table.index:
-            app.logger.error(f"Member ID {member_id} not found in pivot table.")
-            return jsonify({'error': 'Member ID not found'}), 404
+#         # 오류처리
+#         if member_id not in pivot_table.index:
+#             app.logger.error(f"Member ID {member_id} not found in pivot table.")
+#             return jsonify({'error': 'Member ID not found'}), 404
         
-        similarity_df = similarity_df(pivot_table)
-        recommended_styles = recommend_styles(member_id, pivot_table, similarity_df)
-        recommended_names = mapping_stylenames(recommended_styles)
+#         similarity_df = similarity_df(pivot_table)
+#         recommended_styles = recommend_styles(member_id, pivot_table, similarity_df)
+#         recommended_names = mapping_stylenames(recommended_styles)
 
-        return jsonify({'recommended_styles': recommended_names})
+#         return jsonify({'recommended_styles': recommended_names})
     
-    except Exception as e:
-        app.logger.error(f"Error processing request: {str(e)}")  # 오류 로깅
-        return jsonify({'error': 'Internal server error'}), 500
+#     except Exception as e:
+#         app.logger.error(f"Error processing request: {str(e)}")  # 오류 로깅
+#         return jsonify({'error': 'Internal server error'}), 500
     
     
-if __name__ == '__main__':
-    app.run(debug=False, port=5001)

@@ -58,7 +58,7 @@ def get_member_styles():
 # 이건 추천 시스템
 
 # history 기반으로 사용자 추천
-# 예시값 memberID는 1부터 155까지 존재하며, 실제 실행시 MemberStylePreference를 일정 주기로 csv 형태로 넣어줘야함
+# 예시값 memberID는 1부터 750까지 존재하며, 실제 실행시 MemberStylePreference를 일정 주기로 csv 형태로 넣어줘야함
 # pivot 테이블과 similarity_df 코사인 유사도 미리 저장해놓으면 효과적일듯
 
 # 파일 경로 설정
@@ -73,42 +73,47 @@ def pivot():
 
     # 2. memberID별 총 frequency 계산
     total_frequency_by_member = history_data.groupby('memberID')['frequency'].sum()
-    # print(total_frequency_by_member.head(5)) # 체크
+    print(total_frequency_by_member.head(5)) # 체크
 
     # 3. 전처리 (normalized_frequency, 유효값 필터링)
     # 3-1. 각 memberID별 frequency 정규화
     history_data['normalized_frequency'] = history_data.apply(
         lambda row: row['frequency'] / total_frequency_by_member[row['memberID']], axis=1)
-    
     # 3-2 유효값 필터링 total_frequency_by_member 값이 5 이하인 member 제거
     valid_members = total_frequency_by_member[total_frequency_by_member > 5].index
     filtered_history_data = history_data[history_data['memberID'].isin(valid_members)]
-    # print(filtered_history_data.head()) # 체크
+    print(filtered_history_data.head()) # 체크
 
     # pivot_table 생성
-    pivot_table = filtered_history_data.pivot(index='memberID', columns='styleID', values='normalized_frequency').fillna(0)
-    # print(pivot_table) # 체크
-    return pivot_table
-
-def get_similarity_df(pivot_table):
-# 모든 멤버 사이의 코사인 유사도를 계산한다
-    similarity_matrix = cosine_similarity(pivot_table)
-    similarity_df = pd.DataFrame(similarity_matrix, index=pivot_table.index, columns=pivot_table.index)
-    return similarity_df
+    rating_matrix = filtered_history_data.pivot_table(index='memberID', columns='styleID', values='normalized_frequency')
+    rating_matrix = rating_matrix.fillna(0)
+    print(rating_matrix) # 체크
+    return rating_matrix
 
 # 가장 비슷한 member 5명 찾기
-def find_similar_members(member_id, matrix, top_n=5):
+def find_similar_members(member_id, matrix, k=5):
+    
     if member_id not in matrix.index:
         return []
-    sim_scores = matrix.loc[member_id]
-    sim_scores = sim_scores.sort_values(ascending=False)
-    top_members = sim_scores.iloc[1:top_n+1].index.tolist()
-    return top_members
+
+    # 현재 유저에 대한 정보를 추출
+    member_vector = matrix.loc[[member_id]]
+    
+    # 다른 모든 유저와의 유사도 계산
+    other_users = matrix.drop(member_id)
+    similarities = cosine_similarity(member_vector, other_users)[0]
+    
+    # 유사도를 데이터 프레임으로 변환하여 인덱스와 함께 저장
+    similarity_series = pd.Series(similarities, index=other_users.index)
+    
+    # 가장 유사한 사용자들의 인덱스를 내림차순으로 정렬하고 상위 k명 선택
+    top_users = similarity_series.sort_values(ascending=False).head(k).index.tolist()
+    
+    return top_users
 
 # 스타일 추천하기 5개
-def recommend_styles(member_id, pivot, matrix, top_n=5):
-    global similarity_df  # 전역 변수로 선언
-    similar_members = find_similar_members(member_id, matrix)
+def recommend_styles(member_id, pivot, top_n=5):
+    similar_members = find_similar_members(member_id, pivot)
     # 비슷한 멤버에게서 스타일 리스트 뽑기
     recommended_styles = pivot.loc[similar_members].sum().sort_values(ascending=False)  #내림차순정렬
     # 멤버의 빈도수 높은 스타일 5개 뽑기
@@ -134,20 +139,12 @@ def recommend_styles(member_id, pivot, matrix, top_n=5):
     return recommendations
 
 def mapping_stylenames(recommended_styles):
-    # 이름과 id 딕셔너리로 매핑
     styles_data = pd.read_csv(styles_file_path)
+    # 이름과 id 딕셔너리로 매핑
     style_dict = dict(zip(styles_data['styleID'], styles_data['styleName']))
     # 딕셔너리로 찾아서 추천 이름에 추가
     recommended_names = [style_dict[style] for style in recommended_styles if style in style_dict]
     return recommended_names
-
-# # 테스트 코드
-# member_id = 1
-# recommended_styles = recommend_styles(member_id, pivot_table, similarity_df)  # id 리스트
-# recommended_names = mapping_stylenames(recommended_styles, styles_data) # 이름 리스트
-
-# print(f"Recommended Styles for member {member_id}: {recommended_styles}")
-# print(f"Recommended Styles for member {member_id}: {recommended_names}")
 
 
 @app.route('/api/get-styles-history', methods=['POST'])
@@ -164,8 +161,7 @@ def get_styles_history():
             app.logger.error(f"Member ID {member_id} not found in pivot table.")
             return jsonify({'error': 'Member ID not found'}), 404
         
-        similarity_df = get_similarity_df(pivot_table)
-        recommended_styles = recommend_styles(member_id, pivot_table, similarity_df)
+        recommended_styles = recommend_styles(member_id, pivot_table)
         recommended_names = mapping_stylenames(recommended_styles)
 
         return jsonify({'recommended_styles': recommended_names})
