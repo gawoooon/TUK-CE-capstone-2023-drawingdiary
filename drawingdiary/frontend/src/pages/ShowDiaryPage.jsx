@@ -109,14 +109,14 @@ const SaveBtn = styled.button`
 `;
 
 const Area = styled.div`
-    width: 505px;
-    height: 400px;
-    padding: 0 auto;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    margin: 10px;
+  width: 505px;
+  height: 400px;
+  padding: 0 auto;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  margin: 10px;
 `;
 
 function ShowDiaryPage() {
@@ -136,7 +136,8 @@ function ShowDiaryPage() {
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState(diaryData.diaryText);
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =useState(true);
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
+    useState(true);
 
   // 날짜, 날씨
   const [weatherState, setWeatherState] = useState("Unknown");
@@ -221,7 +222,6 @@ function ShowDiaryPage() {
 
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
-
     if (parentSelectedButtonStyle) {
       setCreateBtn(true);
       setIsImageLoading(true);
@@ -230,16 +230,16 @@ function ShowDiaryPage() {
       try {
         const SentimentResult = await analyzeSentiment();
 
-        const gender = localStorage.getItem('setGender');
-        let userGender = '';
+        const gender = localStorage.getItem("setGender");
+        let userGender = "";
 
-        if(gender === 'M') {
-          userGender = 'Male'
-        } else if(gender === 'F'){
-          userGender = 'Female'
+        if (gender === "M") {
+          userGender = "Male";
+        } else if (gender === "F") {
+          userGender = "Female";
         } else {
-          userGender = 'none'
-        };
+          userGender = "none";
+        }
 
         const resultDiaryText = `"${diaryText}", 이미지 스타일: ${parentSelectedButtonStyle},감정 : ${SentimentResult}, 주인공: ${userGender}`;
 
@@ -298,7 +298,6 @@ function ShowDiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-
     // 날짜 데이터
     const formattedDate = new Date(date.currentYear, date.month - 1, date.day);
 
@@ -343,7 +342,7 @@ function ShowDiaryPage() {
         } else {
           console.error("일기 전송 실패:", responseDiary.status);
         }
-      } catch(error) {
+      } catch (error) {
         console.log("error : ", error);
       }
     } else {
@@ -372,7 +371,16 @@ function ShowDiaryPage() {
                     onDiaryTextChange={handleDiaryTextChange}
                     showText={diaryText}
                   />
-                  <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '10px', marginTop: '16px'}} />
+                  <IoIosSend
+                    size={28}
+                    color="rgba(106, 156, 253, 0.8)"
+                    onClick={handleCreate}
+                    style={{
+                      cursor: "pointer",
+                      marginLeft: "10px",
+                      marginTop: "16px",
+                    }}
+                  />
                 </Area>
               </LeftMidContent>
               <LeftBottomContent>
@@ -395,7 +403,11 @@ function ShowDiaryPage() {
               <RightTopContent>
                 <SaveBtn onClick={handleSave}>
                   저장하기
-                  <FaRegCheckCircle size={18} color="#3d3d3d" style={{marginLeft: '10px'}} />
+                  <FaRegCheckCircle
+                    size={18}
+                    color="#3d3d3d"
+                    style={{ marginLeft: "10px" }}
+                  />
                 </SaveBtn>
               </RightTopContent>
               <RightMidContent>

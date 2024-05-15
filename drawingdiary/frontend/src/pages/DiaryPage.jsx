@@ -109,14 +109,14 @@ const SaveBtn = styled.button`
 `;
 
 const Area = styled.div`
-    width: 505px;
-    height: 400px;
-    padding: 0 auto;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    margin: 10px;
+  width: 505px;
+  height: 400px;
+  padding: 0 auto;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  margin: 10px;
 `;
 
 function DiaryPage() {
@@ -133,7 +133,8 @@ function DiaryPage() {
   // image
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState("");
-  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] = useState(false);
+  const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
+    useState(false);
 
   // 날짜, 날씨
   const location = useLocation();
@@ -194,8 +195,7 @@ function DiaryPage() {
     }
   };
 
-  useEffect(() => {
-  }, [parentSelectedButtonStyle]);
+  useEffect(() => {}, [parentSelectedButtonStyle]);
 
   // Sentiment에 텍스트 전달
   const handleDiaryTextChange = (newText) => {
@@ -211,7 +211,6 @@ function DiaryPage() {
 
   // 생성 버튼 클릭 핸들러
   const handleCreate = async () => {
-
     if (parentSelectedButtonStyle) {
       setCreateBtn(true);
       setIsImageLoading(true);
@@ -221,19 +220,18 @@ function DiaryPage() {
         // 감정 분석 결과를 받아오기
         const SentimentResult = await analyzeSentiment();
 
-        const gender = localStorage.getItem('setGender');
-        let userGender = '';
+        const gender = localStorage.getItem("setGender");
+        let userGender = "";
 
-        if(gender === 'M') {
-          userGender = 'Male'
-        } else if(gender === 'F'){
-          userGender = 'Female'
+        if (gender === "M") {
+          userGender = "Male";
+        } else if (gender === "F") {
+          userGender = "Female";
         } else {
-          userGender = 'none'
-        };
+          userGender = "none";
+        }
 
         const resultDiaryText = `"${diaryText}", 이미지 스타일: ${parentSelectedButtonStyle},감정 : ${SentimentResult}, 주인공: ${userGender}`;
-
 
         if (diaryText !== "") {
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
@@ -289,7 +287,6 @@ function DiaryPage() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-
     // 날짜 데이터
     const formattedDate = new Date(date.currentYear, date.month - 1, date.day);
 
@@ -358,16 +355,25 @@ function DiaryPage() {
                 />
                 <Area>
                   <EditDiary onDiaryTextChange={handleDiaryTextChange} />
-                  <IoIosSend size={28} color="rgba(106, 156, 253, 0.8)" onClick={handleCreate} style={{cursor: 'pointer', marginLeft: '10px', marginTop: '16px'}} />
+                  <IoIosSend
+                    size={28}
+                    color="rgba(106, 156, 253, 0.8)"
+                    onClick={handleCreate}
+                    style={{
+                      cursor: "pointer",
+                      marginLeft: "10px",
+                      marginTop: "16px",
+                    }}
+                  />
                 </Area>
               </LeftMidContent>
               <LeftBottomContent>
                 <RightBottomContent>
                   <AIComment text={commentText} isLoading={isCommentLoading} />
                   <Sentiment
-                      positiveValue={positiveValue}
-                      negativeValue={negativeValue}
-                      neutralValue={neutralValue}
+                    positiveValue={positiveValue}
+                    negativeValue={negativeValue}
+                    neutralValue={neutralValue}
                   />
                 </RightBottomContent>
               </LeftBottomContent>
@@ -378,7 +384,11 @@ function DiaryPage() {
               <RightTopContent>
                 <SaveBtn onClick={handleSave}>
                   저장하기
-                  <FaRegCheckCircle size={18} color="#3d3d3d" style={{marginLeft: '10px'}} />
+                  <FaRegCheckCircle
+                    size={18}
+                    color="#3d3d3d"
+                    style={{ marginLeft: "10px" }}
+                  />
                 </SaveBtn>
               </RightTopContent>
               <RightMidContent>

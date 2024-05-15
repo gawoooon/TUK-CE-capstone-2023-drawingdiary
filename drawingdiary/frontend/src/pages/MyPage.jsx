@@ -68,6 +68,7 @@ function MyPage() {
   const [profileEmail, setProfileEmail] = useState(null);
   const [profileName, setProfileName] = useState(null);
   const [profileBirth, setProfileBirth] = useState(null);
+  const [profilePhone, setProfilePhone] = useState(null);
 
   // 팝업 창을 토글하는 함수
   const passwordPopup = () => {
@@ -95,6 +96,14 @@ function MyPage() {
         setProfileName(response.data.name);
         setProfileEmail(response.data.email);
         setProfileBirth(response.data.birth);
+
+        if (response.data.phoneNumber === null) {
+          setProfilePhone("전화번호를 등록해주세요");
+          console.log("전화번호를 등록해주세요");
+        } else {
+          setProfilePhone(response.data.phoneNumber);
+          console.log(profilePhone);
+        }
 
         // 프로필 이미지가 있는 경우에만 설정
         if (response.data.profileImage) {
@@ -134,6 +143,7 @@ function MyPage() {
                   profileBirth={profileBirth}
                   profileEmail={profileEmail}
                   profileName={profileName}
+                  profilePhone={profilePhone}
                 />
               </MyPageBottomBox>
             </MyPageBox>
