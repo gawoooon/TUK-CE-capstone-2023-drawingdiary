@@ -221,7 +221,7 @@ function EmailLostPage() {
               {verifyEmail === true && (
                 <Message color="#989898">
                   <>
-                    회원님의 인증번호는{"   "}
+                    회원님의 이메일은{"   "}
                     <span style={{ color: "green" }}>[ {newEmail} ] </span>
                     {"   "} 입니다.
                   </>

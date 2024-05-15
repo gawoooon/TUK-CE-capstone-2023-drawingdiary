@@ -50,7 +50,18 @@ function Information({
   profileEmail,
   profileName,
   profileBirth,
+  profilePhone,
 }) {
+  // 전화번호를 ###-####-#### 형식으로 변경하는 함수
+  const formatPhoneNumber = (phoneNumber) => {
+    // 전화번호 형식 변환
+    const formattedNumber = phoneNumber.replace(
+      /(\d{3})(\d{4})(\d{4})/,
+      "$1-$2-$3"
+    );
+    return formattedNumber;
+  };
+
   return (
     <InfoBox>
       <InfoTop>
@@ -61,7 +72,7 @@ function Information({
         <Line icon={IoMdPerson} text={profileName} hasBorder={true} />
         <Line
           icon={MdOutlinePhoneIphone}
-          text="010-0000-0000"
+          text={formatPhoneNumber(profilePhone)}
           hasBorder={true}
         />
         <Line icon={MdEmail} text={profileEmail} hasBorder={true} />
