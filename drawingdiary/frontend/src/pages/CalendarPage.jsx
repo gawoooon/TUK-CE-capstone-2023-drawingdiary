@@ -354,6 +354,12 @@ function CalendarPage() {
     }
   };
 
+  useEffect(() => {
+    if(accessToken === null) {
+      localStorage.clear(); // 토큰이 널 값이면 로컬 스토리지 초가화
+    }
+  }, [accessToken]);
+
   // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
     if (selectedDate) {

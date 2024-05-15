@@ -107,7 +107,6 @@ function LoginPage() {
         password,
       })
       .then((response) => {
-        console.log("refresh token: ", response.data.refreshToken);
         login(response.data.accessToken, response.data.refreshToken, response.data.memberID);
         navigate("/");
       })
