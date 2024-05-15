@@ -54,6 +54,7 @@ function Information({
 }) {
   // 전화번호를 ###-####-#### 형식으로 변경하는 함수
   const formatPhoneNumber = (phoneNumber) => {
+    if (phoneNumber === null) return "전화번호를 등록해주세요";
     // 전화번호 형식 변환
     const formattedNumber = phoneNumber.replace(
       /(\d{3})(\d{4})(\d{4})/,
