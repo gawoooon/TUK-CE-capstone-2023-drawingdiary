@@ -214,7 +214,7 @@ function StatsPage() {
 
             <StatsContent>
               <Text>선호 스타일</Text>
-              <BigText>{style} 스타일</BigText>
+              <BigText>{style}</BigText>
             </StatsContent>
           </StatsContainer>
 

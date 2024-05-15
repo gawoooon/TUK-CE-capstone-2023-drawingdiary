@@ -19,10 +19,12 @@ const Body = styled.body`
   height: 100%;
 `;
 
-const Title = styled.p`
+const Title = styled(Link)`
   font-size: 40px;
   font-weight: 800;
   padding-bottom: 30px;
+  text-decoration: none;
+  color: black;
 `;
 
 const LoginBox = styled.form`
@@ -125,7 +127,7 @@ function LoginPage() {
   return (
     <Background2>
       <Body>
-        <Title>감성 일기</Title>
+        <Title to='/'>감성 일기</Title>
         <LoginBox>
           <InnerBox>
             <LoginBar

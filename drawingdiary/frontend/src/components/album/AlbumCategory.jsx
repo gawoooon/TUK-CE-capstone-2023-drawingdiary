@@ -8,7 +8,7 @@ const CategoryStyle = styled.select`
   width: 95px;
   height: 36px;
   margin: 10px 10px 10px 20px;
-  padding-left: 25px;
+  padding-left: 6px;
   font-size: 15px;
   border: none;
   outline: none;

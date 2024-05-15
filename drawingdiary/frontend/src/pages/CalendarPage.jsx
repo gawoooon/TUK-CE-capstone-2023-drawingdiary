@@ -417,7 +417,7 @@ function CalendarPage() {
                       <DateBox>
                         {isSelectedMonth}월 {isSelectedDay}일
                       </DateBox>
-                      <EditBtn onClick={handleEdit}>편집</EditBtn>
+                      <EditBtn onClick={handleEdit}>수정</EditBtn>
                     </TopBox>
                     <TrueComponentMidBox>
                       <ImageBox src={imageUrl} />
