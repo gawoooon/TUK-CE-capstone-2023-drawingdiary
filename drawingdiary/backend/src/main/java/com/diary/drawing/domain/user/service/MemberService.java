@@ -24,7 +24,7 @@ public interface MemberService {
     public GetMemberDTO getMember(Long memberID);
     public ResponseEntity<?> updateTheme (Long memberID, int newTheme);
 
-    public boolean validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO);
+    public ResponseEntity<?> validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO);
 
     public void updatePassword(Member targetMember, String oldpassword, String newpassword);
     public void updateProfileImage(Member targetMember, String profileimage) throws IOException;

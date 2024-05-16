@@ -113,12 +113,15 @@ public class MemberServiceImpl implements MemberService{
         return ResponseEntity.ok("테마 변경이 완료되었습니다.");
     }
     @Override
-    public boolean validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO){
+    public ResponseEntity<?> validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO){
         Member targetMember = validateMemberService.validateMember(memberID);
         if(!bCryptPasswordEncoder.matches(passwordDTO.getOldPassword(), targetMember.getPassword())){
             throw new MemberResponseException(MemberExceptionType.WRONG_PASSWORD);
         }
-        else {return true;}
+        else {
+            boolean isValidated = true;
+            return ResponseEntity.ok(true);
+        }
 
     }
 
