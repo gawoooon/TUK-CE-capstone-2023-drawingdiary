@@ -9,17 +9,20 @@ import { LineChart, Line, Tooltip } from "recharts";
 import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.section`
-  width: 98%;
-  height: 900px;
+  width: 100%;
+  height: 100%;
   margin: auto;
   padding: 10px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Text = styled.span`
   margin: 10px;
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 500;
 `;
 
 const BigText = styled.span`
@@ -191,41 +194,35 @@ function StatsPage() {
   }, []);
 
   return (
-    <div>
-      <Background2>
-        <Container>
-          <NavBar />
-          <div style={{marginTop: '40px'}}></div>
-          <Text>{year}년에는 일기를 {totalDairy}편 썼어요!</Text>
-          <HistoryContainer>
-            <GrassGraph/>
-          </HistoryContainer>
-          <StatsContainer>
-
-            <StatsContent>
-              <Text>{month}월 총 작성</Text>
-              <BigText>{monthData} 편</BigText>
-            </StatsContent>
-
-            <StatsContent>
-              <Text>월 평균 작성</Text>
-              <BigText>{average} 편</BigText>
-            </StatsContent>
-
-            <StatsContent>
-              <Text>선호 스타일</Text>
-              <BigText>{style}</BigText>
-            </StatsContent>
-          </StatsContainer>
-
-          <Text>{month}월 {startDay} ~ {endDay}일 감정분석 기록</Text>
-          <SentimentContainer>
-            <RenderLineChat />
-            <GraphValue />
-          </SentimentContainer>
-        </Container>
-      </Background2>
-    </div>
+    <Background2>
+      <Container>
+        <NavBar />
+        <div style={{marginTop: '40px'}}></div>
+        <Text>{year}년에는 일기를 {totalDairy}편 썼어요!</Text>
+        <HistoryContainer>
+          <GrassGraph/>
+        </HistoryContainer>
+        <StatsContainer>
+          <StatsContent>
+            <Text>{month}월 총 작성</Text>
+            <BigText>{monthData} 편</BigText>
+          </StatsContent>
+          <StatsContent>
+            <Text>월 평균 작성</Text>
+            <BigText>{average} 편</BigText>
+          </StatsContent>
+          <StatsContent>
+            <Text>선호 스타일</Text>
+            <BigText>{style}</BigText>
+          </StatsContent>
+        </StatsContainer>
+        <Text>{month}월 {startDay} ~ {endDay}일 감정분석 기록</Text>
+        <SentimentContainer>
+          <RenderLineChat />
+          <GraphValue />
+        </SentimentContainer>
+      </Container>
+    </Background2>
   );
 }
 

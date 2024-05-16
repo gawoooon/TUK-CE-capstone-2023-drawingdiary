@@ -9,14 +9,14 @@ import { CgTrash } from "react-icons/cg";
 
 const Container = styled.section`
     width: 95%;
-    height: 90%;
+    height: 100%;
     margin: auto;
 `;
 
 const AlbumContainer = styled.div`
     width: 100%;
     height: 246px;
-    padding: 10px;
+    padding: 2px;
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 10px;
 `;
@@ -28,10 +28,10 @@ const ScrollSection = styled.div`
     overflow-x: auto;
     overflow-y: hidden;
     &::-webkit-scrollbar {
-        height: 3px;
+        height: 5px;
     }
     &::-webkit-scrollbar-thumb {
-        background-color: #ccc;
+        background-color: #808080;
         border-radius: 4px;
     }
 `;
@@ -74,7 +74,7 @@ const DateText = styled.div`
 const AlbumHeaders = styled.div`
     width: 100%;
     height: 30px;
-    margin-top: 20px;
+    margin: 10px 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
