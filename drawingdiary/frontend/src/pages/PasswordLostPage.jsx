@@ -156,7 +156,7 @@ function PasswordLostPage() {
               계속하려면 계정에서 사용하는 이메일주소를 입력하세요.
             </Content>
             <Content>
-              전송 버튼을 누르면 헤당 이메일로 임시 비밀번호가 전송됩니다.
+              전송 버튼을 누르면 해당 이메일로 임시 비밀번호가 전송됩니다.
             </Content>
             <PasswdBox>
               <LeftBox>
