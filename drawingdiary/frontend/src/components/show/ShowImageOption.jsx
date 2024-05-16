@@ -107,7 +107,11 @@ const OpenBtn = styled.button`
   }
 `;
 
-const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption }) => {
+const ShowImageOption = ({
+  onOptionSelect,
+  isRecommenderLoading,
+  selectedOption,
+}) => {
   const LoadingOptions = {
     loop: true,
     autoplay: true,
@@ -135,7 +139,7 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
 
   const { getToken } = useAuth();
   const accessToken = getToken();
-  
+
   // '더보기'/'닫기' 버튼 클릭 핸들러
   const handleOpen = () => {
     if (displayLeft === "flex") {
@@ -150,11 +154,11 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
   };
 
   const handleButtonStyleSelect = (option) => {
-    console.log("option : " , option);
+    console.log("option : ", option);
     setSelectedButtonStyle(option);
     setIsSelected(true);
     setStoredSelectedStyle(option);
-    onOptionSelect(true, option);
+    onOptionSelect(option);
   };
 
   useEffect(() => {
@@ -165,16 +169,16 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
 
   const CountDiary = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/statistic', {
+      const response = await axios.get("http://localhost:8080/api/statistic", {
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       setCountDiary(response.data.lawn.total);
-    } catch(error) {
+    } catch (error) {
       console.log("error");
     }
-  }
+  };
 
   const fetchUserInfo = async () => {
     try {
@@ -193,44 +197,57 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
 
       setUserGender(genderChar);
       setUserName(response.data.name);
-      
-    } catch(error) {
+    } catch (error) {
       console.log("error: ", error);
     }
   };
 
   const fetchOptionStyle = async () => {
     try {
-      const fallbackResponse = await axios.post("http://localhost:8080/api/style", {
-        age: userAge,
-        gender: userGender,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
+      const fallbackResponse = await axios.post(
+        "http://localhost:8080/api/style",
+        {
+          age: userAge,
+          gender: userGender,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       setIsLoading(!isRecommenderLoading);
-      const updateRecommendedStyles = fallbackResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.trim() === styleName.trim());
-      });
+      const updateRecommendedStyles =
+        fallbackResponse.data.predicted_styles.map((styleName) => {
+          return ImageStyleLists.find(
+            (style) => style.trim() === styleName.trim()
+          );
+        });
       setRecommendedStyles(updateRecommendedStyles);
     } catch (error) {
-      const styleResponse = await axios.get("http://localhost:8080/api/test/style", {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-      })
+      const styleResponse = await axios.get(
+        "http://localhost:8080/api/test/style",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       setIsLoading(!isRecommenderLoading);
-      const updateRecommendedStyles = styleResponse.data.predicted_styles.map((styleName) => {
-        return ImageStyleLists.find(style => style.trim() === styleName.trim());
-      });
+      const updateRecommendedStyles = styleResponse.data.predicted_styles.map(
+        (styleName) => {
+          return ImageStyleLists.find(
+            (style) => style.trim() === styleName.trim()
+          );
+        }
+      );
       setRecommendedStyles(updateRecommendedStyles);
     }
-  }
+  };
 
   useEffect(() => {
-    CountDiary()
-    if(userAge !== 0 || userGender !== "") {
+    CountDiary();
+    if (userAge !== 0 || userGender !== "") {
       fetchOptionStyle();
     } else {
       fetchUserInfo();
@@ -241,62 +258,68 @@ const ShowImageOption = ({ onOptionSelect, isRecommenderLoading, selectedOption 
     onOptionSelect(isSelected);
 
     const filterNonDuplicateStyles = ImageStyleLists.filter(
-      style => !recommendedStyles.map(rStyle => rStyle).includes(style)
+      (style) => !recommendedStyles.map((rStyle) => rStyle).includes(style)
     );
     setOtherStyles(filterNonDuplicateStyles);
   }, [isSelected, onOptionSelect, recommendedStyles]);
 
   return (
-      <Container>
-        <TopContainer>
-          <h4>스타일 선택</h4>
-          <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
-        </TopContainer> 
-        <Description>
-          {countDiary < 5 ? (
-            <TextStyle>
-              아래 스타일은 {userName}님과 나이와 성별이 같은 사용자들이 가장 많이 선택한 5가지의 스타일 입니다.
-              스타일을 추천받고 싶다면 일기를 5번 이상 작성하세요.
-            </TextStyle>
+    <Container>
+      <TopContainer>
+        <h4>스타일 선택</h4>
+        <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
+      </TopContainer>
+      <Description>
+        {countDiary < 5 ? (
+          <TextStyle>
+            아래 스타일은 {userName}님과 나이와 성별이 같은 사용자들이 가장 많이
+            선택한 5가지의 스타일 입니다. 스타일을 추천받고 싶다면 일기를 5번
+            이상 작성하세요.
+          </TextStyle>
+        ) : (
+          <TextStyle>
+            {userName}님과 비슷한 사용자들이 선택한 스타일입니다. 마음에 드시는
+            옵션이 없으면 더보기를 눌러주세요.
+          </TextStyle>
+        )}
+      </Description>
+      <OptionContainer>
+        <SelectedStyle>
+          선택한 스타일:{" "}
+          {selectedButtonStyle !== null
+            ? selectedButtonStyle
+            : `${selectedOption}`}
+        </SelectedStyle>
+        <LeftContainer display={displayLeft}>
+          {isLoading ? (
+            <Lottie
+              isClickToPauseDisabled={true}
+              options={LoadingOptions}
+              height={150}
+              width={150}
+            />
           ) : (
-            <TextStyle>
-              {userName}님과 비슷한 사용자들이 선택한 스타일입니다. 마음에
-            드시는 옵션이 없으면 더보기를 눌러주세요.
-            </TextStyle>
-          )}
-        </Description>
-        <OptionContainer>
-          <SelectedStyle>
-            선택한 스타일: {selectedButtonStyle !== null ? selectedButtonStyle : `${selectedOption}`}
-          </SelectedStyle>
-          <LeftContainer display={displayLeft}>
-            {isLoading ? (
-              <Lottie 
-                isClickToPauseDisabled={true} 
-                options={LoadingOptions} 
-                height={150} 
-                width={150} 
-                />
-              ) : (
-                recommendedStyles.map((style, index) => (
-                  <OptionBtnStyle 
-                    key={index} 
-                    isSelected={selectedButtonStyle === style} 
-                    onClick={() => handleButtonStyleSelect(style)}>
-                    {`${style}`}
-                  </OptionBtnStyle>
-              ))
-            )}
-          </LeftContainer>
-          <RightContainer display={displayRight}>
-            {otherStyles.map((style, index) => (
+            recommendedStyles.map((style, index) => (
               <OptionBtnStyle
                 key={index}
                 isSelected={selectedButtonStyle === style}
-                onClick={() => handleButtonStyleSelect(style)}>
-                  {`${style}`}
+                onClick={() => handleButtonStyleSelect(style)}
+              >
+                {`${style}`}
               </OptionBtnStyle>
-            ))}
+            ))
+          )}
+        </LeftContainer>
+        <RightContainer display={displayRight}>
+          {otherStyles.map((style, index) => (
+            <OptionBtnStyle
+              key={index}
+              isSelected={selectedButtonStyle === style}
+              onClick={() => handleButtonStyleSelect(style)}
+            >
+              {`${style}`}
+            </OptionBtnStyle>
+          ))}
         </RightContainer>
       </OptionContainer>
     </Container>

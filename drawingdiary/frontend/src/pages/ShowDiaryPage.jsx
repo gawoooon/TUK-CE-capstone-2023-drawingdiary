@@ -137,7 +137,7 @@ function ShowDiaryPage() {
   const [newImageUrl, setNewImageUrl] = useState("");
   const [diaryText, setDiaryText] = useState(diaryData.diaryText);
   const [parentSelectedButtonStyle, setParentSelectedButtonStyle] =
-    useState(true);
+    useState("");
 
   // 날짜, 날씨
   const [weatherState, setWeatherState] = useState("Unknown");
@@ -162,11 +162,13 @@ function ShowDiaryPage() {
     setWeatherState(diaryData.weather);
     setDiaryText(diaryData.diaryText);
     setNewImageUrl(diaryData.image);
-    setStyle(diaryData.style);
+    setParentSelectedButtonStyle(diaryData.style);
+    console.log("선택1", parentSelectedButtonStyle);
     setCommentText(diaryData.comment);
     setPositiveValue(diaryData.sentiment.positive);
     setNegativeValue(diaryData.sentiment.negative);
     setNeutralValue(diaryData.sentiment.neutral);
+    setStyle(diaryData.style);
   };
 
   // 앨범 상태를 업데이트하는 함수
@@ -198,11 +200,10 @@ function ShowDiaryPage() {
     }
   };
 
-  const handleOptionSelect = (isSelected, selectedButtonStyle) => {
-    setIsOptionSelected(isSelected);
-    if (selectedButtonStyle === undefined && isSelected === true) {
-    } else {
+  const handleOptionSelect = (selectedButtonStyle) => {
+    if (typeof selectedButtonStyle === "string") {
       setParentSelectedButtonStyle(selectedButtonStyle);
+      console.log("선택2", selectedButtonStyle);
     }
   };
 
