@@ -27,6 +27,7 @@ const GridContent = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  align-items: center;
   width: 1352px;
   height: 182px;
 `;

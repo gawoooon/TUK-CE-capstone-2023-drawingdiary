@@ -27,7 +27,7 @@ const AlbumContainer = styled.section`
     width: 5px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #ccc;
+    background-color: #808080;
     border-radius: 4px;
   }
 `;
