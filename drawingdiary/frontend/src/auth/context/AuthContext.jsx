@@ -6,33 +6,33 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
-    accessToken: Cookies.get('accessToken') || null,
-    refreshToken: Cookies.get('refreshToken') || null,
-    memberID: Cookies.get('memberID') || null
+    accessToken: Cookies.get("accessToken") || null,
+    refreshToken: Cookies.get("refreshToken") || null,
+    memberID: Cookies.get("memberID") || null,
   });
 
   const login = (accessToken, refreshToken, memberID) => {
     localStorage.clear();
-    Cookies.set('accessToken', accessToken, { path: '/' });
-    Cookies.set('refreshToken', refreshToken, { path: '/' });
-    Cookies.set('memberID', memberID, { path: '/' });
+    Cookies.set("accessToken", accessToken, { path: "/" });
+    Cookies.set("refreshToken", refreshToken, { path: "/" });
+    Cookies.set("memberID", memberID, { path: "/" });
     setAuth({ accessToken, refreshToken, memberID });
   };
 
   const refreshToken = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/refresh', {
+      const res = await axios.get("http://localhost:8080/api/refresh", {
         headers: {
-          'Authorization': `Bearer ${auth.refreshToken}`
-        }
+          Authorization: `Bearer ${auth.refreshToken}`,
+        },
       });
-      const accessToken = res;
-      Cookies.set('accessToken', accessToken, { path: '/' });
-      setAuth(prev => ({ ...prev, accessToken }));
+      const accessToken = res.data.accessToken; // 수정된 부분
+      Cookies.set("accessToken", accessToken, { path: "/" });
+      setAuth((prev) => ({ ...prev, accessToken }));
       return accessToken;
     } catch (error) {
       console.log("Error refreshing token: ", error);
-      alert("로그인이 만료되었습니다!")
+      alert("로그인이 만료되었습니다!");
       logout();
     }
   };
@@ -51,12 +51,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
-      response => response,
+      (response) => response,
       async (error) => {
         if (error.response.status === 401 && !error.config._retry) {
           error.config._retry = true;
           const newAccessToken = await refreshToken();
-          login(newAccessToken, newAccessToken, auth.memberID);
+          login(newAccessToken, auth.refreshToken, auth.memberID); // 수정된 부분
           return axios(error.config);
         }
         return Promise.reject(error);
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, [auth.accessToken, auth.refreshToken]);
+  }, [auth.accessToken, auth.refreshToken, auth.memberID]); // 수정된 부분
 
   return (
     <AuthContext.Provider value={{ ...auth, login, logout, getToken }}>

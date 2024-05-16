@@ -97,12 +97,13 @@ function MyPage() {
         setProfileEmail(response.data.email);
         setProfileBirth(response.data.birth);
 
+        console.log(accessToken);
         if (response.data.phoneNumber === null) {
           setProfilePhone("전화번호를 등록해주세요");
           console.log("전화번호를 등록해주세요");
         } else {
           setProfilePhone(response.data.phoneNumber);
-          console.log(profilePhone);
+     
         }
 
         // 프로필 이미지가 있는 경우에만 설정
@@ -110,7 +111,7 @@ function MyPage() {
           setProfileImage(response.data.profileImage);
         }
 
-        console.log(profileImage);
+  
       } catch (error) {
         console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
       }
