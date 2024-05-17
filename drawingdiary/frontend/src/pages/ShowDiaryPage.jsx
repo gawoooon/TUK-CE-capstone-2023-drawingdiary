@@ -313,6 +313,7 @@ function ShowDiaryPage() {
     //image post
     if (newImageUrl) {
       console.log("parentSelectedButtonStyle: ", parentSelectedButtonStyle);
+      console.log("text",diaryText,"weather",weatherState,"date",dateString, "album",selectedAlbumID,"stylename",parentSelectedButtonStyle,"imagefile",newImageUrl,"confidence",positiveValue,"commit",commentText )
       // 일기 수정
       try {
         const responseDiary = await axios.put(
