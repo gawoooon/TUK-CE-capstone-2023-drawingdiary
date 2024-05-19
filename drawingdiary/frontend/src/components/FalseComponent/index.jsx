@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/context/AuthContext";
@@ -50,7 +51,6 @@ function FalseComponent({ currentYear, month, day, selectedDate }) {
   const { memberID } = useAuth();
 
   const handleAdd = () => {
-    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
     const formattedDate = format(selectedDate, "yyyyMMdd");
     navigate(`/diary/${memberID}/${formattedDate}`, {
       state: { date: { currentYear, month, day } },
@@ -63,7 +63,6 @@ function FalseComponent({ currentYear, month, day, selectedDate }) {
         {month}월 {day}일
       </TopBox>
       <MiddleBox>일기를 작성하세요.</MiddleBox>
-
       <AddBtn onClick={handleAdd}>추가하기</AddBtn>
     </ResultBox>
   );

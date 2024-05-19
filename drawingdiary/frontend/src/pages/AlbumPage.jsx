@@ -5,19 +5,25 @@ import Button from "../components/button/Button";
 import { useState } from "react";
 import AddCategory from "../components/album/AddCategory";
 import { CategoryProvider } from "../components/album/CategoryList";
-import Background2 from "../components/Background/index2";
 
-const Container = styled.section`
+const Container = styled.body`
   width: 100%;
+  height: 100vh;
+  margin-right: 120px;
+  display: flex;
+  flex-direction: row;
+  `;
+
+const RightSection = styled.section`
+  width: 80vw;
   height: 100%;
-  padding: 10px;
   display: flex;
   flex-direction: column;
 `;
 
 const AlbumContainer = styled.section`
   width: 100%;
-  height: 90%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -69,23 +75,23 @@ const AlbumPage = () => {
 
   return (
     <CategoryProvider>
-      <Background2>
         <Container>
           <NavBar/>
-          <AlbumContainer>
-            <AlbumBox  onErrorMessage={handleErrorMessage}/>
-          </AlbumContainer>
-          <AddAlbum>
-            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-            <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
-            {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
-            <AddCategory
-              isOpen={isAddCategoryVisible}
-              onclose={handleClose}
-              />
-          </AddAlbum>
+          <RightSection>
+            <AlbumContainer>
+              <AlbumBox  onErrorMessage={handleErrorMessage}/>
+            </AlbumContainer>
+            <AddAlbum>
+              {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+              <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
+              {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
+              <AddCategory
+                isOpen={isAddCategoryVisible}
+                onclose={handleClose}
+                />
+            </AddAlbum>
+          </RightSection>
         </Container>
-      </Background2>
     </CategoryProvider>
   );
 }

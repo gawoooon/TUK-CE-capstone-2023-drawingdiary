@@ -8,10 +8,18 @@ import { format } from 'date-fns';
 import { LineChart, Line, Tooltip } from "recharts";
 import { useAuth } from "../auth/context/AuthContext";
 
-const Container = styled.section`
+const Container = styled.div`
+  width: 100%;
+  height: 100vh;
+  margin: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: row; /* 변경된 부분 */
+`;
+
+const MainContent = styled.section`
   width: 100%;
   height: 100%;
-  margin: auto;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -46,7 +54,7 @@ const StatsContainer = styled.section`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  `;
+`;
 
 const StatsContent = styled.div`
   width: 300px;
@@ -108,7 +116,7 @@ function StatsPage() {
   const date = new Date();
   const year = format(date, "yyyy");
   const month = format(date, "M");
-  const startDay = format(date, "d")
+  const startDay = format(date, "d");
   const endDay = parseInt(startDay) + 7;
 
   const [average, setAverage] = useState(0);
@@ -194,9 +202,9 @@ function StatsPage() {
   }, []);
 
   return (
-    <Background2>
-      <Container>
-        <NavBar />
+    <Container>
+      <NavBar />
+      <MainContent>
         <div style={{marginTop: '40px'}}></div>
         <Text>{year}년에는 일기를 {totalDairy}편 썼어요!</Text>
         <HistoryContainer>
@@ -221,8 +229,8 @@ function StatsPage() {
           <RenderLineChat />
           <GraphValue />
         </SentimentContainer>
-      </Container>
-    </Background2>
+      </MainContent>
+    </Container>
   );
 }
 

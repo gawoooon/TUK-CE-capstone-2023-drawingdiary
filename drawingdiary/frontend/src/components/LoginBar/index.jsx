@@ -6,11 +6,9 @@ const Bar = styled.div`
   width: 400px;
   height: 48px;
   margin: 5px 0;
-  background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  background-color: rgba(237, 237, 237, 0.8);
   border-radius: 10px;
   padding-right: 20px;
-  box-sizing: border-box;
 `;
 
 const IconBox = styled.div`

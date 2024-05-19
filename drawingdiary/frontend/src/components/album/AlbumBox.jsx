@@ -15,9 +15,9 @@ const Container = styled.section`
 
 const AlbumContainer = styled.div`
     width: 100%;
-    height: 246px;
+    height: 231px;
     padding: 2px;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(237, 237, 237, 0.3);
     border-radius: 10px;
 `;
 
@@ -38,7 +38,7 @@ const ScrollSection = styled.div`
 
 const PictureContainer = styled.div`
     min-width: 190px;
-    height: 230px;
+    height: 200px;
     margin: 8px;
     display: flex;
     flex-direction: column;
@@ -63,8 +63,8 @@ const DateText = styled.div`
     border-radius: 10px;
 
     img {
-        width: 200px;
-        height: 200px;
+        width: 180px;
+        height: 180px;
         border-radius: 10px;
         margin: 5px;
         transition: transform 0.2s ease;
@@ -73,7 +73,7 @@ const DateText = styled.div`
 
 const AlbumHeaders = styled.div`
     width: 100%;
-    height: 30px;
+    height: 20px;
     margin: 10px 0;
     display: flex;
     flex-direction: row;
