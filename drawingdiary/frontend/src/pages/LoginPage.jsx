@@ -46,7 +46,7 @@ const InnerBox = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   width: 400px;
-  height: 250px
+  height: 250px;
 `;
 
 const BtnBox = styled.div`
@@ -101,13 +101,24 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    // 입력값 검증
+    const specialCharacters = /['";\\<>\[\]\{\}\|\&=]/;
+    if (specialCharacters.test(email) || specialCharacters.test(password)) {
+      setErrorMessage("특수문자는 사용할 수 없습니다.");
+      return;
+    }
+
     axios
       .post("http://localhost:8080/api/login", {
         email,
         password,
       })
       .then((response) => {
-        login(response.data.accessToken, response.data.refreshToken, response.data.memberID);
+        login(
+          response.data.accessToken,
+          response.data.refreshToken,
+          response.data.memberID
+        );
         navigate("/");
       })
       .catch((error) => {
@@ -126,7 +137,7 @@ function LoginPage() {
   return (
     <Background2>
       <Body>
-        <Title to='/'>감성 일기</Title>
+        <Title to="/">감성 일기</Title>
         <LoginBox>
           <InnerBox>
             <LoginBar
@@ -144,7 +155,9 @@ function LoginPage() {
               {errorMessage && <ErrorMessage> {errorMessage} </ErrorMessage>}
             </ErrorMessageContainer>
             <BtnBox>
-              <JoinBtn to="/" onClick={handleLogin}>로그인</JoinBtn>
+              <JoinBtn to="/" onClick={handleLogin}>
+                로그인
+              </JoinBtn>
               <JoinBtn to="/join">회원가입</JoinBtn>
             </BtnBox>
             <LoginLostBtn to="/loginlost">
