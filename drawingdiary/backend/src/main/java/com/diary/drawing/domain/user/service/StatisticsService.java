@@ -123,14 +123,23 @@ public class StatisticsService {
             .orElse(0);
 
         // 2.3 style
-            // 일기를 작성한 적이 없거나 오류나면 null
+            // 일기를 작성한 적이 없거나 오류나면 무조건 모더니즘
         List<MemberStylePreference> preferences = stylePreferenceRespository.findPreferenceWithMaxFrequency(member);
         MemberStylePreference firstPreference = null;
+        String styleName = null;
+
         if (!preferences.isEmpty()) {
             firstPreference = preferences.get(0);
-        }
+            if (firstPreference.getImageStyle() != null) {
+                styleName = firstPreference.getImageStyle().getStyleName();
+            } else {
+                styleName = "모더니즘"; // 기본 값 설정
+            }
+        } else {
+            styleName = "모더니즘"; // 기본 값 설정
+        }        
 
-        return new Value(month, average, firstPreference.getImageStyle().getStyleName());
+        return new Value(month, average, styleName);
 
     }
 
