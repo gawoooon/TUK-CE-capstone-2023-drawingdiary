@@ -24,6 +24,7 @@
     "homepage": "https://github.com/gawoooon/TUK-CE-capstone-2023-drawingdiary#readme",
     "dependencies": {
         "cors": "^2.8.5",
+        "dayjs": "^1.11.11",
         "embla-carousel-react": "^8.0.2",
         "js-cookie": "^3.0.5",
         "react": "^18.3.1",
