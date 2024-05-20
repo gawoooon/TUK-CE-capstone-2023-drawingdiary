@@ -11,7 +11,6 @@ const Container = styled.div`
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    border: 2px solid #8C8C8C;
     border-radius: 30px;
     background-color: #fff;
     display: flex;
@@ -63,21 +62,15 @@ const FinishPage = () => {
 
 
     return(
-        <Background>
+        <Container>
+            <h2>회원가입이<br/>완료되었습니다!</h2>
+            <ButtonContainer>
+                <ButtonStyle onClick={handleSubmit}>
+                    로그인
+                </ButtonStyle>
+            </ButtonContainer>
+        </Container>
 
-            <Container>
-
-                <h2>회원가입이<br/>완료되었습니다!</h2>
-
-                <ButtonContainer>
-                    <ButtonStyle onClick={handleSubmit}>
-                        로그인
-                    </ButtonStyle>
-                </ButtonContainer>
-
-            </Container>
-
-        </Background>
     );
 };
 

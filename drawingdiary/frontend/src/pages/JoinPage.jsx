@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import LongInputField from '../components/inputField/LongInputField';
 import ShortInputField from '../components/inputField/ShortInputField';
 
-const ContainerStyle = styled.div`
+const Container = styled.div`
   height: 500px;
   width: 700px;
   position: fixed;
@@ -224,7 +224,7 @@ const CreateAccount = () => {
           gender: genderForm,
         })
         .then(response => {
-          navigate('/choosePersonality', { state: { email: userEmail, name }});
+          navigate('/FinishPage');
         })
         .catch(error => {
           if(error.response && error.response.status === 409) {
@@ -289,201 +289,159 @@ const CreateAccount = () => {
     }, [errorMessage, sendMessage, verifyMessage]);
       
     return (
-        <Background>
-
-          <ContainerStyle className='create-account-containers'>
-
-            <h3>계정 만들기</h3>
-
-            <form autoComplete="off">
-
-              {nextButton ? (
-                <section>
-                  <div>
-                    <MessageContainer>
-                    {errorMessage && ( <Message> {errorMessage} </Message> )}
-                    {sendMessage && ( <Message> {sendMessage} </Message>)}
-                    {verifyMessage && ( <Message> {verifyMessage} </Message>)}
-                    </MessageContainer>  
-                  </div>
-
-                  <div>
-                    <InputFieldStyle>
-
-                    <InputStyle
-                      id="email"
-                      type="email"
-                      value={userEmail}
-                      onChange={ (e) => setUserEmail(e.target.value)}
-                      placeholder="이메일"/>
-
-                    <VerifyButton onClick={(e) => sendEmail(e)}>인증</VerifyButton>
-
-                    </InputFieldStyle>
-                  </div>
-
-                  <div>
-                    <InputFieldStyle>
-
-                    <InputStyle
-                      id="certification"
-                      value={certificateEmail}
-                      onChange={(e) => checkCertificateEmail(e.target.value)}
-                      placeholder="인증번호 입력"/>
-
-                      <VerifyButton onClick={(e) => verifyCertification(e)}>확인</VerifyButton>
-
-                    </InputFieldStyle>
-                  </div>
-
-                  <InputFieldStyle>
-
+      <Container className='create-account-containers'>
+        <h3>계정 만들기</h3>
+        <form autoComplete="off">
+          {nextButton ? (
+            <section>
+              <div>
+                <MessageContainer>
+                {errorMessage && ( <Message> {errorMessage} </Message> )}
+                {sendMessage && ( <Message> {sendMessage} </Message>)}
+                {verifyMessage && ( <Message> {verifyMessage} </Message>)}
+                </MessageContainer>  
+              </div>
+              <div>
+                <InputFieldStyle>
+                <InputStyle
+                  id="email"
+                  type="email"
+                  value={userEmail}
+                  onChange={ (e) => setUserEmail(e.target.value)}
+                  placeholder="이메일"/>
+                <VerifyButton onClick={(e) => sendEmail(e)}>인증</VerifyButton>
+                </InputFieldStyle>
+              </div>
+              <div>
+                <InputFieldStyle>
+                <InputStyle
+                  id="certification"
+                  value={certificateEmail}
+                  onChange={(e) => checkCertificateEmail(e.target.value)}
+                  placeholder="인증번호 입력"/>
+                  <VerifyButton onClick={(e) => verifyCertification(e)}>확인</VerifyButton>
+                </InputFieldStyle>
+              </div>
+              <InputFieldStyle>
+              <LongInputField
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="비밀번호"
+              />
+              </InputFieldStyle>
+              <InputFieldStyle>
+              <ConfilmPasswordStyle
+                id="checkPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="비밀번호 확인"
+                ref={confirmPasswordRef}
+              />
+              </InputFieldStyle>
+              <div style={{marginTop:'50px'}}>
+                <ButtonContainer>
+                <ButtonStyle onClick={handleSubmit}>
+                  완료
+                </ButtonStyle>
+                </ButtonContainer>
+              </div>
+            </section>
+          ) : (
+            <section>
+              <div style={{
+                marginBottom: '100px'
+              }}>
+                <InputFieldStyle>
                   <LongInputField
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="비밀번호"
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="이름"
                   />
-
-                  </InputFieldStyle>
-
-                  <InputFieldStyle>
-
-                  <ConfilmPasswordStyle
-                    id="checkPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="비밀번호 확인"
-                    ref={confirmPasswordRef}
+                </InputFieldStyle>
+                <BirthDayContainer>
+                  <ShortInputField
+                    id="year"
+                    type="text"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                    placeholder="연"
                   />
-
-                  </InputFieldStyle>
-
-                  <div style={{marginTop:'50px'}}>
-                    <ButtonContainer>
-                    <ButtonStyle onClick={handleSubmit} herf="/choosePersonality">
-                      완료
-                    </ButtonStyle>
-                    </ButtonContainer>
-                  </div>
-
-                </section>
-              ) : (
-                <section>
-
-                  <div style={{
-                    marginBottom: '100px'
-                  }}>
-                    <InputFieldStyle>
-                      <LongInputField
-                        id="name"
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="이름"
-                      />
-
-                    </InputFieldStyle>
-
-                    <BirthDayContainer>
-
-                      <ShortInputField
-                        id="year"
-                        type="text"
-                        value={year}
-                        onChange={(e) => setYear(e.target.value)}
-                        placeholder="연"
-                      />
-
-                      <SelectMonthContainer 
-                        name='month'
-                        id='month'
-                        value={month}
-                        onChange={ (e) => setMonth(e.target.value)}
-                        style={{ color: month === "" ? '#808080' : 'initial', paddingTop: '2px' }}>
-                        <option value="" disabled style={{ color: 'grey'}}>월</option>
-                        <option value="1">1월</option>
-                        <option value="2">2월</option>
-                        <option value="3">3월</option>
-                        <option value="4">4월</option>
-                        <option value="5">5월</option>
-                        <option value="6">6월</option>
-                        <option value="7">7월</option>
-                        <option value="8">8월</option>
-                        <option value="9">9월</option>
-                        <option value="10">10월</option>
-                        <option value="11">11월</option>
-                        <option value="12">12월</option>
-
-                      </SelectMonthContainer>
-
-                      <ShortInputField
-                        id="day"
-                        type="text"
-                        value={day}
-                        onChange={(e) => setDay(e.target.value)}
-                        placeholder="일"
-                      />
-
-                    </BirthDayContainer>
-
-                    <SelectGenderContainer
-                      name='gender'
-                      id='gender'
-                      value={gender}
-                      onChange={ (e) => setGender(e.target.value)}
-                      style={{ color: month === "" ? '#808080' : 'initial' }}>
-                      <option value="" disabled style={{ color: 'grey'}}>성별</option>
-                      <option value="female">여자</option>
-                      <option value="male">남자</option>
-                      <option value="secret">공개안함</option>
-                    </SelectGenderContainer>
-                  </div>
-
-                    {/* -- 전화번호 입력 부분 -- */}
-
-                    {/* <InputFieldStyle>
-                    
-                      <PhoneInputStyle 
-                        id='phoneNumber'
-                        type='phone'
-                        value={userPhone}
-                        onChange={ (e) => setUserPhone(e.target.value)}
-                        placeholder='전화번호 입력'
-                      />
-
-                      <VerifyButton onClick={(e) => sendEmail(e)}>인증</VerifyButton>
-
-                    </InputFieldStyle> */}
-
-                    {/* <InputFieldStyle>
-
-                    <InputStyle
-                      id="certification"
-                      value={certificateEmail}
-                      onChange={(e) => checkCertificateEmail(e.target.value)}
-                      placeholder="인증번호 입력"/>
-
-                      <VerifyButton onClick={(e) => verifyCertification(e)}>확인</VerifyButton>
-
-                    </InputFieldStyle> */} 
-
-                  <div>
-                    <ButtonContainer>
-                      <ButtonStyle onClick={handleNextForm} herf="/choosePersonality">
-                        다음
-                      </ButtonStyle>
-                    </ButtonContainer>
-                  </div>
-                </section>
-              )}
-            </form>
-
-          </ContainerStyle>
-
-        </Background>
+                  <SelectMonthContainer 
+                    name='month'
+                    id='month'
+                    value={month}
+                    onChange={ (e) => setMonth(e.target.value)}
+                    style={{ color: month === "" ? '#808080' : 'initial', paddingTop: '2px' }}>
+                    <option value="" disabled style={{ color: 'grey'}}>월</option>
+                    <option value="1">1월</option>
+                    <option value="2">2월</option>
+                    <option value="3">3월</option>
+                    <option value="4">4월</option>
+                    <option value="5">5월</option>
+                    <option value="6">6월</option>
+                    <option value="7">7월</option>
+                    <option value="8">8월</option>
+                    <option value="9">9월</option>
+                    <option value="10">10월</option>
+                    <option value="11">11월</option>
+                    <option value="12">12월</option>
+                  </SelectMonthContainer>
+                  <ShortInputField
+                    id="day"
+                    type="text"
+                    value={day}
+                    onChange={(e) => setDay(e.target.value)}
+                    placeholder="일"
+                  />
+                </BirthDayContainer>
+                <SelectGenderContainer
+                  name='gender'
+                  id='gender'
+                  value={gender}
+                  onChange={ (e) => setGender(e.target.value)}
+                  style={{ color: month === "" ? '#808080' : 'initial' }}>
+                  <option value="" disabled style={{ color: 'grey'}}>성별</option>
+                  <option value="female">여자</option>
+                  <option value="male">남자</option>
+                  <option value="secret">공개안함</option>
+                </SelectGenderContainer>
+              </div>
+                {/* -- 전화번호 입력 부분 -- */}
+                {/* <InputFieldStyle>
+                
+                  <PhoneInputStyle 
+                    id='phoneNumber'
+                    type='phone'
+                    value={userPhone}
+                    onChange={ (e) => setUserPhone(e.target.value)}
+                    placeholder='전화번호 입력'
+                  />
+                  <VerifyButton onClick={(e) => sendEmail(e)}>인증</VerifyButton>
+                </InputFieldStyle> */}
+                {/* <InputFieldStyle>
+                <InputStyle
+                  id="certification"
+                  value={certificateEmail}
+                  onChange={(e) => checkCertificateEmail(e.target.value)}
+                  placeholder="인증번호 입력"/>
+                  <VerifyButton onClick={(e) => verifyCertification(e)}>확인</VerifyButton>
+                </InputFieldStyle> */} 
+              <div>
+                <ButtonContainer>
+                  <ButtonStyle onClick={handleNextForm}>
+                    다음
+                  </ButtonStyle>
+                </ButtonContainer>
+              </div>
+            </section>
+          )}
+        </form>
+      </Container>
     )
 };
 
