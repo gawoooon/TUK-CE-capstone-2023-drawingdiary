@@ -8,8 +8,6 @@ import { LuCalendarDays } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../../auth/context/AuthContext";
-import { CalendarProvider } from "../Calendar2/CalendarProvider";
-import Calendar2 from "../Calendar2";
 
 const SideBarStyle = styled.section`
     display: flex;
@@ -43,12 +41,12 @@ const MenuItem = styled(Link)`
         border-radius: 10px;
         background-color: rgba(227, 227, 227, 0.7);
     }
-    `;
+`;
 
 const MenuItemText = styled.div`
     margin-left: 10px;
     color: #0d0d0d;
-    font-size: 16px;
+    font-size: 1rem;
 `;
 
 const CalenderSection = styled.section`
@@ -75,7 +73,7 @@ const RecentSection = styled.section`
 
 const RecentList = styled.div`
     padding: 8px 16px;
-    font-size: 16px;
+    font-size: 1rem;
     color: #0d0d0d;
     text-align: left;
     &:hover {
@@ -83,7 +81,6 @@ const RecentList = styled.div`
         background-color: rgba(227, 227, 227, 0.7);
     }
 `;
-
 
 const ProfileSection = styled(Link)`
     width: 100%;
@@ -110,11 +107,11 @@ const ProfileImg = styled.img`
 
 const ProfileName = styled.div`
     margin-left: 10px;
-    font-size: 16px;
+    font-size: 1rem;
     color: #0d0d0d;
 `;
 
-const Navbar = ({ isOpen}) => {
+const Navbar = ({ isOpen }) => {
 
     const [loginState, setLoginState] = useState(false);
 
@@ -203,9 +200,9 @@ const Navbar = ({ isOpen}) => {
                 alt='edit' />
             )}
             {loginState ? (
-            <ProfileName style={{fontSize:'15px'}}>{localStorage.getItem('setName')}</ProfileName>
+            <ProfileName style={{fontSize:'0.9375rem'}}>{localStorage.getItem('setName')}</ProfileName>
             ) : (
-            <ProfileName style={{fontSize:'12px'}}>{"로그인을 해주세요."}</ProfileName>
+            <ProfileName style={{fontSize:'0.75rem'}}>{"로그인을 해주세요."}</ProfileName>
             )}
         </ProfileSection>
         </SideBarStyle>
