@@ -1,13 +1,10 @@
 package com.diary.drawing.domain.user.controller;
 
-import java.util.Optional;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,14 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.diary.drawing.domain.album.dto.AlbumRequestDTO;
 import com.diary.drawing.domain.album.service.AlbumService;
 import com.diary.drawing.domain.email.EmailVerificationService;
-import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.dto.GetMemberDTO;
 import com.diary.drawing.domain.user.dto.MemberDTO;
 import com.diary.drawing.domain.user.dto.MemberJoinDTO;
-import com.diary.drawing.domain.user.dto.PersonalityUpdateDTO;
 import com.diary.drawing.domain.user.dto.PhoneDTO;
 import com.diary.drawing.domain.user.dto.PhoneDTO.responseNewDTO;
-import com.diary.drawing.domain.user.dto.ThemeUpdateDTO;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
 import com.diary.drawing.domain.user.repository.MemberRepository;
@@ -102,34 +96,6 @@ public class MemberController {
         
     }
 
-    
-
-    /*  성격 속성에 값 저장
-    *   @Param String email
-    */
-    @Operation(summary = "성격 속성 저장")
-    @PostMapping("/updatePersonality")
-    public ResponseEntity<?> updatePersonality(@RequestBody PersonalityUpdateDTO updateDTO) {
-        Optional<Member> memberOptional = memberService.findByEmail(updateDTO.getEmail());
-        if(!memberOptional.isPresent()) {
-            return ResponseEntity.badRequest().body("해당 이메일의 사용자를 찾을 수 없습니다.");
-        }
-
-        Member member = memberOptional.get();
-        memberService.joinMemberPersonality(member, updateDTO.getPersonality());
-
-        return ResponseEntity.ok().body("성격 유형이 업데이트 되었습니다.");
-    }
-
-    /* 테마 업데이트 api
-     * @param int theme
-     */
-    @Operation(summary = "테마 업데이트")
-    @PutMapping("/theme")
-    public ResponseEntity<?> updateTheme (@RequestBody ThemeUpdateDTO themeUpdateDTO,
-                                            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return memberService.updateTheme(principalDetails.getMemberID(), themeUpdateDTO.getTheme());
-    }
 
     
     /*  비밀번호 확인
