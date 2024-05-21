@@ -4,15 +4,15 @@ import styled from "styled-components";
 import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
 import Background2 from "../components/Background/index2";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import { LineChart, Line, Tooltip } from "recharts";
 import { useAuth } from "../auth/context/AuthContext";
 
 const Container = styled.div`
-  width: 100%;
+  width: 100%
   height: 100vh;
   margin: auto;
-  padding: 10px;
+
   display: flex;
   flex-direction: row; /* 변경된 부분 */
 `;
@@ -99,7 +99,7 @@ const Circle = styled.div`
   height: 20px;
   margin: 10px 0 10px 10px;
   border-radius: 50%;
-  background-color: ${props => props.color};
+  background-color: ${(props) => props.color};
 `;
 
 const TextValue = styled.div`
@@ -125,40 +125,66 @@ function StatsPage() {
 
   const RenderLineChat = () => {
     return (
-      <LineChart width={1300} height={180} data={sentiData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+      <LineChart
+        width={1300}
+        height={180}
+        data={sentiData}
+        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+      >
         <Tooltip />
-        <Line type="monotone" dataKey="positive" stroke="#FF76CE" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
-        <Line type="monotone" dataKey="neutral" stroke="#b87ffa" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
-        <Line type="monotone" dataKey="negative" stroke="#A3D8FF" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
+        <Line
+          type="monotone"
+          dataKey="positive"
+          stroke="#FF76CE"
+          activeDot={{ r: 2 }}
+          isAnimationActive={false}
+          strokeWidth={2}
+        />
+        <Line
+          type="monotone"
+          dataKey="neutral"
+          stroke="#b87ffa"
+          activeDot={{ r: 2 }}
+          isAnimationActive={false}
+          strokeWidth={2}
+        />
+        <Line
+          type="monotone"
+          dataKey="negative"
+          stroke="#A3D8FF"
+          activeDot={{ r: 2 }}
+          isAnimationActive={false}
+          strokeWidth={2}
+        />
       </LineChart>
     );
   };
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/statistic', {
+      const response = await axios.get("http://localhost:8080/api/statistic", {
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       setTotalDiary(response.data.lawn.total);
-      
+
       let index = 0;
-      const dayOfWeek = ['월', '화', '수', '목' ,'금', '토', '일'];
-      const sentimentData = response.data.emotions.map(item => {
-        if(item === null || item === 'undefined') {
+      const dayOfWeek = ["월", "화", "수", "목", "금", "토", "일"];
+      const sentimentData = response.data.emotions.map((item) => {
+        if (item === null || item === "undefined") {
           return {
-            name : dayOfWeek[index++],
-            positive : 0,
-            neutral : 0,
-            negative : 0,
+            name: dayOfWeek[index++],
+            positive: 0,
+            neutral: 0,
+            negative: 0,
           };
         } else {
           return {
-            name : dayOfWeek[index++],
-            positive : item.positive,
-            neutral : item.neutral,
-            negative : item.negative,
+            name: dayOfWeek[index++],
+            positive: item.positive,
+            neutral: item.neutral,
+            negative: item.negative,
           };
         }
       });
@@ -167,23 +193,26 @@ function StatsPage() {
       setAverage(response.data.value.average);
       setMonthData(response.data.value.month);
       setStyle(response.data.value.style);
-
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   };
-  
+
   const GraphValue = () => {
     const getColor = (emotion) => {
-      switch(emotion) {
-        case 'positive' : return "#FF76CE";
-        case 'neutral' : return "#b87ffa";
-        case 'negative' : return "#A3D8FF";
-        default: return '#ffffff';
+      switch (emotion) {
+        case "positive":
+          return "#FF76CE";
+        case "neutral":
+          return "#b87ffa";
+        case "negative":
+          return "#A3D8FF";
+        default:
+          return "#ffffff";
       }
     };
 
-    const emotions = ['positive', 'neutral', 'negative'];
+    const emotions = ["positive", "neutral", "negative"];
 
     return (
       <ValueContainer>
@@ -196,7 +225,7 @@ function StatsPage() {
       </ValueContainer>
     );
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -205,10 +234,12 @@ function StatsPage() {
     <Container>
       <NavBar />
       <MainContent>
-        <div style={{marginTop: '40px'}}></div>
-        <Text>{year}년에는 일기를 {totalDairy}편 썼어요!</Text>
+        <div style={{ marginTop: "40px" }}></div>
+        <Text>
+          {year}년에는 일기를 {totalDairy}편 썼어요!
+        </Text>
         <HistoryContainer>
-          <GrassGraph/>
+          <GrassGraph />
         </HistoryContainer>
         <StatsContainer>
           <StatsContent>
@@ -224,7 +255,9 @@ function StatsPage() {
             <BigText>{style}</BigText>
           </StatsContent>
         </StatsContainer>
-        <Text>{month}월 {startDay} ~ {endDay}일 감정분석 기록</Text>
+        <Text>
+          {month}월 {startDay} ~ {endDay}일 감정분석 기록
+        </Text>
         <SentimentContainer>
           <RenderLineChat />
           <GraphValue />
