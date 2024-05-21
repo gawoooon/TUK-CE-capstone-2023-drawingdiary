@@ -55,6 +55,10 @@ public class Image extends BaseTime{
         this.imageFile = imageFile;
         this.album = album;
     }
+
+    public void setImage(String imageFile){
+        this.imageFile = imageFile;
+    }
     
     public void setAlbum(Album album){
         this.album = album;

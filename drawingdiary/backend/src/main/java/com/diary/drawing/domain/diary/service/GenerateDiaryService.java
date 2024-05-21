@@ -1,6 +1,8 @@
 package com.diary.drawing.domain.diary.service;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -132,16 +134,31 @@ public class GenerateDiaryService {
         Image image = diary.getImage();
         if(image == null){throw new DiaryResponseException(DiaryExceptionType.NOT_FOUND_IMAGE);}
 
-        String imageState = s3Uploader.deleteImage(image.getImageFile());
-        String imageUrl = s3Uploader.uploadImage(finalDiaryRequestDTO.getImageFile(), finalDiaryRequestDTO.getDate(), "d");
+        // 5.2 이미지가 수정되었다면 바뀜, 수정되지 않았다면 null값
+        if(finalDiaryRequestDTO.getImageFile() != null && isBase64Encoded(finalDiaryRequestDTO.getImageFile())){
+            String imageState = s3Uploader.deleteImage(image.getImageFile());
+            String imageUrl = s3Uploader.uploadImage(finalDiaryRequestDTO.getImageFile(), finalDiaryRequestDTO.getDate(), "d");
+            image.setImage(imageUrl);
+        }
 
-        image.update(imageUrl, album);
+        image.setAlbum(album);
 
         // 업데이트
         diary.update(finalDiaryRequestDTO, imageStyle);
 
         return ResponseEntity.ok(DiaryResponseDTO.from(diary));
 
+    }
+
+    private static final Pattern BASE64_PATTERN = Pattern.compile("^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)?$");
+    
+    // base64 코드가 맞는지 확인하는 함수
+    private boolean isBase64Encoded(String imageFile) {
+        if (imageFile == null) {
+            return false;
+        }
+        Matcher matcher = BASE64_PATTERN.matcher(imageFile);
+        return matcher.matches();
     }
 
 }
