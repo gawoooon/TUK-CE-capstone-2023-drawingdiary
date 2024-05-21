@@ -14,6 +14,8 @@ import NavBar from "../components/sidebar/NavBar";
 import { IoIosSend } from "react-icons/io";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { useAuth } from "../auth/context/AuthContext";
+import { GrUploadOption } from "react-icons/gr";
+import { IoMdRefresh } from "react-icons/io";
 
 const Container = styled.body`
   width: 100%;
@@ -52,7 +54,6 @@ const BottomContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 27%;
-  background-color: blue;
 `;
 
 const LeftBox = styled.div`
@@ -102,13 +103,21 @@ const StyleBox = styled.div`
 
 const TextBox = styled.div`
   display: flex;
+  flex-direction: column;
   width: 50%;
   height: 69%;
-  background-color: green;
   border-radius: 10px;
   border: 1px solid black;
   padding: 10px;
   box-sizing: border-box;
+`;
+
+const BtnBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 20%;
 `;
 
 // const TextInputBox = styled.div`
@@ -188,19 +197,19 @@ const RightBottomContent = styled.div`
   margin: 0 10px;
 `;
 
-// const SaveBtn = styled.button`
-//   z-index: 9999;
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-//   align-items: center;
-//   padding: 10px 10px;
-//   border: none;
-//   border-radius: 5px;
-//   font-size: 15px;
-//   background-color: white;
-//   cursor: pointer;
-// `;
+const SaveBtn = styled.button`
+  z-index: 9999;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  background-color: white;
+  cursor: pointer;
+`;
 
 const Area = styled.div`
   width: 505px;
@@ -463,13 +472,24 @@ function DiaryPage() {
           </RightBox>
         </MidContainer>
         <BottomContainer>
-          <StyleBox></StyleBox>
+          <StyleBox>
+            <ImageOption
+              onOptionSelect={handleOptionSelect}
+              isRecommenderLoading={isRecommenderLoading}
+            />
+          </StyleBox>
           <TextBox>
-            {/* <TextInputBox></TextInputBox>
-            <TextBtnBox>
-              <RefreshBtn></RefreshBtn>
-              <SaveBtn></SaveBtn>
-            </TextBtnBox> */}
+            <EditDiary onDiaryTextChange={handleDiaryTextChange} />
+            <BtnBox>
+              <IoMdRefresh
+                size={16}
+                onClick={handleCreate}
+                style={{
+                  cursor: "pointer",
+                }}
+              />
+              <GrUploadOption size={16} onClick={handleSave} />
+            </BtnBox>
           </TextBox>
         </BottomContainer>
       </DiaryContainer>
