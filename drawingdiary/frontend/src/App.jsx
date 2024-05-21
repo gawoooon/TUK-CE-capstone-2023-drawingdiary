@@ -16,7 +16,7 @@ import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
 import { CalendarProvider } from "./components/Calendar2/CalendarProvider.jsx";
 import ShowDiaryPage from "./pages/ShowDiaryPage.jsx";
-import MainPage from "./pages/MainPage.jsx"
+import MainPage from "./pages/MainPage.jsx";
 
 function App() {
   return (
@@ -67,12 +67,7 @@ function App() {
             </CategoryProvider>
           }
         />
-        <Route
-          path="/stats"
-          element={
-            <StatsPage />
-          } 
-        />
+        <Route path="/stats" element={<StatsPage />} />
         <Route path="/my" element={<MyPage />} />
         <Route path="/choosePersonality" element={<ChoosePersonalityPage />} />
         <Route path="/FinishPage" element={<FinishPage />} />

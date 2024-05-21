@@ -8,7 +8,6 @@ import { FaSnowman } from "react-icons/fa";
 import { RiMistLine } from "react-icons/ri";
 import { TiWeatherPartlySunny } from "react-icons/ti";
 
-
 const WeatherContainer = styled.div`
   width: 200px;
   height: 40px;
@@ -23,8 +22,7 @@ const WeatherContent = styled.div`
 `;
 
 const DateText = styled.text`
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
 `;
 
 const LoadingImage = styled.img`
@@ -86,7 +84,11 @@ const Weather = ({ date, onWeatherStateChange }) => {
         );
         const data = await response.json();
 
-        const requestedDateUTC = new Date(date.currentYear, date.month - 1, date.day);
+        const requestedDateUTC = new Date(
+          date.currentYear,
+          date.month - 1,
+          date.day
+        );
 
         // 가장 가까운 예보 찾기
         let closestForecast = data.list.reduce((acc, forecast) => {
@@ -144,14 +146,63 @@ const Weather = ({ date, onWeatherStateChange }) => {
           <LoadingImage src="/Spinner.gif" alt="loading" />
         ) : (
           <>
-            {weather.state === 'thunderstorm' && <MdOutlineThunderstorm size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weather.state === 'drizzle' && <BsCloudDrizzle size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weather.state === 'showerrain' && <IoRainyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weather.state === 'snow' && <FaSnowman size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weather.state === 'mist' && <RiMistLine size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weather.state === 'clearsky' && <IoSunnyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weather.state === 'fewclouds' && <TiWeatherPartlySunny size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {(weather.state === 'clouds' || weather.state === 'scatteredclouds') && <BsClouds size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
+            {weather.state === "thunderstorm" && (
+              <MdOutlineThunderstorm
+                size={24}
+                color="3d3d3d"
+                style={{ margin: "0 3px 3px 0" }}
+              />
+            )}
+            {weather.state === "drizzle" && (
+              <BsCloudDrizzle
+                size={24}
+                color="3d3d3d"
+                style={{ margin: "0 3px 3px 0" }}
+              />
+            )}
+            {weather.state === "showerrain" && (
+              <IoRainyOutline
+                size={24}
+                color="3d3d3d"
+                style={{ margin: "0 3px 3px 0" }}
+              />
+            )}
+            {weather.state === "snow" && (
+              <FaSnowman
+                size={24}
+                color="3d3d3d"
+                style={{ margin: "0 3px 3px 0" }}
+              />
+            )}
+            {weather.state === "mist" && (
+              <RiMistLine
+                size={24}
+                color="3d3d3d"
+                style={{ margin: "0 3px 3px 0" }}
+              />
+            )}
+            {weather.state === "clearsky" && (
+              <IoSunnyOutline
+                size={24}
+                color="3d3d3d"
+                style={{ margin: "0 3px 3px 0" }}
+              />
+            )}
+            {weather.state === "fewclouds" && (
+              <TiWeatherPartlySunny
+                size={24}
+                color="3d3d3d"
+                style={{ margin: "0 3px 3px 0" }}
+              />
+            )}
+            {(weather.state === "clouds" ||
+              weather.state === "scatteredclouds") && (
+              <BsClouds
+                size={24}
+                color="3d3d3d"
+                style={{ margin: "0 3px 3px 0" }}
+              />
+            )}
           </>
         )}
       </WeatherContent>
