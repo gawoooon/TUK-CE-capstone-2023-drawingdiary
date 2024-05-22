@@ -16,7 +16,6 @@ import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
 import { CalendarProvider } from "./components/Calendar2/CalendarProvider.jsx";
 import ShowDiaryPage from "./pages/ShowDiaryPage.jsx";
-import MainPage from "./pages/MainPage.jsx"
 
 function App() {
   return (
@@ -30,14 +29,6 @@ function App() {
           element={
             <CalendarProvider>
               <CalendarPage />
-            </CalendarProvider>
-          }
-        />
-        <Route
-          path="/main"
-          element={
-            <CalendarProvider>
-              <MainPage />
             </CalendarProvider>
           }
         />

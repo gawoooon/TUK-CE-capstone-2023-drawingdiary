@@ -20,7 +20,7 @@ const Body = styled.div`
 const Title = styled(Link)`
   font-size: 40px;
   font-weight: 800;
-  padding-bottom: 30px;
+  padding: 20px 0;
   text-decoration: none;
   color: black;
 `;
@@ -28,8 +28,8 @@ const Title = styled(Link)`
 const LoginBox = styled.form`
   display: flex;
   flex-direction: column;
-  width: 600px;
-  height: 350px;
+  width: 500px;
+  height: 700px;
   background-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
@@ -158,8 +158,8 @@ function LoginPage() {
 
   return (
     <Body>
-      <Title to="/">감성 일기</Title>
       <LoginBox onSubmit={handleLogin}>
+        <Title to="/">감성 일기</Title>
         <InnerBox>
           <LoginBar
             icon={<IoMdPerson size={20} />}

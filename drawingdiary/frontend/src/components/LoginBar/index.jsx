@@ -17,8 +17,7 @@ const IconBox = styled.div`
   justify-content: center;
   width: 20%;
   height: 100%;
-  font-size: 24px;
-  color: #4d4d4d;
+  color: #848484;
 `;
 
 const TextBox = styled.input`
@@ -26,13 +25,12 @@ const TextBox = styled.input`
   align-items: center;
   width: 80%;
   height: 100%;
-  color: black;
+  color: #0d0d0d;
   border: none;
   outline: none;
   padding: 0 20px;
   background-color: transparent;
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 14px;
   opacity: 0.7;
 `;
 

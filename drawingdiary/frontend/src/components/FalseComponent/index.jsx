@@ -16,17 +16,17 @@ const ResultBox = styled.div`
 `;
 
 const TopBox = styled.div`
-  font-size: 22px;
-  font-weight: 800;
-  color: #090071;
+  font-size: 20px;
+  font-weight: 400;
+  color: #0d0d0d;
   display: flex;
   transition: opacity 200ms ease-out;
 `;
 
 const MiddleBox = styled.div`
-  font-size: 22px;
-  font-weight: 800;
-  color: #090071;
+  font-size: 20px;
+  font-weight: 400;
+  color: #0d0d0d;
   padding: 10px 0px;
   box-sizing: border-box;
   transition: opacity 200ms ease-out;
@@ -37,13 +37,16 @@ const AddBtn = styled.button`
   height: 50px;
   border: none;
   outline: none;
-  background-color: #090071;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
-  color: white;
+  color: #0d0d0d;
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 10px;
   margin-top: 20px;
+  background-color: rgba(106, 156, 253, 0.5);
+  &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+  }
 `;
 
 function FalseComponent({ currentYear, month, day, selectedDate }) {

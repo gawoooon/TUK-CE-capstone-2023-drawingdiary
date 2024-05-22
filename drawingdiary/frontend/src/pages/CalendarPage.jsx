@@ -3,80 +3,65 @@ import styled from "styled-components";
 import { isSameDay } from "date-fns";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-
-import Background2 from "../components/Background/index2";
 import Calendar2 from "../components/Calendar2";
-import SideBar from "../components/sidebar/SideBar";
 import FalseComponent from "../components/FalseComponent";
 import TrueComponent from "../components/TrueComponent/TrueComponent";
 import { useAuth } from "../auth/context/AuthContext";
-
-import { GrFormPreviousLink } from "react-icons/gr";
 import {
   CalendarProvider,
   useCalendar,
 } from "../components/Calendar2/CalendarProvider";
 import axios from "axios";
+import Navbar from "../components/sidebar/NavBar";
 
 const Body = styled.body`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 60px 100px;
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+`;
+
+const SidebarContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 260px;
+    height: 100%;
 `;
 
 const CalendarBox = styled.div`
   display: flex;
+  flex-direction: row;
   width: 100%;
   height: 100%;
-  border-radius: 30px;
   background-color: white;
   padding-left: 20px;
   transition: opacity 200ms ease-out;
 `;
 
-const LeftBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: ${({ leftBoxWidth }) => leftBoxWidth};
-  height: 100%;
-  margin-right: 20px;
-  transition: opacity 200ms ease-out, width 200ms linear;
-`;
-
 const MiddleBox = styled.div`
   display: flex;
-  width: ${({ middleBoxWidth }) => middleBoxWidth};
+  width: 50%;
   height: 100%;
   border-radius: 30px;
-  padding: 40px 10px;
+  margin: 20px;
   box-sizing: border-box;
   transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const RightBox = styled.div`
   display: flex;
-  width: ${({ rightBoxWidth }) => rightBoxWidth};
+  width: 50%;
   flex-direction: column;
-  height: 100%;
-  padding: 40px 0;
+  justify-content: center;
+  align-items: center;
+  height: 800px;
+  width: 700px;
+  margin: 20px;
   box-sizing: border-box;
-  overflow: hidden; // 내용이 max-height를 넘어가지 않도록 설정
-  transition: opacity 200ms ease-out, width 200ms linear;
-`;
-
-const PrevBtn = styled.button`
-  margin-top: 15px;
-  display: ${({ prevBtnBox }) => (prevBtnBox ? "display" : "none")};
-  width: 35px;
-  height: 35px;
-  font-size: 35px;
-  color: #090071;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  background: transparent;
+  overflow: hidden;
   transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
@@ -89,14 +74,8 @@ const ResultBox = styled.div`
 function CalendarPage() {
   const navigate = useNavigate();
 
-  const [leftBoxWidth, setLeftBoxWidth] = useState("17%");
-  const [rightBoxWidth, setRightBoxWidth] = useState("0%");
-  const [middleBoxWidth, setMiddleBoxWidth] = useState("100%");
-  const [showRightBox, setShowRightBox] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
-  const [prevBtnBox, setPrevBtnBox] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
 
   const { memberID, getToken } = useAuth();
   const accessToken = getToken();
@@ -137,32 +116,8 @@ function CalendarPage() {
   }, [memberID, fetchUserName]);
 
   const handleDateClick = async (day) => {
-    if (isSameDay(day, selectedDate)) {
-      setSelectedDate(null);
-      setLeftBoxWidth("17%");
-      setRightBoxWidth("0%");
-      setMiddleBoxWidth("100%");
-      setShowRightBox(false);
-      setSelectedDateHasData(false);
-      setPrevBtnBox(false);
-      setIsOpen(true);
-    } else {
-      setShowRightBox(true);
-      setLeftBoxWidth("0%");
-      setMiddleBoxWidth("87%");
-      setRightBoxWidth("30%");
-      setSelectedDate(day); // selectedDate 상태 업데이트
-      setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
-      setPrevBtnBox(true);
-      setIsOpen(false);
-    }
-  };
-
-  // PrevBtn 클릭 시
-  const handlePrevBtnClick = () => {
-    if (selectedDate) {
-      handleDateClick(selectedDate);
-    }
+    setSelectedDate(day); // selectedDate 상태 업데이트
+    setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
   };
 
   const handleEdit = async () => {
@@ -312,29 +267,22 @@ function CalendarPage() {
 
   return (
       <Body>
-        <LeftBox leftBoxWidth={leftBoxWidth}>
-          <SideBar isOpen={isOpen} />
-        </LeftBox>
+        <SidebarContainer>
+          <Navbar />
+        </SidebarContainer>
         <CalendarBox>
-          <MiddleBox middleBoxWidth={middleBoxWidth}>
+          <MiddleBox>
             <CalendarProvider>
-              <Calendar2
-                leftBoxWidth={leftBoxWidth}
-                onDateClick={handleDateClick}
-              />
+              <Calendar2 onDateClick={handleDateClick} />
             </CalendarProvider>
           </MiddleBox>
-
-          <RightBox showRightBox={showRightBox} rightBoxWidth={rightBoxWidth}>
-            <PrevBtn prevBtnBox={prevBtnBox} onClick={handlePrevBtnClick}>
-              <GrFormPreviousLink />
-            </PrevBtn>
+          <RightBox>
             <ResultBox>
               {selectedDate &&
                 (selectedDateHasData ? (
                   <TrueComponent
-                    isSelectedMonth={isSelectedMonth}
-                    isSelectedDay={isSelectedDay}
+                    month={selectedDate.getMonth() + 1}
+                    day={selectedDate.getDate()}
                     imageUrl={imageUrl}
                     text={text}
                     handleEdit={handleEdit}

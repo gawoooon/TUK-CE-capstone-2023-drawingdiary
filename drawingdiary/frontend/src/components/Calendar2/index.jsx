@@ -8,22 +8,23 @@ import { isSameMonth, isSameDay, addDays } from "date-fns";
 import { useCalendar } from "./CalendarProvider";
 
 const CalendarBox = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 800px;
+  height: 800px;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
-  transition: width 0.5s linear;
+  overflow: hidden;
 `;
 
 const HeaderBox = styled.div`
   display: flex;
   width: 100%;
-  height: 70px;
+  flex: 0 0 7%; 
 `;
 
 const HeaderStartBox = styled.div`
   display: flex;
   width: 33%;
-  height: 70px;
 `;
 
 const HeaderMiddleBox = styled.div`
@@ -31,30 +32,28 @@ const HeaderMiddleBox = styled.div`
   align-items: center;
   justify-content: center;
   width: 33%;
-  height: 100%;
-  color: 090071;
-  font-size: 20px;
+  color: #0d0d0d;
+  font-size: 1.2em;
   font-weight: 900;
 `;
 
 const HeaderMonth = styled.p`
   padding-right: 5px;
-  color: #090071;
-  `;
+  color: #0d0d0d;
+`;
 
 const HeaderYear = styled.p`
   padding-right: 5px;
-  color: #090071;
+  color: #0d0d0d;
 `;
 
 const HeaderEndBox = styled.div`
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   width: 33%;
-  height: 100%;
   color: #b7b7b7;
-  font-size: 35px;
+  font-size: 1.8em;
   font-weight: 900;
   cursor: pointer;
 `;
@@ -62,9 +61,9 @@ const HeaderEndBox = styled.div`
 const DaysBox = styled.div`
   display: flex;
   width: 100%;
-  height: 30px;
+  flex: 0 0 5%;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 1em;
   box-sizing: border-box;
 `;
 
@@ -72,11 +71,9 @@ const DayColumn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 14%;
-  height: 100%;
-  color: #090071;
+  flex: 1;
+  color: #0d0d0d;
   border: 1px solid rgba(224, 224, 224, 0.5);
-  padding: 5px 0px;
   box-sizing: border-box;
 `;
 
@@ -84,45 +81,41 @@ const BodyBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 85%;
+  flex: 1 1 auto; 
   box-sizing: border-box;
 `;
 
 const BodyDaysBox = styled.div`
   display: flex;
   width: 100%;
-  height: 20%;
+  flex: 1 1 0; 
   box-sizing: border-box;
 `;
 
 const BodyMonth = styled.div`
   display: flex;
   justify-content: center;
-  padding: 6px;
   width: 100%;
-  height: 13%;
+  height: 100%;
   font-weight: 500;
-  font-size: 15px;
-  color: #090071;
+  font-size: 1em;
+  color: #0d0d0d;
 
   &.not-valid {
     color: #b7b7b7;
     cursor: default;
-    height: 100%;
   }
 
   &.today {
-    background-color: #d3d3d36c;
-    margin-top: 2px;
-    width: 15%;
-    border-radius: 2px;
+    background-color: rgba(106, 156, 253, 0.2);
   }
 `;
 
 const BodyDayOneBox = styled.div`
   display: flex;
   justify-content: center;
-  width: 14%;
+  align-items: center; 
+  flex: 1; 
   height: 100%;
   box-sizing: border-box;
   border: 1px solid rgba(224, 224, 224, 0.5);
@@ -131,19 +124,13 @@ const BodyDayOneBox = styled.div`
   &:hover {
     cursor: pointer;
     ${BodyMonth}:not(.not-valid) {
-      background-color: #d3d3d36c;
-      margin-top: 2px;
-      width: 15%;
-      border-radius: 2px;
+      background-color: rgba(106, 156, 253, 0.5);
     }
   }
 
   &.selected {
     ${BodyMonth}:not(.today, .not-valid) {
-      background-color: #d3d3d36c;
-      margin-top: 2px;
-      width: 15%;
-      border-radius: 2px;
+      background-color: rgba(106, 156, 253, 0.3);
     }
   }
 `;
@@ -166,7 +153,7 @@ const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
 
 const RenderDays = () => {
   const days = [];
-  const date = ["Sun", "Mon", "Thu", "Wed", "Thrs", "Fri", "Sat"];
+  const date = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   for (let i = 0; i < 7; i++) {
     days.push(<DayColumn key={i}>{date[i]}</DayColumn>);
@@ -242,7 +229,7 @@ function Calendar2({ onDateClick: parentOnDateClick }) {
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
-    setMonth(format((currentMonth), "yyyy"));
+    setMonth(format(currentMonth, "yyyy"));
   };
   const nextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
@@ -251,7 +238,6 @@ function Calendar2({ onDateClick: parentOnDateClick }) {
 
   const onDateClick = (day) => {
     if (isSameDay(day, selectedDate)) {
-      // 같은 날짜를 다시 클릭한 경우, 상태를 원상복구
       setSelectedDate(null);
       parentOnDateClick(day);
     } else {
@@ -275,8 +261,6 @@ function Calendar2({ onDateClick: parentOnDateClick }) {
       />
     </CalendarBox>
   );
-
-};
-
+}
 
 export default Calendar2;

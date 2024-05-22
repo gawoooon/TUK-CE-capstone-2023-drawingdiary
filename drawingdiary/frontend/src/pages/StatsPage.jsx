@@ -3,16 +3,14 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import NavBar from "../components/sidebar/NavBar";
 import GrassGraph from "../components/grid/DaySquare";
-import Background2 from "../components/Background/index2";
 import { format } from 'date-fns';
 import { LineChart, Line, Tooltip } from "recharts";
 import { useAuth } from "../auth/context/AuthContext";
 
-const Container = styled.div`
+const Container = styled.body`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   margin: auto;
-  padding: 10px;
   display: flex;
   flex-direction: row; /* 변경된 부분 */
 `;
@@ -42,24 +40,24 @@ const BigText = styled.span`
 const HistoryContainer = styled.section`
   width: 1500px;
   height: 202px;
-  margin: 10px;
-`;
+  margin: 20px 10px;
+  `;
 
 const StatsContainer = styled.section`
   width: 95%;
   height: 28%;
-  margin: 10px;
+  margin: 20px 10px;
   padding: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-`;
+  `;
 
 const StatsContent = styled.div`
   width: 300px;
   height: 180px;
-  margin: 0 20px;
+  margin: 20px 10px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -73,7 +71,7 @@ const StatsContent = styled.div`
 const SentimentContainer = styled.section`
   width: 90%;
   height: 20%;
-  margin: 10px;
+  margin: 20px 10px;
   padding: 10px 40px 10px 60px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;

@@ -8,7 +8,7 @@ const TrueComponentBox = styled.div`
   width: 100%;
   height: 100%;
   margin-left: 15px;
-  padding: 30px 50px 10px 0;
+  padding: 10px;
   box-sizing: border-box;
 `;
 
@@ -21,9 +21,9 @@ const TopBox = styled.div`
 `;
 
 const DateBox = styled.div`
-  font-size: 22px;
-  font-weight: 800;
-  color: #090071;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0d0d0d;
 `;
 
 const EditBtn = styled.button`
@@ -33,11 +33,11 @@ const EditBtn = styled.button`
   outline: none;
   background-color: white;
   font-size: 13px;
-  color: black;
+  color: #0d0d0d;
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 10px;
   &:hover {
-    background-color: #f9f9f9;
+    background-color: rgba(106, 156, 253, 0.2);
   }
 `;
 
@@ -48,46 +48,46 @@ const RemoveBtn = styled.button`
   outline: none;
   background-color: white;
   font-size: 13px;
-  color: black;
+  color: #0d0d0d;
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 10px;
   &:hover {
-    background-color: #f9f9f9;
+    background-color: rgba(106, 156, 253, 0.2);
   }
 `;
 
 const TrueComponentMidBox = styled.div`
   width: 100%;
-  height: 50%;
+  height: 85%;
   border: none;
-  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ImageBox = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 30px;
+  border-radius: 10px;
   margin-top: 20px;
 `;
 
 const BottomBox = styled.div`
   width: 95%;
-  height: 30%;
+  height: 15%;
   border: none;
-  border-radius: 30px;
   padding: 8px;
-  line-height: 1.3;
-  margin-top: 40px;
+  margin-top: 20px;
 `;
 
-function TrueComponent({ isSelectedMonth, isSelectedDay, imageUrl, text, handleEdit, handleRemove }) {
+function TrueComponent({ month, day, imageUrl, text, handleEdit, handleRemove }) {
   return (
     <TrueComponentBox>
       <TopBox>
         <RemoveBtn onClick={handleRemove}>삭제</RemoveBtn>
         <DateBox>
-          {isSelectedMonth}월 {isSelectedDay}일
+          {month}월 {day}일
         </DateBox>
         <EditBtn onClick={handleEdit}>수정</EditBtn>
       </TopBox>
