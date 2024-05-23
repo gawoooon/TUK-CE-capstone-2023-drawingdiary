@@ -2,20 +2,15 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { TbUserEdit } from "react-icons/tb";
 const ProfileBox = styled.div`
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 30px 30px 0 0;
-  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
+
 `;
 
 const ProfileImg = styled.img`
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  margin-bottom: 20px;
   object-fit: cover;
 `;
 
@@ -51,8 +46,6 @@ function Profile({ profileImage, profileEmail, profileName }) {
           }}
         />
       )}
-      <ProfileName>{profileName}</ProfileName>
-      <ProfileEmail>{profileEmail}</ProfileEmail>
     </ProfileBox>
   );
 }

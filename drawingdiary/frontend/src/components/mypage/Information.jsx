@@ -10,9 +10,7 @@ const InfoBox = styled.div`
   height: 400px;
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
-  border: 3px solid #a3a3a3;
-  box-shadow: 1px 5px 2px rgba(0, 0, 0, 0.2);
+  align-items: center;
   padding: 0 20px;
   box-sizing: border-box;
 `;
@@ -26,11 +24,10 @@ const InfoTop = styled.div`
 `;
 
 const InfoBtn = styled.button`
-  width: 100px;
+  width: 70%;
   height: 40px;
   background-color: rgba(106, 156, 253, 0.3);
-  box-shadow: 1px 5px 2px rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
   color: black;
@@ -39,7 +36,7 @@ const InfoBtn = styled.button`
 `;
 
 const InfoBottom = styled.div`
-  width: 100%;
+  width: 60%;
   height: 85%;
   padding: 30px 20px 15px 20px;
   box-sizing: border-box;
@@ -65,10 +62,6 @@ function Information({
 
   return (
     <InfoBox>
-      <InfoTop>
-        기본정보
-        <InfoBtn onClick={onPopupPassword}>수정</InfoBtn>
-      </InfoTop>
       <InfoBottom>
         <Line icon={IoMdPerson} text={profileName} hasBorder={true} />
         <Line
@@ -77,8 +70,9 @@ function Information({
           hasBorder={true}
         />
         <Line icon={MdEmail} text={profileEmail} hasBorder={true} />
-        <Line icon={FaBirthdayCake} text={profileBirth} hasBorder={false} />
+        <Line icon={FaBirthdayCake} text={profileBirth} hasBorder={true} />
       </InfoBottom>
+      <InfoBtn onClick={onPopupPassword}>수정</InfoBtn>
     </InfoBox>
   );
 }
