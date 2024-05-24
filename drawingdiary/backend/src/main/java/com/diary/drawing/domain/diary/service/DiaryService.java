@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,12 +67,21 @@ public class DiaryService {
         return diaryResponseDTO;
     }
 
+    /* 최근 5개 다이어리 내용 리턴 */
+    public ResponseEntity<?> recentFive(Long memberID){
+        Member member = validateMemberService.validateMember(memberID);
+        PageRequest pageable = PageRequest.of(0, 5);
+        List<Diary> recent5 = diaryRepository.findByMember5RecentDiary(member, pageable);
+        if(recent5 == null) {throw new DiaryResponseException(DiaryExceptionType.NOT_EXIST_CONTEXT);}
+        List<DiaryResponseDTO> response = recent5.stream()
+            .map(diary -> DiaryResponseDTO.from(diary))
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
     /* 년월, 멤버id로 모든 다이어리 return 하는 캘린더 서비스 */
     public List<CalenderDTO> calender( int year, int month,  Long memberID){
         Member member = validateMemberService.validateMember(memberID);
-        // 확인용 로그찍기
-        log.info("일기 미리보기 요청: 사용자 ID {}", memberID);
-
         // 년월로 startDate와 endDate 얻기
         YearMonth yearMonth = YearMonth.of(year, month);
         LocalDate startDate = yearMonth.atDay(1);
