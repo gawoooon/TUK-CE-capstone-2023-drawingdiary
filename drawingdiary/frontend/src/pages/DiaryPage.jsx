@@ -27,7 +27,6 @@ const DiaryContainer = styled.section`
   display: flex;
   width: 84%;
   flex-direction: column;
-
   padding: 1% 10% 2% 10%;
 `;
 
@@ -92,19 +91,20 @@ const CommentBox = styled.div`
   height: 49%;
   background-color: #e1ebff;
   border-radius: 10px;
+  padding: 1% 3%;
+  box-sizing: border-box;
 `;
 
 const StyleBox = styled.div`
   display: flex;
-  width: 50%;
+  width: 500px;
   height: 29%;
-  background-color: pink;
 `;
 
 const TextBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 500px;
   height: 69%;
   border-radius: 10px;
   border: 1px solid black;

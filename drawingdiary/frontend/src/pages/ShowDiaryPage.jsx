@@ -14,19 +14,121 @@ import Background2 from "../components/Background/index2";
 import { IoIosSend } from "react-icons/io";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { useAuth } from "../auth/context/AuthContext";
+import { GrUploadOption } from "react-icons/gr";
+import { IoMdRefresh } from "react-icons/io";
 
 const Container = styled.body`
   width: 100%;
-  height: 900px;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
 `;
 
 const DiaryContainer = styled.section`
   display: flex;
-  flex-direction: row;
-  margin: auto;
+  width: 84%;
+  flex-direction: column;
+  padding: 1% 10% 2% 10%;
 `;
+
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 8%;
+`;
+
+const MidContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 65%;
+  padding: 1% 0 3% 0;
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 27%;
+`;
+
+const LeftBox = styled.div`
+  display: flex;
+  width: 49%;
+  height: 100%;
+`;
+
+const RightBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 49%;
+  height: 100%;
+`;
+
+const ImageBox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #b4cdfe;
+  border-radius: 10px;
+`;
+
+const SentimentBox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 49%;
+  background-color: #d2e2fe;
+  border-radius: 10px;
+`;
+
+const CommentBox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 49%;
+  background-color: #e1ebff;
+  border-radius: 10px;
+  padding: 1% 3%;
+  box-sizing: border-box;
+`;
+
+const StyleBox = styled.div`
+  display: flex;
+  width: 500px;
+  height: 29%;
+`;
+
+const TextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 69%;
+  border-radius: 10px;
+  border: 1px solid black;
+  padding: 10px;
+  box-sizing: border-box;
+`;
+
+const BtnBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 20%;
+`;
+
+//
+//
+///
+
+// const DiaryContainer = styled.section`
+//   display: flex;
+//   flex-direction: row;
+//   margin: auto;
+// `;
 
 const LeftContainer = styled.section`
   width: 50%;
@@ -313,7 +415,24 @@ function ShowDiaryPage() {
     //image post
     if (newImageUrl) {
       console.log("parentSelectedButtonStyle: ", parentSelectedButtonStyle);
-      console.log("text",diaryText,"weather",weatherState,"date",dateString, "album",selectedAlbumID,"stylename",parentSelectedButtonStyle,"imagefile",newImageUrl,"confidence",positiveValue,"commit",commentText )
+      console.log(
+        "text",
+        diaryText,
+        "weather",
+        weatherState,
+        "date",
+        dateString,
+        "album",
+        selectedAlbumID,
+        "stylename",
+        parentSelectedButtonStyle,
+        "imagefile",
+        newImageUrl,
+        "confidence",
+        positiveValue,
+        "commit",
+        commentText
+      );
       // 일기 수정
       try {
         const responseDiary = await axios.put(
@@ -353,76 +472,64 @@ function ShowDiaryPage() {
   };
 
   return (
-    <div>
-      <Background2>
-        <Container>
-          <DiaryContainer>
-            <LeftContainer>
-              <LeftTopContent>
-                <ShowWeather date={date} weatherState={weatherState} />
-                <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
-              </LeftTopContent>
-              <LeftMidContent>
-                <ShowImageOption
-                  onOptionSelect={handleOptionSelect}
-                  isRecommenderLoading={isRecommenderLoading}
-                  selectedOption={style}
-                />
-                <Area>
-                  <ShowDiary
-                    onDiaryTextChange={handleDiaryTextChange}
-                    showText={diaryText}
-                  />
-                  <IoIosSend
-                    size={28}
-                    color="rgba(106, 156, 253, 0.8)"
-                    onClick={handleCreate}
-                    style={{
-                      cursor: "pointer",
-                      marginLeft: "10px",
-                      marginTop: "16px",
-                    }}
-                  />
-                </Area>
-              </LeftMidContent>
-              <LeftBottomContent>
-                <RightBottomContent>
-                  <ShowAIComment
-                    text={commentText}
-                    isLoading={isCommentLoading}
-                  />
-                  <Sentiment
-                    positiveValue={positiveValue}
-                    negativeValue={negativeValue}
-                    neutralValue={neutralValue}
-                  />
-                </RightBottomContent>
-              </LeftBottomContent>
-            </LeftContainer>
+    <Container>
+      <NavBar />
+      <DiaryContainer>
+        <TopContainer>
+          <ShowWeather date={date} weatherState={weatherState} />
 
-            <RightContainer>
-              <NavBar />
-              <RightTopContent>
-                <SaveBtn onClick={handleSave}>
-                  저장하기
-                  <FaRegCheckCircle
-                    size={18}
-                    color="#3d3d3d"
-                    style={{ marginLeft: "10px" }}
-                  />
-                </SaveBtn>
-              </RightTopContent>
-              <RightMidContent>
-                <ShowGeneratedImage
-                  isLoading={isImageLoading}
-                  newImageUrl={newImageUrl}
-                />
-              </RightMidContent>
-            </RightContainer>
-          </DiaryContainer>
-        </Container>
-      </Background2>
-    </div>
+          <AlbumCategory onSelectAlbum={handleSelectedAlbumChange} />
+        </TopContainer>
+        <MidContainer>
+          <LeftBox>
+            <ImageBox>
+              <ShowGeneratedImage
+                isLoading={isImageLoading}
+                newImageUrl={newImageUrl}
+              />
+            </ImageBox>
+          </LeftBox>
+          <RightBox>
+            <SentimentBox>
+              <Sentiment
+                positiveValue={positiveValue}
+                negativeValue={negativeValue}
+                neutralValue={neutralValue}
+              />
+            </SentimentBox>
+            <CommentBox>
+              <ShowAIComment text={commentText} isLoading={isCommentLoading} />
+            </CommentBox>
+          </RightBox>
+        </MidContainer>
+        <BottomContainer>
+          <StyleBox>
+            <ShowImageOption
+              onOptionSelect={handleOptionSelect}
+              isRecommenderLoading={isRecommenderLoading}
+              selectedOption={style}
+            />
+          </StyleBox>
+          <TextBox>
+            <ShowDiary
+              onDiaryTextChange={handleDiaryTextChange}
+              showText={diaryText}
+            />
+
+            <BtnBox>
+              <IoMdRefresh
+                size={16}
+                onClick={handleCreate}
+                style={{
+                  cursor: "pointer",
+                }}
+              />
+              <GrUploadOption size={16} onClick={handleSave} />
+            </BtnBox>
+          </TextBox>
+        </BottomContainer>
+      </DiaryContainer>
+    </Container>
   );
 }
 
