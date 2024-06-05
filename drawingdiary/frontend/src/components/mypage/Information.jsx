@@ -10,6 +10,7 @@ const InfoBox = styled.div`
   height: 400px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   padding: 0 20px;
   box-sizing: border-box;
@@ -24,22 +25,18 @@ const InfoTop = styled.div`
 `;
 
 const InfoBtn = styled.button`
-  width: 70%;
-  height: 40px;
-  background-color: rgba(106, 156, 253, 0.3);
+  width: 420px;
+  height: 48px;
+  background-color: rgba(106, 156, 253, 0.5);
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const InfoBottom = styled.div`
-  width: 60%;
-  height: 85%;
-  padding: 30px 20px 15px 20px;
-  box-sizing: border-box;
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 30px;
+  &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+  }
 `;
 
 function Information({
@@ -62,16 +59,14 @@ function Information({
 
   return (
     <InfoBox>
-      <InfoBottom>
-        <Line icon={IoMdPerson} text={profileName} hasBorder={true} />
-        <Line
-          icon={MdOutlinePhoneIphone}
-          text={formatPhoneNumber(profilePhone)}
-          hasBorder={true}
-        />
-        <Line icon={MdEmail} text={profileEmail} hasBorder={true} />
-        <Line icon={FaBirthdayCake} text={profileBirth} hasBorder={true} />
-      </InfoBottom>
+      <Line icon={IoMdPerson} text={profileName} hasBorder={true} />
+      <Line
+        icon={MdOutlinePhoneIphone}
+        text={formatPhoneNumber(profilePhone)}
+        hasBorder={true}
+      />
+      <Line icon={MdEmail} text={profileEmail} hasBorder={true} />
+      <Line icon={FaBirthdayCake} text={profileBirth} hasBorder={true} />
       <InfoBtn onClick={onPopupPassword}>수정</InfoBtn>
     </InfoBox>
   );

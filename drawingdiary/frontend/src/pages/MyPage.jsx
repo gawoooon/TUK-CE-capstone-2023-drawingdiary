@@ -9,10 +9,20 @@ import Popup from "../components/mypage/Popup";
 import PopupPassword from "../components/mypage/PopupPassword";
 import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
-const Container = styled.body`
-  width: 100%;
-  height: 100vh;
-  display: flex;
+
+const Body = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100vw;
+    height: 100vh;
+`;
+
+const SidebarContainer = styled.div`
+    width: 260px;
+    height: 100%;
+    position: fixed;
 `;
 
 const MyPageBody = styled.div`
@@ -22,7 +32,6 @@ const MyPageBody = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 20%;
 `;
 
 const MyPageBackground = styled.div`
@@ -135,8 +144,10 @@ function MyPage() {
   }, [memberID, fetchUserName]);
 
   return (
-    <Container>
-      <NavBar />
+    <Body>
+      <SidebarContainer>
+        <NavBar />
+      </SidebarContainer>
       <MyPageBody>
         <Profile
           profileImage={profileImage}
@@ -161,7 +172,7 @@ function MyPage() {
           />
         )}
       </MyPageBody>
-    </Container>
+    </Body>
   );
 }
 

@@ -57,31 +57,23 @@ const PopupTopCloseBtn = styled.button`
 // 팝업창 하단 - 수정 버튼
 const PopupBottom = styled.div`
   width: 100%;
-  height: 13%;
+  height: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const jumpAnimation = keyframes`
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-`;
-
 const PopupBottomCheckBtn = styled.button`
-  width: 200px;
-  height: 50px;
-  background-color: rgba(106, 156, 253, 0.3);
-  box-shadow: 1px 5px 2px rgba(0, 0, 0, 0.2);
-  border-radius: 30px;
+  width: 420px;
+  height: 48px;
+  background-color: rgba(106, 156, 253, 0.5);
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 400;
   &:hover {
-    animation: ${jumpAnimation} 0.5s ease;
+    background-color: rgba(106, 156, 253, 0.3);
   }
 `;
 
@@ -92,36 +84,31 @@ const PopupBody = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 80%;
+  height: 70%;
   box-sizing: border-box;
   padding: 10px 0;
 `;
 
 const PopupTitle = styled.div`
-  font-size: 30px;
+  font-size: 36px;
   font-weight: bold;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 `;
 
 const PopupText = styled.div`
-  font-size: 15px;
-  color: #a3a3a3;
+  font-size: 14px;
   padding-top: 5px;
 `;
 
 const PopupInput = styled.input`
-  width: 100%;
-  height: 100%;
+  width: 420px;
+  height: 48px;
   outline: none;
-  font-size: 13px;
-  border: 2px solid rgba(106, 156, 253, 0.4);
+  font-size: 12px;
+  border: 1px solid #828282;
+  border-radius: 10px;
   padding-left: 10px;
-`;
-
-const PopupInputBox = styled.div`
-  width: 300px;
-  height: 50px;
-  padding-top: 60px;
+  margin-top: 80px;
 `;
 
 function PopupPassword({ onClose, onPopup }) {
@@ -165,14 +152,12 @@ function PopupPassword({ onClose, onPopup }) {
           <PopupTitle>비밀번호 확인</PopupTitle>
           <PopupText>{setName}님의 회원정보를 안전하게 보호하기 위해</PopupText>
           <PopupText>비밀번호를 한 번 더 확인해주세요.</PopupText>
-          <PopupInputBox>
-            <PopupInput
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              placeholder="비밀번호 확인"
-            />
-          </PopupInputBox>
+          <PopupInput
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            placeholder="비밀번호 확인"
+          />
         </PopupBody>
         <PopupBottom>
           <PopupBottomCheckBtn onClick={handleCheck}>확인</PopupBottomCheckBtn>

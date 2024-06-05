@@ -70,25 +70,17 @@ const PopupBottom = styled.div`
   align-items: center;
 `;
 
-const jumpAnimation = keyframes`
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-`;
-
 const PopupBottomEditBtn = styled.button`
-  width: 200px;
-  height: 50px;
-  background-color: rgba(106, 156, 253, 0.3);
-  box-shadow: 1px 5px 2px rgba(0, 0, 0, 0.2);
-  border-radius: 30px;
+  width: 420px;
+  height: 48px;
+  background-color: rgba(106, 156, 253, 0.5);
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 400;
   &:hover {
-    animation: ${jumpAnimation} 0.5s ease;
+    background-color: rgba(106, 156, 253, 0.3);
   }
 `;
 
@@ -111,7 +103,6 @@ const ProfileTop = styled.div`
   width: 100%;
   height: 17%;
   background-color: white;
-  border-bottom: 3px solid rgba(106, 156, 253, 0.2);
   margin-bottom: 20px;
   padding: 0 20px 20px 20px;
   box-sizing: border-box;
@@ -138,16 +129,15 @@ const ProfileName = styled.input`
   align-items: end;
   width: 140px;
   height: 40px;
-  font-size: 20px;
+  font-size: 16px;
   margin: 0px 10px;
   box-sizing: border-box;
   outline: none;
   border: none;
-  color: #a3a3a3;
   ::placeholder {
     color: #a3a3a3;
   }
-  border-bottom: 2px solid rgb(144, 144, 144);
+  border-bottom: 1px solid #828282;
 `;
 
 // 프로필 이미지 업로드
@@ -159,10 +149,10 @@ const ProfileImgUpload = styled.label`
   height: 35px;
   background-color: white;
   border-radius: 10px;
-  font-size: 13px;
-  font-weight: bold;
-  color: rgb(144, 144, 144);
-  border: 2px solid rgb(144, 144, 144);
+  font-size: 12px;
+  font-weight: 400;
+  color: #828282;
+  border: 1px solid #828282;
   cursor: pointer;
 `;
 
@@ -197,7 +187,7 @@ const PopupLineInputBox = styled.div`
   display: flex;
   width: 250px;
   height: 100%;
-  font-size: 13px;
+  font-size: 12px;
   border: none;
   border-bottom: 1px solid rgba(56, 56, 56, 0.4);
 `;
@@ -207,7 +197,7 @@ const PopupLineInput = styled.input`
   width: 220px;
   height: 90%;
   outline: none;
-  font-size: 13px;
+  font-size: 12px;
   border: none;
 `;
 
@@ -216,22 +206,25 @@ const PopupLineTitle = styled.div`
   align-items: center;
   width: 250px;
   height: 100%;
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 400;
 `;
 
 const PopupLineBtn = styled.button`
-  width: 50px;
-  height: 30px;
+  width: 60px;
+  height: 36px;
   background-color: white;
-  border: 2px solid rgba(106, 156, 253, 0.4);
-  border-radius: 10px;
+  border: 2px solid rgba(106, 156, 253, 0.5);
+  border-radius: 5px;
   cursor: pointer;
-  color: black;
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
   outline: none;
-  font-weight: bold;
+  font-weight: 400;
+  &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+    border: none;
+  }
 `;
 
 const PopupLineBtnBox = styled.div`
@@ -570,7 +563,7 @@ function Popup({ onClose, profileImage, profileName }) {
 
           <PopupLineBox>
             <PopupLineIcon>
-              <MdOutlinePhoneIphone size={28} />
+              <MdOutlinePhoneIphone size={20} />
             </PopupLineIcon>
             <PopupLineInputBox>
               <PopupLineInput
@@ -616,7 +609,7 @@ function Popup({ onClose, profileImage, profileName }) {
 
           <PopupLineBox>
             <PopupLineIcon>
-              <MdEmail size={28} />
+              <MdEmail size={20} />
             </PopupLineIcon>
             <PopupLineTitle>아이디 변경</PopupLineTitle>
             <PopupLineBtnBox></PopupLineBtnBox>
@@ -655,7 +648,7 @@ function Popup({ onClose, profileImage, profileName }) {
 
           <PopupLineBox>
             <PopupLineIcon>
-              <RiLock2Fill size={28} />
+              <RiLock2Fill size={20} />
             </PopupLineIcon>
             <PopupLineTitle>비밀번호 변경</PopupLineTitle>
             <PopupLineBtnBox></PopupLineBtnBox>
