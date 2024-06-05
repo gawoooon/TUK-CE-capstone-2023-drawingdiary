@@ -152,10 +152,5 @@ public class AlbumService {
             .map(image -> new ImageForAlbumDTO(image.getImageID(), image.getImageFile(), image.getDate()))
             .collect(Collectors.toList());
 
-        // List<Diary> diaries = diaryRepository.findByAlbum(album);
-        // return diaries.stream()
-        //     .filter(diary -> diary != null && diary.getImage() != null)
-        //     .map(diary -> new ImageForAlbumDTO(diary.getImage().getImageID(), diary.getImage().getImageFile(), diary.getDate(), diary.getDiaryID()))
-        //     .collect(Collectors.toList());
     }
 }

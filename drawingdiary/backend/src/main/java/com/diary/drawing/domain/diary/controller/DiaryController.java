@@ -92,6 +92,15 @@ public class DiaryController {
         return diaryService.calender(year, month, principalDetails.getMemberID());
     }
 
+    /* 메인 페이지용 최신 5개 일기 미리보기 (전체 세부 발송) API [GET]
+     * 
+     */
+    @Operation(summary = "메인화면용 최신 일기 5개 미리보기")
+    @GetMapping("/api/calender/recent-five")
+    public ResponseEntity<?> getRecentFiveDiary(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return diaryService.recentFive(principalDetails.getMemberID());
+    }
+
     @Operation(summary = "테스트 - 추가")
     @PostMapping("/api/diary/test/add")
     public Diary testAddDiary(@RequestBody DiaryRequestDTO diaryRequestDTO) throws Exception{

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +24,9 @@ public interface DiaryRepository extends JpaRepository<Diary, Long>{
 
     @Query("SELECT d FROM Diary d WHERE d.member = :member AND d.date BETWEEN :startDate AND :endDate")
     List<Diary> findByMemberAndDateBetween(@Param("member") Member member, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT d FROM Diary d WHERE d.member = :member ORDER BY d.date DESC")
+    List<Diary> findByMember5RecentDiary(@Param("member") Member member, Pageable pageable);
 
 
 }
