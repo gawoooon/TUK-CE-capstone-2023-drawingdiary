@@ -22,10 +22,6 @@ const LoginBox = styled.div`
   align-items: center;
   width: 1000px;
   height: 600px;
-  // background-color: rgba(255, 255, 255, 0.2);
-  // box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
-  // box-shadow: 3px 5px 2px 0 rgba(0, 0, 0, 0.2);
-  // border-radius: 30px;
   padding: 100px 130px;
   box-sizing: border-box;
 `;

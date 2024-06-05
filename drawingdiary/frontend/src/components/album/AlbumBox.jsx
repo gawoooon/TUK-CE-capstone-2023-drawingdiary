@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { CgTrash } from "react-icons/cg";
 
 const Container = styled.section`
-    width: 95%;
+    width: 100%;
     height: 100%;
     margin: auto;
 `;

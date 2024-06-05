@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
-import LoginBar from "../components/LoginBar";
-import LoginBtn from "../components/LoginBtn";
+import LoginBar from "../components/LoginBar/BasicBar";
 import { MdEmail } from "react-icons/md";
 
 const Body = styled.body`
@@ -43,13 +42,32 @@ const Title = styled.div`
 const Content = styled.p`
   font-size: 16px;
   padding: 10px 0;
-  color: #989898;
+  text-align: center;
 `;
 
 const EmailSection = styled.section`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 380px;
+  height: 48px;
+  margin-top: 20px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: rgba(106, 156, 253, 0.5);
+  &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+  }
 `;
 
 const MessageContainer = styled.div`
@@ -75,33 +93,37 @@ function PasswordLostPage() {
 
   const handlePost = async (event) => {
     event.preventDefault();
-    console.log(email);
-
-    try {
-      axios.post(
-        "http://localhost:8080/api/member/resetpassword", { 
-          email: email 
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+    
+    if(email !== "") {
+      try {
+        axios.post(
+          "http://localhost:8080/api/member/resetpassword", { 
+            email: email 
           },
-        }
-      );
-      setVerifyMessage(true);
-    } catch (error) {
-      console.log("error: ", error);
-      setVerifyMessage(false);
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setVerifyMessage(true);
+      } catch (error) {
+        console.log("error: ", error);
+        setVerifyMessage(false);
+      }
+    } else {
+      alert("이메일을 입력해주세요!");
     }
+
   };
 
   return (
     <Body>
       <LoginBody>
-        <Title>암호 재설정</Title>
+        <Title>비밀번호 찾기</Title>
         <Content>
-          계속하려면 계정에서 사용하는 이메일주소를 입력하세요.
-          전송 버튼을 누르면 해당 이메일로 임시 비밀번호가 전송됩니다.
+          가입한 이메일을 입력해 주세요.<br/>
+          이메일을 통해 비밀번호 변경 링크가 전송됩니다
         </Content>
         <InnerBox>
           <EmailSection>
@@ -109,7 +131,7 @@ function PasswordLostPage() {
               icon={<MdEmail />}
               text="이메일"
               onChange={(e) => setEmail(e.target.value)} />
-            <LoginBtn text="전송" onClick={handlePost} />
+            <Button onClick={handlePost}>전송</Button>
           </EmailSection>
           <MessageContainer>
             {verifyMessage === true && (

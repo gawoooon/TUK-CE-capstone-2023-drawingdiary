@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { isSameDay } from "date-fns";
-import { format } from "date-fns";
+import { isSameDay, format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import Calendar2 from "../components/Calendar2";
 import FalseComponent from "../components/FalseComponent";
@@ -14,41 +13,39 @@ import {
 import axios from "axios";
 import Navbar from "../components/sidebar/NavBar";
 
-const Body = styled.body`
+const Body = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100vw;
+    height: 100vh;
 `;
 
 const SidebarContainer = styled.div`
-    display: flex;
-    flex-direction: column;
     width: 260px;
     height: 100%;
+    position: fixed;
 `;
 
 const CalendarBox = styled.div`
   display: flex;
   flex-direction: row;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  padding-left: 20px;
-  transition: opacity 200ms ease-out;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% - 260px); 
+  height: inherit;
+  padding-left: 280px;
+  box-sizing: border-box;
 `;
 
 const MiddleBox = styled.div`
   display: flex;
   width: 50%;
-  height: 100%;
+  height: 800px;
   border-radius: 30px;
   margin: 20px;
   box-sizing: border-box;
-  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const RightBox = styled.div`
@@ -58,23 +55,19 @@ const RightBox = styled.div`
   justify-content: center;
   align-items: center;
   height: 800px;
-  width: 700px;
-  margin: 20px;
+  margin: 10px;
   box-sizing: border-box;
   overflow: hidden;
-  transition: opacity 200ms ease-out, width 200ms linear;
 `;
 
 const ResultBox = styled.div`
   width: 100%;
   height: 95%;
-  transition: opacity 200ms ease-out;
 `;
 
 function CalendarPage() {
   const navigate = useNavigate();
-
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDateHasData, setSelectedDateHasData] = useState(false);
 
   const { memberID, getToken } = useAuth();
@@ -109,15 +102,15 @@ function CalendarPage() {
         console.log("사용자의 이름을 불러오는 중 에러 발생: ", error);
       }
     }
-  }, [memberID]);
+  }, [accessToken]);
 
   useEffect(() => {
     fetchUserName();
-  }, [memberID, fetchUserName]);
+  }, [fetchUserName]);
 
   const handleDateClick = async (day) => {
     setSelectedDate(day); // selectedDate 상태 업데이트
-    setSelectedDateHasData(true); // // selectedDate에 데이터가 존재하는지
+    setSelectedDateHasData(true); // selectedDate에 데이터가 존재하는지
   };
 
   const handleEdit = async () => {
@@ -126,13 +119,8 @@ function CalendarPage() {
     const day = selectedDate.getDate();
     const formattedDate = new Date(currentYear, month - 1, day);
 
-    // 날짜 및 월을 두 자릿수로 표시하는 함수
     const pad = (number) => (number < 10 ? `0${number}` : number);
-
-    // "xxxx-xx-xx" 형식으로 날짜 문자열 생성
-    const dateString = `${formattedDate.getFullYear()}-${pad(
-      formattedDate.getMonth() + 1
-    )}-${pad(formattedDate.getDate())}`;
+    const dateString = `${formattedDate.getFullYear()}-${pad(formattedDate.getMonth() + 1)}-${pad(formattedDate.getDate())}`;
 
     try {
       const response = await axios.get(
@@ -205,15 +193,12 @@ function CalendarPage() {
     }
   };
 
-  // fetchData 함수를 useEffect 외부에서 선언
   const fetchData = async (date) => {
     try {
-      // isSameDay함수를 사용하여 selectedDate와 일치하는 날짜를 찾음
       const index = data.findIndex((item) =>
         isSameDay(new Date(item.date), date)
       );
 
-      //일치하면 인덱스 값/ 아니면 -1 반환 => 존재하면 true, 존재하지 않으면 false
       if (index !== -1) {
         setText(data[index].text);
         setImageUrl(data[index].imageFile);
@@ -222,17 +207,16 @@ function CalendarPage() {
       return hasData;
     } catch (error) {
       console.error("Error fetching data:", error);
-      return false; // 에러가 발생하면 데이터가 없는 것으로 처리
+      return false;
     }
   };
 
   useEffect(() => {
     if(accessToken === null) {
-      localStorage.clear(); // 토큰이 널 값이면 로컬 스토리지 초가화
+      localStorage.clear();
     }
   }, [accessToken]);
 
-  // useEffect 내부에서 fetchData 함수 호출(변경 감지)
   useEffect(() => {
     if (selectedDate) {
       setYear(format(selectedDate, "yyyy"));
@@ -249,14 +233,10 @@ function CalendarPage() {
         setIsSelectedDay(format(selectedDate, "dd"));
 
         try {
-          // 클릭한 날짜
           const hasData = await fetchData(selectedDate);
-
-          // 데이터 확인 결과에 따라 상태 업데이트
           setSelectedDateHasData(hasData);
         } catch (error) {
           console.error("Error fetching data:", error);
-          // 에러가 발생하면 데이터가 없는 것으로 간주
           setSelectedDateHasData(false);
         }
       }

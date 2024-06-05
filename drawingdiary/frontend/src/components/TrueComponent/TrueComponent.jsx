@@ -5,9 +5,8 @@ const TrueComponentBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
-  height: 100%;
-  margin-left: 15px;
+  width: inherit;
+  height: inherit;
   padding: 10px;
   box-sizing: border-box;
 `;
@@ -16,43 +15,29 @@ const TopBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: inherit;
   height: 5%;
 `;
 
 const DateBox = styled.div`
-  font-size: 20px;
-  font-weight: 600;
-  color: #0d0d0d;
+  font-size: 18px;
+  font-weight: 400;
 `;
 
-const EditBtn = styled.button`
-  width: 65px;
-  height: 34px;
-  border: none;
+const Button = styled.button`
+  width: 54px;
+  height: 38px;
   outline: none;
+  border: 0.0625rem solid rgba(106, 156, 253, 0.5);
   background-color: white;
-  font-size: 13px;
-  color: #0d0d0d;
+  font-size: 14px;
   cursor: pointer;
   border-radius: 10px;
   &:hover {
-    background-color: rgba(106, 156, 253, 0.2);
-  }
-`;
-
-const RemoveBtn = styled.button`
-  width: 65px;
-  height: 34px;
-  border: none;
-  outline: none;
-  background-color: white;
-  font-size: 13px;
-  color: #0d0d0d;
-  cursor: pointer;
-  border-radius: 10px;
-  &:hover {
-    background-color: rgba(106, 156, 253, 0.2);
+    background-color: rgba(106, 156, 253, 0.3);
+    border: none;
+    width: 54px;
+    height: 40px;
   }
 `;
 
@@ -85,11 +70,11 @@ function TrueComponent({ month, day, imageUrl, text, handleEdit, handleRemove })
   return (
     <TrueComponentBox>
       <TopBox>
-        <RemoveBtn onClick={handleRemove}>삭제</RemoveBtn>
+        <Button onClick={handleRemove}>삭제</Button>
         <DateBox>
           {month}월 {day}일
         </DateBox>
-        <EditBtn onClick={handleEdit}>수정</EditBtn>
+        <Button onClick={handleEdit}>수정</Button>
       </TopBox>
       <TrueComponentMidBox>
         <ImageBox src={imageUrl} />

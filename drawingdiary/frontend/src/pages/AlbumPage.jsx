@@ -6,39 +6,51 @@ import { useState } from "react";
 import AddCategory from "../components/album/AddCategory";
 import { CategoryProvider } from "../components/album/CategoryList";
 
-const Container = styled.body`
-  width: 100%;
-  height: 100vh;
-  margin-right: 120px;
+const Body = styled.body`
   display: flex;
   flex-direction: row;
-  `;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const SidebarContainer = styled.div`
+    width: 260px;
+    height: 100%;
+    position: fixed;
+`;
 
 const RightSection = styled.section`
-  width: 80vw;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% - 260px); 
+  height: inherit;
+  padding-left: 180px;
+  box-sizing: border-box;
 `;
 
 const AlbumContainer = styled.section`
-  width: 100%;
-  height: 100%;
+  width: inherit;
+  height: 870px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
   &::-webkit-scrollbar {
-    width: 5px;
+    width: 1px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #808080;
-    border-radius: 4px;
+    background-color: transparent;
   }
 `;
 
 const AddAlbum = styled.div`
+  width: inherit;
   position: sticky;
   display: flex;
   justify-content: end;
@@ -75,8 +87,10 @@ const AlbumPage = () => {
 
   return (
     <CategoryProvider>
-        <Container>
-          <NavBar/>
+        <Body>
+          <SidebarContainer>
+            <NavBar />
+          </SidebarContainer>
           <RightSection>
             <AlbumContainer>
               <AlbumBox  onErrorMessage={handleErrorMessage}/>
@@ -91,7 +105,7 @@ const AlbumPage = () => {
                 />
             </AddAlbum>
           </RightSection>
-        </Container>
+        </Body>
     </CategoryProvider>
   );
 }

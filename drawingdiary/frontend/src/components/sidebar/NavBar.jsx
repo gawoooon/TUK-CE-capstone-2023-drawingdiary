@@ -44,23 +44,9 @@ const MenuItem = styled(Link)`
 `;
 
 const MenuItemText = styled.div`
-    margin-left: 10px;
+    margin-left: 20px;
     color: #0d0d0d;
     font-size: 1rem;
-`;
-
-const CalenderSection = styled.section`
-    margin-top: 70px;
-    width: 100%;
-    height: 236px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const CalendarStyle = styled.div`
-    width: 100%;
-    height: 100%;
 `;
 
 const RecentSection = styled.section`
@@ -106,12 +92,12 @@ const ProfileImg = styled.img`
 `;
 
 const ProfileName = styled.div`
-    margin-left: 10px;
+    margin-left: 20px;
     font-size: 1rem;
     color: #0d0d0d;
 `;
 
-const Navbar = ({ isOpen }) => {
+const Navbar = () => {
 
     const [loginState, setLoginState] = useState(false);
 

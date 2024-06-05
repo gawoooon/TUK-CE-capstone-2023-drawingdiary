@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoginBar from "../components/LoginBar";
 import LoginBtn from "../components/LoginBtn";
@@ -18,9 +18,9 @@ const LoginBody = styled.section`
   display: flex;
   flex-direction: column;
   width: 600px;
-  height: 430px;
+  height: 500px;
   border-radius: 30px;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
@@ -29,40 +29,43 @@ const LoginBody = styled.section`
 const InnerBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  width: 400px;
-  height: 250px;
+  justify-content: center;
+  align-items: center;
+  width: inherit;
+  height: 200px;
 `;
 
 const Title = styled.div`
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 800;
-  padding: 20px 0;
+  padding: 10px 0;
 `;
 
 const Content = styled.p`
   font-size: 16px;
   padding: 10px 0;
-  color: #989898;
+  text-align: center;
 `;
 
 const PhoneSection = styled.section`
+  width: inherit;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-`;
+  justify-content: center;
+  `;
 
 const NumberSection = styled.section`
+  width: inherit;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 const MessageContainer = styled.div`
-  width: 100%;
-  height: 30px;
-  margin: 10px 0;
-  min-height: 30px;
+  width: inherit;
+  height: 20px;
+  margin: 5px 0;
+  min-height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,15 +73,26 @@ const MessageContainer = styled.div`
 `;
 
 const Message = styled.div`
-  width: 100%;
   font-size: 14px;
   color: ${(props) => props.color};
 `;
 
-const GoLogin = styled(Link)`
+const LoginButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 380px;
+  height: 48px;
+  margin: 6px;
+  background-color: rgba(106, 156, 253, 0.5);
+  border-radius: 10px;
+  border: none;
   font-size: 16px;
-  padding-bottom: 10px;
-  color: #0d0d0d;
+  font-weight: 400;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+  }
 `;
 
 function EmailLostPage() {
@@ -92,6 +106,12 @@ function EmailLostPage() {
 
   // 새로운 이메일
   const [newEmail, setNewEmail] = useState("");
+
+  const navigate = useNavigate();
+
+  const goLogin = () => {
+    navigate('/login');
+  }
 
   const handlePhonePost = async (event) => {
     event.preventDefault();
@@ -149,8 +169,8 @@ function EmailLostPage() {
       <LoginBody>
         <Title>이메일 찾기</Title>
         <Content>
-          계속하려면 회원님의 전화번호를 입력해주세요. 이를 통해 본인 확인을
-          진행합니다.
+          계정에 등록된 휴대폰 번호를 인증하시면<br/>
+          사용 중인 계정의 이메일을 알려드립니다.
         </Content>
         <InnerBox>
           <PhoneSection>
@@ -168,22 +188,22 @@ function EmailLostPage() {
               onChange={(e) => setVerifyNumber(e.target.value)} />
             <LoginBtn text="확인" onClick={handleVerify} />
           </NumberSection>
+          <MessageContainer>
+            {verifyEmail === true && (
+              <Message color="#989898">
+                <>
+                  회원님의 이메일은{"   "}
+                  <span style={{ color: "green" }}>[ {newEmail} ] </span>
+                  {"   "} 입니다.
+                </>
+              </Message>
+            )}
+            {verifyEmail === false && (
+              <Message color="red">인증번호가 일치하지 않습니다.</Message>
+            )}
+          </MessageContainer>
         </InnerBox>
-        <MessageContainer>
-          {verifyEmail === true && (
-            <Message color="#989898">
-              <>
-                회원님의 이메일은{"   "}
-                <span style={{ color: "green" }}>[ {newEmail} ] </span>
-                {"   "} 입니다.
-              </>
-            </Message>
-          )}
-          {verifyEmail === false && (
-            <Message color="red">인증번호가 일치하지 않습니다.</Message>
-          )}
-        </MessageContainer>
-        <GoLogin to='/login'>로그인</GoLogin>
+        <LoginButton onClick={goLogin}>로그인</LoginButton>
       </LoginBody>
     </Body>
   );

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { format, addMonths, subMonths } from "date-fns";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
-
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import { useCalendar } from "./CalendarProvider";
@@ -18,13 +17,25 @@ const CalendarBox = styled.div`
 
 const HeaderBox = styled.div`
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  flex: 0 0 7%; 
 `;
 
 const HeaderStartBox = styled.div`
   display: flex;
-  width: 33%;
+  align-items: center;
+  justify-content: flex-start;
+  width: 24px;
+  height: 24px;
+  font-size: 1.8em;
+  font-weight: 900;
+  cursor: pointer;
+  border-radius: 50%;
+  &:hover {
+    background-color: #b7b7b7;
+  }
 `;
 
 const HeaderMiddleBox = styled.div`
@@ -51,11 +62,16 @@ const HeaderEndBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 33%;
-  color: #b7b7b7;
+  width: 24px;
+  height: 24px;
   font-size: 1.8em;
   font-weight: 900;
   cursor: pointer;
+  border-radius: 50%;
+  &:hover {
+    background-color: #b7b7b7;
+  }
+  }
 `;
 
 const DaysBox = styled.div`
@@ -74,6 +90,8 @@ const DayColumn = styled.div`
   flex: 1;
   color: #0d0d0d;
   border: 1px solid rgba(224, 224, 224, 0.5);
+  border-left: ${props => props.isSun ? '1px solid rgba(224, 224, 224, 0.5)' : 'none'};
+  border-right: ${props => props.isSat ? '1px solid rgba(224, 224, 224, 0.5)' : 'none'};
   box-sizing: border-box;
 `;
 
@@ -81,14 +99,14 @@ const BodyBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  flex: 1 1 auto; 
+  flex: 1 1 auto;
   box-sizing: border-box;
 `;
 
 const BodyDaysBox = styled.div`
   display: flex;
   width: 100%;
-  flex: 1 1 0; 
+  flex: 1 1 0;
   box-sizing: border-box;
 `;
 
@@ -114,11 +132,14 @@ const BodyMonth = styled.div`
 const BodyDayOneBox = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center; 
-  flex: 1; 
+  align-items: center;
+  flex: 1;
   height: 100%;
   box-sizing: border-box;
-  border: 1px solid rgba(224, 224, 224, 0.5);
+  border-top: 1px solid rgba(224, 224, 224, 0.5);
+  border-bottom: 1px solid rgba(224, 224, 224, 0.5);
+  border-left: ${props => props.isSun || props.isEven ? '1px solid rgba(224, 224, 224, 0.5)' : 'none'};
+  border-right: ${props => props.isSat || props.isEven ? '1px solid rgba(224, 224, 224, 0.5)' : 'none'};
   transition: width 0.5s linear;
 
   &:hover {
@@ -138,13 +159,14 @@ const BodyDayOneBox = styled.div`
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
     <HeaderBox>
-      <HeaderStartBox />
+      <HeaderStartBox>
+        <GrFormPrevious onClick={prevMonth} />
+      </HeaderStartBox>
       <HeaderMiddleBox>
         <HeaderMonth>{format(currentMonth, "MMMM")}</HeaderMonth>
         <HeaderYear>{format(currentMonth, "yyyy")}</HeaderYear>
       </HeaderMiddleBox>
       <HeaderEndBox>
-        <GrFormPrevious onClick={prevMonth} />
         <GrFormNext onClick={nextMonth} />
       </HeaderEndBox>
     </HeaderBox>
@@ -156,7 +178,7 @@ const RenderDays = () => {
   const date = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   for (let i = 0; i < 7; i++) {
-    days.push(<DayColumn key={i}>{date[i]}</DayColumn>);
+    days.push(<DayColumn key={i} isSun={i === 0} isSat={i === 6}>{date[i]}</DayColumn>);
   }
 
   return <DaysBox>{days}</DaysBox>;
@@ -200,6 +222,9 @@ const RenderCells = ({
           }`}
           key={day}
           onClick={() => cellOnDateClick(cloneDay)}
+          isSun={i === 0}
+          isSat={i === 6}
+          isEven={i % 2 === 1}
         >
           <BodyMonth
             className={
