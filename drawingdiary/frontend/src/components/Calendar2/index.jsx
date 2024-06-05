@@ -71,7 +71,6 @@ const HeaderEndBox = styled.div`
   &:hover {
     background-color: #b7b7b7;
   }
-  }
 `;
 
 const DaysBox = styled.div`

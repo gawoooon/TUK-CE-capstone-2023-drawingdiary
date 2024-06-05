@@ -110,6 +110,7 @@ const Navbar = () => {
 
     useEffect(() => {
         const currentAccessToken = getToken();
+        console.log(currentAccessToken);
         if (currentAccessToken) {
         setLoginState(true);
         } else {
