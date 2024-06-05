@@ -3,66 +3,19 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Lottie from "react-lottie";
 import imageLoading from "../../animation/imageLodding.json";
-import ImageStyleLists from "../diary/ImageStyleLists";
+import ImageStyleLists from "./ImageStyleLists";
 import { useAuth } from "../../auth/context/AuthContext";
-import Slider from "react-slick";
-import { MdNavigateNext } from "react-icons/md";
-import { MdNavigateBefore } from "react-icons/md";
-import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 const Container = styled.div`
+  width: 305px;
+  height: 400px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  .slick-slider {
-    width: 450px;
-    box-sizing: border-box;
-  }
-  .slick-prev,
-  .slick-next {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: black; // 화살표 색상을 검정색으로 설정
-    cursor: pointer;
-    font-size: 24px;
-  }
-  .slick-slide {
-    padding: 0 5px;
-    box-sizing: border-box;
+  h3 {
+    margin: 20px 0 0 10px;
   }
 `;
-
-const SlideItem = styled.div`
-  box-sizing: border-box;
-  border: 1px solid #000000;
-  text-align: center;
-  font-size: 10px;
-  cursor: pointer;
-  border-radius: 20px;
-  padding: 4px 0;
-  background-color: ${({ isSelected }) => (isSelected ? "#ddd" : "#fff")};
-  font-weight: ${({ isSelected }) => (isSelected ? "bold" : "normal")};
-  &:hover {
-    background-color: #ddd;
-  }
-`;
-
-// const Container = styled.div`
-//   width: 305px;
-//   height: 400px;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   h3 {
-//     margin: 20px 0 0 10px;
-//   }
-// `;
 
 const TopContainer = styled.div`
   width: 95%;
@@ -154,17 +107,13 @@ const OpenBtn = styled.button`
   }
 `;
 
-const ShowImageOption = ({
-  onOptionSelect,
-  isRecommenderLoading,
-  selectedOption,
-}) => {
+const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   const LoadingOptions = {
     loop: true,
     autoplay: true,
     animationData: imageLoading,
   };
-  const [selectedIndex, setSelectedIndex] = useState(null); // hover
+
   const [countDiary, setCountDiary] = useState(0);
 
   const [displayLeft, setDisplayLeft] = useState("flex"); // 초기 상태는 'flex'
@@ -201,12 +150,10 @@ const ShowImageOption = ({
   };
 
   const handleButtonStyleSelect = (option) => {
-    console.log("option : ", option);
     setSelectedButtonStyle(option);
     setIsSelected(true);
     setStoredSelectedStyle(option);
-    onOptionSelect(option);
-    setSelectedIndex(option); // hover
+    onOptionSelect(true, option);
   };
 
   useEffect(() => {
@@ -311,59 +258,65 @@ const ShowImageOption = ({
     setOtherStyles(filterNonDuplicateStyles);
   }, [isSelected, onOptionSelect, recommendedStyles]);
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 5,
-    nextArrow: <MdNavigateNext />,
-    prevArrow: <MdNavigateBefore />,
-    beforeChange: (_, next) => {
-      const prevButton = document.querySelector(".slick-prev");
-      const nextButton = document.querySelector(".slick-next");
-
-      if (next === 0) {
-        prevButton.style.display = "none";
-      } else {
-        prevButton.style.display = "flex";
-      }
-
-      if (next === items.length - 5) {
-        nextButton.style.display = "none";
-      } else {
-        nextButton.style.display = "flex";
-      }
-    },
-  };
-
-  const items = [...recommendedStyles, ...otherStyles];
-
   return (
     <Container>
-      {isLoading ? (
-        <Lottie
-          isClickToPauseDisabled={true}
-          options={LoadingOptions}
-          height={150}
-          width={150}
-        />
-      ) : (
-        <Slider {...settings}>
-          {items.map((item, index) => (
-            <div key={index}>
-              <SlideItem
-                isSelected={selectedIndex === index}
-                onClick={() => handleButtonStyleSelect(index)}
+      <TopContainer>
+        <h4>스타일 선택</h4>
+        <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
+      </TopContainer>
+      <Description>
+        {countDiary < 5 ? (
+          <TextStyle>
+            아래 스타일은 {userName}님과 나이와 성별이 같은 사용자들이 가장 많이
+            선택한 5가지의 스타일 입니다. 스타일을 추천받고 싶다면 일기를 5번
+            이상 작성하세요.
+          </TextStyle>
+        ) : (
+          <TextStyle>
+            {userName}님과 비슷한 사용자들이 선택한 스타일입니다. 마음에 드시는
+            옵션이 없으면 더보기를 눌러주세요.
+          </TextStyle>
+        )}
+      </Description>
+      <OptionContainer>
+        <SelectedStyle>
+          선택한 스타일:{" "}
+          {storedSelectedStyle !== null ? storedSelectedStyle : "없음"}
+        </SelectedStyle>
+        <LeftContainer display={displayLeft}>
+          {isLoading ? (
+            <Lottie
+              isClickToPauseDisabled={true}
+              options={LoadingOptions}
+              height={150}
+              width={150}
+            />
+          ) : (
+            recommendedStyles.map((style, index) => (
+              <OptionBtnStyle
+                key={index}
+                isSelected={selectedButtonStyle === style}
+                onClick={() => handleButtonStyleSelect(style)}
               >
-                {item}
-              </SlideItem>
-            </div>
+                {`${style}`}
+              </OptionBtnStyle>
+            ))
+          )}
+        </LeftContainer>
+        <RightContainer display={displayRight}>
+          {otherStyles.map((style, index) => (
+            <OptionBtnStyle
+              key={index}
+              isSelected={selectedButtonStyle === style}
+              onClick={() => handleButtonStyleSelect(style)}
+            >
+              {`${style}`}
+            </OptionBtnStyle>
           ))}
-        </Slider>
-      )}
+        </RightContainer>
+      </OptionContainer>
     </Container>
   );
 };
 
-export default ShowImageOption;
+export default ImageOption;

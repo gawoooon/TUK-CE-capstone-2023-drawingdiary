@@ -30,7 +30,7 @@ function Line({ icon: Icon, text, hasBorder }) {
   return (
     <LineBox hasBorder={hasBorder}>
       <LineIcon>
-        <Icon size={36} color="#727272" />
+        <Icon size={32} color="#727272" />
       </LineIcon>
       <LineText> {text}</LineText>
     </LineBox>

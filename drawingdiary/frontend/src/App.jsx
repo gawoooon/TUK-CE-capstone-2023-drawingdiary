@@ -58,12 +58,7 @@ function App() {
             </CategoryProvider>
           }
         />
-        <Route
-          path="/stats"
-          element={
-            <StatsPage />
-          } 
-        />
+        <Route path="/stats" element={<StatsPage />} />
         <Route path="/my" element={<MyPage />} />
         <Route path="/choosePersonality" element={<ChoosePersonalityPage />} />
         <Route path="/FinishPage" element={<FinishPage />} />

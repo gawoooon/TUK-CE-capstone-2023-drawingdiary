@@ -3,16 +3,22 @@ import styled from "styled-components";
 import { useCategory } from "./CategoryList";
 import axios from "axios";
 import { useAuth } from "../../auth/context/AuthContext";
+import { MdCreateNewFolder } from "react-icons/md";
 
 const CategoryStyle = styled.select`
-  width: 95px;
+  width: 120px;
   height: 36px;
   margin: 10px 10px 10px 20px;
   padding-left: 6px;
   font-size: 15px;
-  border: none;
+  border: 1px solid black;
   outline: none;
   border-radius: 10px;
+  align-items: center;
+`;
+
+const CategoryBox = styled.div`
+  display: flex;
   align-items: center;
 `;
 
@@ -26,11 +32,13 @@ const AlbumCategory = ({ onSelectAlbum }) => {
     try {
       const response = await axios.get("http://localhost:8080/api/album/list", {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
-      const baseIndex = response.data.findIndex(item => item.albumName === "기본");
-      if(baseIndex !== -1) {
+      const baseIndex = response.data.findIndex(
+        (item) => item.albumName === "기본"
+      );
+      if (baseIndex !== -1) {
         const baseID = response.data[baseIndex].albumID;
         setSelectedAlbumID(baseID);
       }
@@ -40,7 +48,7 @@ const AlbumCategory = ({ onSelectAlbum }) => {
   };
 
   useEffect(() => {
-    if(selectedAlbumID === 0) {
+    if (selectedAlbumID === 0) {
       fetchBaseCategory();
     }
     onSelectAlbum(selectedAlbumID);
@@ -52,8 +60,9 @@ const AlbumCategory = ({ onSelectAlbum }) => {
   };
 
   return (
-    <div>
-      <text style={{ fontSize: "15px" }}>앨범에 추가</text>
+    <CategoryBox>
+      <MdCreateNewFolder size={24} />
+      {/* <text style={{ fontSize: "15px" }}>앨범에 추가</text> */}
       <CategoryStyle onChange={handleAlbumChange} value={selectedAlbumID}>
         {categoryList.map((keyword) => (
           <option key={keyword.memberID} value={keyword.albumID}>
@@ -61,7 +70,7 @@ const AlbumCategory = ({ onSelectAlbum }) => {
           </option>
         ))}
       </CategoryStyle>
-    </div>
+    </CategoryBox>
   );
 };
 

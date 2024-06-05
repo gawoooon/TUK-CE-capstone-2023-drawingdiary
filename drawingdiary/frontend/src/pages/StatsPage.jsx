@@ -114,7 +114,7 @@ const Circle = styled.div`
   height: 20px;
   margin: 10px 0 10px 10px;
   border-radius: 50%;
-  background-color: ${props => props.color};
+  background-color: ${(props) => props.color};
 `;
 
 const TextValue = styled.div`
@@ -142,38 +142,59 @@ function StatsPage() {
     return (
       <LineChart width={800} height={180} data={sentiData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
         <Tooltip />
-        <Line type="monotone" dataKey="positive" stroke="#FF76CE" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
-        <Line type="monotone" dataKey="neutral" stroke="#b87ffa" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
-        <Line type="monotone" dataKey="negative" stroke="#A3D8FF" activeDot={{ r: 2 }} isAnimationActive={false} strokeWidth={2}/>
+        <Line
+          type="monotone"
+          dataKey="positive"
+          stroke="#FF76CE"
+          activeDot={{ r: 2 }}
+          isAnimationActive={false}
+          strokeWidth={2}
+        />
+        <Line
+          type="monotone"
+          dataKey="neutral"
+          stroke="#b87ffa"
+          activeDot={{ r: 2 }}
+          isAnimationActive={false}
+          strokeWidth={2}
+        />
+        <Line
+          type="monotone"
+          dataKey="negative"
+          stroke="#A3D8FF"
+          activeDot={{ r: 2 }}
+          isAnimationActive={false}
+          strokeWidth={2}
+        />
       </LineChart>
     );
   };
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/statistic', {
+      const response = await axios.get("http://localhost:8080/api/statistic", {
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       setTotalDiary(response.data.lawn.total);
-      
+
       let index = 0;
-      const dayOfWeek = ['월', '화', '수', '목' ,'금', '토', '일'];
-      const sentimentData = response.data.emotions.map(item => {
-        if(item === null || item === 'undefined') {
+      const dayOfWeek = ["월", "화", "수", "목", "금", "토", "일"];
+      const sentimentData = response.data.emotions.map((item) => {
+        if (item === null || item === "undefined") {
           return {
-            name : dayOfWeek[index++],
-            positive : 0,
-            neutral : 0,
-            negative : 0,
+            name: dayOfWeek[index++],
+            positive: 0,
+            neutral: 0,
+            negative: 0,
           };
         } else {
           return {
-            name : dayOfWeek[index++],
-            positive : item.positive,
-            neutral : item.neutral,
-            negative : item.negative,
+            name: dayOfWeek[index++],
+            positive: item.positive,
+            neutral: item.neutral,
+            negative: item.negative,
           };
         }
       });
@@ -182,23 +203,26 @@ function StatsPage() {
       setAverage(response.data.value.average);
       setMonthData(response.data.value.month);
       setStyle(response.data.value.style);
-
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   };
-  
+
   const GraphValue = () => {
     const getColor = (emotion) => {
-      switch(emotion) {
-        case 'positive' : return "#FF76CE";
-        case 'neutral' : return "#b87ffa";
-        case 'negative' : return "#A3D8FF";
-        default: return '#ffffff';
+      switch (emotion) {
+        case "positive":
+          return "#FF76CE";
+        case "neutral":
+          return "#b87ffa";
+        case "negative":
+          return "#A3D8FF";
+        default:
+          return "#ffffff";
       }
     };
 
-    const emotions = ['positive', 'neutral', 'negative'];
+    const emotions = ["positive", "neutral", "negative"];
 
     return (
       <ValueContainer>
@@ -211,7 +235,7 @@ function StatsPage() {
       </ValueContainer>
     );
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);

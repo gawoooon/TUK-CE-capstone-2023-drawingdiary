@@ -10,23 +10,23 @@ import styled from "styled-components";
 import { useAuth } from "../../auth/context/AuthContext";
 
 const SideBarStyle = styled.section`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 260px;
-    height: 100vh;
-    background-color: #eeeeee;
-    padding: 0 6px;
-    z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 16%;
+  height: 100vh;
+  background-color: #eeeeee;
+  padding: 0 6px;
+  z-index: 9999;
 `;
 
 const HeaderSection = styled.div`
-    margin-top: 45px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 165px;
+  margin-top: 45px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 165px;
 `;
 
 const MenuItem = styled(Link)`
@@ -50,11 +50,11 @@ const MenuItemText = styled.div`
 `;
 
 const RecentSection = styled.section`
-    margin-top: 70px;
-    width: 100%;
-    height: 174px;
-    display: flex;
-    flex-direction: column;
+  margin-top: 70px;
+  width: 100%;
+  height: 174px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const RecentList = styled.div`
@@ -84,11 +84,11 @@ const ProfileSection = styled(Link)`
 `;
 
 const ProfileImg = styled.img`
-    width: 48px;
-    height: 48px;
-    margin-left: 8px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 48px;
+  height: 48px;
+  margin-left: 8px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const ProfileName = styled.div`
@@ -99,14 +99,27 @@ const ProfileName = styled.div`
 
 const Navbar = () => {
 
-    const [loginState, setLoginState] = useState(false);
+  const { logout, getToken } = useAuth();
+  const accessToken = getToken();
 
-    const { logout, getToken } = useAuth();
-    const accessToken = getToken();
+  const setProfileImg = localStorage.getItem("setProfileImage");
 
-    const setProfileImg = localStorage.getItem("setProfileImage");
+  const diaryList = [
+    "2024년 1월 1일",
+    "2024년 1월 1일",
+    "2024년 1월 1일",
+    "2024년 1월 1일",
+    "2024년 1월 1일",
+  ];
 
-    const diaryList = ["2024년 1월 1일", "2024년 1월 1일", "2024년 1월 1일", "2024년 1월 1일", "2024년 1월 1일"];
+  useEffect(() => {
+    const currentAccessToken = getToken();
+    if (currentAccessToken) {
+      setLoginState(true);
+    } else {
+      setLoginState(false);
+    }
+  }, [accessToken]);
 
     useEffect(() => {
         const currentAccessToken = getToken();
@@ -134,34 +147,68 @@ const Navbar = () => {
         }
     };
 
+  return (
+    <SideBarStyle>
+      <HeaderSection>
+        <MenuItem to="/">
+          <LuCalendarDays
+            size={20}
+            color="#3d3d3d"
+            alt="Album"
+            style={{ margin: "1px 0" }}
+          />
+          <MenuItemText>캘린더</MenuItemText>
+        </MenuItem>
+        <MenuItem to="/album">
+          <BiSolidPhotoAlbum
+            size={20}
+            color="#3d3d3d"
+            alt="Album"
+            style={{ margin: "1px 0" }}
+          />
+          <MenuItemText>앨범</MenuItemText>
+        </MenuItem>
+        <MenuItem to="/stats">
+          <SlGraph
+            size={20}
+            color="#3d3d3d"
+            alt="Statics"
+            style={{ margin: "1px 0" }}
+          />
+          <MenuItemText>분석</MenuItemText>
+        </MenuItem>
+        {loginState ? (
+          <MenuItem to="/login" onClick={handleLogout}>
+            <IoMdLogOut
+              size={20}
+              color="#3d3d3d"
+              alt="Logout"
+              style={{ margin: "1px 0" }}
+            />
+            <MenuItemText>로그아웃</MenuItemText>
+          </MenuItem>
+        ) : (
+          <MenuItem to="/login">
+            <IoMdLogIn
+              size={20}
+              color="#3d3d3d"
+              alt="Login"
+              style={{ margin: "1px 0" }}
+            />
+            <MenuItemText>로그인</MenuItemText>
+          </MenuItem>
+        )}
+      </HeaderSection>
 
-    return (
-        <SideBarStyle>
-        <HeaderSection>
-            <MenuItem to="/">
-            <LuCalendarDays size={20} color="#3d3d3d" alt="Album" style={{margin: '1px 0'}}/>
-            <MenuItemText>캘린더</MenuItemText>
-            </MenuItem>
-            <MenuItem to="/album">
-            <BiSolidPhotoAlbum size={20} color="#3d3d3d" alt="Album" style={{margin: '1px 0'}}/>
-            <MenuItemText>앨범</MenuItemText>
-            </MenuItem>
-            <MenuItem to="/stats">
-            <SlGraph size={20} color="#3d3d3d" alt="Statics" style={{margin: '1px 0'}}/>
-            <MenuItemText>분석</MenuItemText>
-            </MenuItem>
-            {loginState ? (
-            <MenuItem to="/login" onClick={handleLogout}>
-                <IoMdLogOut size={20} color="#3d3d3d" alt="Logout" style={{margin: '1px 0'}}/>
-                <MenuItemText>로그아웃</MenuItemText>
-            </MenuItem>
-            ) : (
-            <MenuItem to="/login">
-                <IoMdLogIn size={20} color="#3d3d3d" alt="Login" style={{margin: '1px 0'}}/>
-                <MenuItemText>로그인</MenuItemText>
-            </MenuItem>
-            )}
-        </HeaderSection>
+      <RecentSection>
+        {diaryList.length > 0 ? (
+          diaryList.map((date, index) => (
+            <RecentList key={index}>{date}</RecentList>
+          ))
+        ) : (
+          <RecentList>no recent data.</RecentList>
+        )}
+      </RecentSection>
 
         <RecentSection>
             {diaryList.length > 0 ? (

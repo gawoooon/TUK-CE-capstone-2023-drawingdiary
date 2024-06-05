@@ -9,34 +9,19 @@ import Popup from "../components/mypage/Popup";
 import PopupPassword from "../components/mypage/PopupPassword";
 import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
-const Container = styled.body`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-`;
-
-const MyPageBody = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0 20%;
-`;
 
 const MyPageBackground = styled.div`
   width: 100%;
   height: 100vh;
 `;
 
-// const MyPageBody = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   width: 100%;
-//   height: 100%;
-// `;
+const MyPageBody = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
 
 const MyPageBox = styled.div`
   width: 900px;
@@ -135,33 +120,45 @@ function MyPage() {
   }, [memberID, fetchUserName]);
 
   return (
-    <Container>
-      <NavBar />
-      <MyPageBody>
-        <Profile
+    <MyPageBackground>
+      <Background backgroundColor={backgroundColor}>
+        <MyPageBodyBox>
+          <NavBar />
+
+          <MyPageBody>
+            <MyPageBox>
+              <MyPageTopBox>
+                <Profile
+                  profileImage={profileImage}
+                  profileEmail={profileEmail}
+                  profileName={profileName}
+                />
+                <Theme onColorChange={setBackgroundColor} />
+              </MyPageTopBox>
+              <MyPageBottomBox>
+                <Information
+                  onPopupPassword={passwordPopup}
+                  profileBirth={profileBirth}
+                  profileEmail={profileEmail}
+                  profileName={profileName}
+                  profilePhone={profilePhone}
+                />
+              </MyPageBottomBox>
+            </MyPageBox>
+          </MyPageBody>
+        </MyPageBodyBox>
+      </Background>
+      {isPopupPassword && (
+        <PopupPassword onClose={passwordPopup} onPopup={PopupToggle} />
+      )}
+      {isPopupVisible && (
+        <Popup
+          onClose={PopupToggle}
           profileImage={profileImage}
-          profileEmail={profileEmail}
           profileName={profileName}
         />
-        <Information
-          onPopupPassword={passwordPopup}
-          profileBirth={profileBirth}
-          profileEmail={profileEmail}
-          profileName={profileName}
-          profilePhone={profilePhone}
-        />
-        {isPopupPassword && (
-          <PopupPassword onClose={passwordPopup} onPopup={PopupToggle} />
-        )}
-        {isPopupVisible && (
-          <Popup
-            onClose={PopupToggle}
-            profileImage={profileImage}
-            profileName={profileName}
-          />
-        )}
-      </MyPageBody>
-    </Container>
+      )}
+    </MyPageBackground>
   );
 }
 
