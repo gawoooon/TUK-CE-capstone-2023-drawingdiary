@@ -29,12 +29,12 @@ const RightSection = styled.section`
   align-items: center;
   width: calc(100% - 260px); 
   height: inherit;
-  padding-left: 180px;
+  padding-left: 520px;
   box-sizing: border-box;
 `;
 
 const MainContent = styled.section`
-  width: inherit;
+  width: 100%;
   height: 870px;
   margin-top: 30px;
   display: flex;

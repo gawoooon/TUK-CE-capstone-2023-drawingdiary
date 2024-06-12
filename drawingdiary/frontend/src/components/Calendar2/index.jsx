@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { format, addMonths, subMonths } from "date-fns";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import { useCalendar } from "./CalendarProvider";
+import axios from "axios";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const CalendarBox = styled.div`
   width: 800px;
@@ -77,7 +79,7 @@ const DaysBox = styled.div`
   display: flex;
   width: 100%;
   flex: 0 0 5%;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 1em;
   box-sizing: border-box;
 `;
@@ -89,8 +91,8 @@ const DayColumn = styled.div`
   flex: 1;
   color: #0d0d0d;
   border: 1px solid rgba(224, 224, 224, 0.5);
-  border-left: ${props => props.isSun ? '1px solid rgba(224, 224, 224, 0.5)' : 'none'};
-  border-right: ${props => props.isSat ? '1px solid rgba(224, 224, 224, 0.5)' : 'none'};
+  border-left: ${(props) => (props.isSun ? '1px solid rgba(224, 224, 224, 0.5)' : 'none')};
+  border-right: ${(props) => (props.isSat ? '1px solid rgba(224, 224, 224, 0.5)' : 'none')};
   box-sizing: border-box;
 `;
 
@@ -130,29 +132,51 @@ const BodyMonth = styled.div`
 
 const BodyDayOneBox = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   flex: 1;
   height: 100%;
+  padding: 5px;
   box-sizing: border-box;
   border-top: 1px solid rgba(224, 224, 224, 0.5);
   border-bottom: 1px solid rgba(224, 224, 224, 0.5);
-  border-left: ${props => props.isSun || props.isEven ? '1px solid rgba(224, 224, 224, 0.5)' : 'none'};
-  border-right: ${props => props.isSat || props.isEven ? '1px solid rgba(224, 224, 224, 0.5)' : 'none'};
-  transition: width 0.5s linear;
-
-  &:hover {
-    cursor: pointer;
-    ${BodyMonth}:not(.not-valid) {
-      background-color: rgba(106, 156, 253, 0.5);
-    }
-  }
+  border-left: ${(props) => (props.isSun || props.isEven ? '1px solid rgba(224, 224, 224, 0.5)' : 'none')};
+  border-right: ${(props) => (props.isSat || props.isEven ? '1px solid rgba(224, 224, 224, 0.5)' : 'none')};
+  cursor: pointer;
 
   &.selected {
     ${BodyMonth}:not(.today, .not-valid) {
       background-color: rgba(106, 156, 253, 0.3);
+      border-radius: 50%;
     }
   }
+`;
+
+const NumberBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  width: 24px;
+  height: 24px;
+  background-color: ${(props) => (props.hasData ? 'rgba(106, 156, 253, 0.2)' : 'none')};
+  border-radius: ${(props) => (props.hasData ? '50%' : 'none')};
+  font-weight: 500;
+  font-size: 1em;
+  color: #0d0d0d;
+
+  &.not-valid {
+    color: #b7b7b7;
+    cursor: default;
+  }
+
+  &.today {
+    background-color: rgba(106, 156, 253, 0.5);
+    border-radius: 50%;
+  }
+`;
+
+const BlankBox = styled.div`
+  flex: 1;
 `;
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
@@ -187,6 +211,7 @@ const RenderCells = ({
   currentMonth,
   selectedDate,
   onDateClick: cellOnDateClick,
+  datesWithData
 }) => {
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
@@ -207,6 +232,7 @@ const RenderCells = ({
 
       const isToday = isSameDay(day, today);
       const isClicked = isSameDay(day, selectedDate);
+      const hasData = datesWithData.includes(format(day, 'yyyy-MM-dd'));
 
       days.push(
         <BodyDayOneBox
@@ -224,18 +250,21 @@ const RenderCells = ({
           isSun={i === 0}
           isSat={i === 6}
           isEven={i % 2 === 1}
+          hasData={hasData}
         >
-          <BodyMonth
-            className={
-              format(currentMonth, "M") !== format(day, "M")
-                ? "text not-valid"
-                : isToday
-                ? "today"
-                : ""
-            }
-          >
-            {formattedDate}
-          </BodyMonth>
+            <NumberBox
+              className={
+                format(currentMonth, "M") !== format(day, "M")
+                  ? "text not-valid"
+                  : isToday
+                  ? "today"
+                  : ""
+              }
+              hasData={hasData}
+            >
+              {formattedDate}
+            </NumberBox>
+            <BlankBox/>
         </BodyDayOneBox>
       );
       day = addDays(day, 1);
@@ -248,8 +277,35 @@ const RenderCells = ({
 
 function Calendar2({ onDateClick: parentOnDateClick }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
-
+  const [datesWithData, setDatesWithData] = useState([]);
   const { setMonth, currentMonth, setCurrentMonth } = useCalendar();
+  const { memberID, getToken } = useAuth();
+  const accessToken = getToken();
+
+  useEffect(() => {
+    const fetchCalendar = async () => {
+      const year = format(currentMonth, "yyyy");
+      const month = format(currentMonth, "MM");
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/calender/${year}-${month}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        const dates = response.data.map((item) => item.date);
+        setDatesWithData(dates);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    };
+
+    fetchCalendar();
+  }, [currentMonth, accessToken]);
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -282,6 +338,7 @@ function Calendar2({ onDateClick: parentOnDateClick }) {
         currentMonth={currentMonth}
         selectedDate={selectedDate}
         onDateClick={onDateClick}
+        datesWithData={datesWithData}
       />
     </CalendarBox>
   );

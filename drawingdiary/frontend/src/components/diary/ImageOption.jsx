@@ -40,16 +40,16 @@ const Container = styled.div`
 
 const SlideItem = styled.div`
   box-sizing: border-box;
-  border: 1px solid #000000;
+  border: 0.5px solid #000000;
   text-align: center;
-  font-size: 10px;
+  font-size: 12px;
   cursor: pointer;
   border-radius: 20px;
   padding: 4px 0;
-  background-color: ${({ isSelected }) => (isSelected ? "#ddd" : "#fff")};
+  background-color: ${({ isSelected }) => (isSelected ? "#eeeeee" : "#fff")};
   font-weight: ${({ isSelected }) => (isSelected ? "bold" : "normal")};
   &:hover {
-    background-color: #ddd;
+    background-color: #eeeeee;
   }
 `;
 
@@ -126,7 +126,7 @@ const OptionBtnStyle = styled.button`
   min-height: 36px;
   margin: 5px 0;
   background-color: ${(props) =>
-    props.isSelected ? "#ddd" : "rgba(255, 255, 255, 0.3)"};
+    props.isSelected ? "#eeeeee" : "rgba(255, 255, 255, 0.3)"};
   border: none;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -346,8 +346,8 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
         <Lottie
           isClickToPauseDisabled={true}
           options={LoadingOptions}
-          height={150}
-          width={150}
+          height={100}
+          width={100}
         />
       ) : (
         <Slider {...settings}>

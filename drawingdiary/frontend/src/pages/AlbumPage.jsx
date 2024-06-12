@@ -28,12 +28,12 @@ const RightSection = styled.section`
   align-items: center;
   width: calc(100% - 260px); 
   height: inherit;
-  padding-left: 180px;
+  padding-left: 520px;
   box-sizing: border-box;
 `;
 
 const AlbumContainer = styled.section`
-  width: inherit;
+  width: 100%;
   height: 870px;
   margin-top: 30px;
   display: flex;
@@ -50,7 +50,7 @@ const AlbumContainer = styled.section`
 `;
 
 const AddAlbum = styled.div`
-  width: inherit;
+  width: 100%;
   position: sticky;
   display: flex;
   justify-content: end;
@@ -60,7 +60,7 @@ const AddAlbum = styled.div`
 
 const ErrorMessage = styled.div`
   margin: 0 30px 30px 0;
-  color: #af0000;
+  color: red;
 `;
 
 const AlbumPage = () => {

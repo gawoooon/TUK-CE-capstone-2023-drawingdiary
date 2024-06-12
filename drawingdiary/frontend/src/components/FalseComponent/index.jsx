@@ -12,24 +12,21 @@ const ResultBox = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  transition: opacity 200ms ease-out;
+  border: 1px solid rgba(224, 224, 224, 0.5);
+  border-radius: 20px;
 `;
 
 const TopBox = styled.div`
   font-size: 20px;
   font-weight: 400;
-  color: #0d0d0d;
   display: flex;
-  transition: opacity 200ms ease-out;
 `;
 
 const MiddleBox = styled.div`
   font-size: 20px;
   font-weight: 400;
-  color: #0d0d0d;
   padding: 10px 0px;
   box-sizing: border-box;
-  transition: opacity 200ms ease-out;
 `;
 
 const AddBtn = styled.button`
@@ -39,7 +36,6 @@ const AddBtn = styled.button`
   outline: none;
   font-size: 18px;
   font-weight: 400;
-  color: #0d0d0d;
   cursor: pointer;
   border-radius: 10px;
   margin-top: 20px;

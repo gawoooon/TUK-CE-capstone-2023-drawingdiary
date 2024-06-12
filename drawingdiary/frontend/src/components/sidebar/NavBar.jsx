@@ -105,7 +105,7 @@ const ProfileName = styled.div`
 
 const Navbar = () => {
     const [loginState, setLoginState] = useState(false);
-    const [currentList, setCurrentList] = useState([]);
+    const [currentList, setCurrentList] = useState(JSON.parse(localStorage.getItem("recentList")) || []);
     const navigate = useNavigate();
 
     const { memberID, logout, getToken } = useAuth();
@@ -124,20 +124,19 @@ const Navbar = () => {
                             'Authorization': `Bearer ${currentAccessToken}`
                         }
                     });
-                    console.log("response: ", response.data);
                     setCurrentList(response.data);
+                    localStorage.setItem("recentList", JSON.stringify(response.data));
                 } catch (error) {
                     console.log(error);
                     setCurrentList([]);
                 }
             } else {
                 setLoginState(false);
-                setCurrentList([]);
             }
         };
 
         fetchRecentData();
-    }, [accessToken]);
+    }, [accessToken, currentList, getToken]);
 
     const handleLogout = async () => {
         if (accessToken) {
@@ -149,6 +148,8 @@ const Navbar = () => {
                 });
                 logout();
                 setLoginState(false);
+                localStorage.removeItem("recentList");
+                setCurrentList([]);
                 alert("로그아웃 되었습니다!");
             } catch (error) {
                 console.log(error);

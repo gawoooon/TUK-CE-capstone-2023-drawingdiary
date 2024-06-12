@@ -35,7 +35,7 @@ const CalendarBox = styled.div`
   align-items: center;
   width: calc(100% - 260px); 
   height: inherit;
-  padding-left: 280px;
+  padding-left: 520px;
   box-sizing: border-box;
 `;
 
@@ -55,14 +55,14 @@ const RightBox = styled.div`
   justify-content: center;
   align-items: center;
   height: 800px;
-  margin: 10px;
+  margin: 20px;
   box-sizing: border-box;
   overflow: hidden;
 `;
 
 const ResultBox = styled.div`
   width: 100%;
-  height: 95%;
+  height: 100%;
 `;
 
 function CalendarPage() {
