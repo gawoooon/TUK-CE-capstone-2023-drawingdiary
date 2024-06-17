@@ -12,8 +12,8 @@ import com.diary.drawing.domain.diary.exception.DiaryExceptionType;
 import com.diary.drawing.domain.diary.exception.DiaryResponseException;
 import com.diary.drawing.domain.user.exception.MemberExceptionType;
 import com.diary.drawing.domain.user.exception.MemberResponseException;
-import com.diary.drawing.global.jwt.exception.authExceptionType;
-import com.diary.drawing.global.jwt.exception.authResponseException;
+import com.diary.drawing.global.jwt.exception.AuthExceptionType;
+import com.diary.drawing.global.jwt.exception.AuthResponseException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -76,9 +76,9 @@ public class GlobalExceptionHandler {
     }
 
     /* authResponseException */
-    @ExceptionHandler(authResponseException.class)
-    public ResponseEntity<ErrorResponse> handleAuthResponseException(authResponseException ex) {
-        authExceptionType exceptionType = (authExceptionType) ex.getExceptionType();
+    @ExceptionHandler(AuthResponseException.class)
+    public ResponseEntity<ErrorResponse> handleAuthResponseException(AuthResponseException ex) {
+        AuthExceptionType exceptionType = (AuthExceptionType) ex.getExceptionType();
         
         // 로깅 추가
         log.error("AuthResponseException 발생, 유형: {}, 메시지: {}", exceptionType.getErrorCode(), exceptionType.getErrorMessage());
