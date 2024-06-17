@@ -22,7 +22,7 @@ public interface MemberService {
     public  String getEmailByMemberID(Long memberID);
     public GetMemberDTO getMember(Long memberID);
 
-    public ResponseEntity<?> validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO);
+    public ResponseEntity<Boolean> validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO);
 
     public void updatePassword(Member targetMember, String oldpassword, String newpassword);
     public void updateProfileImage(Member targetMember, String profileimage) throws IOException;

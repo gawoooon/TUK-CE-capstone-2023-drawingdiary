@@ -2,6 +2,7 @@ package com.diary.drawing.global.jwt.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -21,6 +22,7 @@ public class JwtRequestDTO {
     }
 
 
+    @Builder
     @Jacksonized
     @Getter
     @ToString
