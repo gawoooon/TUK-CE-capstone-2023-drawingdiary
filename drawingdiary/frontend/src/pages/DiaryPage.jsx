@@ -120,6 +120,19 @@ const BtnBox = styled.div`
   height: 20%;
 `;
 
+const BtnHover = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  border-radius: 50px;
+  &:hover {
+    background-color: #b7b7b7;
+  }
+`;
+
 function DiaryPage() {
   const navigate = useNavigate();
 
@@ -390,22 +403,13 @@ function DiaryPage() {
           <TextBox>
             <EditDiary onDiaryTextChange={handleDiaryTextChange} />
             <BtnBox>
-              <IoMdRefresh
-                size={16}
-                onClick={handleCreate}
-                style={{
-                  cursor: "pointer",
-                  color: "#b7b7b7",
-                }}
-              />
-              <GrUploadOption
-                size={16}
-                onClick={handleSave}
-                style={{
-                  cursor: "pointer",
-                  color: "#b7b7b7",
-                }}
-              />
+              <BtnHover onClick={handleCreate}>
+                <IoMdRefresh size={16} />
+              </BtnHover>
+
+              <BtnHover onClick={handleSave}>
+                <GrUploadOption size={16} />
+              </BtnHover>
             </BtnBox>
           </TextBox>
         </BottomContainer>

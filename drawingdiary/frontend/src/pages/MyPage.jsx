@@ -11,18 +11,18 @@ import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
 
 const Body = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    width: 100vw;
-    height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100vw;
+  height: 100vh;
 `;
 
 const SidebarContainer = styled.div`
-    width: 260px;
-    height: 100%;
-    position: fixed;
+  width: 260px;
+  height: 100%;
+  position: fixed;
 `;
 
 const MyPageBody = styled.div`
@@ -32,53 +32,6 @@ const MyPageBody = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-
-const MyPageBackground = styled.div`
-  width: 100%;
-  height: 100vh;
-`;
-
-// const MyPageBody = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   width: 100%;
-//   height: 100%;
-// `;
-
-const MyPageBox = styled.div`
-  width: 900px;
-  height: 800px;
-  background-color: white;
-  box-shadow: 3px 10px 5px rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  padding: 50px 155px;
-  box-sizing: border-box;
-`;
-
-const MyPageTopBox = styled.div`
-  width: 100%;
-  height: 35%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MyPageBottomBox = styled.div`
-  width: 100%;
-  height: 65%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const MyPageBodyBox = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `;
 
 function MyPage() {
@@ -120,6 +73,9 @@ function MyPage() {
         setProfileName(response.data.name);
         setProfileEmail(response.data.email);
         setProfileBirth(response.data.birth);
+
+        localStorage.setItem("setName", response.data.name);
+        localStorage.setItem("setProfileImage", response.data.profileImage);
 
         console.log(accessToken);
         if (response.data.phoneNumber === null) {
