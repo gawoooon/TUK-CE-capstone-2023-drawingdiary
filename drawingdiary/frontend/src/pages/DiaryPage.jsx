@@ -120,108 +120,6 @@ const BtnBox = styled.div`
   height: 20%;
 `;
 
-// const TextInputBox = styled.div`
-//   display: flex;
-// `;
-
-// const TextBtnBox = styled.div`
-//   display: flex;
-// `;
-
-// const RefreshBtn = styled.div`
-//   display: flex;
-// `;
-
-// const SaveBtn = styled.div`
-//   display: flex;
-// `;
-
-///
-
-const LeftTopContent = styled.div`
-  height: 40px;
-  margin-top: 60px;
-  padding-bottom: 10px;
-  padding-right: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const LeftMidContent = styled.div`
-  height: 450px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0 10px;
-  margin: 0 10px;
-`;
-
-const LeftBottomContent = styled.div`
-  height: 300px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-`;
-
-const RightContainer = styled.section`
-  width: 50%;
-`;
-
-const RightTopContent = styled.div`
-  height: 30px;
-  margin-top: 20px;
-  padding-right: 44px;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-`;
-
-const RightMidContent = styled.div`
-  height: 700px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding-top: 6px;
-`;
-
-const RightBottomContent = styled.div`
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  padding: 0 10px;
-  margin: 0 10px;
-`;
-
-const SaveBtn = styled.button`
-  z-index: 9999;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 15px;
-  background-color: white;
-  cursor: pointer;
-`;
-
-const Area = styled.div`
-  width: 505px;
-  height: 400px;
-  padding: 0 auto;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  margin: 10px;
-`;
-
 function DiaryPage() {
   const navigate = useNavigate();
 
@@ -336,6 +234,7 @@ function DiaryPage() {
 
         const resultDiaryText = `"${diaryText}", 이미지 스타일: ${parentSelectedButtonStyle},감정 : ${SentimentResult}, 주인공: ${userGender}`;
 
+        console.log(resultDiaryText);
         if (diaryText !== "") {
           const imageApiUrl = "http://127.0.0.1:5000/api/diary/image";
           const responseDiary = await fetch(imageApiUrl, {
@@ -345,6 +244,7 @@ function DiaryPage() {
             },
             body: JSON.stringify({ resultDiaryText }),
           });
+          console.log("dd");
 
           if (responseDiary.ok) {
             const responseDate = await responseDiary.json();
@@ -405,6 +305,15 @@ function DiaryPage() {
 
     //image post
     if (newImageUrl) {
+      console.log(
+        basicDiaryText,
+        weatherState,
+        dateString,
+        selectedAlbumID,
+        parentSelectedButtonStyle,
+        newImageUrl,
+        commentText
+      );
       const responseDiary = await axios.post(
         "http://localhost:8080/api/diary/add",
         {

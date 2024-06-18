@@ -505,6 +505,7 @@ function ShowDiaryPage() {
               onOptionSelect={handleOptionSelect}
               isRecommenderLoading={isRecommenderLoading}
               selectedOption={style}
+              parentSelectedButtonStyle={parentSelectedButtonStyle}
             />
           </StyleBox>
           <TextBox>

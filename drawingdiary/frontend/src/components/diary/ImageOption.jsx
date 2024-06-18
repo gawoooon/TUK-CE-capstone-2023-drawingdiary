@@ -25,7 +25,7 @@ const Container = styled.div`
   }
   .slick-prev,
   .slick-next {
-    display: flex;
+    display: ${(props) => (props.show ? "block" : "none")};
     align-items: center;
     justify-content: center;
     color: black; // 화살표 색상을 검정색으로 설정
@@ -50,107 +50,6 @@ const SlideItem = styled.div`
   font-weight: ${({ isSelected }) => (isSelected ? "bold" : "normal")};
   &:hover {
     background-color: #eeeeee;
-  }
-`;
-
-// const Container = styled.div`
-//   width: 305px;
-//   height: 400px;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   h3 {
-//     margin: 20px 0 0 10px;
-//   }
-// `;
-
-const TopContainer = styled.div`
-  width: 95%;
-  height: 50px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-left: 16px;
-`;
-
-const Description = styled.div`
-  width: 90%;
-  margin-bottom: 10px;
-`;
-
-const OptionContainer = styled.div`
-  width: 95%;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
-
-const LeftContainer = styled.div`
-  height: 250px;
-  margin-top: 10px;
-  display: ${({ display }) => display};
-  flex-direction: column;
-  transition: opacity 0.5s ease-in-out;
-`;
-
-const RightContainer = styled.div`
-  height: 250px;
-  margin-top: 10px;
-  margin-left: 6px;
-  display: ${({ display }) => display};
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
-  transition: opacity 0.5s ease-in-out;
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-  }
-`;
-
-const SelectedStyle = styled.div`
-  font-size: 12px;
-  margin-top: 10px;
-`;
-
-const OptionBtnStyle = styled.button`
-  width: 200px;
-  min-height: 36px;
-  margin: 5px 0;
-  background-color: ${(props) =>
-    props.isSelected ? "#eeeeee" : "rgba(255, 255, 255, 0.3)"};
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-`;
-
-const TextStyle = styled.div`
-  padding-top: 2px;
-  font-size: 12px;
-  color: black;
-`;
-
-const OpenBtn = styled.button`
-  width: 65px;
-  height: 30px;
-  margin: 10px;
-  border: none;
-  outline: none;
-  font-size: 13px;
-  color: black;
-  cursor: pointer;
-  border-radius: 15px;
-  &:hover {
-    background-color: #f9f9f9;
   }
 `;
 
@@ -308,20 +207,29 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
     setOtherStyles(filterNonDuplicateStyles);
   }, [isSelected, onOptionSelect, recommendedStyles]);
 
+  const items = [...recommendedStyles, ...otherStyles];
+
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 5,
     slidesToScroll: 5,
     nextArrow: <MdNavigateNext />,
     prevArrow: <MdNavigateBefore />,
     beforeChange: (_, next) => {
+      const prevButton = document.querySelector(".slick-prev");
       const nextButton = document.querySelector(".slick-next");
 
       setCurrentPage(next);
 
-      if (next === items.length - 5) {
+      if (next === 0) {
+        prevButton.style.display = "none";
+      } else {
+        prevButton.style.display = "flex";
+      }
+
+      if (next >= items.length - 5) {
         nextButton.style.display = "none";
       } else {
         nextButton.style.display = "flex";
@@ -332,13 +240,18 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
   // 컴포넌트가 처음 렌더링될 때 실행되는 useEffect
   useEffect(() => {
     const prevButton = document.querySelector(".slick-prev");
+    const nextButton = document.querySelector(".slick-next");
+
     if (prevButton) {
-      // 이전 버튼이 존재하는 경우에만 스타일을 변경합니다.
+      // 첫 페이지일 때 왼쪽 화살표 숨김
       prevButton.style.display = "none";
     }
-  }, []); // 빈 배열을 전달하여 처음 렌더링 시에만 실행되도록 설정
 
-  const items = [...recommendedStyles, ...otherStyles];
+    if (nextButton && items.length == 5) {
+      // 아이템 수가 슬라이드에 보여지는 수 이하일 때 오른쪽 화살표 숨김
+      nextButton.style.display = "none";
+    }
+  }, [items.length]); // 빈 배열을 전달하여 처음 렌더링 시에만 실행되도록 설정
 
   return (
     <Container>
@@ -352,10 +265,10 @@ const ImageOption = ({ onOptionSelect, isRecommenderLoading }) => {
       ) : (
         <Slider {...settings}>
           {items.map((item, index) => (
-            <div key={index}>
+            <div key={item}>
               <SlideItem
-                isSelected={selectedIndex === index}
-                onClick={() => handleButtonStyleSelect(index)}
+                isSelected={selectedIndex === item}
+                onClick={() => handleButtonStyleSelect(item)}
               >
                 {item}
               </SlideItem>
