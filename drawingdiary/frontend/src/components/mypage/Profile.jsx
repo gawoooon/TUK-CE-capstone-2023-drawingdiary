@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { TbUserEdit } from "react-icons/tb";
 const ProfileBox = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
 
 `;
 
