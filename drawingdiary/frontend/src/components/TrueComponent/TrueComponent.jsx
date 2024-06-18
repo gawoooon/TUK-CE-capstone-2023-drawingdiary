@@ -36,8 +36,6 @@ const Button = styled.button`
   &:hover {
     background-color: rgba(106, 156, 253, 0.3);
     border: none;
-    width: 54px;
-    height: 40px;
   }
 `;
 

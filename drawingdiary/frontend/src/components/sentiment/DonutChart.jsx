@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ReactApexChart from 'react-apexcharts';
 
 const DonutChartContainer = styled.div`
-  width: 250px;
+  width: 350px;
 `;
 
 const DonutChart = ({ positiveValue, negativeValue, neutralValue }) => {

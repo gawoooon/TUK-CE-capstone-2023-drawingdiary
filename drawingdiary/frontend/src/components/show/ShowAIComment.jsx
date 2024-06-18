@@ -11,7 +11,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 15px;
+  font-size: 18px;
+  line-height: 1.5;
   overflow: hidden;
 `;
 

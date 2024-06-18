@@ -96,6 +96,7 @@ const SentimentContainer = styled.section`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
 `;
 
 const ValueContainer = styled.div`

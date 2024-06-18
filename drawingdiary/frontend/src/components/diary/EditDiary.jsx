@@ -10,13 +10,10 @@ const WriteArea = styled.textarea`
   width: 100%;
   height: 100%;
   border: none;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 400;
   outline: none;
   resize: none;
-  &::placeholder {
-    color: black;
-  }
 `;
 
 const DetailsContainer = styled.div`
