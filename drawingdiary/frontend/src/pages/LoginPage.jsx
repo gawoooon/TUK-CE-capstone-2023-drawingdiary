@@ -52,7 +52,7 @@ const LoginLostBtnBox = styled.div`
   align-items: center;
   text-align: center;
   margin-top: 10px;
-  `;
+`;
 
 const LoginLostBtn = styled(Link)`
   width: 100px;
@@ -61,6 +61,9 @@ const LoginLostBtn = styled(Link)`
   font-weight: 500;
   text-decoration: none;
   color: #828282;
+  &:hover {
+    color: rgba(106, 156, 253, 0.5)
+  }
 `;
 
 const ErrorMessageContainer = styled.div`

@@ -27,16 +27,16 @@ const JoinBox = styled.form`
   justify-content: center;
   align-items: center;
   width: 600px;
-  height: 580px;
+  height: 650px;
 `;
 
 const InnerBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: inherit;
-  height: 480px;
+  height: 500px;
 `;
 
 const MoveButton = styled.button`
@@ -45,7 +45,7 @@ const MoveButton = styled.button`
   justify-content: center;
   width: 400px;
   height: 48px;
-  margin: 5px 0;
+  margin: 20px 0;
   background-color: rgba(106, 156, 253, 0.5);
   border-radius: 10px;
   border: none;
@@ -74,6 +74,9 @@ const InputStyle = styled.input`
   outline: none;
   font-size: 14px;
   padding: 0 20px;
+  &:focus {
+    border-color: rgba(106, 156, 253, 0.5);
+  }
 `;
 
 const PhoneInputStyle = styled.input`
@@ -83,6 +86,9 @@ const PhoneInputStyle = styled.input`
   outline: none;
   font-size: 13px;
   margin-top: 20px;
+  &:focus {
+    border-color: rgba(106, 156, 253, 0.5);
+  }
 `;
 
 const SelectMonthContainer = styled.select`
@@ -95,6 +101,9 @@ const SelectMonthContainer = styled.select`
   outline: none;
   font-size: 14px;
   padding: 0 20px;
+  &:focus {
+    border-color: rgba(106, 156, 253, 0.5);
+  }
 `;
 
 const SelectGenderContainer = styled.select`
@@ -107,6 +116,9 @@ const SelectGenderContainer = styled.select`
   outline: none;
   font-size: 14px;
   padding: 0 20px;
+  &:focus {
+    border-color: rgba(106, 156, 253, 0.5);
+  }
 `;
 
 const BirthDayContainer = styled.div`
@@ -126,6 +138,9 @@ const ConfilmPasswordStyle = styled.input`
   outline: none;
   font-size: 14px;
   padding: 0 20px;
+  &:focus {
+    border-color: rgba(106, 156, 253, 0.5);
+  }
 `;
 
 const MessageContainer = styled.div`
@@ -323,9 +338,11 @@ const CreateAccount = () => {
                 <LoginBtn text="확인" onClick={(e) => verifyCertification(e)} />
             </InputSection>
 
-            <MessageContainer>
-            {message && ( <Message> {message} </Message>)}
-            </MessageContainer> 
+            {message && (
+              <MessageContainer>
+                <Message>{message}</Message>
+              </MessageContainer>
+            )}
 
             <LongInputField
               id="password"
@@ -352,6 +369,5 @@ const CreateAccount = () => {
       </Body>
     )
 };
-
 
 export default CreateAccount;
