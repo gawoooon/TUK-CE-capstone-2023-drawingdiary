@@ -10,6 +10,9 @@ const InputStyle = styled.input`
     outline: none;
     font-size: 14px;
     padding: 0 20px;
+    &:focus {
+    border-color: rgba(106, 156, 253, 0.5);
+    }
 `;
 
 const ShortInputField = ({ id, type, value, onChange, placeholder }) => {
