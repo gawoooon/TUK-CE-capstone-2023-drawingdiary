@@ -117,107 +117,6 @@ const BtnBox = styled.div`
   height: 20%;
 `;
 
-//
-//
-///
-
-// const DiaryContainer = styled.section`
-//   display: flex;
-//   flex-direction: row;
-//   margin: auto;
-// `;
-
-const LeftContainer = styled.section`
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const LeftTopContent = styled.div`
-  height: 40px;
-  margin-top: 60px;
-  padding-bottom: 10px;
-  padding-right: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const LeftMidContent = styled.div`
-  height: 450px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0 10px;
-  margin: 0 10px;
-`;
-
-const LeftBottomContent = styled.div`
-  height: 300px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-`;
-
-const RightContainer = styled.section`
-  width: 50%;
-`;
-
-const RightTopContent = styled.div`
-  height: 30px;
-  margin-top: 20px;
-  padding-right: 44px;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-`;
-
-const RightMidContent = styled.div`
-  height: 700px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding-top: 6px;
-`;
-
-const RightBottomContent = styled.div`
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  padding: 0 10px;
-  margin: 0 10px;
-`;
-
-const SaveBtn = styled.button`
-  z-index: 9999;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 15px;
-  background-color: white;
-  cursor: pointer;
-`;
-
-const Area = styled.div`
-  width: 505px;
-  height: 400px;
-  padding: 0 auto;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  margin: 10px;
-`;
-
 function ShowDiaryPage() {
   const { getToken } = useAuth();
   const accessToken = getToken();
@@ -520,9 +419,17 @@ function ShowDiaryPage() {
                 onClick={handleCreate}
                 style={{
                   cursor: "pointer",
+                  color: "#b7b7b7",
                 }}
               />
-              <GrUploadOption size={16} onClick={handleSave} />
+              <GrUploadOption
+                size={16}
+                onClick={handleSave}
+                style={{
+                  cursor: "pointer",
+                  color: "#b7b7b7",
+                }}
+              />
             </BtnBox>
           </TextBox>
         </BottomContainer>

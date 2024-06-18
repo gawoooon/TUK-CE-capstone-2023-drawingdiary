@@ -22,6 +22,7 @@ const Container = styled.div`
   .slick-slider {
     width: 450px;
     box-sizing: border-box;
+    height: 26px;
   }
   .slick-prev,
   .slick-next {

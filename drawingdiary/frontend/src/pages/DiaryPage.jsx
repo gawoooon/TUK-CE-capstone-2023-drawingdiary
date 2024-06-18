@@ -395,9 +395,17 @@ function DiaryPage() {
                 onClick={handleCreate}
                 style={{
                   cursor: "pointer",
+                  color: "#b7b7b7",
                 }}
               />
-              <GrUploadOption size={16} onClick={handleSave} />
+              <GrUploadOption
+                size={16}
+                onClick={handleSave}
+                style={{
+                  cursor: "pointer",
+                  color: "#b7b7b7",
+                }}
+              />
             </BtnBox>
           </TextBox>
         </BottomContainer>

@@ -23,6 +23,7 @@ const WeatherContent = styled.div`
 
 const DateText = styled.text`
   font-size: 16px;
+  font-weight: bold;
 `;
 
 const LoadingImage = styled.img`

@@ -25,9 +25,7 @@ const DateText = styled.text`
   font-weight: bold;
 `;
 
-
 const ShowWeather = ({ date, weatherState }) => {
-
   const formatDate = (date) => {
     const newDate = new Date(date.currentYear, date.month - 1, date.day);
     const days = [
@@ -60,16 +58,65 @@ const ShowWeather = ({ date, weatherState }) => {
   return (
     <WeatherContainer>
       <WeatherContent>
-          <>
-            {weatherState === 'thunderstorm' && <MdOutlineThunderstorm size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weatherState === 'drizzle' && <BsCloudDrizzle size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weatherState === 'showerrain' && <IoRainyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weatherState === 'snow' && <FaSnowman size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weatherState === 'mist' && <RiMistLine size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weatherState === 'clearsky' && <IoSunnyOutline size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {weatherState === 'fewclouds' && <TiWeatherPartlySunny size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-            {(weatherState === 'clouds' || weatherState === 'scatteredclouds') && <BsClouds size={24} color="3d3d3d" style={{margin:'0 3px 3px 0'}}/>}
-          </>
+        <>
+          {weatherState === "thunderstorm" && (
+            <MdOutlineThunderstorm
+              size={24}
+              color="3d3d3d"
+              style={{ margin: "0 3px 3px 0" }}
+            />
+          )}
+          {weatherState === "drizzle" && (
+            <BsCloudDrizzle
+              size={24}
+              color="3d3d3d"
+              style={{ margin: "0 3px 3px 0" }}
+            />
+          )}
+          {weatherState === "showerrain" && (
+            <IoRainyOutline
+              size={24}
+              color="3d3d3d"
+              style={{ margin: "0 3px 3px 0" }}
+            />
+          )}
+          {weatherState === "snow" && (
+            <FaSnowman
+              size={24}
+              color="3d3d3d"
+              style={{ margin: "0 3px 3px 0" }}
+            />
+          )}
+          {weatherState === "mist" && (
+            <RiMistLine
+              size={24}
+              color="3d3d3d"
+              style={{ margin: "0 3px 3px 0" }}
+            />
+          )}
+          {weatherState === "clearsky" && (
+            <IoSunnyOutline
+              size={24}
+              color="3d3d3d"
+              style={{ margin: "0 3px 3px 0" }}
+            />
+          )}
+          {weatherState === "fewclouds" && (
+            <TiWeatherPartlySunny
+              size={24}
+              color="3d3d3d"
+              style={{ margin: "0 3px 3px 0" }}
+            />
+          )}
+          {(weatherState === "clouds" ||
+            weatherState === "scatteredclouds") && (
+            <BsClouds
+              size={24}
+              color="3d3d3d"
+              style={{ margin: "0 3px 3px 0" }}
+            />
+          )}
+        </>
       </WeatherContent>
       <DateText>{date ? formatDate(date) : "날짜 정보 없음"}</DateText>
     </WeatherContainer>

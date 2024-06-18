@@ -91,8 +91,10 @@ const DayColumn = styled.div`
   flex: 1;
   color: #0d0d0d;
   border: 1px solid rgba(224, 224, 224, 0.5);
-  border-left: ${(props) => (props.isSun ? '1px solid rgba(224, 224, 224, 0.5)' : 'none')};
-  border-right: ${(props) => (props.isSat ? '1px solid rgba(224, 224, 224, 0.5)' : 'none')};
+  border-left: ${(props) =>
+    props.isSun ? "1px solid rgba(224, 224, 224, 0.5)" : "none"};
+  border-right: ${(props) =>
+    props.isSat ? "1px solid rgba(224, 224, 224, 0.5)" : "none"};
   box-sizing: border-box;
 `;
 
@@ -130,27 +132,6 @@ const BodyMonth = styled.div`
   }
 `;
 
-const BodyDayOneBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: 100%;
-  padding: 5px;
-  box-sizing: border-box;
-  border-top: 1px solid rgba(224, 224, 224, 0.5);
-  border-bottom: 1px solid rgba(224, 224, 224, 0.5);
-  border-left: ${(props) => (props.isSun || props.isEven ? '1px solid rgba(224, 224, 224, 0.5)' : 'none')};
-  border-right: ${(props) => (props.isSat || props.isEven ? '1px solid rgba(224, 224, 224, 0.5)' : 'none')};
-  cursor: pointer;
-
-  &.selected {
-    ${BodyMonth}:not(.today, .not-valid) {
-      background-color: rgba(106, 156, 253, 0.3);
-      border-radius: 50%;
-    }
-  }
-`;
-
 const NumberBox = styled.div`
   display: flex;
   align-items: center;
@@ -158,8 +139,9 @@ const NumberBox = styled.div`
   margin: auto;
   width: 24px;
   height: 24px;
-  background-color: ${(props) => (props.hasData ? 'rgba(106, 156, 253, 0.2)' : 'none')};
-  border-radius: ${(props) => (props.hasData ? '50%' : 'none')};
+  background-color: ${(props) =>
+    props.hasData ? "rgba(106, 156, 253, 0.2)" : "none"};
+  border-radius: ${(props) => (props.hasData ? "50%" : "none")};
   font-weight: 500;
   font-size: 1em;
   color: #0d0d0d;
@@ -172,6 +154,41 @@ const NumberBox = styled.div`
   &.today {
     background-color: rgba(106, 156, 253, 0.5);
     border-radius: 50%;
+  }
+`;
+
+const BodyDayOneBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(224, 224, 224, 0.5);
+  border-bottom: 1px solid rgba(224, 224, 224, 0.5);
+  border-left: ${(props) =>
+    props.isSun || props.isEven
+      ? "1px solid rgba(224, 224, 224, 0.5)"
+      : "none"};
+  border-right: ${(props) =>
+    props.isSat || props.isEven
+      ? "1px solid rgba(224, 224, 224, 0.5)"
+      : "none"};
+  cursor: pointer;
+
+  &.selected {
+    ${BodyMonth}:not(.today, .not-valid) {
+      background-color: rgba(106, 156, 253, 0.3);
+      border-radius: 50%;
+    }
+  }
+
+  &:hover,
+  &.selected {
+    ${NumberBox} {
+      background-color: #eeeeee;
+      border-radius: 50%;
+    }
   }
 `;
 
@@ -201,7 +218,11 @@ const RenderDays = () => {
   const date = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   for (let i = 0; i < 7; i++) {
-    days.push(<DayColumn key={i} isSun={i === 0} isSat={i === 6}>{date[i]}</DayColumn>);
+    days.push(
+      <DayColumn key={i} isSun={i === 0} isSat={i === 6}>
+        {date[i]}
+      </DayColumn>
+    );
   }
 
   return <DaysBox>{days}</DaysBox>;
@@ -211,7 +232,7 @@ const RenderCells = ({
   currentMonth,
   selectedDate,
   onDateClick: cellOnDateClick,
-  datesWithData
+  datesWithData,
 }) => {
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
@@ -232,7 +253,7 @@ const RenderCells = ({
 
       const isToday = isSameDay(day, today);
       const isClicked = isSameDay(day, selectedDate);
-      const hasData = datesWithData.includes(format(day, 'yyyy-MM-dd'));
+      const hasData = datesWithData.includes(format(day, "yyyy-MM-dd"));
 
       days.push(
         <BodyDayOneBox
@@ -252,19 +273,19 @@ const RenderCells = ({
           isEven={i % 2 === 1}
           hasData={hasData}
         >
-            <NumberBox
-              className={
-                format(currentMonth, "M") !== format(day, "M")
-                  ? "text not-valid"
-                  : isToday
-                  ? "today"
-                  : ""
-              }
-              hasData={hasData}
-            >
-              {formattedDate}
-            </NumberBox>
-            <BlankBox/>
+          <NumberBox
+            className={
+              format(currentMonth, "M") !== format(day, "M")
+                ? "text not-valid"
+                : isToday
+                ? "today"
+                : ""
+            }
+            hasData={hasData}
+          >
+            {formattedDate}
+          </NumberBox>
+          <BlankBox />
         </BodyDayOneBox>
       );
       day = addDays(day, 1);
