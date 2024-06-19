@@ -14,7 +14,6 @@ import com.diary.drawing.domain.user.dto.PhoneDTO.responseNewDTO;
 public interface MemberService {
     
     public Member joinMember(MemberJoinDTO memberDTO) throws Exception; //회원가입
-    public void joinMemberPersonality(Member member, String personality); //회원가입시 성격 선택
 
     public Optional<Member> findByEmail(String email); //이메일로 멤버 찾기
     public ResponseEntity<?> verifyExistedPhoneNumber(String phoneNumber, String code);
@@ -22,7 +21,6 @@ public interface MemberService {
 
     public  String getEmailByMemberID(Long memberID);
     public GetMemberDTO getMember(Long memberID);
-    public ResponseEntity<?> updateTheme (Long memberID, int newTheme);
 
     public ResponseEntity<?> validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO);
 

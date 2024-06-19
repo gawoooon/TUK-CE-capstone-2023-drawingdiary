@@ -8,16 +8,16 @@ import { useNavigate } from "react-router-dom";
 import { CgTrash } from "react-icons/cg";
 
 const Container = styled.section`
-    width: 95%;
+    width: 100%;
     height: 100%;
     margin: auto;
 `;
 
 const AlbumContainer = styled.div`
     width: 100%;
-    height: 246px;
+    height: 231px;
     padding: 2px;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(237, 237, 237, 0.3);
     border-radius: 10px;
 `;
 
@@ -38,7 +38,7 @@ const ScrollSection = styled.div`
 
 const PictureContainer = styled.div`
     min-width: 190px;
-    height: 230px;
+    height: 200px;
     margin: 8px;
     display: flex;
     flex-direction: column;
@@ -63,17 +63,17 @@ const DateText = styled.div`
     border-radius: 10px;
 
     img {
-        width: 200px;
-        height: 200px;
+        width: 180px;
+        height: 180px;
         border-radius: 10px;
         margin: 5px;
-        transition: transform 0.2s ease;
+        transition: transform 0.2 ease;
     }
 `;
 
 const AlbumHeaders = styled.div`
     width: 100%;
-    height: 30px;
+    height: 20px;
     margin: 10px 0;
     display: flex;
     flex-direction: row;
@@ -86,8 +86,17 @@ const CategoryName = styled.div`
     font-weight: bold;
 `;
 
+const TrashIcon = styled(CgTrash)`
+    color: #3d3d3d;
+    border-radius: 50%;
+    padding: 5px;
+    &:hover {
+        background-color: #b7b7b7;
+    }
+`;
+
 function AlbumBox({ onErrorMessage }) {
-    const {  removeCategory } = useCategory();
+    const { removeCategory } = useCategory();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
     const [data, setData] = useState([]);
@@ -98,7 +107,6 @@ function AlbumBox({ onErrorMessage }) {
     const { memberID, getToken } = useAuth();
     const accessToken = getToken();
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchAlbum = async () => {
         try {
             const response = await axios.get('http://localhost:8080/api/album/all', {
@@ -174,7 +182,7 @@ function AlbumBox({ onErrorMessage }) {
             fetchAlbum();
             setCheckList(!checkList);
         }
-    }, [fetchAlbum, checkList]);
+    }, [checkList]);
     
     return (
         <Container>
@@ -188,7 +196,7 @@ function AlbumBox({ onErrorMessage }) {
                         }}>
                         <AlbumHeaders isOpen={categoryEntry.albumID}>
                             <CategoryName>{categoryEntry.name}</CategoryName>
-                            <CgTrash size={22} color="3d3d3d" onClick={() => handleDeleteClick(categoryEntry.albumID)} />
+                            <TrashIcon size={20} onClick={() => handleDeleteClick(categoryEntry.albumID)} />
                         </AlbumHeaders>
                     </div>
 

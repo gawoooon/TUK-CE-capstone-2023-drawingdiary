@@ -42,16 +42,11 @@ public class Member {
 
     private char gender;
 
-    @Column(length = 50)
-    private String personality;
-
     @Enumerated(EnumType.STRING)
     @Column(name="role")
     private MemberRole role; //ROLE_USER, ROLE_ADMIN
 
     private String profileImage;
-
-    private int theme; // 화면 테마
 
     @Column(unique = true, length = 75)
     private String phoneNumber;
@@ -59,8 +54,7 @@ public class Member {
     @Override
     public String toString(){
         return "UserID: " + this.memberID + "Name: " +  this.name + "Email: " + this.email + "Password: " + this.password
-                + "Birth: " + this.birth + "Gender: " + this.gender + "ProfileImage: " + this.profileImage
-                + "Personality: " + this.personality + "theme: " + this.theme + "PhoneNumber" + this.phoneNumber;
+                + "Birth: " + this.birth + "Gender: " + this.gender + "ProfileImage: " + this.profileImage + "PhoneNumber" + this.phoneNumber;
     }
 
     public Member(){}
@@ -73,23 +67,12 @@ public class Member {
         this.gender = gender;
         this.password = password;
         this.role = MemberRole.ROLE_USER;   //기본값 설정
-        this.theme = 1; // 기본값 설정
         this.phoneNumber = null;  // 임시 설정
     }
  
     // 문자열로 role 주기
     public String getRole() {
         return this.role.name();
-    }
-
-    // persnality 설정
-    public void setPersonality(String personality) {
-        this.personality = personality;
-    }
-
-    // 테마 업데이트
-    public void updateTheme(int newTheme){
-        this.theme = newTheme;
     }
     
 

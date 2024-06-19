@@ -1,16 +1,14 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { MdCheckCircle, MdClear } from "react-icons/md";
 
 const Bar = styled.div`
   display: flex;
-  width: 400px;
+  width: 300px;
   height: 48px;
   margin: 5px 0;
-  background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  background-color: rgba(237, 237, 237, 0.8);
   border-radius: 10px;
   padding-right: 20px;
-  box-sizing: border-box;
 `;
 
 const IconBox = styled.div`
@@ -19,22 +17,26 @@ const IconBox = styled.div`
   justify-content: center;
   width: 20%;
   height: 100%;
-  font-size: 24px;
-  color: #4d4d4d;
+  color: #848484;
+
+  ${(props) =>
+    !props.hasIcon &&
+    css`
+      display: none;
+    `}
 `;
 
 const TextBox = styled.input`
   display: flex;
   align-items: center;
-  width: 80%;
+  width: ${(props) => (props.hasIcon ? "80%" : "100%")};
   height: 100%;
-  color: black;
+  color: #0d0d0d;
   border: none;
   outline: none;
   padding: 0 20px;
   background-color: transparent;
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 14px;
   opacity: 0.7;
 `;
 
@@ -66,8 +68,8 @@ function LoginBar({ icon, text, onChange, type, phoneNumber, verifyMessage }) {
 
   return (
     <Bar>
-      <IconBox>{icon}</IconBox>
-      <TextBox type={type} placeholder={text} onChange={onChange} />
+      <IconBox hasIcon={!!icon}>{icon}</IconBox>
+      <TextBox type={type} placeholder={text} onChange={onChange} hasIcon={!!icon} />
       <VerificationIcon isValid={verifyMessage} />
     </Bar>
   );

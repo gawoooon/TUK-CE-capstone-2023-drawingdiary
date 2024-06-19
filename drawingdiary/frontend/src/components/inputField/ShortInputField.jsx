@@ -1,12 +1,18 @@
 import styled from "styled-components";
 
 const InputStyle = styled.input`
-    height: 40px;
-    width: 160px;
-    margin: 0px 15px 30px 15px;
-    padding-left: 10px;
+    display: flex;
+    width: 86px;
+    height: 44px;
+    margin: 6px;
+    border: 0.0625rem solid rgb(237, 237, 237);
+    border-radius: 10px;
     outline: none;
-    font-size: 13px;
+    font-size: 14px;
+    padding: 0 20px;
+    &:focus {
+    border-color: rgba(106, 156, 253, 0.5);
+    }
 `;
 
 const ShortInputField = ({ id, type, value, onChange, placeholder }) => {

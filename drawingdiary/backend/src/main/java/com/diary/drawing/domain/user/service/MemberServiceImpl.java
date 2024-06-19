@@ -65,14 +65,6 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.save(member);
     }
 
-    // 회원가입시 성격 저장하는 메소드
-    @Transactional
-    @Override
-    public void joinMemberPersonality(Member member, String personality){
-        member.setPersonality(personality);
-        memberRepository.save(member); // [지원 수정 부분]
-    }
-
     // 이메일로 멤버 찾기
     @Override
     public Optional<Member> findByEmail(String email) {
@@ -95,23 +87,12 @@ public class MemberServiceImpl implements MemberService{
             .email(targetMemeber.getEmail())
             .birth(targetMemeber.getBirth())
             .gender(targetMemeber.getGender())
-            .personality(targetMemeber.getPersonality())
             .profileImage(targetMemeber.getProfileImage())  // 임시 url 넣기
-            .theme(targetMemeber.getTheme())
             .phoneNumber(targetMemeber.getPhoneNumber())
             .build();
         return getMemberDTO;
     }
 
-    // 테마 수정하는 메소드
-    @Transactional
-    @Override
-    public ResponseEntity<?> updateTheme (Long memberID, int newTheme){
-        Member targetMemeber = validateMemberService.validateMember(memberID);
-        targetMemeber.updateTheme(newTheme);
-        memberRepository.save(targetMemeber);
-        return ResponseEntity.ok("테마 변경이 완료되었습니다.");
-    }
     @Override
     public ResponseEntity<?> validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO){
         Member targetMember = validateMemberService.validateMember(memberID);

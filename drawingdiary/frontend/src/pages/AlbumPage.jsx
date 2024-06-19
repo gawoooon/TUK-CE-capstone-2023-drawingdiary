@@ -5,34 +5,52 @@ import Button from "../components/button/Button";
 import { useState } from "react";
 import AddCategory from "../components/album/AddCategory";
 import { CategoryProvider } from "../components/album/CategoryList";
-import Background2 from "../components/Background/index2";
 
-const Container = styled.section`
-  width: 100%;
-  height: 100%;
-  padding: 10px;
+const Body = styled.body`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const SidebarContainer = styled.div`
+    width: 260px;
+    height: 100%;
+    position: fixed;
+`;
+
+const RightSection = styled.section`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% - 260px); 
+  height: inherit;
+  padding-left: 520px;
+  box-sizing: border-box;
 `;
 
 const AlbumContainer = styled.section`
   width: 100%;
-  height: 90%;
+  height: 870px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
   &::-webkit-scrollbar {
-    width: 5px;
+    width: 1px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #808080;
-    border-radius: 4px;
+    background-color: transparent;
   }
 `;
 
 const AddAlbum = styled.div`
+  width: 100%;
   position: sticky;
   display: flex;
   justify-content: end;
@@ -42,7 +60,7 @@ const AddAlbum = styled.div`
 
 const ErrorMessage = styled.div`
   margin: 0 30px 30px 0;
-  color: #af0000;
+  color: red;
 `;
 
 const AlbumPage = () => {
@@ -69,23 +87,25 @@ const AlbumPage = () => {
 
   return (
     <CategoryProvider>
-      <Background2>
-        <Container>
-          <NavBar/>
-          <AlbumContainer>
-            <AlbumBox  onErrorMessage={handleErrorMessage}/>
-          </AlbumContainer>
-          <AddAlbum>
-            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-            <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
-            {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
-            <AddCategory
-              isOpen={isAddCategoryVisible}
-              onclose={handleClose}
-              />
-          </AddAlbum>
-        </Container>
-      </Background2>
+        <Body>
+          <SidebarContainer>
+            <NavBar />
+          </SidebarContainer>
+          <RightSection>
+            <AlbumContainer>
+              <AlbumBox  onErrorMessage={handleErrorMessage}/>
+            </AlbumContainer>
+            <AddAlbum>
+              {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+              <Button text="앨범 추가" onClick={handleAddCategoryButtonClick}></Button>
+              {isAddCategoryVisible && <AddCategory onClick={handleClose} />}
+              <AddCategory
+                isOpen={isAddCategoryVisible}
+                onclose={handleClose}
+                />
+            </AddAlbum>
+          </RightSection>
+        </Body>
     </CategoryProvider>
   );
 }

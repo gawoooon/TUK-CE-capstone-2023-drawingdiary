@@ -10,9 +10,8 @@ const InfoBox = styled.div`
   height: 400px;
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
-  border: 3px solid #a3a3a3;
-  box-shadow: 1px 5px 2px rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  align-items: center;
   padding: 0 20px;
   box-sizing: border-box;
 `;
@@ -26,23 +25,18 @@ const InfoTop = styled.div`
 `;
 
 const InfoBtn = styled.button`
-  width: 100px;
-  height: 40px;
-  background-color: rgba(106, 156, 253, 0.3);
-  box-shadow: 1px 5px 2px rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
+  width: 420px;
+  height: 48px;
+  background-color: rgba(106, 156, 253, 0.5);
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const InfoBottom = styled.div`
-  width: 100%;
-  height: 85%;
-  padding: 30px 20px 15px 20px;
-  box-sizing: border-box;
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 30px;
+  &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+  }
 `;
 
 function Information({
@@ -65,20 +59,15 @@ function Information({
 
   return (
     <InfoBox>
-      <InfoTop>
-        기본정보
-        <InfoBtn onClick={onPopupPassword}>수정</InfoBtn>
-      </InfoTop>
-      <InfoBottom>
-        <Line icon={IoMdPerson} text={profileName} hasBorder={true} />
-        <Line
-          icon={MdOutlinePhoneIphone}
-          text={formatPhoneNumber(profilePhone)}
-          hasBorder={true}
-        />
-        <Line icon={MdEmail} text={profileEmail} hasBorder={true} />
-        <Line icon={FaBirthdayCake} text={profileBirth} hasBorder={false} />
-      </InfoBottom>
+      <Line icon={IoMdPerson} text={profileName} hasBorder={true} />
+      <Line
+        icon={MdOutlinePhoneIphone}
+        text={formatPhoneNumber(profilePhone)}
+        hasBorder={true}
+      />
+      <Line icon={MdEmail} text={profileEmail} hasBorder={true} />
+      <Line icon={FaBirthdayCake} text={profileBirth} hasBorder={true} />
+      <InfoBtn onClick={onPopupPassword}>수정</InfoBtn>
     </InfoBox>
   );
 }

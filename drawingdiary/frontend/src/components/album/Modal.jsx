@@ -35,21 +35,10 @@ const ModalStyle = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-    margin-top: 50px;
+    margin-top: 30px;
 `;
 
-const YesStyle = styled.button`
-    width: 100px;
-    height: 40px;
-    margin: 10px;
-    align-items: center;
-    font-size: 15px;
-    border-radius: 10px;
-    border: 2px solid rgba(106, 156, 253, 0.3);
-    background-color: white;
-`;
-
-const NoStyle = styled.button`
+const Button = styled.button`
     width: 100px;
     height: 40px;
     margin: 10px;
@@ -57,7 +46,10 @@ const NoStyle = styled.button`
     font-size: 15px;
     border-radius: 10px;
     border: none;
+    background-color: rgba(106, 156, 253, 0.5);
+    &:hover {
     background-color: rgba(106, 156, 253, 0.3);
+    }
 `;
 
 
@@ -70,8 +62,8 @@ const Modal = ({ isOpen, onClose, onConfirm }) => {
                 <CgTrash size={30} color="3d3d3d" style={{marginBottom:'30px'}} />
                 <p>앨범을 삭제하시겠습니까?</p>
                 <ButtonContainer>
-                    <YesStyle onClick={onConfirm}>예</YesStyle>
-                    <NoStyle onClick={onClose}>아니오</NoStyle>
+                    <Button onClick={onConfirm}>예</Button>
+                    <Button onClick={onClose}>아니오</Button>
                 </ButtonContainer>
             </ModalStyle>
         </ModalBackground>

@@ -12,7 +12,6 @@ import StatsPage from "./pages/StatsPage.jsx";
 import PasswordLostPage from "./pages/PasswordLostPage.jsx";
 import EmailLostPage from "./pages/EmailLostPage.jsx";
 import MyPage from "./pages/MyPage.jsx";
-import ChoosePersonalityPage from "./pages/ChoosePersonalityPage";
 import FinishPage from "./pages/FinishPage";
 import { CalendarProvider } from "./components/Calendar2/CalendarProvider.jsx";
 import ShowDiaryPage from "./pages/ShowDiaryPage.jsx";
@@ -58,14 +57,8 @@ function App() {
             </CategoryProvider>
           }
         />
-        <Route
-          path="/stats"
-          element={
-            <StatsPage />
-          } 
-        />
+        <Route path="/stats" element={<StatsPage />} />
         <Route path="/my" element={<MyPage />} />
-        <Route path="/choosePersonality" element={<ChoosePersonalityPage />} />
         <Route path="/FinishPage" element={<FinishPage />} />
         <Route path="/password" element={<PasswordLostPage />} />
         <Route path="/email" element={<EmailLostPage />} />

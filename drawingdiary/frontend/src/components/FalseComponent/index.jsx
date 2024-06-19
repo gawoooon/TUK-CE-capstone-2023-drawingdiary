@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/context/AuthContext";
@@ -11,24 +12,21 @@ const ResultBox = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  transition: opacity 200ms ease-out;
+  border: 1px solid rgba(224, 224, 224, 0.5);
+  border-radius: 20px;
 `;
 
 const TopBox = styled.div`
-  font-size: 22px;
-  font-weight: 800;
-  color: #090071;
+  font-size: 20px;
+  font-weight: 400;
   display: flex;
-  transition: opacity 200ms ease-out;
 `;
 
 const MiddleBox = styled.div`
-  font-size: 22px;
-  font-weight: 800;
-  color: #090071;
+  font-size: 20px;
+  font-weight: 400;
   padding: 10px 0px;
   box-sizing: border-box;
-  transition: opacity 200ms ease-out;
 `;
 
 const AddBtn = styled.button`
@@ -36,13 +34,15 @@ const AddBtn = styled.button`
   height: 50px;
   border: none;
   outline: none;
-  background-color: #090071;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
-  color: white;
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 10px;
   margin-top: 20px;
+  background-color: rgba(106, 156, 253, 0.5);
+  &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+  }
 `;
 
 function FalseComponent({ currentYear, month, day, selectedDate }) {
@@ -50,7 +50,6 @@ function FalseComponent({ currentYear, month, day, selectedDate }) {
   const { memberID } = useAuth();
 
   const handleAdd = () => {
-    // 로그인 로직을 처리한 후 '/calendar' 페이지로 이동
     const formattedDate = format(selectedDate, "yyyyMMdd");
     navigate(`/diary/${memberID}/${formattedDate}`, {
       state: { date: { currentYear, month, day } },
@@ -63,7 +62,6 @@ function FalseComponent({ currentYear, month, day, selectedDate }) {
         {month}월 {day}일
       </TopBox>
       <MiddleBox>일기를 작성하세요.</MiddleBox>
-
       <AddBtn onClick={handleAdd}>추가하기</AddBtn>
     </ResultBox>
   );

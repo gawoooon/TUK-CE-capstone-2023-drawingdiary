@@ -9,9 +9,18 @@ const GridContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  width: 1400px; 
+  align-items: flex-start;
+  width: 98%; 
   height: 202px;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    height: 8px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #808080;
+    border-radius: 4px;
+  }
 `;
 
 const MonthContent = styled.div`
@@ -19,7 +28,7 @@ const MonthContent = styled.div`
   flex-direction: row;
   align-items: center;
   position: relative;
-  width: 1352px;
+  width: 100%;
   height: 20px;
 `;
 
@@ -28,11 +37,11 @@ const GridContent = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
-  width: 1352px;
+  width: auto;
   height: 182px;
 `;
 
-const MonthText = styled.text`
+const MonthText = styled.span`
   position: absolute;
   font-size: 8px;
   margin-left: ${props => props.offset}px;

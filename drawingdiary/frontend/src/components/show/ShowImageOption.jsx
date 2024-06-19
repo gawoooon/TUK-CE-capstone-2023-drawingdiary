@@ -5,105 +5,52 @@ import Lottie from "react-lottie";
 import imageLoading from "../../animation/imageLodding.json";
 import ImageStyleLists from "../diary/ImageStyleLists";
 import { useAuth } from "../../auth/context/AuthContext";
+import Slider from "react-slick";
+import { MdNavigateNext } from "react-icons/md";
+import { MdNavigateBefore } from "react-icons/md";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Container = styled.div`
-  width: 305px;
-  height: 400px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  h3 {
-    margin: 20px 0 0 10px;
-  }
-`;
-
-const TopContainer = styled.div`
-  width: 95%;
-  height: 50px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-left: 16px;
-`;
-
-const Description = styled.div`
-  width: 90%;
-  margin-bottom: 10px;
-`;
-
-const OptionContainer = styled.div`
-  width: 95%;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
-
-const LeftContainer = styled.div`
-  height: 250px;
-  margin-top: 10px;
-  display: ${({ display }) => display};
-  flex-direction: column;
-  transition: opacity 0.5s ease-in-out;
-`;
-
-const RightContainer = styled.div`
-  height: 250px;
-  margin-top: 10px;
-  margin-left: 6px;
-  display: ${({ display }) => display};
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
-  transition: opacity 0.5s ease-in-out;
-  &::-webkit-scrollbar {
-    width: 6px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  .slick-slider {
+    width: 450px;
+    box-sizing: border-box;
+    height: 26px;
   }
-  &::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
+  .slick-prev,
+  .slick-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black; // 화살표 색상을 검정색으로 설정
+    cursor: pointer;
+    font-size: 24px;
+  }
+  .slick-slide {
+    padding: 0 5px;
+    box-sizing: border-box;
   }
 `;
 
-const SelectedStyle = styled.div`
+const SlideItem = styled.div`
+  box-sizing: border-box;
+  border: 0.5px solid #000000;
+  text-align: center;
   font-size: 12px;
-  margin-top: 10px;
-`;
-
-const OptionBtnStyle = styled.button`
-  width: 200px;
-  min-height: 36px;
-  margin: 5px 0;
-  background-color: ${(props) =>
-    props.isSelected ? "#ddd" : "rgba(255, 255, 255, 0.3)"};
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-`;
-
-const TextStyle = styled.div`
-  padding-top: 2px;
-  font-size: 12px;
-  color: black;
-`;
-
-const OpenBtn = styled.button`
-  width: 65px;
-  height: 30px;
-  margin: 10px;
-  border: none;
-  outline: none;
-  font-size: 13px;
-  color: black;
-  cursor: pointer;
-  border-radius: 15px;
+  border-radius: 20px;
+  padding: 4px 0;
+  background-color: ${({ isSelected }) => (isSelected ? "#eeeeee" : "#fff")};
+  font-weight: ${({ isSelected }) => (isSelected ? "bold" : "normal")};
   &:hover {
-    background-color: #f9f9f9;
+    background-color: #eeeeee;
   }
 `;
 
@@ -111,6 +58,7 @@ const ShowImageOption = ({
   onOptionSelect,
   isRecommenderLoading,
   selectedOption,
+  parentSelectedButtonStyle,
 }) => {
   const LoadingOptions = {
     loop: true,
@@ -118,7 +66,9 @@ const ShowImageOption = ({
     animationData: imageLoading,
   };
 
+  const [selectedIndex, setSelectedIndex] = useState(null); // hover
   const [countDiary, setCountDiary] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0); // 첫페이지
 
   const [displayLeft, setDisplayLeft] = useState("flex"); // 초기 상태는 'flex'
   const [displayRight, setDisplayRight] = useState("none"); // 초기 상태는 'none'
@@ -159,6 +109,7 @@ const ShowImageOption = ({
     setIsSelected(true);
     setStoredSelectedStyle(option);
     onOptionSelect(option);
+    setSelectedIndex(option); // hover
   };
 
   useEffect(() => {
@@ -263,65 +214,79 @@ const ShowImageOption = ({
     setOtherStyles(filterNonDuplicateStyles);
   }, [isSelected, onOptionSelect, recommendedStyles]);
 
+  const items = [...recommendedStyles, ...otherStyles];
+
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    nextArrow: <MdNavigateNext />,
+    prevArrow: <MdNavigateBefore />,
+    beforeChange: (_, next) => {
+      const prevButton = document.querySelector(".slick-prev");
+      const nextButton = document.querySelector(".slick-next");
+
+      setCurrentPage(next);
+
+      if (next === 0) {
+        prevButton.style.display = "none";
+      } else {
+        prevButton.style.display = "flex";
+      }
+
+      if (next >= items.length - 5) {
+        nextButton.style.display = "none";
+      } else {
+        nextButton.style.display = "flex";
+      }
+    },
+  };
+
+  // 컴포넌트가 처음 렌더링될 때 실행되는 useEffect
+  useEffect(() => {
+    const prevButton = document.querySelector(".slick-prev");
+    const nextButton = document.querySelector(".slick-next");
+
+    if (prevButton) {
+      // 첫 페이지일 때 왼쪽 화살표 숨김
+      prevButton.style.display = "none";
+    }
+
+    if (nextButton && items.length == 5) {
+      // 아이템 수가 슬라이드에 보여지는 수 이하일 때 오른쪽 화살표 숨김
+      nextButton.style.display = "none";
+    }
+  }, [items.length]);
+
   return (
     <Container>
-      <TopContainer>
-        <h4>스타일 선택</h4>
-        <OpenBtn onClick={handleOpen}>{openBtn}</OpenBtn>
-      </TopContainer>
-      <Description>
-        {countDiary < 5 ? (
-          <TextStyle>
-            아래 스타일은 {userName}님과 나이와 성별이 같은 사용자들이 가장 많이
-            선택한 5가지의 스타일 입니다. 스타일을 추천받고 싶다면 일기를 5번
-            이상 작성하세요.
-          </TextStyle>
-        ) : (
-          <TextStyle>
-            {userName}님과 비슷한 사용자들이 선택한 스타일입니다. 마음에 드시는
-            옵션이 없으면 더보기를 눌러주세요.
-          </TextStyle>
-        )}
-      </Description>
-      <OptionContainer>
-        <SelectedStyle>
-          선택한 스타일:{" "}
-          {selectedButtonStyle !== null
-            ? selectedButtonStyle
-            : `${selectedOption}`}
-        </SelectedStyle>
-        <LeftContainer display={displayLeft}>
-          {isLoading ? (
-            <Lottie
-              isClickToPauseDisabled={true}
-              options={LoadingOptions}
-              height={150}
-              width={150}
-            />
-          ) : (
-            recommendedStyles.map((style, index) => (
-              <OptionBtnStyle
-                key={index}
-                isSelected={selectedButtonStyle === style}
-                onClick={() => handleButtonStyleSelect(style)}
+      {isLoading ? (
+        <Lottie
+          isClickToPauseDisabled={true}
+          options={LoadingOptions}
+          height={100}
+          width={100}
+        />
+      ) : (
+        <Slider {...settings}>
+          {items.map((item, index) => (
+            <div key={index}>
+              <SlideItem
+                isSelected={
+                  selectedIndex === null
+                    ? parentSelectedButtonStyle === item
+                    : selectedIndex === index
+                }
+                onClick={() => handleButtonStyleSelect(index)}
               >
-                {`${style}`}
-              </OptionBtnStyle>
-            ))
-          )}
-        </LeftContainer>
-        <RightContainer display={displayRight}>
-          {otherStyles.map((style, index) => (
-            <OptionBtnStyle
-              key={index}
-              isSelected={selectedButtonStyle === style}
-              onClick={() => handleButtonStyleSelect(style)}
-            >
-              {`${style}`}
-            </OptionBtnStyle>
+                {item}
+              </SlideItem>
+            </div>
           ))}
-        </RightContainer>
-      </OptionContainer>
+        </Slider>
+      )}
     </Container>
   );
 };

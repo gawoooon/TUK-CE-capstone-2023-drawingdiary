@@ -1,41 +1,30 @@
-import { useState } from "react";
-import styled, { keyframes, css } from "styled-components";
+import styled from "styled-components";
 
-const jumpAnimation = keyframes`
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0); }
-`;
 
 const Btn = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  border: none;
+  width: 56px;
+  height: 44px;
+  margin: 5px 0 5px 10px;
   outline: none;
-  border-radius: 20px;
-  font-size: 20px;
-  font-weight: 800;
+  border-radius: 10px;
+  font-size: 14px;
   cursor: pointer;
-  background-color: #7fa5ffc5;
-  box-shadow: 0 1px 1px 0 rgba(255, 255, 255, 0.1);
-  color: black;
+  border: 0.0625rem solid rgba(106, 156, 253, 0.5);
+  color: #0d0d0d;
   &:hover {
-    animation: ${(props) =>
-      props.animate
-        ? css`
-            ${jumpAnimation} 0.5s ease
-          `
-        : "none"};
+    background-color: rgba(106, 156, 253, 0.3);
+    border: none;
+    width: 58px;
+    height: 46px;
   }
 `;
 
 function LoginBtn({ text, onClick }) {
-  const animateLogin = true;
   return (
-    <Btn onClick={onClick} animate={animateLogin}>
+    <Btn onClick={onClick}>
       {text}
     </Btn>
   );

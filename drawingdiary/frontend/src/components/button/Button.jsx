@@ -16,9 +16,11 @@ const ButtonStyle = styled.button`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border: none;
     cursor: pointer;
-    color: black;
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 400;
+    &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+    }
 `;
 
 const Button = ({ text, onClick }) => {

@@ -1,81 +1,69 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
-
-import Background2 from "../components/Background/index2";
-import LoginBar from "../components/LoginBar";
+import LoginBar from "../components/LoginBar/BasicBar";
 
 import { IoMdPerson } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 import axios from "axios";
 import { useAuth } from "../auth/context/AuthContext";
 
-const Body = styled.body`
+const Body = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 `;
 
 const Title = styled(Link)`
   font-size: 40px;
   font-weight: 800;
-  padding-bottom: 30px;
+  padding: 20px 0;
   text-decoration: none;
-  color: black;
 `;
 
 const LoginBox = styled.form`
   display: flex;
-  width: 600px;
-  height: 300px;
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 30px;
-  padding: 70px 80px 40px 80px;
-  box-sizing: border-box;
-  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 600px;
+  height: 700px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  box-sizing: border-box;
 `;
 
 const InnerBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  width: 400px;
+  justify-content: center;
+  align-items: center;
+  width: inherit;
   height: 250px;
 `;
 
-const BtnBox = styled.div`
+const LoginLostBtnBox = styled.div`
+  width: inherit;
   display: flex;
-  flex-direction: row;
-  justify-content: end;
+  justify-content: center;
   align-items: center;
-  height: 50px;
-  width: 100%;
-`;
-
-const JoinBtn = styled(Link)`
-  padding-left: 10px;
-  color: #090071;
-  opacity: 0.8;
-  font-weight: 600;
-  font-size: 16px;
-  text-decoration: none;
+  text-align: center;
+  margin-top: 10px;
 `;
 
 const LoginLostBtn = styled(Link)`
-  width: 100%;
-  height: 30px;
-  font-size: 12px;
+  width: 100px;
+  height: 20px;
+  font-size: 14px;
   font-weight: 500;
-  color: #090071;
-  text-align: center;
   text-decoration: none;
-  padding-top: 18px;
+  color: #828282;
+  &:hover {
+    color: rgba(106, 156, 253, 0.5)
+  }
 `;
 
 const ErrorMessageContainer = styled.div`
@@ -83,11 +71,28 @@ const ErrorMessageContainer = styled.div`
   min-height: 20px;
 `;
 
-const ErrorMessage = styled.text`
+const ErrorMessage = styled.span`
   font-size: 12px;
   font-weight: bold;
   color: gray;
-  font-weight: bold;
+`;
+
+const MoveButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 380px;
+  height: 48px;
+  margin: 5px 0;
+  background-color: rgba(106, 156, 253, 0.5);
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(106, 156, 253, 0.3);
+  }
 `;
 
 function LoginPage() {
@@ -135,38 +140,33 @@ function LoginPage() {
   };
 
   return (
-    <Background2>
-      <Body>
+    <Body>
+      <LoginBox onSubmit={handleLogin}>
         <Title to="/">감성 일기</Title>
-        <LoginBox>
-          <InnerBox>
-            <LoginBar
-              icon={<IoMdPerson size={20} />}
-              text="아이디"
-              onChange={(e) => setEmail(e.target.value)}
-            ></LoginBar>
-            <LoginBar
-              icon={<FaLock size={20} />}
-              text="비밀번호"
-              type="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            ></LoginBar>
-            <ErrorMessageContainer>
-              {errorMessage && <ErrorMessage> {errorMessage} </ErrorMessage>}
-            </ErrorMessageContainer>
-            <BtnBox>
-              <JoinBtn to="/" onClick={handleLogin}>
-                로그인
-              </JoinBtn>
-              <JoinBtn to="/join">회원가입</JoinBtn>
-            </BtnBox>
-            <LoginLostBtn to="/loginlost">
-              아이디·비밀번호를 잃어버리셨나요?{" "}
-            </LoginLostBtn>
-          </InnerBox>
-        </LoginBox>
-      </Body>
-    </Background2>
+        <InnerBox>
+          <LoginBar
+            icon={<IoMdPerson size={18} color="#3d3d3d" />}
+            text="아이디"
+            onChange={(e) => setEmail(e.target.value)}
+          ></LoginBar>
+          <LoginBar
+            icon={<FaLock size={16} color="#3d3d3d" />}
+            text="비밀번호"
+            type="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          ></LoginBar>
+          <ErrorMessageContainer>
+            {errorMessage && <ErrorMessage> {errorMessage} </ErrorMessage>}
+          </ErrorMessageContainer>
+          <MoveButton type="submit">로그인</MoveButton>
+        </InnerBox>
+        <LoginLostBtnBox>
+          <LoginLostBtn to="/email">아이디 찾기</LoginLostBtn>
+          <LoginLostBtn to="/password">비밀번호 찾기</LoginLostBtn>
+          <LoginLostBtn to="/join">회원가입</LoginLostBtn>
+        </LoginLostBtnBox>
+      </LoginBox>
+    </Body>
   );
 }
 
