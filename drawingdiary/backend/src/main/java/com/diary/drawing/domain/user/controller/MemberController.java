@@ -103,7 +103,7 @@ public class MemberController {
      */
     @Operation(summary = "비밀번호 확인", description = "ok일때: 200, boolean 형식 true / 틀렸을때 : 601 error, wrongpassword")
     @PostMapping("/password")
-    public ResponseEntity<?> verifyPassword(@RequestBody MemberDTO.passwordCheck oldpassword, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<Boolean> verifyPassword(@RequestBody MemberDTO.passwordCheck oldpassword, @AuthenticationPrincipal PrincipalDetails principalDetails){
         return memberService.validatePassword(principalDetails.getMemberID(), oldpassword);
     }
 

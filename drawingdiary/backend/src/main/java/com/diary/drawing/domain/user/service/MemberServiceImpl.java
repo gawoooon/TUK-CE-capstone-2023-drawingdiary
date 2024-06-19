@@ -94,7 +94,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public ResponseEntity<?> validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO){
+    public ResponseEntity<Boolean> validatePassword(Long memberID, MemberDTO.passwordCheck passwordDTO){
         Member targetMember = validateMemberService.validateMember(memberID);
         if(!bCryptPasswordEncoder.matches(passwordDTO.getOldPassword(), targetMember.getPassword())){
             throw new MemberResponseException(MemberExceptionType.WRONG_PASSWORD);

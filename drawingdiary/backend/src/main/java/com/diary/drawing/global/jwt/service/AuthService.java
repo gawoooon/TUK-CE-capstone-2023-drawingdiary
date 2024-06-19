@@ -15,8 +15,8 @@ import com.diary.drawing.domain.user.domain.Member;
 import com.diary.drawing.domain.user.service.ValidateMemberService;
 import com.diary.drawing.global.jwt.domain.RefreshToken;
 import com.diary.drawing.global.jwt.dto.JwtRequestDTO;
-import com.diary.drawing.global.jwt.exception.authExceptionType;
-import com.diary.drawing.global.jwt.exception.authResponseException;
+import com.diary.drawing.global.jwt.exception.AuthExceptionType;
+import com.diary.drawing.global.jwt.exception.AuthResponseException;
 import com.diary.drawing.global.jwt.repository.RefreshTokenRepository;
 import com.diary.drawing.global.jwt.security.JwtIssuer;
 
@@ -53,7 +53,7 @@ public class AuthService {
             return token;
             // token을 사용하는 코드
         }else{
-            throw new authResponseException(authExceptionType.WRONG_VALIDATION);
+            throw new AuthResponseException(AuthExceptionType.WRONG_VALIDATION);
         }
     }
 
@@ -65,7 +65,7 @@ public class AuthService {
         if (expiresAt.before(new Date())) {
             return false;
         } else{
-            return true; 
+            return true;
         }
     }
 
@@ -85,14 +85,14 @@ public class AuthService {
             return accessToken;
         }
 
-        else {throw new authResponseException(authExceptionType.WRONG_REFRESHTOKEN);}
+        else {throw new AuthResponseException(AuthExceptionType.WRONG_REFRESHTOKEN);}
 
     }
 
     @Transactional
     public void logout(JwtRequestDTO.logoutRequestDTO requestDTO){
         if(!validateToken(requestDTO.getToken())){
-            throw new authResponseException(authExceptionType.EXPIRED_TOKEN);
+            throw new AuthResponseException(AuthExceptionType.EXPIRED_TOKEN);
         }
 
         // 1. memberID와 일치하는 refreshtoken을 찾아 삭제
@@ -104,7 +104,7 @@ public class AuthService {
         Date expiresAt = jwt.getExpiresAt();
         Long expiration = expiresAt.getTime() - System.currentTimeMillis();
         if (expiration < 0) {
-            throw new authResponseException(authExceptionType.EXPIRED_TOKEN);
+            throw new AuthResponseException(AuthExceptionType.EXPIRED_TOKEN);
         }
 
         String key = BLACKLIST_PREFIX + requestDTO.getToken();

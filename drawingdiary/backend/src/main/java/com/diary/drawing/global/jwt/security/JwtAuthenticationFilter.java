@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.diary.drawing.global.jwt.exception.authExceptionType;
-import com.diary.drawing.global.jwt.exception.authResponseException;
+import com.diary.drawing.global.jwt.exception.AuthExceptionType;
+import com.diary.drawing.global.jwt.exception.AuthResponseException;
 import com.diary.drawing.global.jwt.service.PrincipalDetailsAuthenticationToken;
 
 import jakarta.servlet.FilterChain;
@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         try {
             Optional<String> token = extractTokenFromRequest(request);
             if (token.isPresent() && jwtDecoder.isTokenExpired(token.get())) {
-                throw new authResponseException(authExceptionType.EXPIRED_TOKEN);
+                throw new AuthResponseException(AuthExceptionType.EXPIRED_TOKEN);
             }
         
             token.map(jwtDecoder::decode)
@@ -45,13 +45,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 .ifPresent(authentication -> SecurityContextHolder.getContext().setAuthentication(authentication));
         
             filterChain.doFilter(request, response);
-        } catch (authResponseException e) {
+        } catch (AuthResponseException e) {
             handleAuthException(e, response);
         }
     }
 
     /* 바로 exception을 리턴하는 함수를 임시로 생성함 */
-    private void handleAuthException(authResponseException e, HttpServletResponse response) throws IOException {
+    private void handleAuthException(AuthResponseException e, HttpServletResponse response) throws IOException {
         HttpStatus status = e.getExceptionType().getHttpStatus();
         String message = e.getExceptionType().getErrorMessage();
         

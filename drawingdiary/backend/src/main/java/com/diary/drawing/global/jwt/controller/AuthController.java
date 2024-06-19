@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.diary.drawing.global.jwt.domain.PrincipalDetails;
 import com.diary.drawing.global.jwt.dto.JwtRequestDTO;
 import com.diary.drawing.global.jwt.dto.JwtResponseDTO;
-import com.diary.drawing.global.jwt.exception.authExceptionType;
-import com.diary.drawing.global.jwt.exception.authResponseException;
+import com.diary.drawing.global.jwt.exception.AuthExceptionType;
+import com.diary.drawing.global.jwt.exception.AuthResponseException;
 import com.diary.drawing.global.jwt.security.JwtAuthenticationFilter;
 import com.diary.drawing.global.jwt.security.JwtDecoder;
 import com.diary.drawing.global.jwt.security.JwtIssuer;
@@ -88,7 +88,7 @@ public class AuthController {
         }
         
         // 유효하지 않은 refreshToken에 대한 처리
-        throw new authResponseException(authExceptionType.WRONG_REFRESHTOKEN);
+        throw new AuthResponseException(AuthExceptionType.WRONG_REFRESHTOKEN);
     }
 
     @PostMapping("/logout")
