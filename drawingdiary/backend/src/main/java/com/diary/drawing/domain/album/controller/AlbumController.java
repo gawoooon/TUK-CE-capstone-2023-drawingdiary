@@ -51,9 +51,10 @@ public class AlbumController {
      */
     @Operation(summary = "토큰으로 앨범 삭제")
     @DeleteMapping("/api/album/{albumID}")
-    public ResponseEntity<?> deleteAlbum(@PathVariable Long albumID, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> deleteAlbum(@PathVariable("albumID") Long albumID, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return albumService.deleteAlbum(albumID, principalDetails.getMemberID());
     }
+    
 
     /* 앨범 리스트 넘겨주는 api
      *
