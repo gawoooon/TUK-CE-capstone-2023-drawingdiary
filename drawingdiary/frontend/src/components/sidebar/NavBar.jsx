@@ -124,7 +124,6 @@ const Navbar = () => {
                             'Authorization': `Bearer ${currentAccessToken}`
                         }
                     });
-                    console.log("여기");
                     setCurrentList(response.data);
                     localStorage.setItem("recentList", JSON.stringify(response.data));
                 } catch (error) {
@@ -137,7 +136,7 @@ const Navbar = () => {
         };
 
         fetchRecentData();
-    }, [accessToken, getToken]);
+    }, [accessToken, currentList, getToken]);
 
     const handleLogout = async () => {
         if (accessToken) {
