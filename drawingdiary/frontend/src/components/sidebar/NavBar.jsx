@@ -2,9 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
+import { LuCalendarDays } from "react-icons/lu";
 import { SlGraph } from "react-icons/sl";
 import { TbUserEdit } from "react-icons/tb";
-import { LuCalendarDays } from "react-icons/lu";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../../auth/context/AuthContext";
@@ -136,7 +136,7 @@ const Navbar = () => {
         };
 
         fetchRecentData();
-    }, [accessToken, currentList, getToken]);
+    }, [accessToken, getToken]);
 
     const handleLogout = async () => {
         if (accessToken) {
